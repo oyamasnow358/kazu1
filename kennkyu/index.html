@@ -1,0 +1,295 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); }
+  .container { padding: 1.5rem 1rem; max-width: 680px; }
+  .header { margin-bottom: 1.5rem; }
+  .header h1 { font-size: 18px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+  .header p { font-size: 13px; color: var(--color-text-secondary); }
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--color-text-secondary); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .timeline { position: relative; }
+  .month-block { margin-bottom: 1rem; }
+  .month-label { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .month-tag { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); min-width: 40px; }
+  .month-line { flex: 1; height: 0.5px; background: var(--color-border-tertiary); }
+  .tasks { display: flex; flex-direction: column; gap: 6px; padding-left: 8px; border-left: 2px solid var(--color-border-tertiary); margin-left: 20px; }
+  .task { border-radius: var(--border-radius-md); padding: 10px 12px; border: 0.5px solid; cursor: pointer; transition: opacity 0.15s; }
+  .task:hover { opacity: 0.85; }
+  .task-title { font-size: 13px; font-weight: 500; margin-bottom: 3px; }
+  .task-body { font-size: 12px; line-height: 1.5; }
+  .deadline { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 7px; border-radius: 20px; margin-bottom: 5px; }
+  /* colors - all group */
+  .all { background: #E6F1FB; border-color: #85B7EB; }
+  .all .task-title { color: #0C447C; }
+  .all .task-body { color: #185FA5; }
+  .all .deadline { background: #B5D4F4; color: #0C447C; }
+  /* colors - rep (代表者) */
+  .rep { background: #FAEEDA; border-color: #EF9F27; }
+  .rep .task-title { color: #412402; }
+  .rep .task-body { color: #633806; }
+  .rep .deadline { background: #FAC775; color: #412402; }
+  /* colors - non-rep */
+  .nonrep { background: #E1F5EE; border-color: #5DCAA5; }
+  .nonrep .task-title { color: #04342C; }
+  .nonrep .task-body { color: #085041; }
+  .nonrep .deadline { background: #9FE1CB; color: #04342C; }
+  /* colors - admin */
+  .admin { background: #F1EFE8; border-color: #B4B2A9; }
+  .admin .task-title { color: #2C2C2A; }
+  .admin .task-body { color: #444441; }
+  /* filter area */
+  .filter-area { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+  .filter-btn { font-size: 12px; padding: 5px 12px; border-radius: 20px; border: 0.5px solid var(--color-border-secondary); background: var(--color-background-secondary); color: var(--color-text-secondary); cursor: pointer; transition: all 0.15s; }
+  .filter-btn.active { border-color: #378ADD; background: #E6F1FB; color: #185FA5; font-weight: 500; }
+  .hidden { display: none; }
+  .dot-line { width: 2px; height: 12px; background: var(--color-border-tertiary); margin: 0 auto 0 19px; }
+  .important-box { background: #FAECE7; border: 0.5px solid #F0997B; border-radius: var(--border-radius-md); padding: 10px 14px; margin-bottom: 1rem; }
+  .important-box p { font-size: 13px; color: #4A1B0C; line-height: 1.6; }
+  .important-box strong { color: #993C1D; }
+</style>
+
+<div class="container">
+  <div class="header">
+    <h1>先生方の動き — 年間スケジュール</h1>
+    <p>自分が次に何をするか、いつまでにやるかが一目でわかるガイドです</p>
+  </div>
+
+  <div class="important-box">
+    <p>
+      <strong>👤 自分はどっち？</strong><br>
+      <strong>学部代表者（各ブロック1名）</strong>：MieeL活用授業を10月30日までに行い、授業を動画撮影する。その動画を外部に公開する。<br>
+      <strong>それ以外の先生方（全員）</strong>：MieeL活用授業を7月〜12月15日までに行う。
+    </p>
+  </div>
+
+  <div class="filter-area">
+    <button class="filter-btn active" onclick="filterTasks('all-filter')">全員表示</button>
+    <button class="filter-btn" onclick="filterTasks('all')">全先生共通</button>
+    <button class="filter-btn" onclick="filterTasks('rep')">学部代表者のみ</button>
+    <button class="filter-btn" onclick="filterTasks('nonrep')">代表者以外</button>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#378ADD"></div>全先生が行う研修・作業</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#EF9F27"></div>学部代表者のみ</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#1D9E75"></div>代表者以外の先生方</div>
+  </div>
+
+  <div class="timeline">
+
+    <!-- 5月 -->
+    <div class="month-block">
+      <div class="month-label"><span class="month-tag">5月</span><div class="month-line"></div></div>
+      <div class="tasks">
+        <div class="task all" data-group="all">
+          <div class="deadline">5月13日（水）</div>
+          <div class="task-title">① 研究オリエンテーション</div>
+          <div class="task-body">今年の研究テーマや年間計画を全員で確認。MieeLの基本的な使い方を学ぶ。アンケートへの回答。</div>
+        </div>
+        <div class="task all" data-group="all">
+          <div class="deadline">5月13日〜6月中に完了</div>
+          <div class="task-title">📝 授業カードを2枚作る</div>
+          <div class="task-body">自分が行っている授業のアイデアを「授業カード」という形式に1人2枚まとめる。MieeL上にアップ。</div>
+        </div>
+        <div class="task all" data-group="all">
+          <div class="deadline">5月27日（水）</div>
+          <div class="task-title">② AI指導案作成研修</div>
+          <div class="task-body">AIを使って授業の指導案をサクッと作る方法を学ぶ研修。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dot-line"></div>
+
+    <!-- 6月 -->
+    <div class="month-block">
+      <div class="month-label"><span class="month-tag">6月</span><div class="month-line"></div></div>
+      <div class="tasks">
+        <div class="task all" data-group="all">
+          <div class="deadline">6月2日（火）</div>
+          <div class="task-title">③ 他の先生の授業カードを見て自分の授業に使えそうなものを探す（個人作業）</div>
+          <div class="task-body">MieeL上にある授業カードを見て、「自分もこれやれそう！」と思うものを探し、所定の用紙にまとめる。</div>
+        </div>
+        <div class="task all" data-group="all">
+          <div class="deadline">6月30日（火）</div>
+          <div class="task-title">④ 学年ごとの打ち合わせ</div>
+          <div class="task-body">授業カード・用紙を持ち寄って学年で話し合い、<strong style="color:inherit">公開授業の候補者を1名</strong>選ぶ。（この時点では「候補」です）</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dot-line"></div>
+
+    <!-- 7月 -->
+    <div class="month-block">
+      <div class="month-label"><span class="month-tag">7月</span><div class="month-line"></div></div>
+      <div class="tasks">
+        <div class="task all" data-group="all">
+          <div class="deadline">7月14日までに</div>
+          <div class="task-title">🏫 各学部で「公開授業者」を正式に決定して報告</div>
+          <div class="task-body">小低・小高・中・高の各ブロックで、公開授業を行う先生を1名確定。その先生のMieeL活用授業の用紙と一緒に、<strong style="color:inherit">総合支援部・小山へ報告</strong>する。</div>
+        </div>
+        <div class="task all" data-group="all">
+          <div class="deadline">7月〜 ★いよいよスタート</div>
+          <div class="task-title">🎯 MieeL活用授業を自分のクラスで行う</div>
+          <div class="task-body">検討してきたMieeL活用授業を実際に授業で行う。期限は自分の立場によって違う（下記参照）。</div>
+        </div>
+        <div class="task rep" data-group="rep">
+          <div class="deadline">学部代表者 → 10月30日までに完了</div>
+          <div class="task-title">📹【代表者のみ】授業を動画で撮影する</div>
+          <div class="task-body">授業の様子が伝わるように動画を撮影しておく。この動画を11月に外部の人たちに公開する。</div>
+        </div>
+        <div class="task nonrep" data-group="nonrep">
+          <div class="deadline">代表者以外 → 12月15日までに完了</div>
+          <div class="task-title">【代表者以外】授業を行う（期限は12月15日まで）</div>
+          <div class="task-body">MieeL活用授業を自分のペースで進める。12月の「ポストカンファレンス研修」で発表するための授業なので、それまでに終わらせる。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dot-line"></div>
+
+    <!-- 8月 -->
+    <div class="month-block">
+      <div class="month-label"><span class="month-tag">8月</span><div class="month-line"></div></div>
+      <div class="tasks">
+        <div class="task all" data-group="all">
+          <div class="deadline">8月28日（金）</div>
+          <div class="task-title">⑤ 夏季ICT全校研修（2部構成）</div>
+          <div class="task-body">前半：大学の先生による講演。後半：小山によるAI活用研修 または 澤田先生による授業実践紹介。</div>
+        </div>
+        <div class="task all" data-group="all">
+          <div class="deadline">8月中に完了（個人作業）</div>
+          <div class="task-title">📝 授業カードを1枚作る</div>
+          <div class="task-body">10月の全校シャッフル研修に向けて事例を増やし、授業カード作成にも慣れておくため、個人で新たに授業カードを1枚作成しMieeL上にアップする。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dot-line"></div>
+
+    <!-- 9月 -->
+    <div class="month-block">
+      <div class="month-label"><span class="month-tag">9月</span><div class="month-line"></div></div>
+      <div class="tasks">
+        <div class="task all" data-group="all">
+          <div class="deadline">9月18日（水）</div>
+          <div class="task-title">⑥ MieeL活用授業の準備・操作研修</div>
+          <div class="task-body">MieeL上でのAI活用・授業案・教材案作成の研修。自分の授業をさらに磨くチャンス。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dot-line"></div>
+
+    <!-- 10月 -->
+    <div class="month-block">
+      <div class="month-label"><span class="month-tag">10月</span><div class="month-line"></div></div>
+      <div class="tasks">
+        <div class="task all" data-group="all">
+          <div class="deadline">10月14日（水）</div>
+          <div class="task-title">⑦ 全校シャッフル研修</div>
+          <div class="task-body">小・中・高が混ざった6人グループで、お互いの授業カードを見せ合う。良かった点や「自分の授業に使えそう！」なアイデアをMieeL上に直接コメントとして入力する。</div>
+        </div>
+        <div class="task rep" data-group="rep">
+          <div class="deadline">学部代表者 → 10月30日まで！</div>
+          <div class="task-title">📹【代表者のみ】MieeL活用授業を完了・動画撮影</div>
+          <div class="task-body">11月の公開に向けて、授業と動画撮影を10月30日までに終わらせる。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dot-line"></div>
+
+    <!-- 11月 -->
+    <div class="month-block">
+      <div class="month-label"><span class="month-tag">11月</span><div class="month-line"></div></div>
+      <div class="tasks">
+        <div class="task rep" data-group="rep">
+          <div class="deadline">11月17日（火）</div>
+          <div class="task-title">⑧【代表者のみ】公開MieeL活用授業・公開協議会</div>
+          <div class="task-body">近隣の学校の先生や教育委員会の方々に、撮影した授業動画を公開する。代表者以外の先生は参加なし。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dot-line"></div>
+
+    <!-- 12月 -->
+    <div class="month-block">
+      <div class="month-label"><span class="month-tag">12月</span><div class="month-line"></div></div>
+      <div class="tasks">
+        <div class="task all" data-group="all">
+          <div class="deadline">12月15日（火）</div>
+          <div class="task-title">⑨ ポストカンファレンス研修</div>
+          <div class="task-body">各学年で行ったMieeL活用授業を発表し合う。「こんな授業をやってみたよ！」「良かった点・難しかった点」などを共有する場。<br>※代表者以外の先生はこの日までに授業を完了させておく。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dot-line"></div>
+
+    <!-- 1月 -->
+    <div class="month-block">
+      <div class="month-label"><span class="month-tag">1月</span><div class="month-line"></div></div>
+      <div class="tasks">
+        <div class="task all" data-group="all">
+          <div class="deadline">1月13日（水）</div>
+          <div class="task-title">⑩ 新・授業カードを作る</div>
+          <div class="task-body">12月のポストカンファレンスで学んだことを活かして、自分のMieeL活用授業をパワーアップさせた「改良版の授業カード」として作成する。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dot-line"></div>
+
+    <!-- 2月 -->
+    <div class="month-block">
+      <div class="month-label"><span class="month-tag">2月</span><div class="month-line"></div></div>
+      <div class="tasks">
+        <div class="task admin" data-group="admin">
+          <div class="task-title">研修はなし（研究部による成果まとめ期間）</div>
+          <div class="task-body">研究部が中心になって、アンケートの分析・成果事例の整理・研究紀要の準備を行う。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dot-line"></div>
+
+    <!-- 3月 -->
+    <div class="month-block">
+      <div class="month-label"><span class="month-tag">3月</span><div class="month-line"></div></div>
+      <div class="tasks">
+        <div class="task all" data-group="all">
+          <div class="deadline">3月17日（水）</div>
+          <div class="task-title">⑪ 学校研究報告会</div>
+          <div class="task-body">1年間のMieeL活用授業の成果をポスター発表などで共有する。「授業改善の好サイクル」がどう生まれたか、未来デザインの進捗も報告する。</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function filterTasks(group) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const tasks = document.querySelectorAll('.task');
+  tasks.forEach(t => {
+    const g = t.getAttribute('data-group');
+    if (group === 'all-filter') {
+      t.classList.remove('hidden');
+    } else if (group === 'all') {
+      t.classList.toggle('hidden', g !== 'all' && g !== 'admin');
+    } else if (group === 'rep') {
+      t.classList.toggle('hidden', g !== 'all' && g !== 'rep');
+    } else if (group === 'nonrep') {
+      t.classList.toggle('hidden', g !== 'all' && g !== 'nonrep');
+    }
+  });
+}
+</script>
