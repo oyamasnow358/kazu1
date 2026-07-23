@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>おかねの がくしゅう｜MieeL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF7EC;
+    --card:#FFFFFF;
+    --ink:#2E2A25;
+    --ink-soft:#8A8072;
+    --line:#EAE1CE;
+    --coin:#B8860B;   --coin-soft:#F5E9C8;
+    --sum:#3F8F5F;    --sum-soft:#DCF0E2;
+    --shop:#3D6B8A;   --shop-soft:#DCE9F0;
+    --change:#C15B6B; --change-soft:#F8E1E5;
+    --success:#4F9A63; --success-soft:#E3F3E6;
+    --danger:#C4573F;  --danger-soft:#FBE4DE;
+    --radius:22px;
+    --shadow:0 6px 18px rgba(46,42,37,0.10);
+    --maxw:960px;
+    --mieel:radial-gradient(circle at 50% 0%,#1B8FE8 0%,#2BB8D6 28%,#3FCB9E 45%,#8FD24A 58%,#F4D027 72%,#F7941E 100%);
+  }
+  *{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact;color-adjust:exact;}
+  html{font-size:17px;}
+  html.large-text{font-size:21px;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+    -webkit-font-smoothing:antialiased;padding-bottom:40px;
+  }
+  button{font-family:inherit;}
+  button:focus-visible, [tabindex]:focus-visible{outline:3px solid var(--shop);outline-offset:2px;}
+
+  .app{max-width:var(--maxw);margin:0 auto;padding:18px 16px 8px;}
+
+  header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
+  .mieel-brand{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .mieel-brand .orb-mini{width:20px;height:20px;border-radius:50%;background:var(--mieel);flex:none;}
+  .mieel-brand strong{color:var(--ink);font-size:.85rem;}
+  .mieel-brand a{font-size:.78rem;color:var(--shop);text-decoration:none;font-weight:600;}
+  .mieel-brand a:hover{text-decoration:underline;}
+  header.top h1{font-size:1.6rem;margin:0;font-weight:800;letter-spacing:.02em;display:flex;align-items:center;gap:.4em;}
+  header.top h1 .icon{font-size:1.2em;}
+  header.top p{margin:4px 0 0;color:var(--ink-soft);font-size:.85rem;font-weight:500;}
+  .icon-btn{
+    border:2px solid var(--ink);background:var(--card);color:var(--ink);border-radius:999px;
+    padding:.5em 1em;font-weight:700;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:.4em;
+  }
+  .icon-btn:hover{background:var(--coin-soft);}
+
+  nav.modes{display:flex;gap:9px;margin-bottom:16px;flex-wrap:wrap;}
+  nav.modes button{
+    flex:1 1 150px;font-weight:800;font-size:1rem;padding:13px 8px;border-radius:var(--radius);
+    border:3px solid transparent;background:var(--card);color:var(--ink-soft);box-shadow:var(--shadow);
+    cursor:pointer;transition:transform .12s ease, border-color .12s ease, color .12s ease;
+  }
+  nav.modes button .sub{display:block;font-size:.68em;font-weight:500;margin-top:2px;}
+  nav.modes button:hover{transform:translateY(-2px);}
+  nav.modes button.active{border-color:var(--ink);color:var(--ink);background:var(--coin-soft);}
+
+  section.panel{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:18px;}
+
+  .level-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+  .level-bar .level-btn{
+    flex:1 1 140px;text-align:left;border:2px solid var(--line);background:#FCFAF3;border-radius:16px;
+    padding:10px 12px;cursor:pointer;font-weight:700;color:var(--ink);
+  }
+  .level-bar .level-btn .stars{color:var(--coin);letter-spacing:1px;display:block;font-size:.9em;}
+  .level-bar .level-btn .name{display:block;font-size:1rem;}
+  .level-bar .level-btn.active{border-color:var(--shop);background:var(--shop-soft);}
+  .level-bar .level-btn:hover{border-color:var(--shop);}
+
+  .score-pill{
+    display:inline-flex;align-items:center;gap:.5em;background:var(--success-soft);color:var(--success);
+    font-weight:800;padding:8px 16px;border-radius:999px;font-size:.95rem;margin-bottom:14px;
+  }
+
+  .stage{min-height:260px;display:flex;flex-direction:column;align-items:center;}
+  .prompt-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;text-align:center;}
+  .prompt-row .q-text{font-weight:800;color:var(--ink);font-size:1.1rem;}
+  .speak-btn{
+    border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:999px;
+    width:40px;height:40px;font-size:1.1rem;cursor:pointer;flex:none;
+  }
+  .speak-btn:hover{background:var(--coin-soft);}
+
+  /* ── coin visuals ── */
+  .coin-display{width:150px;margin:0 auto 20px;}
+  .coin-display svg{width:100%;height:auto;display:block;}
+  .coin-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-width:640px;margin-bottom:20px;}
+  .coin-row .mini-coin{width:64px;}
+  .coin-row .mini-coin svg{width:100%;height:auto;display:block;}
+
+  .opt-grid{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-width:640px;}
+  .opt-btn{
+    min-width:100px;padding:14px 18px;border:3px solid var(--coin);background:var(--coin-soft);color:#7a5d0f;
+    font-size:1.15rem;font-weight:800;border-radius:16px;cursor:pointer;box-shadow:0 5px 0 #8a6a14;transition:.1s;
+  }
+  .opt-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #8a6a14;}
+  .opt-btn.correct-flash{background:var(--success-soft);border-color:var(--success);box-shadow:0 5px 0 #2a6040;color:#255e3c;}
+  .opt-btn.wrong-flash{background:var(--danger-soft);border-color:var(--danger);box-shadow:0 5px 0 #8a3020;color:#7a2a18;}
+  .opt-btn:disabled{opacity:.35;cursor:not-allowed;}
+
+  .sum-opt .opt-btn{border-color:var(--sum);background:var(--sum-soft);color:#215a3c;box-shadow:0 5px 0 #2a6b48;}
+  .sum-opt .opt-btn.correct-flash{border-color:var(--success);background:var(--success-soft);box-shadow:0 5px 0 #2a6040;}
+  .sum-opt .opt-btn.wrong-flash{border-color:var(--danger);background:var(--danger-soft);box-shadow:0 5px 0 #8a3020;}
+
+  .shop-opt .opt-btn{border-color:var(--shop);background:var(--shop-soft);color:#254a5f;box-shadow:0 5px 0 #2c5570;font-size:1rem;}
+  .shop-opt .opt-btn.correct-flash{border-color:var(--success);background:var(--success-soft);box-shadow:0 5px 0 #2a6040;}
+  .shop-opt .opt-btn.wrong-flash{border-color:var(--danger);background:var(--danger-soft);box-shadow:0 5px 0 #8a3020;}
+
+  .change-opt .opt-btn{border-color:var(--change);background:var(--change-soft);color:#7a2f3d;box-shadow:0 5px 0 #8a3d4d;}
+  .change-opt .opt-btn.correct-flash{border-color:var(--success);background:var(--success-soft);box-shadow:0 5px 0 #2a6040;}
+  .change-opt .opt-btn.wrong-flash{border-color:var(--danger);background:var(--danger-soft);box-shadow:0 5px 0 #8a3020;}
+
+  /* ── shop scene ── */
+  .shop-card{
+    background:#FCFAF3;border:2px solid var(--line);border-radius:18px;padding:20px 24px;
+    text-align:center;max-width:500px;margin-bottom:20px;
+  }
+  .shop-card .icon{font-size:3rem;display:block;margin-bottom:6px;}
+  .shop-card .name{font-size:1.15rem;font-weight:800;margin-bottom:4px;}
+  .shop-card .price{font-size:1.4rem;font-weight:900;color:var(--shop);}
+
+  .change-card{
+    background:#FCFAF3;border:2px solid var(--line);border-radius:18px;padding:20px 24px;
+    text-align:center;max-width:520px;margin-bottom:20px;font-size:1.05rem;font-weight:700;line-height:1.9;
+  }
+  .change-card .icon{font-size:2.4rem;display:block;margin-bottom:4px;}
+  .change-card .price-line{color:var(--shop);font-weight:900;}
+  .change-card .paid-line{color:var(--change);font-weight:900;}
+
+  /* ── feedback / footer ── */
+  .fb{margin-top:6px;font-size:1.1rem;font-weight:700;min-height:32px;display:flex;align-items:center;gap:8px;text-align:center;}
+  .fb.ok{color:#2a7a50;} .fb.ng{color:var(--danger);}
+  .action-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;justify-content:center;}
+  .btn{font-weight:800;font-size:.95rem;border-radius:14px;border:none;padding:12px 18px;cursor:pointer;color:#fff;background:var(--ink-soft);}
+  .btn.primary{background:var(--shop);}
+  .btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--ink);}
+  .btn:disabled{opacity:.4;cursor:not-allowed;}
+  .btn:active{transform:scale(.97);}
+
+  /* ── print mode ── */
+  .print-controls{display:flex;flex-direction:column;gap:14px;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{border:2px solid var(--line);background:#FCFAF3;border-radius:999px;padding:9px 16px;font-weight:700;font-size:.88rem;cursor:pointer;color:var(--ink);}
+  .chip.selected{border-color:var(--shop);background:var(--shop-soft);color:var(--shop);}
+  .field-label{font-size:.82rem;font-weight:800;color:var(--ink-soft);margin-bottom:6px;}
+  .toggle-row{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.92rem;}
+  .preview-note{color:var(--ink-soft);font-size:.85rem;margin-top:6px;text-align:center;}
+  #worksheet{display:none;}
+
+  .ws-header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid var(--ink);padding-bottom:10px;margin-bottom:16px;}
+  .ws-header h2{margin:2px 0 0;font-size:1.15rem;}
+  .ws-fields{display:flex;gap:10px;font-size:.9rem;font-weight:700;align-items:flex-end;}
+  .ws-fields .lbl{white-space:nowrap;}
+  .ws-fields .blank{border-bottom:1.5px solid var(--ink);padding:0 6px 4px;display:inline-block;min-width:100px;margin-right:10px;}
+  .ws-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+  .ws-cell{border:2px solid var(--line);border-radius:12px;padding:12px 14px;break-inside:avoid;}
+  .ws-cell .no{font-size:.78rem;font-weight:800;color:var(--ink-soft);margin-bottom:6px;}
+  .ws-sentence{font-size:1rem;font-weight:700;margin-bottom:8px;}
+  .ws-bank{font-size:.82rem;color:var(--ink-soft);margin-top:6px;}
+  .ws-answer{color:var(--success);font-weight:800;}
+  .ws-writeline{display:inline-block;border-bottom:1.8px solid var(--ink);min-width:110px;height:1.5em;vertical-align:bottom;margin-left:6px;}
+  .ws-coin-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;justify-content:center;}
+  .ws-coin-row .ws-coin{width:52px;}
+  .ws-coin-row .ws-coin svg{width:100%;height:auto;display:block;}
+
+  .hidden{display:none !important;}
+
+  @media (prefers-reduced-motion: reduce){*{transition:none !important;animation:none !important;}}
+
+  /* ── correct-answer overlay (big maru + ping-pong chime) ── */
+  #correctOverlay{
+    position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+    pointer-events:none;z-index:9999;opacity:0;
+  }
+  #correctOverlay.show{animation:overlayFade 1.05s ease forwards;}
+  @keyframes overlayFade{
+    0%{opacity:0;} 8%{opacity:1;} 78%{opacity:1;} 100%{opacity:0;}
+  }
+  .correct-circle-wrap{position:relative;width:230px;height:230px;max-width:60vw;max-height:60vw;filter:drop-shadow(0 6px 14px rgba(0,0,0,.18));}
+  .correct-circle-wrap svg{width:100%;height:100%;transform:rotate(-90deg);}
+  .correct-circle-wrap svg circle{
+    fill:rgba(255,255,255,.9);stroke:#E2483D;stroke-width:15;stroke-linecap:round;
+    stroke-dasharray:660;stroke-dashoffset:660;
+  }
+  .correct-circle-wrap.animate svg circle{animation:circleDraw .55s cubic-bezier(.4,0,.2,1) .05s forwards;}
+  @keyframes circleDraw{ to{ stroke-dashoffset:0; } }
+  .correct-label{
+    position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);
+    text-align:center;font-weight:900;color:#E2483D;font-size:1.15rem;
+    opacity:0;
+  }
+  .correct-circle-wrap.animate .correct-label{animation:labelPop .4s ease .5s forwards;}
+  @keyframes labelPop{ 0%{opacity:0;transform:translateY(-50%) scale(.6);} 60%{opacity:1;transform:translateY(-50%) scale(1.15);} 100%{opacity:1;transform:translateY(-50%) scale(1);} }
+  .correct-ping-text{
+    position:absolute;left:0;right:0;bottom:-34px;text-align:center;
+    font-weight:800;color:#E2483D;font-size:1rem;opacity:0;letter-spacing:.05em;
+  }
+  .correct-circle-wrap.animate .correct-ping-text{animation:labelPop .4s ease .62s forwards;}
+  @media (prefers-reduced-motion: reduce){
+    #correctOverlay.show{animation:none;opacity:1;}
+    .correct-circle-wrap.animate svg circle{animation:none;stroke-dashoffset:0;}
+    .correct-circle-wrap.animate .correct-label, .correct-circle-wrap.animate .correct-ping-text{animation:none;opacity:1;}
+  }
+
+  @media print{
+    body *{visibility:hidden;}
+    #worksheet, #worksheet *{visibility:visible;}
+    #worksheet{display:block !important;position:absolute;left:0;top:0;width:100%;padding:12mm;}
+    .ws-print-btn-wrap{display:none !important;}
+  }
+  @media (max-width:640px){
+    .ws-grid{grid-template-columns:1fr;}
+  }
+
+  footer.hint{max-width:var(--maxw);margin:20px auto 0;padding:0 16px;color:var(--ink-soft);font-size:.8rem;}
+  details.teacher-note{max-width:var(--maxw);margin:0 auto 20px;padding:0 16px;}
+  details.teacher-note summary{cursor:pointer;font-weight:700;color:var(--ink-soft);font-size:.85rem;}
+  details.teacher-note .box{background:#fff;border-radius:14px;padding:14px 16px;margin-top:8px;font-size:.85rem;color:var(--ink-soft);line-height:1.7;box-shadow:var(--shadow);}
+</style>
+</head>
+<body>
+<div id="correctOverlay" aria-hidden="true">
+  <div class="correct-circle-wrap">
+    <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="84"></circle></svg>
+    <div class="correct-label">せいかい！</div>
+    <div class="correct-ping-text">🔔 ピンポーン♪</div>
+  </div>
+</div>
+<div class="app">
+  <header class="top">
+    <div>
+      <div class="mieel-brand">
+        <div class="orb-mini"></div>
+        <strong>MieeL</strong>
+        <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener">www.mieel-support-school.com</a>
+      </div>
+      <h1><span class="icon">🪙</span>おかねの がくしゅう</h1>
+      <p>こうかを おぼえて、かぞえて、おかいものと おつりの れんしゅうを しよう</p>
+    </div>
+    <button class="icon-btn" id="btnLargeText" aria-pressed="false">🔠 文字を大きく</button>
+  </header>
+
+  <nav class="modes" role="tablist" aria-label="モードをえらぶ">
+    <button data-mode="coin" class="active" role="tab" aria-selected="true">🪙 こうか<span class="sub">なんえん か おぼえよう</span></button>
+    <button data-mode="sum" role="tab" aria-selected="false">💰 いくらかな<span class="sub">こうかを あわせよう</span></button>
+    <button data-mode="shop" role="tab" aria-selected="false">🛒 おかいもの<span class="sub">ちょうど はらおう</span></button>
+    <button data-mode="change" role="tab" aria-selected="false">🔄 おつり<span class="sub">おつりを かんがえよう</span></button>
+    <button data-mode="print" role="tab" aria-selected="false">🖨️ プリント<span class="sub">PDFをつくる</span></button>
+  </nav>
+
+  <!-- ===== COIN VIEW ===== -->
+  <section class="panel view" id="view-coin">
+    <div class="level-bar" id="levelBarCoin"></div>
+    <div class="score-pill" id="scoreCoin">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="coinSpeak" title="よみあげ">🔊</button>
+        <div class="q-text">これは なんえん かな？</div>
+      </div>
+      <div class="coin-display" id="coinDisplay"></div>
+      <div class="opt-grid" id="coinOpts"></div>
+      <div class="fb" id="coinFb"></div>
+      <div class="action-row">
+        <button class="btn" id="coinNext" style="background:var(--coin);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SUM VIEW ===== -->
+  <section class="panel view hidden" id="view-sum">
+    <div class="level-bar" id="levelBarSum"></div>
+    <div class="score-pill" id="scoreSum">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="sumSpeak" title="よみあげ">🔊</button>
+        <div class="q-text">ぜんぶで いくらかな？</div>
+      </div>
+      <div class="coin-row" id="sumCoins"></div>
+      <div class="opt-grid sum-opt" id="sumOpts"></div>
+      <div class="fb" id="sumFb"></div>
+      <div class="action-row">
+        <button class="btn" id="sumNext" style="background:var(--sum);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SHOP VIEW ===== -->
+  <section class="panel view hidden" id="view-shop">
+    <div class="level-bar" id="levelBarShop"></div>
+    <div class="score-pill" id="scoreShop">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="shopSpeak" title="よみあげ">🔊</button>
+        <div class="q-text">ちょうど はらえる こうかは どれ？</div>
+      </div>
+      <div class="shop-card" id="shopCard"></div>
+      <div class="opt-grid shop-opt" id="shopOpts"></div>
+      <div class="fb" id="shopFb"></div>
+      <div class="action-row">
+        <button class="btn" id="shopNext" style="background:var(--shop);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CHANGE VIEW ===== -->
+  <section class="panel view hidden" id="view-change">
+    <div class="level-bar" id="levelBarChange"></div>
+    <div class="score-pill" id="scoreChange">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="changeSpeak" title="よみあげ">🔊</button>
+        <div class="q-text">おつりは いくらかな？</div>
+      </div>
+      <div class="change-card" id="changeCard"></div>
+      <div class="opt-grid change-opt" id="changeOpts"></div>
+      <div class="fb" id="changeFb"></div>
+      <div class="action-row">
+        <button class="btn" id="changeNext" style="background:var(--change);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PRINT VIEW ===== -->
+  <section class="panel view hidden" id="view-print">
+    <div class="print-controls">
+      <div>
+        <div class="field-label">もんだいの しゅるい</div>
+        <div class="chip-row" id="printTypeChips">
+          <button class="chip selected" data-ptype="coin">🪙 こうか</button>
+          <button class="chip" data-ptype="sum">💰 いくらかな</button>
+          <button class="chip" data-ptype="shop">🛒 おかいもの</button>
+          <button class="chip" data-ptype="change">🔄 おつり</button>
+        </div>
+      </div>
+      <div>
+        <div class="field-label">レベル</div>
+        <div class="chip-row" id="levelBarPrint"></div>
+      </div>
+      <div>
+        <div class="field-label">もんだいすう</div>
+        <div class="chip-row" id="printCountChips">
+          <button class="chip" data-count="4">4もん</button>
+          <button class="chip selected" data-count="6">6もん</button>
+          <button class="chip" data-count="8">8もん</button>
+        </div>
+      </div>
+      <div class="toggle-row">
+        <input type="checkbox" id="printShowAnswer">
+        <label for="printShowAnswer">こたえを ひょうじする（指導者用）</label>
+      </div>
+      <div class="action-row" style="margin-top:2px;">
+        <button class="btn ghost" id="printRegenBtn">🔄 もんだいを かえる</button>
+        <button class="btn primary" id="printOpenBtn">🖨️ プリントする</button>
+      </div>
+      <div class="preview-note">「プリントする」を押すと、印刷プレビューが開きます。ブラウザの印刷設定でPDF保存もできます。</div>
+    </div>
+  </section>
+
+  <footer class="hint">
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:5px;">
+      <div style="width:18px;height:18px;border-radius:50%;background:var(--mieel);flex:none;"></div>
+      <strong style="color:var(--ink);">MieeL</strong>
+      <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener" style="color:var(--shop);">mieel-support-school.com</a>
+    </div>
+    © おかねの がくしゅう ツール（特別支援教育向け）
+  </footer>
+
+  <details class="teacher-note">
+    <summary>👩‍🏫 指導者の方へ</summary>
+    <div class="box">
+      このアプリは、特別支援学校の算数・数学、生活単元学習における「お金」の学習を目的とした4つの練習モードと、印刷用ワークシート機能で構成されています。<br>
+      ・<strong>こうか</strong>：1円・5円・10円・50円・100円・500円・1000円札の見分け方を練習します。実際の硬貨と同じく5円・50円には穴の絵を入れています<br>
+      ・<strong>いくらかな</strong>：複数の硬貨を組み合わせた合計金額を求める練習です<br>
+      ・<strong>おかいもの</strong>：提示された金額を、ちょうど支払える硬貨の組み合わせから選ぶ、実践的な買い物学習です<br>
+      ・<strong>おつり</strong>：代金と支払った金額から、おつりを計算する練習です<br>
+      いくらかな・おかいもの・おつりの3モードは問題を自動生成しているため、繰り返し練習しても毎回ちがう問題が出題されます。各モードにレベル設定があり、小さい硬貨から大きい金額へ段階的に学習できます。よみあげボタンで音声支援も可能です。プリントモードでは同じ4種類の問題をワークシートとして印刷でき、解答表示の切り替えもできます。
+    </div>
+  </details>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =========================================================
+     UTILS
+  ========================================================= */
+  function shuffle(a){
+    var arr=a.slice();
+    for(var i=arr.length-1;i>0;i--){
+      var j=Math.floor(Math.random()*(i+1));
+      var t=arr[i];arr[i]=arr[j];arr[j]=t;
+    }
+    return arr;
+  }
+  function pickRandom(a){ return a[Math.floor(Math.random()*a.length)]; }
+  function rand(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+  function speak(text){
+    if(!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang='ja-JP'; u.rate=0.85;
+    window.speechSynthesis.speak(u);
+  }
+  function renderLevelBar(container, levels, activeId, onSelect){
+    container.innerHTML='';
+    levels.forEach(function(lv){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='level-btn'+(lv.id===activeId?' active':'');
+      b.innerHTML='<span class="stars">'+lv.stars+'</span><span class="name">'+lv.name+'</span>';
+      b.addEventListener('click', function(){ onSelect(lv.id); });
+      container.appendChild(b);
+    });
+  }
+  function updateScorePill(el, state){
+    el.innerHTML = '✅ '+state.score+' / '+state.total;
+  }
+  var PRAISE = ['やったね！','せいかい！','すごい！','ばっちり！','よくできました！'];
+  var TRY_AGAIN = ['もういちど！','おしい！','ゆっくり かんがえよう。','だいじょうぶ、もう一回！'];
+
+  /* ── correct-answer chime + big maru overlay ── */
+  var sharedAudioCtx = null;
+  function playDing(){
+    try{
+      var Ctx = window.AudioContext || window.webkitAudioContext;
+      if(!Ctx) return;
+      if(!sharedAudioCtx) sharedAudioCtx = new Ctx();
+      var ctx = sharedAudioCtx;
+      if(ctx.state==='suspended'){ ctx.resume(); }
+      function tone(freq, start, dur, peak){
+        var o = ctx.createOscillator();
+        var g = ctx.createGain();
+        o.type='sine'; o.frequency.value=freq;
+        o.connect(g); g.connect(ctx.destination);
+        var t0 = ctx.currentTime+start;
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.linearRampToValueAtTime(peak, t0+0.03);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0+dur);
+        o.start(t0);
+        o.stop(t0+dur+0.03);
+      }
+      tone(880.0, 0,    0.30, 0.30);  /* ピン */
+      tone(1318.5, 0.24, 0.48, 0.26); /* ポーン */
+    }catch(e){ /* audio not available; visual feedback still shows */ }
+  }
+  function triggerCorrectFeedback(){
+    playDing();
+    var overlay = document.getElementById('correctOverlay');
+    if(!overlay) return;
+    var wrap = overlay.querySelector('.correct-circle-wrap');
+    overlay.classList.remove('show');
+    wrap.classList.remove('animate');
+    void overlay.offsetWidth; /* force reflow so animation restarts every time */
+    overlay.classList.add('show');
+    wrap.classList.add('animate');
+  }
+
+  /* generic numeric multiple-choice option builder */
+  function buildOptions(correctVal, deltas, suffix, count){
+    var set=[correctVal];
+    var pool=shuffle(deltas.slice());
+    for(var i=0;i<pool.length && set.length<count;i++){
+      var v=correctVal+pool[i];
+      if(v>0 && set.indexOf(v)===-1) set.push(v);
+    }
+    var guard=0;
+    while(set.length<count && guard<80){
+      guard++;
+      var v2=correctVal+rand(-9,9);
+      if(v2>0 && set.indexOf(v2)===-1) set.push(v2);
+    }
+    var arr=shuffle(set);
+    return {correctLabel: correctVal+suffix, options: arr.map(function(v){return v+suffix;})};
+  }
+
+  /* =========================================================
+     COIN SVG BUILDER (shared by coin mode, sum mode, shop mode, print)
+  ========================================================= */
+  function buildCoinSVG(value){
+    if(value>=1000){
+      return '<svg viewBox="0 0 160 90" xmlns="http://www.w3.org/2000/svg">'
+        + '<rect x="4" y="4" width="152" height="82" rx="8" fill="#BFE3D0" stroke="#2E2A25" stroke-width="3"></rect>'
+        + '<rect x="14" y="14" width="132" height="62" rx="4" fill="none" stroke="#2E2A25" stroke-width="1.5" stroke-dasharray="4 3"></rect>'
+        + '<text x="80" y="54" font-size="24" text-anchor="middle" font-weight="900" fill="#2E2A25">'+value+'円</text>'
+        + '</svg>';
+    }
+    var colors = {1:'#E7E7E7',5:'#D9B64E',10:'#BD7F4C',50:'#D3D3D3',100:'#CFCFCF',500:'#CDA33D'};
+    var col = colors[value] || '#CFCFCF';
+    var hasHole = (value===5 || value===50);
+    var svg = '<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">';
+    svg += '<circle cx="60" cy="60" r="52" fill="'+col+'" stroke="#2E2A25" stroke-width="3"></circle>';
+    svg += '<circle cx="60" cy="60" r="52" fill="none" stroke="#2E2A25" stroke-width="1" stroke-dasharray="2 3" opacity="0.5"></circle>';
+    if(hasHole){
+      svg += '<circle cx="60" cy="60" r="13" fill="var(--bg,#FAF7EC)" stroke="#2E2A25" stroke-width="2"></circle>';
+      svg += '<text x="60" y="100" font-size="15" text-anchor="middle" font-weight="900" fill="#2E2A25">'+value+'円</text>';
+    } else {
+      svg += '<text x="60" y="68" font-size="21" text-anchor="middle" font-weight="900" fill="#2E2A25">'+value+'円</text>';
+    }
+    svg += '</svg>';
+    return svg;
+  }
+
+  /* =========================================================
+     SHARED DENOMINATION POOLS
+  ========================================================= */
+  var LEVELS_COMMON = [
+    {id:1, name:'ちいさい こうか', stars:'★☆☆'},
+    {id:2, name:'まぎらわしい こうか', stars:'★★☆'},
+    {id:3, name:'おおきな きんがく', stars:'★★★'}
+  ];
+  var DENOM_POOL = {1:[1,5,10], 2:[10,50,100], 3:[100,500,1000]};
+
+  var SHOP_ITEMS = [
+    {icon:'🍬', name:'あめ'}, {icon:'🍫', name:'チョコレート'}, {icon:'🍪', name:'クッキー'},
+    {icon:'🍩', name:'ドーナツ'}, {icon:'🧃', name:'ジュース'}, {icon:'🍎', name:'りんご'},
+    {icon:'🍌', name:'バナナ'}, {icon:'🥐', name:'パン'}, {icon:'✏️', name:'えんぴつ'},
+    {icon:'📒', name:'ノート'}, {icon:'🖍️', name:'クレヨン'}, {icon:'🧻', name:'ティッシュ'},
+    {icon:'🎈', name:'ふうせん'}, {icon:'🧸', name:'ぬいぐるみ'}, {icon:'⚽', name:'ボール'},
+    {icon:'🖊️', name:'ペン'}
+  ];
+
+  /* =========================================================
+     COIN MODE (recognition)
+  ========================================================= */
+  var COIN_LEVELS = LEVELS_COMMON;
+  var coinState = {level:1, score:0, total:0, current:null, locked:false};
+  function genCoinQuestion(level){
+    var pool = DENOM_POOL[level];
+    var value = pickRandom(pool);
+    return {value:value, options: shuffle(pool.slice())};
+  }
+  function renderLevelBarCoin(){
+    renderLevelBar(document.getElementById('levelBarCoin'), COIN_LEVELS, coinState.level, function(id){
+      coinState.level=id; renderLevelBarCoin(); newCoinQuestion();
+    });
+  }
+  function newCoinQuestion(){
+    coinState.current = genCoinQuestion(coinState.level);
+    coinState.locked = false;
+    document.getElementById('coinFb').className='fb'; document.getElementById('coinFb').textContent='';
+    document.getElementById('coinNext').style.display='none';
+    document.getElementById('coinDisplay').innerHTML = buildCoinSVG(coinState.current.value);
+    var grid = document.getElementById('coinOpts');
+    grid.innerHTML='';
+    coinState.current.options.forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button'; b.className='opt-btn'; b.textContent=opt+'円';
+      b.addEventListener('click', function(){
+        if(coinState.locked) return;
+        var correct = (opt===coinState.current.value);
+        coinState.total++;
+        if(correct) coinState.score++;
+        updateScorePill(document.getElementById('scoreCoin'), coinState);
+        var fbEl = document.getElementById('coinFb');
+        if(correct){
+          coinState.locked=true;
+          b.classList.add('correct-flash');
+          grid.querySelectorAll('.opt-btn').forEach(function(o){ if(o!==b) o.disabled=true; });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+          document.getElementById('coinNext').style.display='inline-block';
+          speak(opt+'円です。');
+        } else {
+          b.classList.add('wrong-flash');
+          setTimeout(function(){ b.classList.remove('wrong-flash'); }, 500);
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+      });
+      grid.appendChild(b);
+    });
+  }
+  document.getElementById('coinSpeak').addEventListener('click', function(){
+    speak('これは なんえん かな？');
+  });
+  document.getElementById('coinNext').addEventListener('click', newCoinQuestion);
+
+  /* =========================================================
+     SUM MODE
+  ========================================================= */
+  var SUM_LEVELS = LEVELS_COMMON;
+  var sumState = {level:1, score:0, total:0, current:null, locked:false};
+  function genSumQuestion(level){
+    var pool = DENOM_POOL[level];
+    var count = level===1 ? 2 : (level===2 ? 3 : 4);
+    var coins = [];
+    for(var i=0;i<count;i++){ coins.push(pickRandom(pool)); }
+    coins = coins.sort(function(a,b){return b-a;});
+    var total = coins.reduce(function(a,b){return a+b;}, 0);
+    var deltas = pool.concat(pool.map(function(v){return -v;})).concat([-1,1,-2,2]);
+    var built = buildOptions(total, deltas, '円', 4);
+    return {coins:coins, total:total, correctLabel:built.correctLabel, options: shuffle(built.options)};
+  }
+  function renderLevelBarSum(){
+    renderLevelBar(document.getElementById('levelBarSum'), SUM_LEVELS, sumState.level, function(id){
+      sumState.level=id; renderLevelBarSum(); newSumQuestion();
+    });
+  }
+  function newSumQuestion(){
+    sumState.current = genSumQuestion(sumState.level);
+    sumState.locked = false;
+    document.getElementById('sumFb').className='fb'; document.getElementById('sumFb').textContent='';
+    document.getElementById('sumNext').style.display='none';
+    var row = document.getElementById('sumCoins');
+    row.innerHTML='';
+    sumState.current.coins.forEach(function(v){
+      var d = document.createElement('div');
+      d.className='mini-coin';
+      d.innerHTML = buildCoinSVG(v);
+      row.appendChild(d);
+    });
+    var grid = document.getElementById('sumOpts');
+    grid.innerHTML='';
+    sumState.current.options.forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button'; b.className='opt-btn'; b.textContent=opt;
+      b.addEventListener('click', function(){
+        if(sumState.locked) return;
+        var correct = (opt===sumState.current.correctLabel);
+        sumState.total++;
+        if(correct) sumState.score++;
+        updateScorePill(document.getElementById('scoreSum'), sumState);
+        var fbEl = document.getElementById('sumFb');
+        if(correct){
+          sumState.locked=true;
+          b.classList.add('correct-flash');
+          grid.querySelectorAll('.opt-btn').forEach(function(o){ if(o!==b) o.disabled=true; });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+          document.getElementById('sumNext').style.display='inline-block';
+          speak('ぜんぶで '+sumState.current.correctLabel+'です。');
+        } else {
+          b.classList.add('wrong-flash');
+          setTimeout(function(){ b.classList.remove('wrong-flash'); }, 500);
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+      });
+      grid.appendChild(b);
+    });
+  }
+  document.getElementById('sumSpeak').addEventListener('click', function(){
+    speak('ぜんぶで いくらかな？');
+  });
+  document.getElementById('sumNext').addEventListener('click', newSumQuestion);
+
+  /* =========================================================
+     SHOP MODE
+  ========================================================= */
+  var SHOP_LEVELS = LEVELS_COMMON;
+  var shopState = {level:1, score:0, total:0, current:null, locked:false};
+  function comboLabel(combo){
+    return combo.slice().sort(function(a,b){return b-a;}).map(function(v){return v+'円';}).join(' + ');
+  }
+  function genShopQuestion(level){
+    var pool = DENOM_POOL[level];
+    var item = pickRandom(SHOP_ITEMS);
+    var count = level===1 ? 2 : (level===2 ? 3 : 3);
+    var correctCombo = [];
+    for(var i=0;i<count;i++){ correctCombo.push(pickRandom(pool)); }
+    var price = correctCombo.reduce(function(a,b){return a+b;}, 0);
+    var comboLabels = [comboLabel(correctCombo)];
+    var options = [{combo:correctCombo, label:comboLabel(correctCombo), sum:price}];
+    var guard=0;
+    while(options.length<3 && guard<200){
+      guard++;
+      var swapIdx = rand(0, correctCombo.length-1);
+      var newCombo = correctCombo.slice();
+      newCombo[swapIdx] = pickRandom(pool);
+      var lbl = comboLabel(newCombo);
+      var sum = newCombo.reduce(function(a,b){return a+b;}, 0);
+      if(sum!==price && comboLabels.indexOf(lbl)===-1){
+        comboLabels.push(lbl);
+        options.push({combo:newCombo, label:lbl, sum:sum});
+      }
+    }
+    /* fallback: if we couldn't find enough distinct distractors, build simple ones */
+    while(options.length<3){
+      var extra = correctCombo.concat([pickRandom(pool)]);
+      var lbl2 = comboLabel(extra);
+      var sum2 = extra.reduce(function(a,b){return a+b;}, 0);
+      if(sum2!==price && comboLabels.indexOf(lbl2)===-1){
+        comboLabels.push(lbl2);
+        options.push({combo:extra, label:lbl2, sum:sum2});
+      }
+    }
+    return {item:item, price:price, correctLabel:comboLabel(correctCombo), options: shuffle(options)};
+  }
+  function renderLevelBarShop(){
+    renderLevelBar(document.getElementById('levelBarShop'), SHOP_LEVELS, shopState.level, function(id){
+      shopState.level=id; renderLevelBarShop(); newShopQuestion();
+    });
+  }
+  function newShopQuestion(){
+    shopState.current = genShopQuestion(shopState.level);
+    shopState.locked = false;
+    document.getElementById('shopFb').className='fb'; document.getElementById('shopFb').textContent='';
+    document.getElementById('shopNext').style.display='none';
+    var cur = shopState.current;
+    document.getElementById('shopCard').innerHTML =
+      '<span class="icon">'+cur.item.icon+'</span><span class="name">'+cur.item.name+'</span><br><span class="price">'+cur.price+'円</span>';
+    var grid = document.getElementById('shopOpts');
+    grid.innerHTML='';
+    cur.options.forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button'; b.className='opt-btn'; b.textContent=opt.label;
+      b.addEventListener('click', function(){
+        if(shopState.locked) return;
+        var correct = (opt.label===cur.correctLabel);
+        shopState.total++;
+        if(correct) shopState.score++;
+        updateScorePill(document.getElementById('scoreShop'), shopState);
+        var fbEl = document.getElementById('shopFb');
+        if(correct){
+          shopState.locked=true;
+          b.classList.add('correct-flash');
+          grid.querySelectorAll('.opt-btn').forEach(function(o){ if(o!==b) o.disabled=true; });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+          document.getElementById('shopNext').style.display='inline-block';
+          speak(cur.item.name+'は '+cur.price+'円です。');
+        } else {
+          b.classList.add('wrong-flash');
+          setTimeout(function(){ b.classList.remove('wrong-flash'); }, 500);
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+      });
+      grid.appendChild(b);
+    });
+  }
+  document.getElementById('shopSpeak').addEventListener('click', function(){
+    var cur = shopState.current;
+    speak(cur.item.name+'は '+cur.price+'円です。ちょうど はらえる こうかは どれ？');
+  });
+  document.getElementById('shopNext').addEventListener('click', newShopQuestion);
+
+  /* =========================================================
+     CHANGE MODE
+  ========================================================= */
+  var CHANGE_LEVELS = LEVELS_COMMON;
+  function genChangeQuestion(level){
+    var item = pickRandom(SHOP_ITEMS);
+    var price, paid;
+    if(level===1){
+      price = rand(1,9); paid = 10;
+    } else if(level===2){
+      price = rand(1,9)*10; paid = 100;
+    } else {
+      price = rand(1,9)*100;
+      paid = price<500 ? pickRandom([500,1000]) : 1000;
+    }
+    var change = paid - price;
+    var deltas = [-100,-50,-10,-5,-1,1,5,10,50,100];
+    var built = buildOptions(change, deltas, '円', 4);
+    return {item:item, price:price, paid:paid, correctLabel:built.correctLabel, options: shuffle(built.options)};
+  }
+  var changeState = {level:1, score:0, total:0, current:null, locked:false};
+  function renderLevelBarChange(){
+    renderLevelBar(document.getElementById('levelBarChange'), CHANGE_LEVELS, changeState.level, function(id){
+      changeState.level=id; renderLevelBarChange(); newChangeQuestion();
+    });
+  }
+  function newChangeQuestion(){
+    changeState.current = genChangeQuestion(changeState.level);
+    changeState.locked = false;
+    document.getElementById('changeFb').className='fb'; document.getElementById('changeFb').textContent='';
+    document.getElementById('changeNext').style.display='none';
+    var cur = changeState.current;
+    document.getElementById('changeCard').innerHTML =
+      '<span class="icon">'+cur.item.icon+'</span>'
+      + cur.item.name+' は <span class="price-line">'+cur.price+'円</span> です。<br>'
+      + '<span class="paid-line">'+cur.paid+'円</span> はらいました。おつりは？';
+    var grid = document.getElementById('changeOpts');
+    grid.innerHTML='';
+    cur.options.forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button'; b.className='opt-btn'; b.textContent=opt;
+      b.addEventListener('click', function(){
+        if(changeState.locked) return;
+        var correct = (opt===cur.correctLabel);
+        changeState.total++;
+        if(correct) changeState.score++;
+        updateScorePill(document.getElementById('scoreChange'), changeState);
+        var fbEl = document.getElementById('changeFb');
+        if(correct){
+          changeState.locked=true;
+          b.classList.add('correct-flash');
+          grid.querySelectorAll('.opt-btn').forEach(function(o){ if(o!==b) o.disabled=true; });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+          document.getElementById('changeNext').style.display='inline-block';
+          speak('おつりは '+cur.correctLabel+'です。');
+        } else {
+          b.classList.add('wrong-flash');
+          setTimeout(function(){ b.classList.remove('wrong-flash'); }, 500);
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+      });
+      grid.appendChild(b);
+    });
+  }
+  document.getElementById('changeSpeak').addEventListener('click', function(){
+    var cur = changeState.current;
+    speak(cur.item.name+'は '+cur.price+'円です。'+cur.paid+'円 はらいました。おつりは いくらかな？');
+  });
+  document.getElementById('changeNext').addEventListener('click', newChangeQuestion);
+
+  /* =========================================================
+     PRINT MODE
+  ========================================================= */
+  var printState = {level:1, type:'coin', count:6, showAnswer:false, problems:[]};
+
+  function levelsForPrintType(){ return LEVELS_COMMON; }
+  function renderPrintLevelBar(){
+    var levelsForType = levelsForPrintType();
+    if(!levelsForType.some(function(l){return l.id===printState.level;})){
+      printState.level = levelsForType[0].id;
+    }
+    var container = document.getElementById('levelBarPrint');
+    container.innerHTML='';
+    levelsForType.forEach(function(lv){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='chip'+(lv.id===printState.level?' selected':'');
+      b.textContent = lv.stars+' '+lv.name;
+      b.addEventListener('click', function(){
+        printState.level=lv.id; renderPrintLevelBar(); regenerateProblems(); renderWorksheet();
+      });
+      container.appendChild(b);
+    });
+  }
+  document.querySelectorAll('#printTypeChips .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#printTypeChips .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      printState.type = c.getAttribute('data-ptype');
+      renderPrintLevelBar();
+      regenerateProblems();
+      renderWorksheet();
+    });
+  });
+  document.querySelectorAll('#printCountChips .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#printCountChips .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      printState.count = parseInt(c.getAttribute('data-count'),10);
+      regenerateProblems(); renderWorksheet();
+    });
+  });
+  document.getElementById('printShowAnswer').addEventListener('change', function(e){
+    printState.showAnswer = e.target.checked;
+    renderWorksheet();
+  });
+  document.getElementById('printRegenBtn').addEventListener('click', function(){
+    regenerateProblems(); renderWorksheet();
+  });
+  document.getElementById('printOpenBtn').addEventListener('click', function(){
+    renderWorksheet();
+    setTimeout(function(){ window.print(); }, 60);
+  });
+
+  function regenerateProblems(){
+    var list=[];
+    for(var i=0;i<printState.count;i++){
+      if(printState.type==='coin'){
+        list.push(genCoinQuestion(printState.level));
+      } else if(printState.type==='sum'){
+        list.push(genSumQuestion(printState.level));
+      } else if(printState.type==='shop'){
+        list.push(genShopQuestion(printState.level));
+      } else {
+        list.push(genChangeQuestion(printState.level));
+      }
+    }
+    printState.problems = list;
+  }
+  regenerateProblems();
+
+  function typeInstruction(){
+    return printState.type==='coin' ? 'なんえんか、こたえに 〇を つけよう'
+      : printState.type==='sum' ? 'ぜんぶで いくらか、こたえに 〇を つけよう'
+      : printState.type==='shop' ? 'ちょうど はらえる こうかに 〇を つけよう'
+      : 'おつりは いくらか、こたえに 〇を つけよう';
+  }
+  function renderWorksheet(){
+    var lv = LEVELS_COMMON.filter(function(l){return l.id===printState.level;})[0];
+    var typeLabel = printState.type==='coin' ? '🪙 こうか'
+      : printState.type==='sum' ? '💰 いくらかな'
+      : printState.type==='shop' ? '🛒 おかいもの'
+      : '🔄 おつり';
+
+    var html = '';
+    html += '<div class="ws-header"><div style="display:flex;align-items:center;gap:8px;">'
+      + '<div style="width:20px;height:20px;border-radius:50%;background:var(--mieel);border:1px solid #ccc;flex:none;"></div>'
+      + '<div><div style="font-size:11px;color:#333;font-weight:700;">MieeL おかねの がくしゅう</div>'
+      + '<h2>'+typeLabel+'（'+lv.name+'）</h2>'
+      + '<div style="font-size:11px;color:#666;margin-top:2px;">'+typeInstruction()+'</div></div></div>'
+      + '<div class="ws-fields" style="flex-direction:column;align-items:flex-end;gap:2px;">'
+      + '<div style="font-size:.75rem;color:#3A9A8C;font-weight:700;">mieel-support-school.com</div>'
+      + '<div><span class="lbl">なまえ：</span><span class="blank">&nbsp;</span><span class="lbl">ひづけ：</span><span class="blank">&nbsp;</span></div></div></div>';
+
+    html += '<div class="ws-grid">';
+    printState.problems.forEach(function(p, idx){
+      html += '<div class="ws-cell"><div class="no">もんだい '+(idx+1)+'</div>';
+      if(printState.type==='coin'){
+        html += '<div class="ws-coin-row"><div class="ws-coin">'+buildCoinSVG(p.value)+'</div></div>';
+        html += '<div style="text-align:center;">こたえ：<span class="ws-writeline"></span> 円</div>';
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;text-align:center;">こたえ：'+p.value+'円</div>';
+        }
+      } else if(printState.type==='sum'){
+        html += '<div class="ws-coin-row">'+p.coins.map(function(v){return '<div class="ws-coin">'+buildCoinSVG(v)+'</div>';}).join('')+'</div>';
+        html += '<div style="text-align:center;">こたえ：<span class="ws-writeline"></span> 円</div>';
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;text-align:center;">こたえ：'+p.correctLabel+'</div>';
+        }
+      } else if(printState.type==='shop'){
+        html += '<div class="ws-sentence" style="text-align:center;">'+p.item.icon+' '+p.item.name+'　<strong>'+p.price+'円</strong></div>';
+        html += '<div class="ws-bank">えらぶ：'+shuffle(p.options.map(function(o){return o.label;})).join('　／　')+'</div>';
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;">こたえ：'+p.correctLabel+'</div>';
+        }
+      } else {
+        html += '<div class="ws-sentence" style="text-align:center;">'+p.item.icon+' '+p.item.name+'　'+p.price+'円<br>'+p.paid+'円 はらいました</div>';
+        html += '<div style="text-align:center;">おつり：<span class="ws-writeline"></span> 円</div>';
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;text-align:center;">こたえ：'+p.correctLabel+'</div>';
+        }
+      }
+      html += '</div>';
+    });
+    html += '</div>';
+    var ws = document.getElementById('worksheet');
+    if(!ws){
+      ws = document.createElement('div');
+      ws.id='worksheet';
+      document.body.appendChild(ws);
+    }
+    ws.innerHTML = html;
+  }
+  renderPrintLevelBar();
+  renderWorksheet();
+
+  /* =========================================================
+     MODE SWITCHING / GLOBAL UI
+  ========================================================= */
+  document.querySelectorAll('nav.modes button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('nav.modes button').forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+      btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+      var mode = btn.getAttribute('data-mode');
+      document.querySelectorAll('.view').forEach(function(v){ v.classList.add('hidden'); });
+      document.getElementById('view-'+mode).classList.remove('hidden');
+      if(mode==='print') renderWorksheet();
+    });
+  });
+
+  var largeToggle = document.getElementById('btnLargeText');
+  largeToggle.addEventListener('click', function(){
+    var on = document.documentElement.classList.toggle('large-text');
+    largeToggle.setAttribute('aria-pressed', on ? 'true':'false');
+  });
+
+  /* =========================================================
+     INIT
+  ========================================================= */
+  renderLevelBarCoin(); newCoinQuestion();
+  renderLevelBarSum(); newSumQuestion();
+  renderLevelBarShop(); newShopQuestion();
+  renderLevelBarChange(); newChangeQuestion();
+
+})();
+</script>
+</body>
+</html>

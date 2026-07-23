@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>こうつうあんぜん｜MieeL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF7EF;
+    --card:#FFFFFF;
+    --ink:#2E2A25;
+    --ink-soft:#8A8072;
+    --line:#EAE1CE;
+    --signal:#3D6B8A;  --signal-soft:#DCE9F0;
+    --walk:#3F9D8B;    --walk-soft:#DBEFEA;
+    --sign:#C98A2E;    --sign-soft:#F6E6C7;
+    --danger2:#C15B6B; --danger2-soft:#F8E1E5;
+    --safe:#4F9A63;    --safe-soft:#DDEFE0;
+    --success:#4F9A63; --success-soft:#E3F3E6;
+    --danger:#C4573F;  --danger-soft:#FBE4DE;
+    --radius:22px;
+    --shadow:0 6px 18px rgba(46,42,37,0.10);
+    --maxw:960px;
+    --mieel:radial-gradient(circle at 50% 0%,#1B8FE8 0%,#2BB8D6 28%,#3FCB9E 45%,#8FD24A 58%,#F4D027 72%,#F7941E 100%);
+  }
+  *{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact;color-adjust:exact;}
+  html{font-size:17px;}
+  html.large-text{font-size:21px;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+    -webkit-font-smoothing:antialiased;padding-bottom:40px;
+  }
+  button{font-family:inherit;}
+  button:focus-visible, [tabindex]:focus-visible{outline:3px solid var(--walk);outline-offset:2px;}
+
+  .app{max-width:var(--maxw);margin:0 auto;padding:18px 16px 8px;}
+
+  header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
+  .mieel-brand{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .mieel-brand .orb-mini{width:20px;height:20px;border-radius:50%;background:var(--mieel);flex:none;}
+  .mieel-brand strong{color:var(--ink);font-size:.85rem;}
+  .mieel-brand a{font-size:.78rem;color:var(--walk);text-decoration:none;font-weight:600;}
+  .mieel-brand a:hover{text-decoration:underline;}
+  header.top h1{font-size:1.5rem;margin:0;font-weight:800;letter-spacing:.02em;display:flex;align-items:center;gap:.35em;}
+  header.top h1 .icon{font-size:1.15em;}
+  header.top p{margin:4px 0 0;color:var(--ink-soft);font-size:.85rem;font-weight:500;}
+  .icon-btn{
+    border:2px solid var(--ink);background:var(--card);color:var(--ink);border-radius:999px;
+    padding:.5em 1em;font-weight:700;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:.4em;
+  }
+  .icon-btn:hover{background:var(--sign-soft);}
+
+  nav.modes{display:flex;gap:9px;margin-bottom:16px;flex-wrap:wrap;}
+  nav.modes button{
+    flex:1 1 150px;font-weight:800;font-size:1rem;padding:13px 8px;border-radius:var(--radius);
+    border:3px solid transparent;background:var(--card);color:var(--ink-soft);box-shadow:var(--shadow);
+    cursor:pointer;transition:transform .12s ease, border-color .12s ease, color .12s ease;
+  }
+  nav.modes button .sub{display:block;font-size:.68em;font-weight:500;margin-top:2px;}
+  nav.modes button:hover{transform:translateY(-2px);}
+  nav.modes button.active{border-color:var(--ink);color:var(--ink);background:var(--sign-soft);}
+
+  section.panel{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:18px;}
+
+  .level-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+  .level-bar .level-btn{
+    flex:1 1 140px;text-align:left;border:2px solid var(--line);background:#FCFAF3;border-radius:16px;
+    padding:10px 12px;cursor:pointer;font-weight:700;color:var(--ink);
+  }
+  .level-bar .level-btn .stars{color:var(--danger2);letter-spacing:1px;display:block;font-size:.9em;}
+  .level-bar .level-btn .name{display:block;font-size:1rem;}
+  .level-bar .level-btn.active{border-color:var(--walk);background:var(--walk-soft);}
+  .level-bar .level-btn:hover{border-color:var(--walk);}
+
+  .score-pill{
+    display:inline-flex;align-items:center;gap:.5em;background:var(--success-soft);color:var(--success);
+    font-weight:800;padding:8px 16px;border-radius:999px;font-size:.95rem;margin-bottom:14px;
+  }
+
+  .stage{min-height:260px;display:flex;flex-direction:column;align-items:center;}
+  .prompt-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;text-align:center;}
+  .prompt-row .q-text{font-weight:800;color:var(--ink);font-size:1.05rem;}
+  .speak-btn{
+    border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:999px;
+    width:40px;height:40px;font-size:1.1rem;cursor:pointer;flex:none;
+  }
+  .speak-btn:hover{background:var(--sign-soft);}
+
+  /* ── signal light display ── */
+  .light-box{
+    background:#33302A;border-radius:20px;padding:20px 26px;display:flex;flex-direction:column;gap:14px;
+    margin-bottom:20px;box-shadow:0 6px 16px rgba(0,0,0,.2);
+  }
+  .light-circle{width:56px;height:56px;border-radius:50%;background:#4a453d;}
+  .light-circle.on-red{background:#E2483D;box-shadow:0 0 20px #E2483D;}
+  .light-circle.on-yellow{background:#F0C93D;box-shadow:0 0 20px #F0C93D;}
+  .light-circle.on-green{background:#4F9A63;box-shadow:0 0 20px #4F9A63;}
+  .ped-signal{
+    background:#33302A;border-radius:16px;padding:20px 30px;margin-bottom:20px;
+    display:flex;align-items:center;justify-content:center;font-size:3rem;
+  }
+
+  .word-bubble{
+    background:#FCFAF3;border:3px solid var(--line);border-radius:20px;padding:22px 30px;
+    font-size:1.15rem;font-weight:700;text-align:center;max-width:600px;margin-bottom:20px;line-height:1.6;
+  }
+  .word-bubble .icon{font-size:2.4rem;display:block;margin-bottom:8px;}
+
+  .opt-grid{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-width:640px;}
+  .opt-btn{
+    padding:14px 18px;border:3px solid var(--signal);background:var(--signal-soft);color:#233a5c;
+    font-size:1rem;font-weight:800;border-radius:16px;cursor:pointer;box-shadow:0 5px 0 #2c4a72;transition:.1s;
+    max-width:100%;
+  }
+  .opt-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #2c4a72;}
+  .opt-btn.correct-flash{background:var(--success-soft);border-color:var(--success);box-shadow:0 5px 0 #2a6040;color:#255e3c;}
+  .opt-btn.wrong-flash{background:var(--danger-soft);border-color:var(--danger);box-shadow:0 5px 0 #8a3020;color:#7a2a18;}
+  .opt-btn:disabled{opacity:.35;cursor:not-allowed;}
+
+  .walk-opt .opt-btn{border-color:var(--walk);background:var(--walk-soft);color:#215a4f;box-shadow:0 5px 0 #2c6b5d;}
+  .walk-opt .opt-btn.correct-flash{border-color:var(--success);background:var(--success-soft);box-shadow:0 5px 0 #2a6040;}
+  .walk-opt .opt-btn.wrong-flash{border-color:var(--danger);background:var(--danger-soft);box-shadow:0 5px 0 #8a3020;}
+
+  .sign-opt .opt-btn{border-color:var(--sign);background:var(--sign-soft);color:#7a5219;box-shadow:0 5px 0 #8a6220;}
+  .sign-opt .opt-btn.correct-flash{border-color:var(--success);background:var(--success-soft);box-shadow:0 5px 0 #2a6040;}
+  .sign-opt .opt-btn.wrong-flash{border-color:var(--danger);background:var(--danger-soft);box-shadow:0 5px 0 #8a3020;}
+
+  /* ── danger sort buckets ── */
+  .bucket-row{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;max-width:640px;}
+  .bucket-btn{
+    flex:1 1 220px;min-width:200px;padding:22px 16px;border-radius:20px;cursor:pointer;
+    font-size:1.1rem;font-weight:800;display:flex;flex-direction:column;align-items:center;gap:8px;
+    border:3px solid; transition:.1s;
+  }
+  .bucket-btn .emoji{font-size:2.2rem;}
+  .bucket-btn.danger{border-color:var(--danger2);background:var(--danger2-soft);color:#7a2f3d;box-shadow:0 5px 0 #8a3d4d;}
+  .bucket-btn.safe{border-color:var(--safe);background:var(--safe-soft);color:#255e3c;box-shadow:0 5px 0 #2a6040;}
+  .bucket-btn:active{transform:translateY(4px);box-shadow:none;}
+  .bucket-btn.correct-flash{border-color:var(--success) !important;background:var(--success-soft) !important;color:#255e3c !important;box-shadow:0 5px 0 #2a6040 !important;}
+  .bucket-btn.wrong-flash{border-color:var(--danger) !important;background:var(--danger-soft) !important;color:#7a2a18 !important;box-shadow:0 5px 0 #8a3020 !important;}
+  .bucket-btn:disabled{opacity:.45;cursor:not-allowed;}
+
+  /* ── feedback / footer ── */
+  .fb{margin-top:6px;font-size:1.1rem;font-weight:700;min-height:32px;display:flex;align-items:center;gap:8px;text-align:center;}
+  .fb.ok{color:#2a7a50;} .fb.ng{color:var(--danger);}
+  .action-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;justify-content:center;}
+  .btn{font-weight:800;font-size:.95rem;border-radius:14px;border:none;padding:12px 18px;cursor:pointer;color:#fff;background:var(--ink-soft);}
+  .btn.primary{background:var(--walk);}
+  .btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--ink);}
+  .btn:disabled{opacity:.4;cursor:not-allowed;}
+  .btn:active{transform:scale(.97);}
+
+  /* ── print mode ── */
+  .print-controls{display:flex;flex-direction:column;gap:14px;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{border:2px solid var(--line);background:#FCFAF3;border-radius:999px;padding:9px 16px;font-weight:700;font-size:.88rem;cursor:pointer;color:var(--ink);}
+  .chip.selected{border-color:var(--walk);background:var(--walk-soft);color:var(--walk);}
+  .field-label{font-size:.82rem;font-weight:800;color:var(--ink-soft);margin-bottom:6px;}
+  .toggle-row{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.92rem;}
+  .preview-note{color:var(--ink-soft);font-size:.85rem;margin-top:6px;text-align:center;}
+  #worksheet{display:none;}
+
+  .ws-header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid var(--ink);padding-bottom:10px;margin-bottom:16px;}
+  .ws-header h2{margin:2px 0 0;font-size:1.15rem;}
+  .ws-fields{display:flex;gap:10px;font-size:.9rem;font-weight:700;align-items:flex-end;}
+  .ws-fields .lbl{white-space:nowrap;}
+  .ws-fields .blank{border-bottom:1.5px solid var(--ink);padding:0 6px 4px;display:inline-block;min-width:100px;margin-right:10px;}
+  .ws-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+  .ws-cell{border:2px solid var(--line);border-radius:12px;padding:12px 14px;break-inside:avoid;}
+  .ws-cell .no{font-size:.78rem;font-weight:800;color:var(--ink-soft);margin-bottom:6px;}
+  .ws-sentence{font-size:1rem;font-weight:700;margin-bottom:8px;text-align:center;}
+  .ws-bank{font-size:.82rem;color:var(--ink-soft);margin-top:6px;text-align:center;}
+  .ws-opt-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;justify-content:center;}
+  .ws-opt-chip{border:1.5px solid var(--ink);border-radius:10px;padding:6px 12px;font-size:.85rem;font-weight:700;color:var(--ink);background:#fff;white-space:normal;}
+  .ws-answer{color:var(--success);font-weight:800;}
+  .ws-choice-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;justify-content:center;}
+  .ws-choice{border:1.5px solid var(--ink);border-radius:8px;padding:5px 10px;font-size:.85rem;font-weight:700;}
+
+  .hidden{display:none !important;}
+
+  @media (prefers-reduced-motion: reduce){*{transition:none !important;animation:none !important;}}
+
+  /* ── correct-answer overlay (big maru + ping-pong chime) ── */
+  #correctOverlay{
+    position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+    pointer-events:none;z-index:9999;opacity:0;
+  }
+  #correctOverlay.show{animation:overlayFade 1.05s ease forwards;}
+  @keyframes overlayFade{
+    0%{opacity:0;} 8%{opacity:1;} 78%{opacity:1;} 100%{opacity:0;}
+  }
+  .correct-circle-wrap{position:relative;width:230px;height:230px;max-width:60vw;max-height:60vw;filter:drop-shadow(0 6px 14px rgba(0,0,0,.18));}
+  .correct-circle-wrap svg{width:100%;height:100%;transform:rotate(-90deg);}
+  .correct-circle-wrap svg circle{
+    fill:rgba(255,255,255,.9);stroke:#E2483D;stroke-width:15;stroke-linecap:round;
+    stroke-dasharray:660;stroke-dashoffset:660;
+  }
+  .correct-circle-wrap.animate svg circle{animation:circleDraw .55s cubic-bezier(.4,0,.2,1) .05s forwards;}
+  @keyframes circleDraw{ to{ stroke-dashoffset:0; } }
+  .correct-label{
+    position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);
+    text-align:center;font-weight:900;color:#E2483D;font-size:1.15rem;
+    opacity:0;
+  }
+  .correct-circle-wrap.animate .correct-label{animation:labelPop .4s ease .5s forwards;}
+  @keyframes labelPop{ 0%{opacity:0;transform:translateY(-50%) scale(.6);} 60%{opacity:1;transform:translateY(-50%) scale(1.15);} 100%{opacity:1;transform:translateY(-50%) scale(1);} }
+  .correct-ping-text{
+    position:absolute;left:0;right:0;bottom:-34px;text-align:center;
+    font-weight:800;color:#E2483D;font-size:1rem;opacity:0;letter-spacing:.05em;
+  }
+  .correct-circle-wrap.animate .correct-ping-text{animation:labelPop .4s ease .62s forwards;}
+  @media (prefers-reduced-motion: reduce){
+    #correctOverlay.show{animation:none;opacity:1;}
+    .correct-circle-wrap.animate svg circle{animation:none;stroke-dashoffset:0;}
+    .correct-circle-wrap.animate .correct-label, .correct-circle-wrap.animate .correct-ping-text{animation:none;opacity:1;}
+  }
+
+  @media print{
+    body *{visibility:hidden;}
+    #worksheet, #worksheet *{visibility:visible;}
+    #worksheet{display:block !important;position:absolute;left:0;top:0;width:100%;padding:12mm;}
+    .ws-print-btn-wrap{display:none !important;}
+  }
+  @media (max-width:640px){
+    .ws-grid{grid-template-columns:1fr;}
+  }
+
+  footer.hint{max-width:var(--maxw);margin:20px auto 0;padding:0 16px;color:var(--ink-soft);font-size:.8rem;}
+  details.teacher-note{max-width:var(--maxw);margin:0 auto 20px;padding:0 16px;}
+  details.teacher-note summary{cursor:pointer;font-weight:700;color:var(--ink-soft);font-size:.85rem;}
+  details.teacher-note .box{background:#fff;border-radius:14px;padding:14px 16px;margin-top:8px;font-size:.85rem;color:var(--ink-soft);line-height:1.7;box-shadow:var(--shadow);}
+</style>
+</head>
+<body>
+<div id="correctOverlay" aria-hidden="true">
+  <div class="correct-circle-wrap">
+    <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="84"></circle></svg>
+    <div class="correct-label">せいかい！</div>
+    <div class="correct-ping-text">🔔 ピンポーン♪</div>
+  </div>
+</div>
+<div class="app">
+  <header class="top">
+    <div>
+      <div class="mieel-brand">
+        <div class="orb-mini"></div>
+        <strong>MieeL</strong>
+        <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener">www.mieel-support-school.com</a>
+      </div>
+      <h1><span class="icon">🚦</span>こうつうあんぜん</h1>
+      <p>しんごう・あるきかた・ひょうしき・あぶないを まなんで、じぶんの みを まもろう</p>
+    </div>
+    <button class="icon-btn" id="btnLargeText" aria-pressed="false">🔠 文字を大きく</button>
+  </header>
+
+  <nav class="modes" role="tablist" aria-label="モードをえらぶ">
+    <button data-mode="signal" class="active" role="tab" aria-selected="true">🚦 しんごう<span class="sub">なにを すればいい？</span></button>
+    <button data-mode="walk" role="tab" aria-selected="false">🚶 あるきかた<span class="sub">あんぜんな こうどうを えらぼう</span></button>
+    <button data-mode="sign" role="tab" aria-selected="false">🪧 ひょうしき<span class="sub">しるしの いみを おぼえよう</span></button>
+    <button data-mode="danger" role="tab" aria-selected="false">⚠️ あぶない？あんぜん？<span class="sub">わけてみよう</span></button>
+    <button data-mode="print" role="tab" aria-selected="false">🖨️ プリント<span class="sub">PDFをつくる</span></button>
+  </nav>
+
+  <!-- ===== SIGNAL VIEW ===== -->
+  <section class="panel view" id="view-signal">
+    <div class="level-bar" id="levelBarSignal"></div>
+    <div class="score-pill" id="scoreSignal">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="signalSpeak" title="よみあげ">🔊</button>
+        <div class="q-text" id="signalQ"></div>
+      </div>
+      <div id="signalDisplay"></div>
+      <div class="opt-grid" id="signalOpts"></div>
+      <div class="fb" id="signalFb"></div>
+      <div class="action-row">
+        <button class="btn" id="signalNext" style="background:var(--signal);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== WALK VIEW ===== -->
+  <section class="panel view hidden" id="view-walk">
+    <div class="level-bar" id="levelBarWalk"></div>
+    <div class="score-pill" id="scoreWalk">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="walkSpeak" title="よみあげ">🔊</button>
+      </div>
+      <div class="word-bubble"><span class="icon">🚶</span><span id="walkScene"></span></div>
+      <div class="opt-grid walk-opt" id="walkOpts"></div>
+      <div class="fb" id="walkFb"></div>
+      <div class="action-row">
+        <button class="btn" id="walkNext" style="background:var(--walk);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SIGN VIEW ===== -->
+  <section class="panel view hidden" id="view-sign">
+    <div class="level-bar" id="levelBarSign"></div>
+    <div class="score-pill" id="scoreSign">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="signSpeak" title="よみあげ">🔊</button>
+        <div class="q-text">この しるしは なに？</div>
+      </div>
+      <div class="word-bubble"><span class="icon" id="signIcon"></span></div>
+      <div class="opt-grid sign-opt" id="signOpts"></div>
+      <div class="fb" id="signFb"></div>
+      <div class="action-row">
+        <button class="btn" id="signNext" style="background:var(--sign);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DANGER VIEW ===== -->
+  <section class="panel view hidden" id="view-danger">
+    <div class="level-bar" id="levelBarDanger"></div>
+    <div class="score-pill" id="scoreDanger">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="dangerSpeak" title="よみあげ">🔊</button>
+        <div class="q-text">この こうどうは どっち？</div>
+      </div>
+      <div class="word-bubble" id="dangerWord"></div>
+      <div class="bucket-row">
+        <button class="bucket-btn danger" id="dangerBtnDanger"><span class="emoji">⚠️</span>あぶない</button>
+        <button class="bucket-btn safe" id="dangerBtnSafe"><span class="emoji">✅</span>あんぜん</button>
+      </div>
+      <div class="fb" id="dangerFb"></div>
+      <div class="action-row">
+        <button class="btn" id="dangerNext" style="background:var(--danger2);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PRINT VIEW ===== -->
+  <section class="panel view hidden" id="view-print">
+    <div class="print-controls">
+      <div>
+        <div class="field-label">もんだいの しゅるい</div>
+        <div class="chip-row" id="printTypeChips">
+          <button class="chip selected" data-ptype="signal">🚦 しんごう</button>
+          <button class="chip" data-ptype="walk">🚶 あるきかた</button>
+          <button class="chip" data-ptype="sign">🪧 ひょうしき</button>
+          <button class="chip" data-ptype="danger">⚠️ あぶない？あんぜん？</button>
+        </div>
+      </div>
+      <div>
+        <div class="field-label">レベル</div>
+        <div class="chip-row" id="levelBarPrint"></div>
+      </div>
+      <div>
+        <div class="field-label">もんだいすう</div>
+        <div class="chip-row" id="printCountChips">
+          <button class="chip" data-count="4">4もん</button>
+          <button class="chip selected" data-count="6">6もん</button>
+          <button class="chip" data-count="8">8もん</button>
+        </div>
+      </div>
+      <div class="toggle-row">
+        <input type="checkbox" id="printShowAnswer">
+        <label for="printShowAnswer">こたえを ひょうじする（指導者用）</label>
+      </div>
+      <div class="action-row" style="margin-top:2px;">
+        <button class="btn ghost" id="printRegenBtn">🔄 もんだいを かえる</button>
+        <button class="btn primary" id="printOpenBtn">🖨️ プリントする</button>
+      </div>
+      <div class="preview-note">「プリントする」を押すと、印刷プレビューが開きます。ブラウザの印刷設定でPDF保存もできます。</div>
+    </div>
+  </section>
+
+  <footer class="hint">
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:5px;">
+      <div style="width:18px;height:18px;border-radius:50%;background:var(--mieel);flex:none;"></div>
+      <strong style="color:var(--ink);">MieeL</strong>
+      <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener" style="color:var(--walk);">mieel-support-school.com</a>
+    </div>
+    © こうつうあんぜん ツール（特別支援教育向け）
+  </footer>
+
+  <details class="teacher-note">
+    <summary>👩‍🏫 指導者の方へ</summary>
+    <div class="box">
+      このアプリは、特別支援学校の自立活動・生活単元学習における「交通安全」の学習を目的とした4つの練習モードと、印刷用ワークシート機能で構成されています。<br>
+      ・<strong>しんごう</strong>：赤・黄・青の車両用信号、歩行者用信号（点滅を含む）を見て、とるべき行動を選ぶ練習です<br>
+      ・<strong>あるきかた</strong>：横断歩道、踏切、駐車場など具体的な場面での安全な行動を選ぶ、実践的な練習です<br>
+      ・<strong>ひょうしき</strong>：とまれ、駐車場、車椅子マーク、消火器など身近な標識・サインの意味を覚えます<br>
+      ・<strong>あぶない？あんぜん？</strong>：日常の行動を「あぶない」「あんぜん」に分類し、安全な行動への意識を育てます<br>
+      各モードにレベル設定があり、児童生徒の実態に応じて選べます。よみあげボタンで音声支援も可能です。プリントモードでは同じ4種類の問題をワークシートとして印刷でき、解答表示の切り替えもできます。実際の交通安全指導（横断歩道の渡り方の実地訓練等）と組み合わせてご活用ください。
+    </div>
+  </details>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =========================================================
+     UTILS
+  ========================================================= */
+  function shuffle(a){
+    var arr=a.slice();
+    for(var i=arr.length-1;i>0;i--){
+      var j=Math.floor(Math.random()*(i+1));
+      var t=arr[i];arr[i]=arr[j];arr[j]=t;
+    }
+    return arr;
+  }
+  function pickRandom(a){ return a[Math.floor(Math.random()*a.length)]; }
+  function speak(text){
+    if(!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang='ja-JP'; u.rate=0.85;
+    window.speechSynthesis.speak(u);
+  }
+  function renderLevelBar(container, levels, activeId, onSelect){
+    container.innerHTML='';
+    levels.forEach(function(lv){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='level-btn'+(lv.id===activeId?' active':'');
+      b.innerHTML='<span class="stars">'+lv.stars+'</span><span class="name">'+lv.name+'</span>';
+      b.addEventListener('click', function(){ onSelect(lv.id); });
+      container.appendChild(b);
+    });
+  }
+  function updateScorePill(el, state){
+    el.innerHTML = '✅ '+state.score+' / '+state.total;
+  }
+  var PRAISE = ['やったね！','せいかい！','すごい！','ばっちり！','よくできました！'];
+  var TRY_AGAIN = ['もういちど！','おしい！','ゆっくり かんがえよう。','だいじょうぶ、もう一回！'];
+
+  /* ── correct-answer chime + big maru overlay ── */
+  var sharedAudioCtx = null;
+  function playDing(){
+    try{
+      var Ctx = window.AudioContext || window.webkitAudioContext;
+      if(!Ctx) return;
+      if(!sharedAudioCtx) sharedAudioCtx = new Ctx();
+      var ctx = sharedAudioCtx;
+      if(ctx.state==='suspended'){ ctx.resume(); }
+      function tone(freq, start, dur, peak){
+        var o = ctx.createOscillator();
+        var g = ctx.createGain();
+        o.type='sine'; o.frequency.value=freq;
+        o.connect(g); g.connect(ctx.destination);
+        var t0 = ctx.currentTime+start;
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.linearRampToValueAtTime(peak, t0+0.03);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0+dur);
+        o.start(t0);
+        o.stop(t0+dur+0.03);
+      }
+      tone(880.0, 0,    0.30, 0.30);  /* ピン */
+      tone(1318.5, 0.24, 0.48, 0.26); /* ポーン */
+    }catch(e){ /* audio not available; visual feedback still shows */ }
+  }
+  function triggerCorrectFeedback(){
+    playDing();
+    var overlay = document.getElementById('correctOverlay');
+    if(!overlay) return;
+    var wrap = overlay.querySelector('.correct-circle-wrap');
+    overlay.classList.remove('show');
+    wrap.classList.remove('animate');
+    void overlay.offsetWidth; /* force reflow so animation restarts every time */
+    overlay.classList.add('show');
+    wrap.classList.add('animate');
+  }
+
+  /* =========================================================
+     DATA
+  ========================================================= */
+  var SIGNAL_LEVELS = [
+    {id:1, name:'きほんの いろ', stars:'★☆☆'},
+    {id:2, name:'ほこうしゃ しんごう', stars:'★★☆'},
+    {id:3, name:'じょうきょうで かんがえる', stars:'★★★'}
+  ];
+  var SIGNAL_DB = [
+    {level:1, kind:'car', color:'red', label:'あか', correct:'とまる', options:['とまる','すすむ','はしる']},
+    {level:1, kind:'car', color:'green', label:'あお（みどり）', correct:'きをつけて すすむ', options:['きをつけて すすむ','とまる','いそいで すすむ']},
+    {level:1, kind:'car', color:'yellow', label:'きいろ', correct:'とまる じゅんびを する', options:['とまる じゅんびを する','はやく すすむ','はしる']},
+    {level:1, kind:'car', color:'red', label:'あか', correct:'とまる', options:['とまる','すすむ','いそぐ']},
+    {level:1, kind:'ped', color:'red', label:'あか（ほこうしゃ）', correct:'わたらない', options:['わたらない','わたる','はしって わたる']},
+    {level:1, kind:'ped', color:'green', label:'あお（ほこうしゃ）', correct:'みぎひだりを みて わたる', options:['みぎひだりを みて わたる','はしって わたる','スマホを みながら わたる']},
+    {level:1, kind:'car', color:'green', label:'あお（みどり）', correct:'きをつけて すすむ', options:['きをつけて すすむ','めを つぶって すすむ','はしる']},
+    {level:1, kind:'ped', color:'red', label:'あか（ほこうしゃ）', correct:'とまって まつ', options:['とまって まつ','わたる','はしる']},
+    {level:2, kind:'ped', color:'blink', label:'あお てんめつ（ほこうしゃ）', correct:'わたりはじめない', options:['わたりはじめない','いそいで わたる','はしって わたる']},
+    {level:2, kind:'ped', color:'green', label:'あお（ほこうしゃ）', correct:'てを あげて わたる', options:['てを あげて わたる','はしって わたる','スマホを みて わたる']},
+    {level:2, kind:'car', color:'red', label:'あか（しゃりょう）', correct:'かんぜんに とまる', options:['かんぜんに とまる','じょこうする','すすむ']},
+    {level:2, kind:'car', color:'yellow', label:'きいろ（しゃりょう）', correct:'とまれる ときは とまる', options:['とまれる ときは とまる','いつも すすむ','はしる']},
+    {level:2, kind:'ped', color:'blink', label:'あお てんめつ（ほこうしゃ）', correct:'つぎの しんごうを まつ', options:['つぎの しんごうを まつ','だっしゅで わたる','とちゅうで はしる']},
+    {level:2, kind:'ped', color:'red', label:'あか（ほこうしゃ）', correct:'しんごうが かわるまで まつ', options:['しんごうが かわるまで まつ','くるまが いなければ わたる','いそいで わたる']},
+    {level:2, kind:'car', color:'green', label:'あお（しゃりょう）', correct:'ほこうしゃに ちゅういして すすむ', options:['ほこうしゃに ちゅういして すすむ','ほこうしゃを むしする','はやく はしる']},
+    {level:2, kind:'ped', color:'green', label:'あお（ほこうしゃ）', correct:'みぎひだりを かくにんしながら わたる', options:['みぎひだりを かくにんしながら わたる','なにも みずに わたる','はしって わたる']},
+    {level:3, kind:'scene', color:'', label:'あおしんごうだけど、みぎから くるまが きている', correct:'とまって まつ', options:['とまって まつ','すすむ','はしって わたる']},
+    {level:3, kind:'scene', color:'', label:'しんごうが ない こうさてん', correct:'みぎひだりを みて わたる', options:['みぎひだりを みて わたる','そのまま わたる','はしって わたる']},
+    {level:3, kind:'scene', color:'', label:'おうだんほどうの てまえで くるまが とまってくれた', correct:'かるく おじぎして わたる', options:['かるく おじぎして わたる','むしして わたる','てを ふらずに いそいで わたる']},
+    {level:3, kind:'scene', color:'', label:'しんごうが きいろから あかに かわりそう', correct:'わたらないで まつ', options:['わたらないで まつ','いそいで わたる','はしって わたる']},
+    {level:3, kind:'scene', color:'', label:'じてんしゃが しんごうを まもらずに すすもうと している', correct:'じぶんは しんごうを まもる', options:['じぶんは しんごうを まもる','じてんしゃに あわせて すすむ','いっしょに いそぐ']},
+    {level:3, kind:'scene', color:'', label:'おうだんほどうの まんなかで しんごうが あかに かわった', correct:'いそいで わたりきる か、あんぜんな ばしょで まつ', options:['いそいで わたりきる か、あんぜんな ばしょで まつ','そのまま うごかない','もどろうとして うろうろする']},
+    {level:3, kind:'scene', color:'', label:'きゅうきゅうしゃの サイレンが きこえる', correct:'みちを あけて まつ', options:['みちを あけて まつ','いつもどおり あるく','おいかける']},
+    {level:3, kind:'scene', color:'', label:'よこの みちから くるまが でてこようと している', correct:'くるまが とまるか かくにんしてから すすむ', options:['くるまが とまるか かくにんしてから すすむ','くるまを むしして すすむ','はしって とおりすぎる']}
+  ];
+
+  var WALK_LEVELS = [
+    {id:1, name:'わかりやすい ばめん', stars:'★☆☆'},
+    {id:2, name:'すこし かんがえる', stars:'★★☆'},
+    {id:3, name:'なやましい ばめん', stars:'★★★'}
+  ];
+  var WALK_DB = [
+    {level:1, scene:'おうだんほどうを わたるとき', correct:'みぎ・ひだりを みて わたる', options:['みぎ・ひだりを みて わたる','はしって わたる','スマホを みながら わたる']},
+    {level:1, scene:'ほどうを あるくとき', correct:'みちの はしを あるく', options:['みちの はしを あるく','みちの まんなかを あるく','くるまの ちかくを あるく']},
+    {level:1, scene:'バスに のるとき', correct:'れつに ならんで まつ', options:['れつに ならんで まつ','われさきに のる','おしあう']},
+    {level:1, scene:'じてんしゃに のるとき', correct:'ヘルメットを かぶる', options:['ヘルメットを かぶる','ヘルメットなしで のる','りょうてを はなして のる']},
+    {level:1, scene:'よるに そとを あるくとき', correct:'あかるい いろの ふくを きる', options:['あかるい いろの ふくを きる','くらい いろの ふくを きる','なにも きをつけない']},
+    {level:1, scene:'くるまの ちかくで あそぶとき', correct:'くるまから はなれて あそぶ', options:['くるまから はなれて あそぶ','くるまの うしろで あそぶ','くるまの したに かくれる']},
+    {level:1, scene:'かいだんを おりるとき', correct:'てすりを もって おりる', options:['てすりを もって おりる','はしって おりる','2だんずつ とぶ']},
+    {level:1, scene:'エレベーターに のるとき', correct:'ドアが しまりきってから うごく', options:['ドアが しまりきってから うごく','ドアに てを はさむ','むりに かけこむ']},
+    {level:2, scene:'あめの ひに そとを あるくとき', correct:'かさで まえが みえるように もつ', options:['かさで まえが みえるように もつ','かさで まえを ふさぐ','はしって みちを わたる']},
+    {level:2, scene:'ふみきりを わたるとき', correct:'いったん とまって みみと めで かくにんする', options:['いったん とまって みみと めで かくにんする','おとを きかずに わたる','しゃだんきが なりはじめても わたる']},
+    {level:2, scene:'こうさてんで みぎに まがる くるまが いる', correct:'くるまが とまるのを かくにんしてから わたる', options:['くるまが とまるのを かくにんしてから わたる','くるまが とまるまえに わたりはじめる','くるまを むしして わたる']},
+    {level:2, scene:'せまい みちに くるまが はいってきた', correct:'みちの はしに よって、くるまを とおす', options:['みちの はしに よって、くるまを とおす','みちの まんなかに いつづける','くるまの まえに とびだす']},
+    {level:2, scene:'ともだちと あるいているとき', correct:'いっしょに ほどうを あるく', options:['いっしょに ほどうを あるく','どうろに とびだして あそぶ','おしあいへしあいしながら あるく']},
+    {level:2, scene:'おおきい にもつを もっているとき', correct:'りょうてで しっかり もち、まわりに ちゅういする', options:['りょうてで しっかり もち、まわりに ちゅういする','にもつで まえが みえなくても すすむ','はしりながら はこぶ']},
+    {level:2, scene:'ちゅうしゃじょうを あるくとき', correct:'くるまが うごいていないか かくにんする', options:['くるまが うごいていないか かくにんする','くるまの うしろを かくにんせずに あるく','はしって よこぎる']},
+    {level:2, scene:'こうえんから みちに でるとき', correct:'いったん とまって みぎひだりを かくにんする', options:['いったん とまって みぎひだりを かくにんする','いきおいよく とびだす','かくにんせずに でる']},
+    {level:3, scene:'おうだんほどうの しんごうが あおに なったが、くるまが とまっていない', correct:'すぐに わたらず、あんぜんを かくにんする', options:['すぐに わたらず、あんぜんを かくにんする','あおだから すぐに わたる','くるまを むしして すすむ']},
+    {level:3, scene:'ともだちに はやく わたろうと さそわれたが、しんごうは あかだった', correct:'あかの ときは わたらないと つたえる', options:['あかの ときは わたらないと つたえる','さそわれたから わたる','だまって ついていく']},
+    {level:3, scene:'みちに ボールが ころがっていった', correct:'すぐに おいかけず、くるまを かくにんしてから とりに いく', options:['すぐに おいかけず、くるまを かくにんしてから とりに いく','すぐに おいかけて とりに いく','くるまが きていても とりに いく']},
+    {level:3, scene:'くらい どうろで うしろから じてんしゃが きた おとが した', correct:'みちの はしに よって、じてんしゃに きづいて もらう', options:['みちの はしに よって、じてんしゃに きづいて もらう','ふりむかずに まんなかを あるきつづける','きゅうに たちどまる']},
+    {level:3, scene:'しらない ひとに くるまで こえを かけられた', correct:'ちかづかず、おとなに しらせる', options:['ちかづかず、おとなに しらせる','くるまに ちかづく','ひとりで ついていく']},
+    {level:3, scene:'がっこうの かえりに、ひとどおりの すくない ちかみちを つかいたい', correct:'いつもの あんぜんな みちを つかう', options:['いつもの あんぜんな みちを つかう','ひとどおりが すくない みちを つかう','はやいから ちかみちを つかう']},
+    {level:3, scene:'あめで みちが すべりやすい', correct:'いつもより ゆっくり あるく', options:['いつもより ゆっくり あるく','いつもどおりの はやさで あるく','はしって いそぐ']},
+    {level:3, scene:'こうさてんで、しんごうが みえにくい ばしょに いる', correct:'みえる ばしょまで いどうしてから かくにんする', options:['みえる ばしょまで いどうしてから かくにんする','みえないまま わたる','てきとうに はんだんして わたる']}
+  ];
+
+  var SIGN_LEVELS = [
+    {id:1, name:'みぢかな しるし', stars:'★☆☆'},
+    {id:2, name:'あんぜんの しるし', stars:'★★☆'},
+    {id:3, name:'まちの しるし', stars:'★★★'}
+  ];
+  var SIGN_DB = [
+    {level:1, icon:'🛑', correct:'とまれ の しるし', options:['とまれ の しるし','すすめ の しるし','まがれ の しるし']},
+    {level:1, icon:'🚸', correct:'こどもに ちゅういの しるし', options:['こどもに ちゅういの しるし','おとなに ちゅういの しるし','どうぶつに ちゅういの しるし']},
+    {level:1, icon:'🚭', correct:'たばこを すっては いけない ばしょ', options:['たばこを すっては いけない ばしょ','たばこを すってもいい ばしょ','たべものを たべる ばしょ']},
+    {level:1, icon:'🚫', correct:'はいっては いけない ばしょ', options:['はいっては いけない ばしょ','だれでも はいれる ばしょ','あそんでいい ばしょ']},
+    {level:1, icon:'♿', correct:'くるまいすの ひとが つかう ばしょ', options:['くるまいすの ひとが つかう ばしょ','じてんしゃを とめる ばしょ','こどもが あそぶ ばしょ']},
+    {level:1, icon:'🅿️', correct:'くるまを とめる ばしょ', options:['くるまを とめる ばしょ','くるまが とおれない ばしょ','あるく ばしょ']},
+    {level:1, icon:'🚻', correct:'トイレの ばしょ', options:['トイレの ばしょ','だいどころの ばしょ','きゅうけいしつの ばしょ']},
+    {level:1, icon:'🛗', correct:'エレベーターの ばしょ', options:['エレベーターの ばしょ','かいだんの ばしょ','でぐちの ばしょ']},
+    {level:2, icon:'⚠️', correct:'きけん・ちゅういの しるし', options:['きけん・ちゅういの しるし','あんしんの しるし','おうえんの しるし']},
+    {level:2, icon:'🚱', correct:'のめない みずの しるし', options:['のめない みずの しるし','のめる みずの しるし','あたたかい みずの しるし']},
+    {level:2, icon:'🚰', correct:'のめる みずの しるし', options:['のめる みずの しるし','のめない みずの しるし','おゆの しるし']},
+    {level:2, icon:'🚳', correct:'じてんしゃで はいれない ばしょ', options:['じてんしゃで はいれない ばしょ','じてんしゃ せんようの ばしょ','くるま せんようの ばしょ']},
+    {level:2, icon:'🆘', correct:'たすけを よぶ しるし', options:['たすけを よぶ しるし','だいじょうぶという しるし','おわりの しるし']},
+    {level:2, icon:'🧯', correct:'しょうかきの ばしょ', options:['しょうかきの ばしょ','じどうはんばいきの ばしょ','ごみばこの ばしょ']},
+    {level:2, icon:'🔇', correct:'しずかに する ばしょ', options:['しずかに する ばしょ','おおきな こえを だす ばしょ','おんがくを きく ばしょ']},
+    {level:2, icon:'🚦', correct:'しんごうきの ばしょ', options:['しんごうきの ばしょ','バスていの ばしょ','こうえんの ばしょ']},
+    {level:3, icon:'🚏', correct:'バスていの しるし', options:['バスていの しるし','タクシーのりばの しるし','えきの しるし']},
+    {level:3, icon:'🚧', correct:'こうじちゅう ちゅういの しるし', options:['こうじちゅう ちゅういの しるし','こうじが おわった しるし','あんぜんな しるし']},
+    {level:3, icon:'⛔', correct:'すすめない・つうこうどめ の しるし', options:['すすめない・つうこうどめ の しるし','すすんでもいい しるし','ゆっくり すすむ しるし']},
+    {level:3, icon:'🚴', correct:'じてんしゃ せんよう どうろ の しるし', options:['じてんしゃ せんよう どうろ の しるし','くるま せんよう どうろ の しるし','ひとが あるく どうろ の しるし']},
+    {level:3, icon:'🏥', correct:'びょういんの しるし', options:['びょういんの しるし','がっこうの しるし','おみせの しるし']},
+    {level:3, icon:'🚒', correct:'しょうぼうしょの しるし', options:['しょうぼうしょの しるし','けいさつしょの しるし','ゆうびんきょくの しるし']},
+    {level:3, icon:'👮', correct:'けいさつかんの しるし', options:['けいさつかんの しるし','いしゃの しるし','せんせいの しるし']},
+    {level:3, icon:'🚑', correct:'きゅうきゅうしゃの しるし', options:['きゅうきゅうしゃの しるし','しょうぼうしゃの しるし','パトカーの しるし']}
+  ];
+
+  var DANGER_LEVELS = [
+    {id:1, name:'はっきり わかる', stars:'★☆☆'},
+    {id:2, name:'すこし かんがえる', stars:'★★☆'},
+    {id:3, name:'じょうきょうで はんだん', stars:'★★★'}
+  ];
+  var DANGER_DB = [
+    {level:1, text:'どうろに とびだす', correct:'danger'},
+    {level:1, text:'あかしんごうで わたる', correct:'danger'},
+    {level:1, text:'はしりながら どうろを わたる', correct:'danger'},
+    {level:1, text:'くるまの まえに とびだす', correct:'danger'},
+    {level:1, text:'みぎひだりを みて わたる', correct:'safe'},
+    {level:1, text:'てを あげて わたる', correct:'safe'},
+    {level:1, text:'あおしんごうで わたる', correct:'safe'},
+    {level:1, text:'おうだんほどうを わたる', correct:'safe'},
+    {level:2, text:'スマホを みながら あるく', correct:'danger'},
+    {level:2, text:'りょうみみに イヤホンを つけて どうろを あるく', correct:'danger'},
+    {level:2, text:'かさで まえを ふさいで あるく', correct:'danger'},
+    {level:2, text:'じてんしゃで ほどうを はやく はしる', correct:'danger'},
+    {level:2, text:'みちの はしを あるく', correct:'safe'},
+    {level:2, text:'くるまに きをつけて あるく', correct:'safe'},
+    {level:2, text:'ヘルメットを かぶって じてんしゃに のる', correct:'safe'},
+    {level:2, text:'よるは あかるい ふくを きる', correct:'safe'},
+    {level:3, text:'ふみきりの しゃだんきが おりても むりに わたる', correct:'danger'},
+    {level:3, text:'くるまが きても わたりきれると おもって いそぐ', correct:'danger'},
+    {level:3, text:'ともだちに さそわれて あかしんごうで わたる', correct:'danger'},
+    {level:3, text:'しんごうが みえにくい ばしょで かくにんせずに わたる', correct:'danger'},
+    {level:3, text:'しんごうが みえる ばしょまで いどうしてから わたる', correct:'safe'},
+    {level:3, text:'あぶないと おもったら とまって かんがえる', correct:'safe'},
+    {level:3, text:'ともだちに さそわれても しんごうの ルールを まもる', correct:'safe'},
+    {level:3, text:'あめの ひは いつもより ゆっくり あるく', correct:'safe'}
+  ];
+
+  /* =========================================================
+     SIGNAL MODE
+  ========================================================= */
+  var signalState = {level:1, score:0, total:0, current:null, locked:false};
+  var signalQueue = [];
+  function renderLevelBarSignal(){
+    renderLevelBar(document.getElementById('levelBarSignal'), SIGNAL_LEVELS, signalState.level, function(id){
+      signalState.level=id; renderLevelBarSignal(); newSignalQuestion();
+    });
+  }
+  function renderSignalDisplay(item){
+    var el = document.getElementById('signalDisplay');
+    if(item.kind==='car'){
+      var order = ['red','yellow','green'];
+      var html = '<div class="light-box">';
+      order.forEach(function(c){
+        html += '<div class="light-circle'+(c===item.color?' on-'+c:'')+'"></div>';
+      });
+      html += '</div>';
+      el.innerHTML = html;
+    } else if(item.kind==='ped'){
+      var emoji = item.color==='green' ? '🚶' : (item.color==='blink' ? '🚶' : '🛑');
+      var colorLabel = item.color==='green' ? '#4F9A63' : (item.color==='blink' ? '#F0C93D' : '#E2483D');
+      el.innerHTML = '<div class="ped-signal" style="color:'+colorLabel+';">'+emoji+'</div>';
+    } else {
+      el.innerHTML = '<div class="word-bubble"><span class="icon">🚦</span>'+item.label+'</div>';
+    }
+  }
+  function newSignalQuestion(){
+    if(signalQueue.length===0 || signalQueue[0].level!==signalState.level){
+      signalQueue = shuffle(SIGNAL_DB.filter(function(d){return d.level===signalState.level;}));
+    }
+    signalState.current = signalQueue.shift();
+    signalState.locked = false;
+    var cur = signalState.current;
+    document.getElementById('signalQ').textContent = cur.kind==='scene' ? 'どうすれば いい？' : cur.label+'は なにを すればいい？';
+    document.getElementById('signalFb').className='fb'; document.getElementById('signalFb').textContent='';
+    document.getElementById('signalNext').style.display='none';
+    renderSignalDisplay(cur);
+    var grid = document.getElementById('signalOpts');
+    grid.innerHTML='';
+    shuffle(cur.options).forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button'; b.className='opt-btn'; b.textContent=opt;
+      b.addEventListener('click', function(){
+        if(signalState.locked) return;
+        var correct = (opt===cur.correct);
+        signalState.total++;
+        if(correct) signalState.score++;
+        updateScorePill(document.getElementById('scoreSignal'), signalState);
+        var fbEl = document.getElementById('signalFb');
+        if(correct){
+          signalState.locked=true;
+          b.classList.add('correct-flash');
+          grid.querySelectorAll('.opt-btn').forEach(function(o){ if(o!==b) o.disabled=true; });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+          document.getElementById('signalNext').style.display='inline-block';
+          speak(cur.correct);
+        } else {
+          b.classList.add('wrong-flash');
+          setTimeout(function(){ b.classList.remove('wrong-flash'); }, 500);
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+      });
+      grid.appendChild(b);
+    });
+  }
+  document.getElementById('signalSpeak').addEventListener('click', function(){
+    speak(document.getElementById('signalQ').textContent);
+  });
+  document.getElementById('signalNext').addEventListener('click', newSignalQuestion);
+
+  /* =========================================================
+     WALK MODE
+  ========================================================= */
+  var walkState = {level:1, score:0, total:0, current:null, locked:false};
+  var walkQueue = [];
+  function renderLevelBarWalk(){
+    renderLevelBar(document.getElementById('levelBarWalk'), WALK_LEVELS, walkState.level, function(id){
+      walkState.level=id; renderLevelBarWalk(); newWalkQuestion();
+    });
+  }
+  function newWalkQuestion(){
+    if(walkQueue.length===0 || walkQueue[0].level!==walkState.level){
+      walkQueue = shuffle(WALK_DB.filter(function(d){return d.level===walkState.level;}));
+    }
+    walkState.current = walkQueue.shift();
+    walkState.locked = false;
+    document.getElementById('walkScene').textContent = walkState.current.scene;
+    document.getElementById('walkFb').className='fb'; document.getElementById('walkFb').textContent='';
+    document.getElementById('walkNext').style.display='none';
+    var grid = document.getElementById('walkOpts');
+    grid.innerHTML='';
+    shuffle(walkState.current.options).forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button'; b.className='opt-btn'; b.textContent=opt;
+      b.addEventListener('click', function(){
+        if(walkState.locked) return;
+        var correct = (opt===walkState.current.correct);
+        walkState.total++;
+        if(correct) walkState.score++;
+        updateScorePill(document.getElementById('scoreWalk'), walkState);
+        var fbEl = document.getElementById('walkFb');
+        if(correct){
+          walkState.locked=true;
+          b.classList.add('correct-flash');
+          grid.querySelectorAll('.opt-btn').forEach(function(o){ if(o!==b) o.disabled=true; });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+          document.getElementById('walkNext').style.display='inline-block';
+          speak(opt);
+        } else {
+          b.classList.add('wrong-flash');
+          setTimeout(function(){ b.classList.remove('wrong-flash'); }, 500);
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+      });
+      grid.appendChild(b);
+    });
+  }
+  document.getElementById('walkSpeak').addEventListener('click', function(){
+    speak(walkState.current.scene);
+  });
+  document.getElementById('walkNext').addEventListener('click', newWalkQuestion);
+
+  /* =========================================================
+     SIGN MODE
+  ========================================================= */
+  var signState = {level:1, score:0, total:0, current:null, locked:false};
+  var signQueue = [];
+  function renderLevelBarSign(){
+    renderLevelBar(document.getElementById('levelBarSign'), SIGN_LEVELS, signState.level, function(id){
+      signState.level=id; renderLevelBarSign(); newSignQuestion();
+    });
+  }
+  function newSignQuestion(){
+    if(signQueue.length===0 || signQueue[0].level!==signState.level){
+      signQueue = shuffle(SIGN_DB.filter(function(d){return d.level===signState.level;}));
+    }
+    signState.current = signQueue.shift();
+    signState.locked = false;
+    document.getElementById('signIcon').textContent = signState.current.icon;
+    document.getElementById('signFb').className='fb'; document.getElementById('signFb').textContent='';
+    document.getElementById('signNext').style.display='none';
+    var grid = document.getElementById('signOpts');
+    grid.innerHTML='';
+    shuffle(signState.current.options).forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button'; b.className='opt-btn'; b.textContent=opt;
+      b.addEventListener('click', function(){
+        if(signState.locked) return;
+        var correct = (opt===signState.current.correct);
+        signState.total++;
+        if(correct) signState.score++;
+        updateScorePill(document.getElementById('scoreSign'), signState);
+        var fbEl = document.getElementById('signFb');
+        if(correct){
+          signState.locked=true;
+          b.classList.add('correct-flash');
+          grid.querySelectorAll('.opt-btn').forEach(function(o){ if(o!==b) o.disabled=true; });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+          document.getElementById('signNext').style.display='inline-block';
+          speak(opt);
+        } else {
+          b.classList.add('wrong-flash');
+          setTimeout(function(){ b.classList.remove('wrong-flash'); }, 500);
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+      });
+      grid.appendChild(b);
+    });
+  }
+  document.getElementById('signSpeak').addEventListener('click', function(){
+    speak('この しるしは なに？');
+  });
+  document.getElementById('signNext').addEventListener('click', newSignQuestion);
+
+  /* =========================================================
+     DANGER MODE
+  ========================================================= */
+  var dangerState = {level:1, score:0, total:0, current:null, locked:false};
+  var dangerQueue = [];
+  function renderLevelBarDanger(){
+    renderLevelBar(document.getElementById('levelBarDanger'), DANGER_LEVELS, dangerState.level, function(id){
+      dangerState.level=id; renderLevelBarDanger(); newDangerQuestion();
+    });
+  }
+  function newDangerQuestion(){
+    if(dangerQueue.length===0 || dangerQueue[0].level!==dangerState.level){
+      dangerQueue = shuffle(DANGER_DB.filter(function(d){return d.level===dangerState.level;}));
+    }
+    dangerState.current = dangerQueue.shift();
+    dangerState.locked = false;
+    document.getElementById('dangerWord').textContent = dangerState.current.text;
+    document.getElementById('dangerFb').className='fb'; document.getElementById('dangerFb').textContent='';
+    document.getElementById('dangerNext').style.display='none';
+    document.getElementById('dangerBtnDanger').disabled=false;
+    document.getElementById('dangerBtnSafe').disabled=false;
+    document.getElementById('dangerBtnDanger').classList.remove('correct-flash','wrong-flash');
+    document.getElementById('dangerBtnSafe').classList.remove('correct-flash','wrong-flash');
+  }
+  function handleDangerAnswer(choice, btnEl, otherBtnEl){
+    if(dangerState.locked) return;
+    var cur = dangerState.current;
+    var correct = (choice===cur.correct);
+    dangerState.total++;
+    if(correct) dangerState.score++;
+    updateScorePill(document.getElementById('scoreDanger'), dangerState);
+    var fbEl = document.getElementById('dangerFb');
+    dangerState.locked = true;
+    document.getElementById('dangerBtnDanger').disabled=true;
+    document.getElementById('dangerBtnSafe').disabled=true;
+    if(correct){
+      btnEl.classList.add('correct-flash');
+      fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+      triggerCorrectFeedback();
+      speak(cur.text);
+    } else {
+      btnEl.classList.add('wrong-flash');
+      otherBtnEl.classList.add('correct-flash');
+      fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+    }
+    document.getElementById('dangerNext').style.display='inline-block';
+  }
+  document.getElementById('dangerBtnDanger').addEventListener('click', function(){
+    handleDangerAnswer('danger', document.getElementById('dangerBtnDanger'), document.getElementById('dangerBtnSafe'));
+  });
+  document.getElementById('dangerBtnSafe').addEventListener('click', function(){
+    handleDangerAnswer('safe', document.getElementById('dangerBtnSafe'), document.getElementById('dangerBtnDanger'));
+  });
+  document.getElementById('dangerSpeak').addEventListener('click', function(){
+    speak(dangerState.current.text);
+  });
+  document.getElementById('dangerNext').addEventListener('click', newDangerQuestion);
+
+  /* =========================================================
+     PRINT MODE
+  ========================================================= */
+  var printState = {level:1, type:'signal', count:6, showAnswer:false, problems:[]};
+
+  function levelsForPrintType(){
+    return printState.type==='signal' ? SIGNAL_LEVELS
+      : printState.type==='walk' ? WALK_LEVELS
+      : printState.type==='sign' ? SIGN_LEVELS
+      : DANGER_LEVELS;
+  }
+  function renderPrintLevelBar(){
+    var levelsForType = levelsForPrintType();
+    if(!levelsForType.some(function(l){return l.id===printState.level;})){
+      printState.level = levelsForType[0].id;
+    }
+    var container = document.getElementById('levelBarPrint');
+    container.innerHTML='';
+    levelsForType.forEach(function(lv){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='chip'+(lv.id===printState.level?' selected':'');
+      b.textContent = lv.stars+' '+lv.name;
+      b.addEventListener('click', function(){
+        printState.level=lv.id; renderPrintLevelBar(); regenerateProblems(); renderWorksheet();
+      });
+      container.appendChild(b);
+    });
+  }
+  document.querySelectorAll('#printTypeChips .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#printTypeChips .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      printState.type = c.getAttribute('data-ptype');
+      renderPrintLevelBar();
+      regenerateProblems();
+      renderWorksheet();
+    });
+  });
+  document.querySelectorAll('#printCountChips .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#printCountChips .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      printState.count = parseInt(c.getAttribute('data-count'),10);
+      regenerateProblems(); renderWorksheet();
+    });
+  });
+  document.getElementById('printShowAnswer').addEventListener('change', function(e){
+    printState.showAnswer = e.target.checked;
+    renderWorksheet();
+  });
+  document.getElementById('printRegenBtn').addEventListener('click', function(){
+    regenerateProblems(); renderWorksheet();
+  });
+  document.getElementById('printOpenBtn').addEventListener('click', function(){
+    renderWorksheet();
+    setTimeout(function(){ window.print(); }, 60);
+  });
+
+  function sampleFrom(db, level, count){
+    var pool = shuffle(db.filter(function(d){ return d.level===level; }));
+    var out = [];
+    var guard=0;
+    while(out.length<count && guard<500){
+      guard++;
+      if(pool.length===0) pool = shuffle(db.filter(function(d){ return d.level===level; }));
+      out.push(pool.shift());
+    }
+    return out;
+  }
+  function regenerateProblems(){
+    var db = printState.type==='signal' ? SIGNAL_DB
+      : printState.type==='walk' ? WALK_DB
+      : printState.type==='sign' ? SIGN_DB
+      : DANGER_DB;
+    printState.problems = sampleFrom(db, printState.level, printState.count);
+  }
+  regenerateProblems();
+
+  function renderOptChips(options){
+    return '<div class="ws-opt-row">'+shuffle(options).map(function(o){ return '<span class="ws-opt-chip">'+o+'</span>'; }).join('')+'</div>';
+  }
+  function typeInstruction(){
+    return printState.type==='signal' ? 'なにを すればいいか、こたえに 〇を つけよう'
+      : printState.type==='walk' ? 'あんぜんな こうどうに 〇を つけよう'
+      : printState.type==='sign' ? 'しるしの いみに 〇を つけよう'
+      : '「あぶない」か「あんぜん」か、こたえに 〇を つけよう';
+  }
+  function renderWorksheet(){
+    var levelsForType = levelsForPrintType();
+    var lv = levelsForType.filter(function(l){return l.id===printState.level;})[0];
+    var typeLabel = printState.type==='signal' ? '🚦 しんごう'
+      : printState.type==='walk' ? '🚶 あるきかた'
+      : printState.type==='sign' ? '🪧 ひょうしき'
+      : '⚠️ あぶない？あんぜん？';
+
+    var html = '';
+    html += '<div class="ws-header"><div style="display:flex;align-items:center;gap:8px;">'
+      + '<div style="width:20px;height:20px;border-radius:50%;background:var(--mieel);border:1px solid #ccc;flex:none;"></div>'
+      + '<div><div style="font-size:11px;color:#333;font-weight:700;">MieeL こうつうあんぜん</div>'
+      + '<h2>'+typeLabel+'（'+lv.name+'）</h2>'
+      + '<div style="font-size:11px;color:#666;margin-top:2px;">'+typeInstruction()+'</div></div></div>'
+      + '<div class="ws-fields" style="flex-direction:column;align-items:flex-end;gap:2px;">'
+      + '<div style="font-size:.75rem;color:#3A9A8C;font-weight:700;">mieel-support-school.com</div>'
+      + '<div><span class="lbl">なまえ：</span><span class="blank">&nbsp;</span><span class="lbl">ひづけ：</span><span class="blank">&nbsp;</span></div></div></div>';
+
+    html += '<div class="ws-grid">';
+    printState.problems.forEach(function(p, idx){
+      html += '<div class="ws-cell"><div class="no">もんだい '+(idx+1)+'</div>';
+      if(printState.type==='signal'){
+        html += '<div class="ws-sentence">'+(p.kind==='scene' ? p.label : p.label+' の とき') +'</div>';
+        html += renderOptChips(p.options);
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;text-align:center;">こたえ：'+p.correct+'</div>';
+        }
+      } else if(printState.type==='walk'){
+        html += '<div class="ws-sentence">'+p.scene+'</div>';
+        html += renderOptChips(p.options);
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;text-align:center;">こたえ：'+p.correct+'</div>';
+        }
+      } else if(printState.type==='sign'){
+        html += '<div class="ws-sentence" style="font-size:2rem;">'+p.icon+'</div>';
+        html += renderOptChips(p.options);
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;text-align:center;">こたえ：'+p.correct+'</div>';
+        }
+      } else {
+        html += '<div class="ws-sentence">「'+p.text+'」</div>';
+        html += '<div class="ws-choice-row"><span class="ws-choice">⚠️ あぶない</span><span class="ws-choice">✅ あんぜん</span></div>';
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;text-align:center;">こたえ：'+(p.correct==='danger'?'⚠️ あぶない':'✅ あんぜん')+'</div>';
+        }
+      }
+      html += '</div>';
+    });
+    html += '</div>';
+    var ws = document.getElementById('worksheet');
+    if(!ws){
+      ws = document.createElement('div');
+      ws.id='worksheet';
+      document.body.appendChild(ws);
+    }
+    ws.innerHTML = html;
+  }
+  renderPrintLevelBar();
+  renderWorksheet();
+
+  /* =========================================================
+     MODE SWITCHING / GLOBAL UI
+  ========================================================= */
+  document.querySelectorAll('nav.modes button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('nav.modes button').forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+      btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+      var mode = btn.getAttribute('data-mode');
+      document.querySelectorAll('.view').forEach(function(v){ v.classList.add('hidden'); });
+      document.getElementById('view-'+mode).classList.remove('hidden');
+      if(mode==='print') renderWorksheet();
+    });
+  });
+
+  var largeToggle = document.getElementById('btnLargeText');
+  largeToggle.addEventListener('click', function(){
+    var on = document.documentElement.classList.toggle('large-text');
+    largeToggle.setAttribute('aria-pressed', on ? 'true':'false');
+  });
+
+  /* =========================================================
+     INIT
+  ========================================================= */
+  renderLevelBarSignal(); newSignalQuestion();
+  renderLevelBarWalk(); newWalkQuestion();
+  renderLevelBarSign(); newSignQuestion();
+  renderLevelBarDanger(); newDangerQuestion();
+
+})();
+</script>
+</body>
+</html>

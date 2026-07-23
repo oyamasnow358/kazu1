@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>ちくちく・あったか ことば｜MieeL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF6ED;
+    --card:#FFFFFF;
+    --ink:#2E2A25;
+    --ink-soft:#8A8072;
+    --line:#EAE1CE;
+    --chiku:#5B6B7A;    --chiku-soft:#E4E8EC;
+    --atta:#E2793D;     --atta-soft:#FCEAD3;
+    --feel:#8B5FA3;     --feel-soft:#EEE3F5;
+    --rephrase:#3F9D8B; --rephrase-soft:#DBEFEA;
+    --scenario:#C15B6B; --scenario-soft:#F8E1E5;
+    --success:#4F9A63;  --success-soft:#E3F3E6;
+    --danger:#C4573F;   --danger-soft:#FBE4DE;
+    --radius:22px;
+    --shadow:0 6px 18px rgba(46,42,37,0.10);
+    --maxw:960px;
+    --mieel:radial-gradient(circle at 50% 0%,#1B8FE8 0%,#2BB8D6 28%,#3FCB9E 45%,#8FD24A 58%,#F4D027 72%,#F7941E 100%);
+  }
+  *{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact;color-adjust:exact;}
+  html{font-size:17px;}
+  html.large-text{font-size:21px;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+    -webkit-font-smoothing:antialiased;padding-bottom:40px;
+  }
+  button{font-family:inherit;}
+  button:focus-visible, [tabindex]:focus-visible{outline:3px solid var(--rephrase);outline-offset:2px;}
+
+  .app{max-width:var(--maxw);margin:0 auto;padding:18px 16px 8px;}
+
+  header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
+  .mieel-brand{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .mieel-brand .orb-mini{width:20px;height:20px;border-radius:50%;background:var(--mieel);flex:none;}
+  .mieel-brand strong{color:var(--ink);font-size:.85rem;}
+  .mieel-brand a{font-size:.78rem;color:var(--rephrase);text-decoration:none;font-weight:600;}
+  .mieel-brand a:hover{text-decoration:underline;}
+  header.top h1{font-size:1.5rem;margin:0;font-weight:800;letter-spacing:.02em;display:flex;align-items:center;gap:.35em;}
+  header.top h1 .icon{font-size:1.15em;}
+  header.top p{margin:4px 0 0;color:var(--ink-soft);font-size:.85rem;font-weight:500;}
+  .icon-btn{
+    border:2px solid var(--ink);background:var(--card);color:var(--ink);border-radius:999px;
+    padding:.5em 1em;font-weight:700;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:.4em;
+  }
+  .icon-btn:hover{background:var(--atta-soft);}
+
+  nav.modes{display:flex;gap:9px;margin-bottom:16px;flex-wrap:wrap;}
+  nav.modes button{
+    flex:1 1 150px;font-weight:800;font-size:1rem;padding:13px 8px;border-radius:var(--radius);
+    border:3px solid transparent;background:var(--card);color:var(--ink-soft);box-shadow:var(--shadow);
+    cursor:pointer;transition:transform .12s ease, border-color .12s ease, color .12s ease;
+  }
+  nav.modes button .sub{display:block;font-size:.68em;font-weight:500;margin-top:2px;}
+  nav.modes button:hover{transform:translateY(-2px);}
+  nav.modes button.active{border-color:var(--ink);color:var(--ink);background:var(--atta-soft);}
+
+  section.panel{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:18px;}
+
+  .level-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+  .level-bar .level-btn{
+    flex:1 1 140px;text-align:left;border:2px solid var(--line);background:#FCFAF3;border-radius:16px;
+    padding:10px 12px;cursor:pointer;font-weight:700;color:var(--ink);
+  }
+  .level-bar .level-btn .stars{color:var(--atta);letter-spacing:1px;display:block;font-size:.9em;}
+  .level-bar .level-btn .name{display:block;font-size:1rem;}
+  .level-bar .level-btn.active{border-color:var(--rephrase);background:var(--rephrase-soft);}
+  .level-bar .level-btn:hover{border-color:var(--rephrase);}
+
+  .score-pill{
+    display:inline-flex;align-items:center;gap:.5em;background:var(--success-soft);color:var(--success);
+    font-weight:800;padding:8px 16px;border-radius:999px;font-size:.95rem;margin-bottom:14px;
+  }
+
+  .stage{min-height:260px;display:flex;flex-direction:column;align-items:center;}
+  .prompt-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;text-align:center;}
+  .prompt-row .q-text{font-weight:800;color:var(--ink-soft);font-size:1rem;}
+  .speak-btn{
+    border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:999px;
+    width:40px;height:40px;font-size:1.1rem;cursor:pointer;flex:none;
+  }
+  .speak-btn:hover{background:var(--atta-soft);}
+
+  /* ── word bubble (shared visual for mode 1 & 2) ── */
+  .word-bubble{
+    background:#FCFAF3;border:3px solid var(--line);border-radius:20px;padding:26px 32px;
+    font-size:1.6rem;font-weight:800;text-align:center;max-width:600px;margin-bottom:22px;line-height:1.5;
+  }
+
+  /* ── mode1: sort into buckets ── */
+  .bucket-row{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;max-width:640px;}
+  .bucket-btn{
+    flex:1 1 220px;min-width:200px;padding:22px 16px;border-radius:20px;cursor:pointer;
+    font-size:1.15rem;font-weight:800;display:flex;flex-direction:column;align-items:center;gap:8px;
+    border:3px solid; transition:.1s;
+  }
+  .bucket-btn .emoji{font-size:2.2rem;}
+  .bucket-btn.chiku{border-color:var(--chiku);background:var(--chiku-soft);color:#33414d;box-shadow:0 5px 0 #3f4c58;}
+  .bucket-btn.atta{border-color:var(--atta);background:var(--atta-soft);color:#8a4a1e;box-shadow:0 5px 0 #9a541f;}
+  .bucket-btn:active{transform:translateY(4px);box-shadow:none;}
+  .bucket-btn.correct-flash{border-color:var(--success) !important;background:var(--success-soft) !important;color:#255e3c !important;box-shadow:0 5px 0 #2a6040 !important;}
+  .bucket-btn.wrong-flash{border-color:var(--danger) !important;background:var(--danger-soft) !important;color:#7a2a18 !important;box-shadow:0 5px 0 #8a3020 !important;}
+  .bucket-btn:disabled{opacity:.45;cursor:not-allowed;}
+
+  /* ── mode2: feelings ── */
+  .feel-grid{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;max-width:600px;}
+  .feel-btn{
+    padding:18px 20px;border-radius:18px;border:3px solid var(--feel);background:var(--feel-soft);
+    color:#4d3160;cursor:pointer;font-weight:800;font-size:1rem;box-shadow:0 5px 0 #5a3d78;
+    display:flex;flex-direction:column;align-items:center;gap:6px;min-width:110px;transition:.1s;
+  }
+  .feel-btn .emoji{font-size:2rem;}
+  .feel-btn:active{transform:translateY(4px);box-shadow:none;}
+  .feel-btn.correct-flash{border-color:var(--success);background:var(--success-soft);color:#255e3c;box-shadow:0 5px 0 #2a6040;}
+  .feel-btn.wrong-flash{border-color:var(--danger);background:var(--danger-soft);color:#7a2a18;box-shadow:0 5px 0 #8a3020;}
+  .feel-btn:disabled{opacity:.45;cursor:not-allowed;}
+
+  /* ── mode3: rephrase ── */
+  .chiku-card{
+    background:var(--chiku-soft);border:3px solid var(--chiku);border-radius:20px;padding:20px 26px;
+    font-size:1.3rem;font-weight:800;text-align:center;max-width:600px;margin-bottom:8px;color:#33414d;
+  }
+  .chiku-card .tag{display:block;font-size:.72rem;font-weight:800;color:#5B6B7A;margin-bottom:6px;letter-spacing:.05em;}
+  .arrow-down{font-size:1.6rem;color:var(--ink-soft);margin:6px 0 14px;}
+  .opt-grid{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-width:640px;}
+  .opt-btn{
+    padding:14px 18px;border:3px solid var(--rephrase);background:var(--rephrase-soft);color:#215a4f;
+    font-size:1rem;font-weight:800;border-radius:16px;cursor:pointer;box-shadow:0 5px 0 #2c6b5d;transition:.1s;
+    max-width:100%;
+  }
+  .opt-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #2c6b5d;}
+  .opt-btn.correct-flash{background:var(--success-soft);border-color:var(--success);box-shadow:0 5px 0 #2a6040;color:#255e3c;}
+  .opt-btn.wrong-flash{background:var(--danger-soft);border-color:var(--danger);box-shadow:0 5px 0 #8a3020;color:#7a2a18;}
+  .opt-btn:disabled{opacity:.35;cursor:not-allowed;}
+
+  /* ── mode4: scenario ── */
+  .scene-card{
+    background:#FCFAF3;border:2px solid var(--line);border-radius:18px;padding:20px 24px;
+    font-size:1.1rem;font-weight:700;text-align:center;max-width:640px;margin-bottom:18px;line-height:1.7;
+  }
+  .scene-card .icon{font-size:2rem;display:block;margin-bottom:8px;}
+  .scenario-opt .opt-btn{border-color:var(--scenario);background:var(--scenario-soft);color:#7a2f3d;box-shadow:0 5px 0 #8a3d4d;}
+  .scenario-opt .opt-btn.correct-flash{border-color:var(--success);background:var(--success-soft);box-shadow:0 5px 0 #2a6040;color:#255e3c;}
+  .scenario-opt .opt-btn.wrong-flash{border-color:var(--danger);background:var(--danger-soft);box-shadow:0 5px 0 #8a3020;color:#7a2a18;}
+
+  /* ── feedback / footer ── */
+  .fb{margin-top:6px;font-size:1.1rem;font-weight:700;min-height:32px;display:flex;align-items:center;gap:8px;text-align:center;}
+  .fb.ok{color:#2a7a50;} .fb.ng{color:var(--danger);}
+  .action-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;justify-content:center;}
+  .btn{font-weight:800;font-size:.95rem;border-radius:14px;border:none;padding:12px 18px;cursor:pointer;color:#fff;background:var(--ink-soft);}
+  .btn.primary{background:var(--rephrase);}
+  .btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--ink);}
+  .btn:disabled{opacity:.4;cursor:not-allowed;}
+  .btn:active{transform:scale(.97);}
+
+  /* ── print mode ── */
+  .print-controls{display:flex;flex-direction:column;gap:14px;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{border:2px solid var(--line);background:#FCFAF3;border-radius:999px;padding:9px 16px;font-weight:700;font-size:.88rem;cursor:pointer;color:var(--ink);}
+  .chip.selected{border-color:var(--rephrase);background:var(--rephrase-soft);color:var(--rephrase);}
+  .field-label{font-size:.82rem;font-weight:800;color:var(--ink-soft);margin-bottom:6px;}
+  .toggle-row{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.92rem;}
+  .preview-note{color:var(--ink-soft);font-size:.85rem;margin-top:6px;text-align:center;}
+  #worksheet{display:none;}
+
+  .ws-header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid var(--ink);padding-bottom:10px;margin-bottom:16px;}
+  .ws-header h2{margin:2px 0 0;font-size:1.15rem;}
+  .ws-fields{display:flex;gap:10px;font-size:.9rem;font-weight:700;align-items:flex-end;}
+  .ws-fields .lbl{white-space:nowrap;}
+  .ws-fields .blank{border-bottom:1.5px solid var(--ink);padding:0 6px 4px;display:inline-block;min-width:100px;margin-right:10px;}
+  .ws-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+  .ws-cell{border:2px solid var(--line);border-radius:12px;padding:12px 14px;break-inside:avoid;}
+  .ws-cell .no{font-size:.78rem;font-weight:800;color:var(--ink-soft);margin-bottom:6px;}
+  .ws-sentence{font-size:1rem;font-weight:700;margin-bottom:8px;}
+  .ws-bank{font-size:.82rem;color:var(--ink-soft);margin-top:6px;}
+  .ws-answer{color:var(--success);font-weight:800;}
+  .ws-choice-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;}
+  .ws-choice{border:1.5px solid var(--ink);border-radius:8px;padding:5px 10px;font-size:.85rem;font-weight:700;}
+
+  .hidden{display:none !important;}
+
+  @media (prefers-reduced-motion: reduce){*{transition:none !important;animation:none !important;}}
+
+  /* ── correct-answer overlay (big maru + ping-pong chime) ── */
+  #correctOverlay{
+    position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+    pointer-events:none;z-index:9999;opacity:0;
+  }
+  #correctOverlay.show{animation:overlayFade 1.05s ease forwards;}
+  @keyframes overlayFade{
+    0%{opacity:0;} 8%{opacity:1;} 78%{opacity:1;} 100%{opacity:0;}
+  }
+  .correct-circle-wrap{position:relative;width:230px;height:230px;max-width:60vw;max-height:60vw;filter:drop-shadow(0 6px 14px rgba(0,0,0,.18));}
+  .correct-circle-wrap svg{width:100%;height:100%;transform:rotate(-90deg);}
+  .correct-circle-wrap svg circle{
+    fill:rgba(255,255,255,.9);stroke:#E2483D;stroke-width:15;stroke-linecap:round;
+    stroke-dasharray:660;stroke-dashoffset:660;
+  }
+  .correct-circle-wrap.animate svg circle{animation:circleDraw .55s cubic-bezier(.4,0,.2,1) .05s forwards;}
+  @keyframes circleDraw{ to{ stroke-dashoffset:0; } }
+  .correct-label{
+    position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);
+    text-align:center;font-weight:900;color:#E2483D;font-size:1.15rem;
+    opacity:0;
+  }
+  .correct-circle-wrap.animate .correct-label{animation:labelPop .4s ease .5s forwards;}
+  @keyframes labelPop{ 0%{opacity:0;transform:translateY(-50%) scale(.6);} 60%{opacity:1;transform:translateY(-50%) scale(1.15);} 100%{opacity:1;transform:translateY(-50%) scale(1);} }
+  .correct-ping-text{
+    position:absolute;left:0;right:0;bottom:-34px;text-align:center;
+    font-weight:800;color:#E2483D;font-size:1rem;opacity:0;letter-spacing:.05em;
+  }
+  .correct-circle-wrap.animate .correct-ping-text{animation:labelPop .4s ease .62s forwards;}
+  @media (prefers-reduced-motion: reduce){
+    #correctOverlay.show{animation:none;opacity:1;}
+    .correct-circle-wrap.animate svg circle{animation:none;stroke-dashoffset:0;}
+    .correct-circle-wrap.animate .correct-label, .correct-circle-wrap.animate .correct-ping-text{animation:none;opacity:1;}
+  }
+
+  @media print{
+    body *{visibility:hidden;}
+    #worksheet, #worksheet *{visibility:visible;}
+    #worksheet{display:block !important;position:absolute;left:0;top:0;width:100%;padding:12mm;}
+    .ws-print-btn-wrap{display:none !important;}
+  }
+  @media (max-width:640px){
+    .ws-grid{grid-template-columns:1fr;}
+  }
+
+  footer.hint{max-width:var(--maxw);margin:20px auto 0;padding:0 16px;color:var(--ink-soft);font-size:.8rem;}
+  details.teacher-note{max-width:var(--maxw);margin:0 auto 20px;padding:0 16px;}
+  details.teacher-note summary{cursor:pointer;font-weight:700;color:var(--ink-soft);font-size:.85rem;}
+  details.teacher-note .box{background:#fff;border-radius:14px;padding:14px 16px;margin-top:8px;font-size:.85rem;color:var(--ink-soft);line-height:1.7;box-shadow:var(--shadow);}
+</style>
+</head>
+<body>
+<div id="correctOverlay" aria-hidden="true">
+  <div class="correct-circle-wrap">
+    <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="84"></circle></svg>
+    <div class="correct-label">せいかい！</div>
+    <div class="correct-ping-text">🔔 ピンポーン♪</div>
+  </div>
+</div>
+<div class="app">
+  <header class="top">
+    <div>
+      <div class="mieel-brand">
+        <div class="orb-mini"></div>
+        <strong>MieeL</strong>
+        <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener">www.mieel-support-school.com</a>
+      </div>
+      <h1><span class="icon">🌵☀️</span>ちくちく・あったか ことば</h1>
+      <p>ことばには、ひとの きもちを あたためたり、いたくしたり する ちからが あります</p>
+    </div>
+    <button class="icon-btn" id="btnLargeText" aria-pressed="false">🔠 文字を大きく</button>
+  </header>
+
+  <nav class="modes" role="tablist" aria-label="モードをえらぶ">
+    <button data-mode="sort" class="active" role="tab" aria-selected="true">🌵☀️ わけてみよう<span class="sub">ちくちく／あったかを えらぼう</span></button>
+    <button data-mode="feel" role="tab" aria-selected="false">😊😢 きもち<span class="sub">いわれたら どんな きもち？</span></button>
+    <button data-mode="rephrase" role="tab" aria-selected="false">🔄 いいかえよう<span class="sub">あったか ことばに かえよう</span></button>
+    <button data-mode="scenario" role="tab" aria-selected="false">💬 こんな とき<span class="sub">なんて いう？</span></button>
+    <button data-mode="print" role="tab" aria-selected="false">🖨️ プリント<span class="sub">PDFをつくる</span></button>
+  </nav>
+
+  <!-- ===== SORT VIEW ===== -->
+  <section class="panel view" id="view-sort">
+    <div class="level-bar" id="levelBarSort"></div>
+    <div class="score-pill" id="scoreSort">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="sortSpeak" title="よみあげ">🔊</button>
+        <div class="q-text">この ことばは どっち？</div>
+      </div>
+      <div class="word-bubble" id="sortWord"></div>
+      <div class="bucket-row">
+        <button class="bucket-btn chiku" id="sortBtnChiku"><span class="emoji">🌵</span>ちくちく ことば</button>
+        <button class="bucket-btn atta" id="sortBtnAtta"><span class="emoji">☀️</span>あったか ことば</button>
+      </div>
+      <div class="fb" id="sortFb"></div>
+      <div class="action-row">
+        <button class="btn" id="sortNext" style="background:var(--rephrase);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FEEL VIEW ===== -->
+  <section class="panel view hidden" id="view-feel">
+    <div class="level-bar" id="levelBarFeel"></div>
+    <div class="score-pill" id="scoreFeel">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="feelSpeak" title="よみあげ">🔊</button>
+        <div class="q-text">これを いわれたら、どんな きもちに なるかな？</div>
+      </div>
+      <div class="word-bubble" id="feelWord"></div>
+      <div class="feel-grid" id="feelGrid"></div>
+      <div class="fb" id="feelFb"></div>
+      <div class="action-row">
+        <button class="btn" id="feelNext" style="background:var(--feel);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== REPHRASE VIEW ===== -->
+  <section class="panel view hidden" id="view-rephrase">
+    <div class="level-bar" id="levelBarRephrase"></div>
+    <div class="score-pill" id="scoreRephrase">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="rephraseSpeak" title="よみあげ">🔊</button>
+        <div class="q-text">あったか ことばに いいかえると？</div>
+      </div>
+      <div class="chiku-card"><span class="tag">🌵 ちくちく ことば</span><span id="rephraseChiku"></span></div>
+      <div class="arrow-down">⬇</div>
+      <div class="opt-grid" id="rephraseOpts"></div>
+      <div class="fb" id="rephraseFb"></div>
+      <div class="action-row">
+        <button class="btn" id="rephraseNext" style="background:var(--rephrase);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SCENARIO VIEW ===== -->
+  <section class="panel view hidden" id="view-scenario">
+    <div class="level-bar" id="levelBarScenario"></div>
+    <div class="score-pill" id="scoreScenario">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="scenarioSpeak" title="よみあげ">🔊</button>
+      </div>
+      <div class="scene-card"><span class="icon">💭</span><span id="scenarioText"></span></div>
+      <div class="opt-grid scenario-opt" id="scenarioOpts"></div>
+      <div class="fb" id="scenarioFb"></div>
+      <div class="action-row">
+        <button class="btn" id="scenarioNext" style="background:var(--scenario);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PRINT VIEW ===== -->
+  <section class="panel view hidden" id="view-print">
+    <div class="print-controls">
+      <div>
+        <div class="field-label">もんだいの しゅるい</div>
+        <div class="chip-row" id="printTypeChips">
+          <button class="chip selected" data-ptype="sort">🌵☀️ わけてみよう</button>
+          <button class="chip" data-ptype="feel">😊😢 きもち</button>
+          <button class="chip" data-ptype="rephrase">🔄 いいかえよう</button>
+          <button class="chip" data-ptype="scenario">💬 こんな とき</button>
+        </div>
+      </div>
+      <div>
+        <div class="field-label">レベル</div>
+        <div class="chip-row" id="levelBarPrint"></div>
+      </div>
+      <div>
+        <div class="field-label">もんだいすう</div>
+        <div class="chip-row" id="printCountChips">
+          <button class="chip" data-count="4">4もん</button>
+          <button class="chip selected" data-count="6">6もん</button>
+          <button class="chip" data-count="8">8もん</button>
+        </div>
+      </div>
+      <div class="toggle-row">
+        <input type="checkbox" id="printShowAnswer">
+        <label for="printShowAnswer">こたえを ひょうじする（指導者用）</label>
+      </div>
+      <div class="action-row" style="margin-top:2px;">
+        <button class="btn ghost" id="printRegenBtn">🔄 もんだいを かえる</button>
+        <button class="btn primary" id="printOpenBtn">🖨️ プリントする</button>
+      </div>
+      <div class="preview-note">「プリントする」を押すと、印刷プレビューが開きます。ブラウザの印刷設定でPDF保存もできます。</div>
+    </div>
+  </section>
+
+  <footer class="hint">
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:5px;">
+      <div style="width:18px;height:18px;border-radius:50%;background:var(--mieel);flex:none;"></div>
+      <strong style="color:var(--ink);">MieeL</strong>
+      <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener" style="color:var(--rephrase);">mieel-support-school.com</a>
+    </div>
+    © ちくちく・あったか ことば ツール（特別支援教育向け）
+  </footer>
+
+  <details class="teacher-note">
+    <summary>👩‍🏫 指導者の方へ</summary>
+    <div class="box">
+      このアプリは、特別支援学校の道徳・自立活動・特別活動における「ことばと きもち」の学習を目的とした4つの練習モードと、印刷用ワークシート機能で構成されています。<br>
+      ・<strong>わけてみよう</strong>：ことばを「ちくちくことば」と「あったかことば」に分類し、ことばの持つ性質への気づきを育てます<br>
+      ・<strong>きもち</strong>：ことばを言われた側の気持ちを想像する練習。「わけてみよう」と同じ語彙を使い、分類理解を感情理解へつなげます<br>
+      ・<strong>いいかえよう</strong>：ちくちくことばを、同じ気持ちや要求を伝えつつも相手を傷つけない「あったかことば」に言い換える練習。単なる分類にとどまらず、実際のコミュニケーションスキルの獲得をねらいます<br>
+      ・<strong>こんな とき</strong>：具体的な場面設定の中で、望ましい言葉かけを選ぶ実践的な練習です<br>
+      掲載している「ちくちくことば」は、特定の個人・属性を傷つける差別的表現ではなく、児童生徒間でよく見られる日常的な不適切発言（例：「あっちいけ」「うるさい」等）を教材として選定しています。各モードにレベル設定があり、児童生徒の実態に応じて選べます。よみあげボタンで音声支援も可能です。プリントモードでは同じ4種類の問題をワークシートとして印刷でき、解答表示の切り替えもできます。
+    </div>
+  </details>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =========================================================
+     UTILS
+  ========================================================= */
+  function shuffle(a){
+    var arr=a.slice();
+    for(var i=arr.length-1;i>0;i--){
+      var j=Math.floor(Math.random()*(i+1));
+      var t=arr[i];arr[i]=arr[j];arr[j]=t;
+    }
+    return arr;
+  }
+  function pickRandom(a){ return a[Math.floor(Math.random()*a.length)]; }
+  function speak(text){
+    if(!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang='ja-JP'; u.rate=0.85;
+    window.speechSynthesis.speak(u);
+  }
+  function renderLevelBar(container, levels, activeId, onSelect){
+    container.innerHTML='';
+    levels.forEach(function(lv){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='level-btn'+(lv.id===activeId?' active':'');
+      b.innerHTML='<span class="stars">'+lv.stars+'</span><span class="name">'+lv.name+'</span>';
+      b.addEventListener('click', function(){ onSelect(lv.id); });
+      container.appendChild(b);
+    });
+  }
+  function updateScorePill(el, state){
+    el.innerHTML = '✅ '+state.score+' / '+state.total;
+  }
+  var PRAISE = ['やったね！','せいかい！','すごい！','ばっちり！','よくできました！'];
+  var TRY_AGAIN = ['もういちど！','おしい！','ゆっくり かんがえよう。','だいじょうぶ、もう一回！'];
+
+  /* ── correct-answer chime + big maru overlay ── */
+  var sharedAudioCtx = null;
+  function playDing(){
+    try{
+      var Ctx = window.AudioContext || window.webkitAudioContext;
+      if(!Ctx) return;
+      if(!sharedAudioCtx) sharedAudioCtx = new Ctx();
+      var ctx = sharedAudioCtx;
+      if(ctx.state==='suspended'){ ctx.resume(); }
+      function tone(freq, start, dur, peak){
+        var o = ctx.createOscillator();
+        var g = ctx.createGain();
+        o.type='sine'; o.frequency.value=freq;
+        o.connect(g); g.connect(ctx.destination);
+        var t0 = ctx.currentTime+start;
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.linearRampToValueAtTime(peak, t0+0.03);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0+dur);
+        o.start(t0);
+        o.stop(t0+dur+0.03);
+      }
+      tone(880.0, 0,    0.30, 0.30);  /* ピン */
+      tone(1318.5, 0.24, 0.48, 0.26); /* ポーン */
+    }catch(e){ /* audio not available; visual feedback still shows */ }
+  }
+  function triggerCorrectFeedback(){
+    playDing();
+    var overlay = document.getElementById('correctOverlay');
+    if(!overlay) return;
+    var wrap = overlay.querySelector('.correct-circle-wrap');
+    overlay.classList.remove('show');
+    wrap.classList.remove('animate');
+    void overlay.offsetWidth; /* force reflow so animation restarts every time */
+    overlay.classList.add('show');
+    wrap.classList.add('animate');
+  }
+
+  /* =========================================================
+     DATA
+     WORDS_DB is shared by SORT mode and FEEL mode.
+  ========================================================= */
+  var SORT_LEVELS = [
+    {id:1, name:'わかりやすい ことば', stars:'★☆☆'},
+    {id:2, name:'ちょっと ながい ことば', stars:'★★☆'},
+    {id:3, name:'よく かんがえる ことば', stars:'★★★'}
+  ];
+  var FEEL_LEVELS = SORT_LEVELS;
+  var WORDS_DB = [
+    {level:1, text:'あっちいけ', kind:'chiku', feeling:'sad'},
+    {level:1, text:'きらい', kind:'chiku', feeling:'sad'},
+    {level:1, text:'じゃまだよ', kind:'chiku', feeling:'sad'},
+    {level:1, text:'へたくそ', kind:'chiku', feeling:'sad'},
+    {level:1, text:'どいて', kind:'chiku', feeling:'sad'},
+    {level:1, text:'いやだ', kind:'chiku', feeling:'sad'},
+    {level:1, text:'だめ', kind:'chiku', feeling:'sad'},
+    {level:1, text:'しつこいな', kind:'chiku', feeling:'angry'},
+    {level:1, text:'はやくしてよ', kind:'chiku', feeling:'angry'},
+    {level:1, text:'もういい', kind:'chiku', feeling:'sad'},
+    {level:1, text:'やだ', kind:'chiku', feeling:'sad'},
+    {level:1, text:'きたない', kind:'chiku', feeling:'sad'},
+    {level:1, text:'ありがとう', kind:'atta', feeling:'happy'},
+    {level:1, text:'だいすきだよ', kind:'atta', feeling:'happy'},
+    {level:1, text:'がんばれ', kind:'atta', feeling:'happy'},
+    {level:1, text:'てつだうよ', kind:'atta', feeling:'happy'},
+    {level:1, text:'どうぞ', kind:'atta', feeling:'happy'},
+    {level:1, text:'いいよ', kind:'atta', feeling:'happy'},
+    {level:1, text:'うれしいな', kind:'atta', feeling:'happy'},
+    {level:1, text:'たのしいね', kind:'atta', feeling:'happy'},
+    {level:1, text:'いっしょだよ', kind:'atta', feeling:'happy'},
+    {level:1, text:'すごいね', kind:'atta', feeling:'happy'},
+    {level:1, text:'やさしいね', kind:'atta', feeling:'happy'},
+    {level:1, text:'だいじょうぶだよ', kind:'atta', feeling:'happy'},
+    {level:2, text:'どうせ できないでしょ', kind:'chiku', feeling:'sad'},
+    {level:2, text:'もう いっしょに あそばない', kind:'chiku', feeling:'sad'},
+    {level:2, text:'はやく しろよ', kind:'chiku', feeling:'angry'},
+    {level:2, text:'うるさいな', kind:'chiku', feeling:'angry'},
+    {level:2, text:'べつに いいけど', kind:'chiku', feeling:'sad'},
+    {level:2, text:'しらないし', kind:'chiku', feeling:'sad'},
+    {level:2, text:'かんけいないじゃん', kind:'chiku', feeling:'sad'},
+    {level:2, text:'なんで それ するの', kind:'chiku', feeling:'angry'},
+    {level:2, text:'ちょっと ヘンだよ', kind:'chiku', feeling:'sad'},
+    {level:2, text:'もう はなしかけないで', kind:'chiku', feeling:'sad'},
+    {level:2, text:'そんなの どうでもいい', kind:'chiku', feeling:'sad'},
+    {level:2, text:'すきに すれば', kind:'chiku', feeling:'angry'},
+    {level:2, text:'いっしょに あそぼう', kind:'atta', feeling:'happy'},
+    {level:2, text:'じょうずだね', kind:'atta', feeling:'happy'},
+    {level:2, text:'だいじょうぶ？', kind:'atta', feeling:'happy'},
+    {level:2, text:'また あそぼうね', kind:'atta', feeling:'happy'},
+    {level:2, text:'きいて くれて ありがとう', kind:'atta', feeling:'happy'},
+    {level:2, text:'たすかったよ', kind:'atta', feeling:'happy'},
+    {level:2, text:'いっしょに かんがえよう', kind:'atta', feeling:'happy'},
+    {level:2, text:'それ いいね', kind:'atta', feeling:'happy'},
+    {level:2, text:'むりしないでね', kind:'atta', feeling:'happy'},
+    {level:2, text:'たよりに してるよ', kind:'atta', feeling:'happy'},
+    {level:2, text:'あんしんしてね', kind:'atta', feeling:'happy'},
+    {level:2, text:'まっててね', kind:'atta', feeling:'happy'},
+    {level:3, text:'なんで そんなことも わからないの', kind:'chiku', feeling:'angry'},
+    {level:3, text:'きょうみ ないな', kind:'chiku', feeling:'sad'},
+    {level:3, text:'どうでもいいよ', kind:'chiku', feeling:'sad'},
+    {level:3, text:'つまらない はなし', kind:'chiku', feeling:'sad'},
+    {level:3, text:'どうせ わかってもらえない', kind:'chiku', feeling:'sad'},
+    {level:3, text:'じぶんで かんがえたら', kind:'chiku', feeling:'angry'},
+    {level:3, text:'そんな はなし きいてない', kind:'chiku', feeling:'sad'},
+    {level:3, text:'なにが いいたいの', kind:'chiku', feeling:'angry'},
+    {level:3, text:'だから なに', kind:'chiku', feeling:'angry'},
+    {level:3, text:'もう いい かげんに して', kind:'chiku', feeling:'angry'},
+    {level:3, text:'べつに たのんでない', kind:'chiku', feeling:'sad'},
+    {level:3, text:'それが なに', kind:'chiku', feeling:'angry'},
+    {level:3, text:'きになるね、もっと おしえて', kind:'atta', feeling:'happy'},
+    {level:3, text:'ゆっくりで だいじょうぶだよ', kind:'atta', feeling:'happy'},
+    {level:3, text:'それも いいね', kind:'atta', feeling:'happy'},
+    {level:3, text:'いっしょに かんがえよう', kind:'atta', feeling:'happy'},
+    {level:3, text:'はなしを きかせてくれて ありがとう', kind:'atta', feeling:'happy'},
+    {level:3, text:'あなたの きもち、たいせつに おもうよ', kind:'atta', feeling:'happy'},
+    {level:3, text:'むりしないで、ゆっくりでいいよ', kind:'atta', feeling:'happy'},
+    {level:3, text:'いっしょに かいけつほうを かんがえよう', kind:'atta', feeling:'happy'},
+    {level:3, text:'あなたの かんがえも きになるな', kind:'atta', feeling:'happy'},
+    {level:3, text:'どんな きもちか、おしえてくれる？', kind:'atta', feeling:'happy'},
+    {level:3, text:'こまったときは いつでも いってね', kind:'atta', feeling:'happy'},
+    {level:3, text:'あなたなら できると おもうよ', kind:'atta', feeling:'happy'}
+  ];
+  var FEEL_OPTIONS_POOL = [
+    {key:'happy', emoji:'😊', label:'うれしい'},
+    {key:'sad',   emoji:'😢', label:'かなしい'},
+    {key:'angry', emoji:'😠', label:'はらがたつ'},
+    {key:'neutral', emoji:'😐', label:'なんとも ない'}
+  ];
+
+  var REPHRASE_LEVELS = [
+    {id:1, name:'わかりやすい', stars:'★☆☆'},
+    {id:2, name:'すこし むずかしい', stars:'★★☆'},
+    {id:3, name:'よく かんがえる', stars:'★★★'}
+  ];
+  var REPHRASE_DB = [
+    {level:1, chiku:'どいてよ！', correct:'とおしてくれる？', options:['とおしてくれる？','だいすきだよ','ありがとう']},
+    {level:1, chiku:'あっちいけ', correct:'いま ひとりに なりたいな', options:['いま ひとりに なりたいな','じょうずだね','いっしょに あそぼう']},
+    {level:1, chiku:'じゃまだよ', correct:'ちょっと どいてくれる？', options:['ちょっと どいてくれる？','がんばったね','ありがとう']},
+    {level:1, chiku:'はやく しろよ', correct:'いっしょに いそごうね', options:['いっしょに いそごうね','だいじょうぶ？','たすけるよ']},
+    {level:1, chiku:'うるさいな', correct:'ちょっと しずかに してくれる？', options:['ちょっと しずかに してくれる？','じょうずだね','だいすきだよ']},
+    {level:1, chiku:'へたくそ', correct:'つぎは きっと うまく いくよ', options:['つぎは きっと うまく いくよ','あっちいけ','どうでもいい']},
+    {level:1, chiku:'きらい', correct:'いまは ちょっと つかれてるんだ', options:['いまは ちょっと つかれてるんだ','がんばれ','ありがとう']},
+    {level:1, chiku:'なんで できないの', correct:'いっしょに やってみようか', options:['いっしょに やってみようか','へたくそ','うるさいな']},
+    {level:1, chiku:'いやだ', correct:'いまは ちょっと むずかしいな', options:['いまは ちょっと むずかしいな','だめ','しつこいな']},
+    {level:1, chiku:'だめ', correct:'いまは できないんだ、ごめんね', options:['いまは できないんだ、ごめんね','やだ','きたない']},
+    {level:1, chiku:'しつこいな', correct:'もう わかったよ、ありがとう', options:['もう わかったよ、ありがとう','いやだ','どいて']},
+    {level:1, chiku:'はやくしてよ', correct:'まってるね、ゆっくりでいいよ', options:['まってるね、ゆっくりでいいよ','だめ','しつこいな']},
+    {level:1, chiku:'もういい', correct:'すこし じかんを おいてから はなそうか', options:['すこし じかんを おいてから はなそうか','いやだ','はやくしてよ']},
+    {level:1, chiku:'やだ', correct:'いまは きぶんが のらないんだ', options:['いまは きぶんが のらないんだ','だめ','もういい']},
+    {level:1, chiku:'きたないな', correct:'いっしょに きれいに しようか', options:['いっしょに きれいに しようか','いやだ','しつこいな']},
+    {level:1, chiku:'どいてよ', correct:'ここ とおりたいから、どいてくれる？', options:['ここ とおりたいから、どいてくれる？','やだ','きたない']},
+    {level:1, chiku:'あっちいって', correct:'いま ひとりで やりたいことが あるんだ', options:['いま ひとりで やりたいことが あるんだ','だめ','もういい']},
+    {level:1, chiku:'さわらないで', correct:'それは さわらないで ほしいな', options:['それは さわらないで ほしいな','いやだ','しつこいな']},
+    {level:1, chiku:'しらんぷり', correct:'ちょっと きづかなかったよ、ごめんね', options:['ちょっと きづかなかったよ、ごめんね','だめ','やだ']},
+    {level:1, chiku:'なにそれ', correct:'それ、もっと おしえて', options:['それ、もっと おしえて','へんなの','きたない']},
+    {level:1, chiku:'べつにいい', correct:'ちょっと かんがえさせてね', options:['ちょっと かんがえさせてね','どうでもいい','しつこいな']},
+    {level:1, chiku:'いじわる', correct:'それは ちょっと いやな きもちに なったよ', options:['それは ちょっと いやな きもちに なったよ','だめ','やだ']},
+    {level:1, chiku:'うざい', correct:'すこし ひとりに させてほしいな', options:['すこし ひとりに させてほしいな','いやだ','もういい']},
+    {level:1, chiku:'へんなの', correct:'わたしとは ちょっと ちがう かんじかたかも', options:['わたしとは ちょっと ちがう かんじかたかも','きもい','ダサいね']},
+    {level:2, chiku:'もう いっしょに あそばない', correct:'すこし じかんを ちょうだい', options:['すこし じかんを ちょうだい','だいすきだよ','じゃまだよ']},
+    {level:2, chiku:'なんで おそいの', correct:'まってたよ、だいじょうぶ？', options:['まってたよ、だいじょうぶ？','はやく しろよ','どうでもいい']},
+    {level:2, chiku:'それ へんじゃない？', correct:'ちょっと ちがう きが するな', options:['ちょっと ちがう きが するな','ダサいね','きもい']},
+    {level:2, chiku:'どうせ できないでしょ', correct:'いっしょに れんしゅうしよう', options:['いっしょに れんしゅうしよう','へたくそ','うるさいな']},
+    {level:2, chiku:'きょうみ ないな', correct:'べつの はなしを しようか', options:['べつの はなしを しようか','あっちいけ','じゃまだよ']},
+    {level:2, chiku:'ダサいね', correct:'わたしは べつの いろが すきかな', options:['わたしは べつの いろが すきかな','きらい','どうでもいい']},
+    {level:2, chiku:'そんなの しらないよ', correct:'いっしょに しらべてみようか', options:['いっしょに しらべてみようか','うるさいな','きもい']},
+    {level:2, chiku:'つまらない はなし', correct:'べつの はなしも きいてみたいな', options:['べつの はなしも きいてみたいな','どいてよ','へたくそ']},
+    {level:2, chiku:'べつに いいけど', correct:'ほんとうは どう おもってるか きかせて', options:['ほんとうは どう おもってるか きかせて','しらないし','かんけいない']},
+    {level:2, chiku:'しらないし', correct:'わたしも まだ よく わからないんだ', options:['わたしも まだ よく わからないんだ','どうでもいい','かんけいない']},
+    {level:2, chiku:'かんけいないじゃん', correct:'ちょっと きになったから きいてみたよ', options:['ちょっと きになったから きいてみたよ','しらない','べつにいい']},
+    {level:2, chiku:'なんで それ するの', correct:'りゆうを おしえてくれる？', options:['りゆうを おしえてくれる？','いみわからん','へんなの']},
+    {level:2, chiku:'ちょっと ヘンだよ', correct:'わたしとは すこし かんがえが ちがうかも', options:['わたしとは すこし かんがえが ちがうかも','きもい','ダサい']},
+    {level:2, chiku:'もう はなしかけないで', correct:'いまは そっとしておいて ほしいな', options:['いまは そっとしておいて ほしいな','しつこい','うざい']},
+    {level:2, chiku:'そんなの どうでもいい', correct:'いまは べつの ことに きょうみが あるんだ', options:['いまは べつの ことに きょうみが あるんだ','きょうみない','つまらない']},
+    {level:2, chiku:'すきに すれば', correct:'あなたの きめたことを おうえんするよ', options:['あなたの きめたことを おうえんするよ','かってにしろ','どうでもいい']},
+    {level:2, chiku:'なんで まちがえるの', correct:'つぎは いっしょに かくにんしようね', options:['つぎは いっしょに かくにんしようね','へたくそ','どんくさい']},
+    {level:2, chiku:'それ いみない', correct:'どういう いみか、もっと おしえて', options:['どういう いみか、もっと おしえて','むだ','つまらない']},
+    {level:2, chiku:'めんどくさがるなよ', correct:'すこしずつで だいじょうぶだよ', options:['すこしずつで だいじょうぶだよ','なまけるな','はやくしろ']},
+    {level:2, chiku:'なんども いわせるな', correct:'もういちど かくにん させてね', options:['もういちど かくにん させてね','しつこい','うるさい']},
+    {level:2, chiku:'そんなの あたりまえ', correct:'よく きづいたね', options:['よく きづいたね','しってるよ','あたりまえ']},
+    {level:2, chiku:'できないなら いいよ', correct:'できるところまで やってみよう', options:['できるところまで やってみよう','むりならいい','じゃあいい']},
+    {level:2, chiku:'なにやってんの', correct:'なにを してるのか おしえて', options:['なにを してるのか おしえて','へんなこと しないで','じゃまだから やめて']},
+    {level:2, chiku:'だまってて', correct:'もうすこし かんがえたいから、まっててくれる？', options:['もうすこし かんがえたいから、まっててくれる？','うるさい','しずかにしろ']},
+    {level:3, chiku:'なんで そんなことも わからないの', correct:'いっしょに かんがえようか', options:['いっしょに かんがえようか','へたくそ','うるさいな']},
+    {level:3, chiku:'どうでもいいよ', correct:'いまは べつの ことを かんがえたいな', options:['いまは べつの ことを かんがえたいな','じゃまだよ','あっちいけ']},
+    {level:3, chiku:'そんなの だれでも できるよ', correct:'がんばったね、じょうずだったよ', options:['がんばったね、じょうずだったよ','へたくそ','どうでもいい']},
+    {level:3, chiku:'きもい', correct:'わたしは ちょっと にがてかな', options:['わたしは ちょっと にがてかな','ダサいね','きらい']},
+    {level:3, chiku:'はあ？', correct:'もういちど おしえてくれる？', options:['もういちど おしえてくれる？','うるさいな','じゃまだよ']},
+    {level:3, chiku:'べつに', correct:'いまは うまく いえないんだ', options:['いまは うまく いえないんだ','きらい','どいてよ']},
+    {level:3, chiku:'しらない', correct:'わからないから、おしえて ほしいな', options:['わからないから、おしえて ほしいな','じゃまだよ','あっちいけ']},
+    {level:3, chiku:'めんどくさい', correct:'ちょっと やすんでから やろうかな', options:['ちょっと やすんでから やろうかな','うるさいな','へたくそ']},
+    {level:3, chiku:'どうせ わかってもらえない', correct:'わかってもらえるまで はなしてみようか', options:['わかってもらえるまで はなしてみようか','もういい','べつに']},
+    {level:3, chiku:'じぶんで かんがえたら', correct:'いっしょに かんがえる てつだいを するよ', options:['いっしょに かんがえる てつだいを するよ','しらない','めんどくさい']},
+    {level:3, chiku:'そんな はなし きいてない', correct:'そうだったんだね、おしえてくれて ありがとう', options:['そうだったんだね、おしえてくれて ありがとう','しらないし','かんけいない']},
+    {level:3, chiku:'なにが いいたいの', correct:'つたえたいこと、ゆっくり きくよ', options:['つたえたいこと、ゆっくり きくよ','いみわからん','はっきりして']},
+    {level:3, chiku:'だから なに', correct:'それが どう つながるのか、おしえて', options:['それが どう つながるのか、おしえて','だから？','どうでもいい']},
+    {level:3, chiku:'もう いい かげんに して', correct:'ちょっと きゅうけい しようか', options:['ちょっと きゅうけい しようか','うざい','しつこい']},
+    {level:3, chiku:'べつに たのんでない', correct:'よけいだったら ごめんね、しんぱいだったんだ', options:['よけいだったら ごめんね、しんぱいだったんだ','いらない','じゃましないで']},
+    {level:3, chiku:'それが なに', correct:'だいじな ことだと おもって つたえたよ', options:['だいじな ことだと おもって つたえたよ','どうでもいい','しらない']},
+    {level:3, chiku:'きみには かんけいない', correct:'しんぱいだから きいてるんだよ', options:['しんぱいだから きいてるんだよ','ほっといて','じゃまするな']},
+    {level:3, chiku:'そんなの むりに きまってる', correct:'むずかしいかもしれないけど、やってみよう', options:['むずかしいかもしれないけど、やってみよう','どうせむり','あきらめれば']},
+    {level:3, chiku:'あてにしてないから', correct:'たすけが いるときは、いつでも いってね', options:['たすけが いるときは、いつでも いってね','べつにいらない','じぶんでやる']},
+    {level:3, chiku:'なんで あやまるの、おそいよ', correct:'きづいて つたえてくれて ありがとう', options:['きづいて つたえてくれて ありがとう','おそい','いまさら']},
+    {level:3, chiku:'そんな かおしないでよ', correct:'なにか きになることが あった？', options:['なにか きになることが あった？','うざい かお','やめてよ']},
+    {level:3, chiku:'いちいち きくなよ', correct:'たしかめたかったから きいたよ', options:['たしかめたかったから きいたよ','しつこい','うるさい']},
+    {level:3, chiku:'そんなの きょうみない', correct:'いまは べつのことに ちゅうもく してるんだ', options:['いまは べつのことに ちゅうもく してるんだ','つまらない','どうでもいい']},
+    {level:3, chiku:'ちゃんと きいてる？', correct:'きいてるよ、もういちど いってくれる？', options:['きいてるよ、もういちど いってくれる？','うるさいな','わかってるって']}
+  ];
+
+  var SCENARIO_LEVELS = [
+    {id:1, name:'わかりやすい ばめん', stars:'★☆☆'},
+    {id:2, name:'すこし かんがえる', stars:'★★☆'},
+    {id:3, name:'なやましい ばめん', stars:'★★★'}
+  ];
+  var SCENARIO_DB = [
+    {level:1, scene:'ともだちが てんとうして ないています。', correct:'だいじょうぶ？', options:['だいじょうぶ？','あっちいけ','へたくそ']},
+    {level:1, scene:'ともだちが おりがみを じょうずに おりました。', correct:'じょうずだね！', options:['じょうずだね！','へたくそ','どうでもいい']},
+    {level:1, scene:'ともだちが てつだって くれました。', correct:'ありがとう', options:['ありがとう','じゃまだよ','うるさいな']},
+    {level:1, scene:'あたらしい ともだちが きょうしつに きました。', correct:'いっしょに あそぼう', options:['いっしょに あそぼう','あっちいけ','きらい']},
+    {level:1, scene:'ともだちが テストを がんばりました。', correct:'がんばったね', options:['がんばったね','どうでもいい','へたくそ']},
+    {level:1, scene:'ともだちが おもちゃを かして くれました。', correct:'ありがとう', options:['ありがとう','じゃまだよ','ダサいね']},
+    {level:1, scene:'ともだちが かなしそうな かおを しています。', correct:'どうしたの？', options:['どうしたの？','うるさいな','あっちいけ']},
+    {level:1, scene:'ともだちが おにごっこに さそって くれました。', correct:'うん、あそぼう！', options:['うん、あそぼう！','いやだ','じゃまだよ']},
+    {level:1, scene:'ともだちが ぼうしを おとしました。', correct:'ぼうし おちたよ', options:['ぼうし おちたよ','しらない','じぶんで ひろえば']},
+    {level:1, scene:'ともだちが けがを しました。', correct:'だいじょうぶ？ せんせい よぼうか？', options:['だいじょうぶ？ せんせい よぼうか？','いたそう','じぶんの せいでしょ']},
+    {level:1, scene:'ともだちが おべんとうを わすれました。', correct:'いっしょに たべよう', options:['いっしょに たべよう','わすれたの？','じぶんが わるい']},
+    {level:1, scene:'ともだちが えんぴつを かして ほしいと いいました。', correct:'いいよ、どうぞ', options:['いいよ、どうぞ','いや','じぶんの もってきなよ']},
+    {level:1, scene:'ともだちが たのしそうに はなしています。', correct:'なにが あったの？ おしえて', options:['なにが あったの？ おしえて','どうでもいい','べつに きょうみない']},
+    {level:1, scene:'ともだちが おおきな こえで わらっています。', correct:'なにが おかしいの？', options:['なにが おかしいの？','うるさいな','しずかにして']},
+    {level:1, scene:'ともだちが ゲームに かちました。', correct:'すごいね、おめでとう', options:['すごいね、おめでとう','ずるい','たまたまでしょ']},
+    {level:1, scene:'ともだちが てを あげて はっぴょうしようと しています。', correct:'がんばって', options:['がんばって','どうせ まちがえるよ','はやく して']},
+    {level:1, scene:'ともだちが おそうじを がんばっています。', correct:'てつだうよ', options:['てつだうよ','がんばってね（ひとごと）','じぶんで やれば']},
+    {level:1, scene:'ともだちが あたらしい かみがたに しました。', correct:'にあってるね', options:['にあってるね','へんなかみがた','ダサい']},
+    {level:1, scene:'ともだちが おおきな こえで ないています。', correct:'そばに いるよ', options:['そばに いるよ','うるさい','おおげさ']},
+    {level:1, scene:'ともだちが しつもんに こたえられませんでした。', correct:'だいじょうぶ、またこんど', options:['だいじょうぶ、またこんど','しらないの？','べんきょうたりない']},
+    {level:1, scene:'ともだちが きゅうしょくを のこしています。', correct:'むりしなくて いいよ', options:['むりしなくて いいよ','ぜんぶ たべなよ','のこすな']},
+    {level:1, scene:'ともだちが せきを ゆずって くれました。', correct:'ありがとう', options:['ありがとう','べつに いらない','とうぜん']},
+    {level:1, scene:'ともだちが てを けがして、ひとりで ふくを きられません。', correct:'てつだおうか？', options:['てつだおうか？','じぶんで やりなよ','おそいね']},
+    {level:1, scene:'ともだちが あたらしい ノートを みせて くれました。', correct:'かわいいね', options:['かわいいね','ふつう','じぶんのほうがいい']},
+    {level:2, scene:'ともだちが なわとびで しっぱいして、はずかしそうです。', correct:'だいじょうぶ、また やってみよう', options:['だいじょうぶ、また やってみよう','へたくそ','わらっちゃう']},
+    {level:2, scene:'ともだちが ひとりで こまっています。', correct:'てつだおうか？', options:['てつだおうか？','じゃまだよ','しらない']},
+    {level:2, scene:'ともだちが じぶんの えを みせて くれました。あまり じょうずでは ありません。', correct:'がんばって かいたね', options:['がんばって かいたね','へたくそ','ダサいね']},
+    {level:2, scene:'はなしあいで ともだちが ちがう いけんを いいました。', correct:'なるほど、それも いいね', options:['なるほど、それも いいね','それ ちがうよ','どうでもいい']},
+    {level:2, scene:'ともだちが ゆっくり はなしています。', correct:'ゆっくりで だいじょうぶだよ', options:['ゆっくりで だいじょうぶだよ','はやく しろよ','うるさいな']},
+    {level:2, scene:'ともだちが しっぱいを して、しょんぼりしています。', correct:'だれにでも あるよ', options:['だれにでも あるよ','へたくそ','だから いっただろ']},
+    {level:2, scene:'ともだちが あたらしい ふくを きて きました。', correct:'にあってるね', options:['にあってるね','ダサいね','きもい']},
+    {level:2, scene:'ともだちが しつもんを してきました。すこし めんどうです。', correct:'いいよ、おしえるね', options:['いいよ、おしえるね','じぶんで しらべなよ','うるさいな']},
+    {level:2, scene:'ともだちが しあいに まけて、おちこんでいます。', correct:'つぎ がんばろう', options:['つぎ がんばろう','よわいから','もう でなくていいよ']},
+    {level:2, scene:'ともだちが みんなの まえで まちがえて、はずかしそうです。', correct:'だれでも まちがえるよ', options:['だれでも まちがえるよ','はずかしいね','わらっちゃう']},
+    {level:2, scene:'ともだちが じぶんとは べつの グループに はいりたいと いいました。', correct:'いいね、たのしんできてね', options:['いいね、たのしんできてね','なんで？','うらぎりだ']},
+    {level:2, scene:'ともだちが ちこくして きました。', correct:'なにか あったの？', options:['なにか あったの？','おそい','しんじられない']},
+    {level:2, scene:'ともだちが じぶんの いけんを つよく しゅちょうしています。', correct:'その かんがえ、もっと きかせて', options:['その かんがえ、もっと きかせて','おしつけないで','それは ちがう']},
+    {level:2, scene:'ともだちが なんども おなじ しつもんを してきます。', correct:'もういちど せつめいするね', options:['もういちど せつめいするね','さっきも いったよね','おぼえてよ']},
+    {level:2, scene:'ともだちが きんちょうして てが ふるえています。', correct:'いっしょに いるから だいじょうぶ', options:['いっしょに いるから だいじょうぶ','おちつけよ','こわがりすぎ']},
+    {level:2, scene:'ともだちが じぶんの ものを かってに つかいました。', correct:'つぎは きいてから つかってね', options:['つぎは きいてから つかってね','どろぼう','さいてい']},
+    {level:2, scene:'ともだちが やくそくの じかんに おくれました。', correct:'なにか あった？ しんぱいしたよ', options:['なにか あった？ しんぱいしたよ','おそすぎ','もう まってない']},
+    {level:2, scene:'ともだちが じぶんの すきな ものを ばかにされて かなしんでいます。', correct:'わたしは すきだよ、その きもち', options:['わたしは すきだよ、その きもち','きにしすぎ','しかたないよ']},
+    {level:2, scene:'ともだちが グループの きめごとに はんたい しています。', correct:'なんで そう おもうのか、きかせて', options:['なんで そう おもうのか、きかせて','わがまま いうな','それは だめ']},
+    {level:2, scene:'ともだちが しゅくだいを てつだって ほしいと たのんできました。', correct:'いいよ、どこが わからない？', options:['いいよ、どこが わからない？','じぶんでやりなよ','めんどくさいな']},
+    {level:2, scene:'ともだちが あたらしい ことに ちょうせんして、しっぱいしました。', correct:'ちょうせんしたこと、すごいよ', options:['ちょうせんしたこと、すごいよ','だから いったのに','むりだったね']},
+    {level:2, scene:'ともだちが じぶんとは ちがう そくどで さぎょうを しています。', correct:'そのペースで だいじょうぶだよ', options:['そのペースで だいじょうぶだよ','おそいよ','はやくして']},
+    {level:2, scene:'ともだちが かなしいことを がまんして、へいきなふりを しています。', correct:'むりしなくて いいよ、はなしたく なったら いつでも', options:['むりしなくて いいよ、はなしたく なったら いつでも','がまんしてえらいね','よわいなあ']},
+    {level:2, scene:'ともだちが みんなと ちがう ペースで がくしゅうを すすめています。', correct:'じぶんの ペースで だいじょうぶだよ', options:['じぶんの ペースで だいじょうぶだよ','おそいね','みんなにあわせて']},
+    {level:3, scene:'ともだちと いけんが ちがって、すこし けんかに なりそうです。', correct:'ちがう かんがえも きいてみたいな', options:['ちがう かんがえも きいてみたいな','おまえが まちがってる','もう いいよ']},
+    {level:3, scene:'グループの なかで、ともだちが しずかで あまり はなしません。', correct:'なにか てつだえることは ある？', options:['なにか てつだえることは ある？','なんで だまってるの','どうでもいい']},
+    {level:3, scene:'ともだちが じぶんの まちがいに きづいて、あわてています。', correct:'だいじょうぶ、いっしょに なおそう', options:['だいじょうぶ、いっしょに なおそう','だから いっただろ','ばかだなあ']},
+    {level:3, scene:'はんの しごとを、ともだちが わすれて しまいました。', correct:'つぎは いっしょに かくにんしようね', options:['つぎは いっしょに かくにんしようね','わすれるなんて さいてい','もう たのまない']},
+    {level:3, scene:'ともだちが じぶんとは ちがう やりかたで もんだいを といています。', correct:'その やりかたも おもしろいね', options:['その やりかたも おもしろいね','それ ちがうくない？','へんなの']},
+    {level:3, scene:'ともだちが なやみを うちあけて くれました。', correct:'はなしてくれて ありがとう', options:['はなしてくれて ありがとう','そんなの きにしすぎ','どうでもいい']},
+    {level:3, scene:'はっぴょうで、ともだちが きんちょうして こえが ちいさいです。', correct:'ゆっくりで いいよ、きいてるよ', options:['ゆっくりで いいよ、きいてるよ','もっと おおきい こえで','きこえないよ']},
+    {level:3, scene:'ともだちが あたらしい アイデアを だしました。すこし へんかもしれません。', correct:'おもしろい かんがえだね', options:['おもしろい かんがえだね','それは むりでしょ','へんなの']},
+    {level:3, scene:'ともだちが グループの リーダーを やりたくないと いいました。', correct:'なんでか きかせてくれる？', options:['なんでか きかせてくれる？','やってよ','にげるな']},
+    {level:3, scene:'ともだちが じぶんの きもちを うまく ことばに できずに います。', correct:'ゆっくりで いいよ、まってるね', options:['ゆっくりで いいよ、まってるね','はやく いって','なにが いいたいの']},
+    {level:3, scene:'ともだちが しっぱいを ひとの せいに しました。', correct:'なにが あったのか、いっしょに ふりかえろう', options:['なにが あったのか、いっしょに ふりかえろう','ひとのせいにするな','さいてい']},
+    {level:3, scene:'ともだちが じぶんの とくいなことを ひかえめに はなします。', correct:'それ、もっと きかせてほしいな', options:['それ、もっと きかせてほしいな','じまんかよ','ふーん']},
+    {level:3, scene:'ともだちが グループの きめたことに したがえないと なやんでいます。', correct:'むりしなくて いいよ、いっしょに かんがえよう', options:['むりしなくて いいよ、いっしょに かんがえよう','したがえよ','わがまま']},
+    {level:3, scene:'ともだちが みんなと ちがう いけんを だすのを ためらっています。', correct:'ちがう いけんも きいてみたいな', options:['ちがう いけんも きいてみたいな','あわせなよ','どうせ おなじでしょ']},
+    {level:3, scene:'ともだちが しっぱいを おそれて、あたらしいことに ちょうせんしません。', correct:'しっぱいしても だいじょうぶだよ', options:['しっぱいしても だいじょうぶだよ','はやく ちょうせんしなよ','こわがりすぎ']},
+    {level:3, scene:'ともだちが じぶんの きもちより ひとの きもちを ゆうせんして いつも がまんしています。', correct:'あなたの きもちも たいせつだよ', options:['あなたの きもちも たいせつだよ','がまん つづけて','それでいいんじゃない']},
+    {level:3, scene:'ともだちが なやみを はなしたあと、しんぱいそうに あなたを みています。', correct:'はなしてくれて、ありがとう', options:['はなしてくれて、ありがとう','それだけ？','たいしたことないね']},
+    {level:3, scene:'ともだちが じぶんの あやまちを みとめるのに じかんが かかっています。', correct:'きづいたときで だいじょうぶだよ', options:['きづいたときで だいじょうぶだよ','はやく みとめろよ','おそい']},
+    {level:3, scene:'ともだちが グループの なかで いけんが まとまらず、こまっています。', correct:'みんなの いけんを ひとつずつ きいてみよう', options:['みんなの いけんを ひとつずつ きいてみよう','どうでもいい','はやく きめて']},
+    {level:3, scene:'ともだちが じぶんに にがてな こうもくで くろうしています。', correct:'にがてでも がんばってるね', options:['にがてでも がんばってるね','にがてなら やめれば','がんばりが たりない']},
+    {level:3, scene:'ともだちが ちがう いけんの ひとと はなしあいを さけています。', correct:'はなしてみたら、あたらしい はっけんが あるかもよ', options:['はなしてみたら、あたらしい はっけんが あるかもよ','さけてても かわらないよ','どうせ わかりあえない']},
+    {level:3, scene:'ともだちが じぶんの きもちを かくして、むりに わらっています。', correct:'むりに わらわなくても いいんだよ', options:['むりに わらわなくても いいんだよ','げんきそうで よかった','わらってれば だいじょうぶ']},
+    {level:3, scene:'ともだちが しんちょうに かんがえすぎて、なかなか けつだんできません。', correct:'じかんを かけて かんがえて いいよ', options:['じかんを かけて かんがえて いいよ','はやく きめてよ','うじうじするな']},
+    {level:3, scene:'ともだちが じぶんの もちものを なくして、みんなに いいだせずにいます。', correct:'いっしょに さがそうか、だれかに いおうか', options:['いっしょに さがそうか、だれかに いおうか','はやく いいなよ','どんくさいな']}
+  ];
+
+  /* =========================================================
+     SORT MODE
+  ========================================================= */
+  var sortState = {level:1, score:0, total:0, current:null, locked:false};
+  var sortQueue = [];
+  function renderLevelBarSort(){
+    renderLevelBar(document.getElementById('levelBarSort'), SORT_LEVELS, sortState.level, function(id){
+      sortState.level=id; renderLevelBarSort(); newSortQuestion();
+    });
+  }
+  function newSortQuestion(){
+    if(sortQueue.length===0 || sortQueue[0].level!==sortState.level){
+      sortQueue = shuffle(WORDS_DB.filter(function(d){return d.level===sortState.level;}));
+    }
+    sortState.current = sortQueue.shift();
+    sortState.locked = false;
+    document.getElementById('sortWord').textContent = sortState.current.text;
+    document.getElementById('sortFb').className='fb'; document.getElementById('sortFb').textContent='';
+    document.getElementById('sortNext').style.display='none';
+    document.getElementById('sortBtnChiku').disabled=false;
+    document.getElementById('sortBtnAtta').disabled=false;
+    document.getElementById('sortBtnChiku').classList.remove('correct-flash','wrong-flash');
+    document.getElementById('sortBtnAtta').classList.remove('correct-flash','wrong-flash');
+  }
+  function handleSortAnswer(choice, btnEl, otherBtnEl){
+    if(sortState.locked) return;
+    var cur = sortState.current;
+    var correct = (choice===cur.kind);
+    sortState.total++;
+    if(correct) sortState.score++;
+    updateScorePill(document.getElementById('scoreSort'), sortState);
+    var fbEl = document.getElementById('sortFb');
+    sortState.locked = true;
+    document.getElementById('sortBtnChiku').disabled=true;
+    document.getElementById('sortBtnAtta').disabled=true;
+    if(correct){
+      btnEl.classList.add('correct-flash');
+      fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+      triggerCorrectFeedback();
+      speak(cur.text);
+    } else {
+      btnEl.classList.add('wrong-flash');
+      otherBtnEl.classList.add('correct-flash');
+      fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+    }
+    document.getElementById('sortNext').style.display='inline-block';
+  }
+  document.getElementById('sortBtnChiku').addEventListener('click', function(){
+    handleSortAnswer('chiku', document.getElementById('sortBtnChiku'), document.getElementById('sortBtnAtta'));
+  });
+  document.getElementById('sortBtnAtta').addEventListener('click', function(){
+    handleSortAnswer('atta', document.getElementById('sortBtnAtta'), document.getElementById('sortBtnChiku'));
+  });
+  document.getElementById('sortSpeak').addEventListener('click', function(){
+    speak(sortState.current.text);
+  });
+  document.getElementById('sortNext').addEventListener('click', newSortQuestion);
+
+  /* =========================================================
+     FEEL MODE
+  ========================================================= */
+  var feelState = {level:1, score:0, total:0, current:null, locked:false};
+  var feelQueue = [];
+  function renderLevelBarFeel(){
+    renderLevelBar(document.getElementById('levelBarFeel'), FEEL_LEVELS, feelState.level, function(id){
+      feelState.level=id; renderLevelBarFeel(); newFeelQuestion();
+    });
+  }
+  function feelOptionsForLevel(level, correctKey){
+    var n = level===1 ? 2 : (level===2 ? 3 : 4);
+    var pool = FEEL_OPTIONS_POOL.slice(0, 4);
+    var correctOpt = pool.filter(function(o){return o.key===correctKey;})[0];
+    var rest = shuffle(pool.filter(function(o){return o.key!==correctKey;}));
+    var chosen = [correctOpt].concat(rest.slice(0, n-1));
+    return shuffle(chosen);
+  }
+  function newFeelQuestion(){
+    if(feelQueue.length===0 || feelQueue[0].level!==feelState.level){
+      feelQueue = shuffle(WORDS_DB.filter(function(d){return d.level===feelState.level;}));
+    }
+    feelState.current = feelQueue.shift();
+    feelState.locked = false;
+    document.getElementById('feelWord').textContent = feelState.current.text;
+    document.getElementById('feelFb').className='fb'; document.getElementById('feelFb').textContent='';
+    document.getElementById('feelNext').style.display='none';
+    var grid = document.getElementById('feelGrid');
+    grid.innerHTML='';
+    var opts = feelOptionsForLevel(feelState.level, feelState.current.feeling);
+    opts.forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button'; b.className='feel-btn';
+      b.innerHTML='<span class="emoji">'+opt.emoji+'</span><span>'+opt.label+'</span>';
+      b.addEventListener('click', function(){
+        if(feelState.locked) return;
+        var correct = (opt.key===feelState.current.feeling);
+        feelState.total++;
+        if(correct) feelState.score++;
+        updateScorePill(document.getElementById('scoreFeel'), feelState);
+        var fbEl = document.getElementById('feelFb');
+        if(correct){
+          feelState.locked=true;
+          b.classList.add('correct-flash');
+          grid.querySelectorAll('.feel-btn').forEach(function(o){ if(o!==b) o.disabled=true; });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+          document.getElementById('feelNext').style.display='inline-block';
+        } else {
+          b.classList.add('wrong-flash');
+          setTimeout(function(){ b.classList.remove('wrong-flash'); }, 500);
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+      });
+      grid.appendChild(b);
+    });
+  }
+  document.getElementById('feelSpeak').addEventListener('click', function(){
+    speak(feelState.current.text);
+  });
+  document.getElementById('feelNext').addEventListener('click', newFeelQuestion);
+
+  /* =========================================================
+     REPHRASE MODE
+  ========================================================= */
+  var rephraseState = {level:1, score:0, total:0, current:null, locked:false};
+  var rephraseQueue = [];
+  function renderLevelBarRephrase(){
+    renderLevelBar(document.getElementById('levelBarRephrase'), REPHRASE_LEVELS, rephraseState.level, function(id){
+      rephraseState.level=id; renderLevelBarRephrase(); newRephraseQuestion();
+    });
+  }
+  function newRephraseQuestion(){
+    if(rephraseQueue.length===0 || rephraseQueue[0].level!==rephraseState.level){
+      rephraseQueue = shuffle(REPHRASE_DB.filter(function(d){return d.level===rephraseState.level;}));
+    }
+    rephraseState.current = rephraseQueue.shift();
+    rephraseState.locked = false;
+    document.getElementById('rephraseChiku').textContent = rephraseState.current.chiku;
+    document.getElementById('rephraseFb').className='fb'; document.getElementById('rephraseFb').textContent='';
+    document.getElementById('rephraseNext').style.display='none';
+    var grid = document.getElementById('rephraseOpts');
+    grid.innerHTML='';
+    shuffle(rephraseState.current.options).forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button'; b.className='opt-btn'; b.textContent=opt;
+      b.addEventListener('click', function(){
+        if(rephraseState.locked) return;
+        var correct = (opt===rephraseState.current.correct);
+        rephraseState.total++;
+        if(correct) rephraseState.score++;
+        updateScorePill(document.getElementById('scoreRephrase'), rephraseState);
+        var fbEl = document.getElementById('rephraseFb');
+        if(correct){
+          rephraseState.locked=true;
+          b.classList.add('correct-flash');
+          grid.querySelectorAll('.opt-btn').forEach(function(o){ if(o!==b) o.disabled=true; });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+          document.getElementById('rephraseNext').style.display='inline-block';
+          speak(opt);
+        } else {
+          b.classList.add('wrong-flash');
+          setTimeout(function(){ b.classList.remove('wrong-flash'); }, 500);
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+      });
+      grid.appendChild(b);
+    });
+  }
+  document.getElementById('rephraseSpeak').addEventListener('click', function(){
+    speak(rephraseState.current.chiku);
+  });
+  document.getElementById('rephraseNext').addEventListener('click', newRephraseQuestion);
+
+  /* =========================================================
+     SCENARIO MODE
+  ========================================================= */
+  var scenarioState = {level:1, score:0, total:0, current:null, locked:false};
+  var scenarioQueue = [];
+  function renderLevelBarScenario(){
+    renderLevelBar(document.getElementById('levelBarScenario'), SCENARIO_LEVELS, scenarioState.level, function(id){
+      scenarioState.level=id; renderLevelBarScenario(); newScenarioQuestion();
+    });
+  }
+  function newScenarioQuestion(){
+    if(scenarioQueue.length===0 || scenarioQueue[0].level!==scenarioState.level){
+      scenarioQueue = shuffle(SCENARIO_DB.filter(function(d){return d.level===scenarioState.level;}));
+    }
+    scenarioState.current = scenarioQueue.shift();
+    scenarioState.locked = false;
+    document.getElementById('scenarioText').textContent = scenarioState.current.scene;
+    document.getElementById('scenarioFb').className='fb'; document.getElementById('scenarioFb').textContent='';
+    document.getElementById('scenarioNext').style.display='none';
+    var grid = document.getElementById('scenarioOpts');
+    grid.innerHTML='';
+    shuffle(scenarioState.current.options).forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button'; b.className='opt-btn'; b.textContent=opt;
+      b.addEventListener('click', function(){
+        if(scenarioState.locked) return;
+        var correct = (opt===scenarioState.current.correct);
+        scenarioState.total++;
+        if(correct) scenarioState.score++;
+        updateScorePill(document.getElementById('scoreScenario'), scenarioState);
+        var fbEl = document.getElementById('scenarioFb');
+        if(correct){
+          scenarioState.locked=true;
+          b.classList.add('correct-flash');
+          grid.querySelectorAll('.opt-btn').forEach(function(o){ if(o!==b) o.disabled=true; });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+          document.getElementById('scenarioNext').style.display='inline-block';
+          speak(opt);
+        } else {
+          b.classList.add('wrong-flash');
+          setTimeout(function(){ b.classList.remove('wrong-flash'); }, 500);
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+      });
+      grid.appendChild(b);
+    });
+  }
+  document.getElementById('scenarioSpeak').addEventListener('click', function(){
+    speak(scenarioState.current.scene);
+  });
+  document.getElementById('scenarioNext').addEventListener('click', newScenarioQuestion);
+
+  /* =========================================================
+     PRINT MODE
+  ========================================================= */
+  var printState = {level:1, type:'sort', count:6, showAnswer:false, problems:[]};
+
+  function levelsForPrintType(){
+    return printState.type==='sort' ? SORT_LEVELS
+      : printState.type==='feel' ? FEEL_LEVELS
+      : printState.type==='rephrase' ? REPHRASE_LEVELS
+      : SCENARIO_LEVELS;
+  }
+  function renderPrintLevelBar(){
+    var levelsForType = levelsForPrintType();
+    if(!levelsForType.some(function(l){return l.id===printState.level;})){
+      printState.level = levelsForType[0].id;
+    }
+    var container = document.getElementById('levelBarPrint');
+    container.innerHTML='';
+    levelsForType.forEach(function(lv){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='chip'+(lv.id===printState.level?' selected':'');
+      b.textContent = lv.stars+' '+lv.name;
+      b.addEventListener('click', function(){
+        printState.level=lv.id; renderPrintLevelBar(); regenerateProblems(); renderWorksheet();
+      });
+      container.appendChild(b);
+    });
+  }
+  document.querySelectorAll('#printTypeChips .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#printTypeChips .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      printState.type = c.getAttribute('data-ptype');
+      renderPrintLevelBar();
+      regenerateProblems();
+      renderWorksheet();
+    });
+  });
+  document.querySelectorAll('#printCountChips .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#printCountChips .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      printState.count = parseInt(c.getAttribute('data-count'),10);
+      regenerateProblems(); renderWorksheet();
+    });
+  });
+  document.getElementById('printShowAnswer').addEventListener('change', function(e){
+    printState.showAnswer = e.target.checked;
+    renderWorksheet();
+  });
+  document.getElementById('printRegenBtn').addEventListener('click', function(){
+    regenerateProblems(); renderWorksheet();
+  });
+  document.getElementById('printOpenBtn').addEventListener('click', function(){
+    renderWorksheet();
+    setTimeout(function(){ window.print(); }, 60);
+  });
+
+  function sampleFrom(db, level, count){
+    var pool = shuffle(db.filter(function(d){ return d.level===level; }));
+    var out = [];
+    var guard=0;
+    while(out.length<count && guard<500){
+      guard++;
+      if(pool.length===0) pool = shuffle(db.filter(function(d){ return d.level===level; }));
+      out.push(pool.shift());
+    }
+    return out;
+  }
+  function regenerateProblems(){
+    var db = printState.type==='sort' ? WORDS_DB
+      : printState.type==='feel' ? WORDS_DB
+      : printState.type==='rephrase' ? REPHRASE_DB
+      : SCENARIO_DB;
+    printState.problems = sampleFrom(db, printState.level, printState.count);
+  }
+  regenerateProblems();
+
+  function typeInstruction(){
+    return printState.type==='sort' ? '「ちくちくことば」か「あったかことば」に 〇を つけよう'
+      : printState.type==='feel' ? 'いわれたら どんな きもちに なるか、〇を つけよう'
+      : printState.type==='rephrase' ? 'あったかことばに いいかえると？ こたえに 〇を つけよう'
+      : 'いちばん いい こたえかたに 〇を つけよう';
+  }
+  function renderWorksheet(){
+    var levelsForType = levelsForPrintType();
+    var lv = levelsForType.filter(function(l){return l.id===printState.level;})[0];
+    var typeLabel = printState.type==='sort' ? '🌵☀️ わけてみよう'
+      : printState.type==='feel' ? '😊😢 きもち'
+      : printState.type==='rephrase' ? '🔄 いいかえよう'
+      : '💬 こんな とき なんて いう？';
+
+    var html = '';
+    html += '<div class="ws-header"><div style="display:flex;align-items:center;gap:8px;">'
+      + '<div style="width:20px;height:20px;border-radius:50%;background:var(--mieel);border:1px solid #ccc;flex:none;"></div>'
+      + '<div><div style="font-size:11px;color:#333;font-weight:700;">MieeL ちくちく・あったか ことば</div>'
+      + '<h2>'+typeLabel+'（'+lv.name+'）</h2>'
+      + '<div style="font-size:11px;color:#666;margin-top:2px;">'+typeInstruction()+'</div></div></div>'
+      + '<div class="ws-fields" style="flex-direction:column;align-items:flex-end;gap:2px;">'
+      + '<div style="font-size:.75rem;color:#3A9A8C;font-weight:700;">mieel-support-school.com</div>'
+      + '<div><span class="lbl">なまえ：</span><span class="blank">&nbsp;</span><span class="lbl">ひづけ：</span><span class="blank">&nbsp;</span></div></div></div>';
+
+    html += '<div class="ws-grid">';
+    printState.problems.forEach(function(p, idx){
+      html += '<div class="ws-cell"><div class="no">もんだい '+(idx+1)+'</div>';
+      if(printState.type==='sort'){
+        html += '<div class="ws-sentence">「'+p.text+'」</div>';
+        html += '<div class="ws-choice-row"><span class="ws-choice">🌵 ちくちくことば</span><span class="ws-choice">☀️ あったかことば</span></div>';
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;">こたえ：'+(p.kind==='chiku'?'🌵 ちくちくことば':'☀️ あったかことば')+'</div>';
+        }
+      } else if(printState.type==='feel'){
+        var opts = feelOptionsForLevel(printState.level, p.feeling);
+        html += '<div class="ws-sentence">「'+p.text+'」と いわれたら？</div>';
+        html += '<div class="ws-choice-row">'+opts.map(function(o){return '<span class="ws-choice">'+o.emoji+' '+o.label+'</span>';}).join('')+'</div>';
+        if(printState.showAnswer){
+          var correctOpt = FEEL_OPTIONS_POOL.filter(function(o){return o.key===p.feeling;})[0];
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;">こたえ：'+correctOpt.emoji+' '+correctOpt.label+'</div>';
+        }
+      } else if(printState.type==='rephrase'){
+        html += '<div class="ws-sentence">🌵「'+p.chiku+'」</div>';
+        html += '<div class="ws-bank">えらぶ：'+shuffle(p.options).join('　／　')+'</div>';
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;">こたえ：'+p.correct+'</div>';
+        }
+      } else {
+        html += '<div class="ws-sentence">'+p.scene+'</div>';
+        html += '<div class="ws-bank">えらぶ：'+shuffle(p.options).join('　／　')+'</div>';
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;">こたえ：'+p.correct+'</div>';
+        }
+      }
+      html += '</div>';
+    });
+    html += '</div>';
+    var ws = document.getElementById('worksheet');
+    if(!ws){
+      ws = document.createElement('div');
+      ws.id='worksheet';
+      document.body.appendChild(ws);
+    }
+    ws.innerHTML = html;
+  }
+  renderPrintLevelBar();
+  renderWorksheet();
+
+  /* =========================================================
+     MODE SWITCHING / GLOBAL UI
+  ========================================================= */
+  document.querySelectorAll('nav.modes button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('nav.modes button').forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+      btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+      var mode = btn.getAttribute('data-mode');
+      document.querySelectorAll('.view').forEach(function(v){ v.classList.add('hidden'); });
+      document.getElementById('view-'+mode).classList.remove('hidden');
+      if(mode==='print') renderWorksheet();
+    });
+  });
+
+  var largeToggle = document.getElementById('btnLargeText');
+  largeToggle.addEventListener('click', function(){
+    var on = document.documentElement.classList.toggle('large-text');
+    largeToggle.setAttribute('aria-pressed', on ? 'true':'false');
+  });
+
+  /* =========================================================
+     INIT
+  ========================================================= */
+  renderLevelBarSort(); newSortQuestion();
+  renderLevelBarFeel(); newFeelQuestion();
+  renderLevelBarRephrase(); newRephraseQuestion();
+  renderLevelBarScenario(); newScenarioQuestion();
+
+})();
+</script>
+</body>
+</html>

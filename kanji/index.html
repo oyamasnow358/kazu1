@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>かんじを まなぼう｜MieeL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF7EF;
+    --card:#FFFFFF;
+    --ink:#2E2A25;
+    --ink-soft:#8A8072;
+    --line:#EAE1CE;
+    --read:#3D5A80;    --read-soft:#DEE6F3;
+    --find:#8B5FA3;    --find-soft:#EEE3F5;
+    --pic:#3F9D8B;      --pic-soft:#DBEFEA;
+    --order:#C15B6B;   --order-soft:#F8E1E5;
+    --success:#4F9A63; --success-soft:#E3F3E6;
+    --danger:#C4573F;  --danger-soft:#FBE4DE;
+    --radius:22px;
+    --shadow:0 6px 18px rgba(46,42,37,0.10);
+    --maxw:960px;
+    --mieel:radial-gradient(circle at 50% 0%,#1B8FE8 0%,#2BB8D6 28%,#3FCB9E 45%,#8FD24A 58%,#F4D027 72%,#F7941E 100%);
+  }
+  *{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact;color-adjust:exact;}
+  html{font-size:17px;}
+  html.large-text{font-size:21px;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+    -webkit-font-smoothing:antialiased;padding-bottom:40px;
+  }
+  button{font-family:inherit;}
+  button:focus-visible, [tabindex]:focus-visible{outline:3px solid var(--pic);outline-offset:2px;}
+
+  .app{max-width:var(--maxw);margin:0 auto;padding:18px 16px 8px;}
+
+  header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
+  .mieel-brand{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .mieel-brand .orb-mini{width:20px;height:20px;border-radius:50%;background:var(--mieel);flex:none;}
+  .mieel-brand strong{color:var(--ink);font-size:.85rem;}
+  .mieel-brand a{font-size:.78rem;color:var(--pic);text-decoration:none;font-weight:600;}
+  .mieel-brand a:hover{text-decoration:underline;}
+  header.top h1{font-size:1.6rem;margin:0;font-weight:800;letter-spacing:.02em;display:flex;align-items:center;gap:.4em;}
+  header.top h1 .icon{font-size:1.2em;}
+  header.top p{margin:4px 0 0;color:var(--ink-soft);font-size:.85rem;font-weight:500;}
+  .icon-btn{
+    border:2px solid var(--ink);background:var(--card);color:var(--ink);border-radius:999px;
+    padding:.5em 1em;font-weight:700;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:.4em;
+  }
+  .icon-btn:hover{background:var(--pic-soft);}
+
+  nav.modes{display:flex;gap:9px;margin-bottom:16px;flex-wrap:wrap;}
+  nav.modes button{
+    flex:1 1 150px;font-weight:800;font-size:1rem;padding:13px 8px;border-radius:var(--radius);
+    border:3px solid transparent;background:var(--card);color:var(--ink-soft);box-shadow:var(--shadow);
+    cursor:pointer;transition:transform .12s ease, border-color .12s ease, color .12s ease;
+  }
+  nav.modes button .sub{display:block;font-size:.68em;font-weight:500;margin-top:2px;}
+  nav.modes button:hover{transform:translateY(-2px);}
+  nav.modes button.active{border-color:var(--ink);color:var(--ink);background:var(--pic-soft);}
+
+  section.panel{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:18px;}
+
+  .level-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+  .level-bar .level-btn{
+    flex:1 1 140px;text-align:left;border:2px solid var(--line);background:#FCFAF3;border-radius:16px;
+    padding:10px 12px;cursor:pointer;font-weight:700;color:var(--ink);
+  }
+  .level-bar .level-btn .stars{color:var(--order);letter-spacing:1px;display:block;font-size:.9em;}
+  .level-bar .level-btn .name{display:block;font-size:1rem;}
+  .level-bar .level-btn.active{border-color:var(--pic);background:var(--pic-soft);}
+  .level-bar .level-btn:hover{border-color:var(--pic);}
+
+  .score-pill{
+    display:inline-flex;align-items:center;gap:.5em;background:var(--success-soft);color:var(--success);
+    font-weight:800;padding:8px 16px;border-radius:999px;font-size:.95rem;margin-bottom:14px;
+  }
+
+  .stage{min-height:260px;display:flex;flex-direction:column;align-items:center;}
+  .prompt-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;text-align:center;}
+  .prompt-row .q-text{font-weight:800;color:var(--ink-soft);font-size:1rem;}
+  .speak-btn{
+    border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:999px;
+    width:40px;height:40px;font-size:1.1rem;cursor:pointer;flex:none;
+  }
+  .speak-btn:hover{background:var(--pic-soft);}
+
+  /* ── kanji / icon bubble ── */
+  .char-bubble{
+    background:#FCFAF3;border:3px solid var(--line);border-radius:24px;width:150px;height:150px;
+    display:flex;align-items:center;justify-content:center;font-size:4.4rem;font-weight:800;
+    margin-bottom:22px;color:var(--ink);
+  }
+
+  .opt-grid{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-width:640px;}
+  .opt-btn{
+    min-width:88px;padding:14px 20px;border:3px solid var(--read);background:var(--read-soft);color:#233a5c;
+    font-size:1.3rem;font-weight:800;border-radius:16px;cursor:pointer;box-shadow:0 5px 0 #2c4a72;transition:.1s;
+  }
+  .opt-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #2c4a72;}
+  .opt-btn.correct-flash{background:var(--success-soft);border-color:var(--success);box-shadow:0 5px 0 #2a6040;color:#255e3c;}
+  .opt-btn.wrong-flash{background:var(--danger-soft);border-color:var(--danger);box-shadow:0 5px 0 #8a3020;color:#7a2a18;}
+  .opt-btn:disabled{opacity:.35;cursor:not-allowed;}
+
+  .find-opt .opt-btn{border-color:var(--find);background:var(--find-soft);color:#4d3160;box-shadow:0 5px 0 #5a3d78;}
+  .find-opt .opt-btn.correct-flash{border-color:var(--success);background:var(--success-soft);box-shadow:0 5px 0 #2a6040;}
+  .find-opt .opt-btn.wrong-flash{border-color:var(--danger);background:var(--danger-soft);box-shadow:0 5px 0 #8a3020;}
+
+  .pic-opt .opt-btn{border-color:var(--pic);background:var(--pic-soft);color:#215a4f;box-shadow:0 5px 0 #2c6b5d;font-size:1.6rem;}
+  .pic-opt .opt-btn.correct-flash{border-color:var(--success);background:var(--success-soft);box-shadow:0 5px 0 #2a6040;}
+  .pic-opt .opt-btn.wrong-flash{border-color:var(--danger);background:var(--danger-soft);box-shadow:0 5px 0 #8a3020;}
+
+  /* ── arrange mode (number ordering) ── */
+  .arrange-scene{font-size:1.1rem;font-weight:800;color:var(--ink-soft);margin-bottom:14px;}
+  .answer-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;min-height:64px;
+    border:3px dashed var(--line);border-radius:16px;padding:12px;width:100%;max-width:600px;margin-bottom:18px;background:#FCFAF3;}
+  .answer-row .slot-empty{color:var(--ink-soft);font-size:.85rem;align-self:center;}
+  .tile-pool{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:600px;}
+  .tile{
+    border:3px solid var(--order);background:var(--order-soft);color:#7a2f3d;
+    border-radius:14px;padding:12px 20px;font-size:1.6rem;font-weight:800;cursor:pointer;
+    box-shadow:0 4px 0 #8a3d4d;transition:.1s;
+  }
+  .tile:active{transform:translateY(4px);box-shadow:0 1px 0 #8a3d4d;}
+  .tile.answer-tile{background:#fff;}
+  .tile.correct-flash{background:var(--success-soft);border-color:var(--success);box-shadow:0 4px 0 #2a6040;}
+  .tile.wrong-flash{background:var(--danger-soft);border-color:var(--danger);box-shadow:0 4px 0 #8a3020;}
+
+  /* ── feedback / footer ── */
+  .fb{margin-top:6px;font-size:1.1rem;font-weight:700;min-height:32px;display:flex;align-items:center;gap:8px;text-align:center;}
+  .fb.ok{color:#2a7a50;} .fb.ng{color:var(--danger);}
+  .action-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;justify-content:center;}
+  .btn{font-weight:800;font-size:.95rem;border-radius:14px;border:none;padding:12px 18px;cursor:pointer;color:#fff;background:var(--ink-soft);}
+  .btn.primary{background:var(--pic);}
+  .btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--ink);}
+  .btn:disabled{opacity:.4;cursor:not-allowed;}
+  .btn:active{transform:scale(.97);}
+
+  /* ── print mode ── */
+  .print-controls{display:flex;flex-direction:column;gap:14px;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{border:2px solid var(--line);background:#FCFAF3;border-radius:999px;padding:9px 16px;font-weight:700;font-size:.88rem;cursor:pointer;color:var(--ink);}
+  .chip.selected{border-color:var(--pic);background:var(--pic-soft);color:var(--pic);}
+  .field-label{font-size:.82rem;font-weight:800;color:var(--ink-soft);margin-bottom:6px;}
+  .toggle-row{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.92rem;}
+  .preview-note{color:var(--ink-soft);font-size:.85rem;margin-top:6px;text-align:center;}
+  #worksheet{display:none;}
+
+  .ws-header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid var(--ink);padding-bottom:10px;margin-bottom:16px;}
+  .ws-header h2{margin:2px 0 0;font-size:1.15rem;}
+  .ws-fields{display:flex;gap:10px;font-size:.9rem;font-weight:700;align-items:flex-end;}
+  .ws-fields .lbl{white-space:nowrap;}
+  .ws-fields .blank{border-bottom:1.5px solid var(--ink);padding:0 6px 4px;display:inline-block;min-width:100px;margin-right:10px;}
+  .ws-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+  .ws-grid.single-col{grid-template-columns:1fr;gap:18px;}
+  .ws-cell{border:2px solid var(--line);border-radius:12px;padding:12px 14px;break-inside:avoid;}
+  .ws-cell.roomy{padding:16px 18px;}
+  .ws-cell .no{font-size:.78rem;font-weight:800;color:var(--ink-soft);margin-bottom:6px;}
+  .ws-sentence{font-size:2rem;font-weight:700;margin-bottom:8px;text-align:center;}
+  .ws-answer{color:var(--success);font-weight:800;}
+  .ws-writeline{display:inline-block;border-bottom:1.8px solid var(--ink);min-width:100px;height:1.6em;vertical-align:bottom;margin-left:6px;}
+  .ws-opt-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;justify-content:center;}
+  .ws-opt-chip{border:1.5px solid var(--ink);border-radius:10px;padding:6px 12px;font-size:1rem;font-weight:700;color:var(--ink);background:#fff;}
+  .ws-tiles{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;justify-content:center;}
+  .ws-tiles span{border:1.5px solid var(--order);background:var(--order-soft);border-radius:8px;padding:6px 14px;font-size:1.4rem;font-weight:700;color:#7a2f3d;}
+
+  .hidden{display:none !important;}
+
+  @media (prefers-reduced-motion: reduce){*{transition:none !important;animation:none !important;}}
+
+  /* ── correct-answer overlay (big maru + ping-pong chime) ── */
+  #correctOverlay{
+    position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+    pointer-events:none;z-index:9999;opacity:0;
+  }
+  #correctOverlay.show{animation:overlayFade 1.05s ease forwards;}
+  @keyframes overlayFade{
+    0%{opacity:0;} 8%{opacity:1;} 78%{opacity:1;} 100%{opacity:0;}
+  }
+  .correct-circle-wrap{position:relative;width:230px;height:230px;max-width:60vw;max-height:60vw;filter:drop-shadow(0 6px 14px rgba(0,0,0,.18));}
+  .correct-circle-wrap svg{width:100%;height:100%;transform:rotate(-90deg);}
+  .correct-circle-wrap svg circle{
+    fill:rgba(255,255,255,.9);stroke:#E2483D;stroke-width:15;stroke-linecap:round;
+    stroke-dasharray:660;stroke-dashoffset:660;
+  }
+  .correct-circle-wrap.animate svg circle{animation:circleDraw .55s cubic-bezier(.4,0,.2,1) .05s forwards;}
+  @keyframes circleDraw{ to{ stroke-dashoffset:0; } }
+  .correct-label{
+    position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);
+    text-align:center;font-weight:900;color:#E2483D;font-size:1.15rem;
+    opacity:0;
+  }
+  .correct-circle-wrap.animate .correct-label{animation:labelPop .4s ease .5s forwards;}
+  @keyframes labelPop{ 0%{opacity:0;transform:translateY(-50%) scale(.6);} 60%{opacity:1;transform:translateY(-50%) scale(1.15);} 100%{opacity:1;transform:translateY(-50%) scale(1);} }
+  .correct-ping-text{
+    position:absolute;left:0;right:0;bottom:-34px;text-align:center;
+    font-weight:800;color:#E2483D;font-size:1rem;opacity:0;letter-spacing:.05em;
+  }
+  .correct-circle-wrap.animate .correct-ping-text{animation:labelPop .4s ease .62s forwards;}
+  @media (prefers-reduced-motion: reduce){
+    #correctOverlay.show{animation:none;opacity:1;}
+    .correct-circle-wrap.animate svg circle{animation:none;stroke-dashoffset:0;}
+    .correct-circle-wrap.animate .correct-label, .correct-circle-wrap.animate .correct-ping-text{animation:none;opacity:1;}
+  }
+
+  @media print{
+    body *{visibility:hidden;}
+    #worksheet, #worksheet *{visibility:visible;}
+    #worksheet{display:block !important;position:absolute;left:0;top:0;width:100%;padding:12mm;}
+    .ws-print-btn-wrap{display:none !important;}
+  }
+  @media (max-width:640px){
+    .ws-grid{grid-template-columns:1fr;}
+  }
+
+  footer.hint{max-width:var(--maxw);margin:20px auto 0;padding:0 16px;color:var(--ink-soft);font-size:.8rem;}
+  details.teacher-note{max-width:var(--maxw);margin:0 auto 20px;padding:0 16px;}
+  details.teacher-note summary{cursor:pointer;font-weight:700;color:var(--ink-soft);font-size:.85rem;}
+  details.teacher-note .box{background:#fff;border-radius:14px;padding:14px 16px;margin-top:8px;font-size:.85rem;color:var(--ink-soft);line-height:1.7;box-shadow:var(--shadow);}
+</style>
+</head>
+<body>
+<div id="correctOverlay" aria-hidden="true">
+  <div class="correct-circle-wrap">
+    <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="84"></circle></svg>
+    <div class="correct-label">せいかい！</div>
+    <div class="correct-ping-text">🔔 ピンポーン♪</div>
+  </div>
+</div>
+<div class="app">
+  <header class="top">
+    <div>
+      <div class="mieel-brand">
+        <div class="orb-mini"></div>
+        <strong>MieeL</strong>
+        <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener">www.mieel-support-school.com</a>
+      </div>
+      <h1><span class="icon">🈁</span>かんじを まなぼう</h1>
+      <p>よみかた・さがそう・えとかんじ・すうじのじゅんばんで、かんじの ちからを 育てます</p>
+    </div>
+    <button class="icon-btn" id="btnLargeText" aria-pressed="false">🔠 文字を大きく</button>
+  </header>
+
+  <nav class="modes" role="tablist" aria-label="モードをえらぶ">
+    <button data-mode="read" class="active" role="tab" aria-selected="true">👀 よみかた<span class="sub">かんじ→ひらがな</span></button>
+    <button data-mode="find" role="tab" aria-selected="false">🔎 さがそう<span class="sub">ひらがな→かんじ</span></button>
+    <button data-mode="pic" role="tab" aria-selected="false">🖼️ えと かんじ<span class="sub">えに あう かんじを えらぼう</span></button>
+    <button data-mode="order" role="tab" aria-selected="false">🔢 すうじの じゅんばん<span class="sub">ならべて みよう</span></button>
+    <button data-mode="print" role="tab" aria-selected="false">🖨️ プリント<span class="sub">PDFをつくる</span></button>
+  </nav>
+
+  <!-- ===== READ VIEW ===== -->
+  <section class="panel view" id="view-read">
+    <div class="level-bar" id="levelBarRead"></div>
+    <div class="score-pill" id="scoreRead">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="readSpeak" title="よみあげ">🔊</button>
+        <div class="q-text">なんと よむ？</div>
+      </div>
+      <div class="char-bubble" id="readChar"></div>
+      <div class="opt-grid" id="readOpts"></div>
+      <div class="fb" id="readFb"></div>
+      <div class="action-row">
+        <button class="btn" id="readNext" style="background:var(--read);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FIND VIEW ===== -->
+  <section class="panel view hidden" id="view-find">
+    <div class="level-bar" id="levelBarFind"></div>
+    <div class="score-pill" id="scoreFind">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="findSpeak" title="よみあげ">🔊</button>
+        <div class="q-text">あう かんじは どれ？</div>
+      </div>
+      <div class="char-bubble" id="findWord" style="font-size:2.2rem;"></div>
+      <div class="opt-grid find-opt" id="findOpts"></div>
+      <div class="fb" id="findFb"></div>
+      <div class="action-row">
+        <button class="btn" id="findNext" style="background:var(--find);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PIC VIEW ===== -->
+  <section class="panel view hidden" id="view-pic">
+    <div class="level-bar" id="levelBarPic"></div>
+    <div class="score-pill" id="scorePic">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="picSpeak" title="よみあげ">🔊</button>
+        <div class="q-text">この えに あう かんじは どれ？</div>
+      </div>
+      <div class="char-bubble" id="picIcon" style="font-size:3.6rem;"></div>
+      <div class="opt-grid pic-opt" id="picOpts"></div>
+      <div class="fb" id="picFb"></div>
+      <div class="action-row">
+        <button class="btn" id="picNext" style="background:var(--pic);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ORDER VIEW ===== -->
+  <section class="panel view hidden" id="view-order">
+    <div class="level-bar" id="levelBarOrder"></div>
+    <div class="score-pill" id="scoreOrder">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="arrange-scene">すうじの かんじを、ちいさい じゅんに ならべよう</div>
+      <div class="answer-row" id="orderAnswer"><span class="slot-empty">ここに かんじを ならべます</span></div>
+      <div class="tile-pool" id="orderPool"></div>
+      <div class="fb" id="orderFb"></div>
+      <div class="action-row">
+        <button class="btn ghost" id="orderUndo">⬅ もどす</button>
+        <button class="btn ghost" id="orderSpeak">🔊 よみあげ</button>
+        <button class="btn primary" id="orderCheck">✔ こたえあわせ</button>
+        <button class="btn" id="orderNext" style="background:var(--order);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PRINT VIEW ===== -->
+  <section class="panel view hidden" id="view-print">
+    <div class="print-controls">
+      <div>
+        <div class="field-label">もんだいの しゅるい</div>
+        <div class="chip-row" id="printTypeChips">
+          <button class="chip selected" data-ptype="read">👀 よみかた</button>
+          <button class="chip" data-ptype="find">🔎 さがそう</button>
+          <button class="chip" data-ptype="pic">🖼️ えと かんじ</button>
+          <button class="chip" data-ptype="order">🔢 すうじの じゅんばん</button>
+        </div>
+      </div>
+      <div>
+        <div class="field-label">レベル</div>
+        <div class="chip-row" id="levelBarPrint"></div>
+      </div>
+      <div>
+        <div class="field-label">もんだいすう</div>
+        <div class="chip-row" id="printCountChips">
+          <button class="chip" data-count="4">4もん</button>
+          <button class="chip selected" data-count="6">6もん</button>
+          <button class="chip" data-count="8">8もん</button>
+        </div>
+      </div>
+      <div class="toggle-row">
+        <input type="checkbox" id="printShowAnswer">
+        <label for="printShowAnswer">こたえを ひょうじする（指導者用）</label>
+      </div>
+      <div class="action-row" style="margin-top:2px;">
+        <button class="btn ghost" id="printRegenBtn">🔄 もんだいを かえる</button>
+        <button class="btn primary" id="printOpenBtn">🖨️ プリントする</button>
+      </div>
+      <div class="preview-note">「プリントする」を押すと、印刷プレビューが開きます。ブラウザの印刷設定でPDF保存もできます。</div>
+    </div>
+  </section>
+
+  <footer class="hint">
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:5px;">
+      <div style="width:18px;height:18px;border-radius:50%;background:var(--mieel);flex:none;"></div>
+      <strong style="color:var(--ink);">MieeL</strong>
+      <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener" style="color:var(--pic);">mieel-support-school.com</a>
+    </div>
+    © かんじを まなぼう ツール（特別支援教育向け）
+  </footer>
+
+  <details class="teacher-note">
+    <summary>👩‍🏫 指導者の方へ</summary>
+    <div class="box">
+      このアプリは、特別支援学校の国語科における「かんじ」の学習を目的とした4つの練習モードと、印刷用ワークシート機能で構成されています。ひらがな・カタカナアプリを修了したあとの、文字学習の総仕上げとしてご利用いただけます。<br>
+      収録している漢字は、数（一〜十・百）、自然（山・川・木・花など）、からだ（目・耳・口・手・足）、いろ・おおきさ（赤・白・青・大・小）、位置（上・下・左・右・中）、ひと（人・女・男）、こよみ（日・月・年）の40字で、小学校1年生前後で学習する基礎的な漢字を中心に選定しています。<br>
+      ・<strong>よみかた</strong>：漢字を見て、対応するひらがなの読みを選ぶ練習です<br>
+      ・<strong>さがそう</strong>：読みを見て、対応する漢字を選ぶ、逆方向の対応づけ練習です<br>
+      ・<strong>えと かんじ</strong>：絵（意味）を見て、対応する漢字を選ぶ、意味理解の練習です<br>
+      ・<strong>すうじの じゅんばん</strong>：バラバラになった数字の漢字を、小さい順に並べる練習です<br>
+      よみあげボタンで音声支援も可能です。プリントモードでは同じ4種類の問題をワークシートとして印刷でき、解答表示の切り替えもできます。
+    </div>
+  </details>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =========================================================
+     UTILS
+  ========================================================= */
+  function shuffle(a){
+    var arr=a.slice();
+    for(var i=arr.length-1;i>0;i--){
+      var j=Math.floor(Math.random()*(i+1));
+      var t=arr[i];arr[i]=arr[j];arr[j]=t;
+    }
+    return arr;
+  }
+  function pickRandom(a){ return a[Math.floor(Math.random()*a.length)]; }
+  function rand(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+  function speak(text){
+    if(!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang='ja-JP'; u.rate=0.8;
+    window.speechSynthesis.speak(u);
+  }
+  function renderLevelBar(container, levels, activeId, onSelect){
+    container.innerHTML='';
+    levels.forEach(function(lv){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='level-btn'+(lv.id===activeId?' active':'');
+      b.innerHTML='<span class="stars">'+lv.stars+'</span><span class="name">'+lv.name+'</span>';
+      b.addEventListener('click', function(){ onSelect(lv.id); });
+      container.appendChild(b);
+    });
+  }
+  function updateScorePill(el, state){
+    el.innerHTML = '✅ '+state.score+' / '+state.total;
+  }
+  var PRAISE = ['やったね！','せいかい！','すごい！','ばっちり！','よくできました！'];
+  var TRY_AGAIN = ['もういちど！','おしい！','ゆっくり かんがえよう。','だいじょうぶ、もう一回！'];
+
+  /* ── correct-answer chime + big maru overlay ── */
+  var sharedAudioCtx = null;
+  function playDing(){
+    try{
+      var Ctx = window.AudioContext || window.webkitAudioContext;
+      if(!Ctx) return;
+      if(!sharedAudioCtx) sharedAudioCtx = new Ctx();
+      var ctx = sharedAudioCtx;
+      if(ctx.state==='suspended'){ ctx.resume(); }
+      function tone(freq, start, dur, peak){
+        var o = ctx.createOscillator();
+        var g = ctx.createGain();
+        o.type='sine'; o.frequency.value=freq;
+        o.connect(g); g.connect(ctx.destination);
+        var t0 = ctx.currentTime+start;
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.linearRampToValueAtTime(peak, t0+0.03);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0+dur);
+        o.start(t0);
+        o.stop(t0+dur+0.03);
+      }
+      tone(880.0, 0,    0.30, 0.30);  /* ピン */
+      tone(1318.5, 0.24, 0.48, 0.26); /* ポーン */
+    }catch(e){ /* audio not available; visual feedback still shows */ }
+  }
+  function triggerCorrectFeedback(){
+    playDing();
+    var overlay = document.getElementById('correctOverlay');
+    if(!overlay) return;
+    var wrap = overlay.querySelector('.correct-circle-wrap');
+    overlay.classList.remove('show');
+    wrap.classList.remove('animate');
+    void overlay.offsetWidth; /* force reflow so animation restarts every time */
+    overlay.classList.add('show');
+    wrap.classList.add('animate');
+  }
+
+  /* =========================================================
+     DATA
+  ========================================================= */
+  var KANJI_LEVELS = [
+    {id:1, name:'すうじ・ひと', stars:'★☆☆'},
+    {id:2, name:'しぜん・からだ', stars:'★★☆'},
+    {id:3, name:'いろ・いち・こよみ', stars:'★★★'}
+  ];
+  var KANJI_DB = [
+    {level:1, kanji:'一', reading:'いち', icon:'1️⃣'},
+    {level:1, kanji:'二', reading:'に', icon:'2️⃣'},
+    {level:1, kanji:'三', reading:'さん', icon:'3️⃣'},
+    {level:1, kanji:'四', reading:'よん', icon:'4️⃣'},
+    {level:1, kanji:'五', reading:'ご', icon:'5️⃣'},
+    {level:1, kanji:'六', reading:'ろく', icon:'6️⃣'},
+    {level:1, kanji:'七', reading:'なな', icon:'7️⃣'},
+    {level:1, kanji:'八', reading:'はち', icon:'8️⃣'},
+    {level:1, kanji:'九', reading:'きゅう', icon:'9️⃣'},
+    {level:1, kanji:'十', reading:'じゅう', icon:'🔟'},
+    {level:1, kanji:'人', reading:'ひと', icon:'🧑'},
+    {level:1, kanji:'大', reading:'おおきい', icon:'🐘'},
+    {level:2, kanji:'山', reading:'やま', icon:'⛰️'},
+    {level:2, kanji:'川', reading:'かわ', icon:'🏞️'},
+    {level:2, kanji:'木', reading:'き', icon:'🌳'},
+    {level:2, kanji:'花', reading:'はな', icon:'🌸'},
+    {level:2, kanji:'空', reading:'そら', icon:'🌌'},
+    {level:2, kanji:'火', reading:'ひ', icon:'🔥'},
+    {level:2, kanji:'水', reading:'みず', icon:'💧'},
+    {level:2, kanji:'土', reading:'つち', icon:null},
+    {level:2, kanji:'目', reading:'め', icon:'👁️'},
+    {level:2, kanji:'耳', reading:'みみ', icon:'👂'},
+    {level:2, kanji:'口', reading:'くち', icon:'👄'},
+    {level:2, kanji:'手', reading:'て', icon:'✋'},
+    {level:3, kanji:'足', reading:'あし', icon:'🦵'},
+    {level:3, kanji:'赤', reading:'あか', icon:'🔴'},
+    {level:3, kanji:'白', reading:'しろ', icon:'⚪'},
+    {level:3, kanji:'青', reading:'あお', icon:'🔵'},
+    {level:3, kanji:'小', reading:'ちいさい', icon:'🐭'},
+    {level:3, kanji:'上', reading:'うえ', icon:'⬆️'},
+    {level:3, kanji:'下', reading:'した', icon:'⬇️'},
+    {level:3, kanji:'左', reading:'ひだり', icon:'⬅️'},
+    {level:3, kanji:'右', reading:'みぎ', icon:'➡️'},
+    {level:3, kanji:'日', reading:'にち', icon:'☀️'},
+    {level:3, kanji:'月', reading:'つき', icon:'🌙'},
+    {level:3, kanji:'年', reading:'とし', icon:null},
+    {level:3, kanji:'中', reading:'なか', icon:'🎯'},
+    {level:3, kanji:'女', reading:'おんな', icon:'👩'},
+    {level:3, kanji:'男', reading:'おとこ', icon:'👨'},
+    {level:3, kanji:'百', reading:'ひゃく', icon:'💯'}
+  ];
+  var NUMBER_KANJI = ['一','二','三','四','五','六','七','八','九','十'];
+
+  /* =========================================================
+     READ MODE (kanji -> reading)
+  ========================================================= */
+  var readState = {level:1, score:0, total:0, current:null, locked:false};
+  var readQueue = [];
+  function renderLevelBarRead(){
+    renderLevelBar(document.getElementById('levelBarRead'), KANJI_LEVELS, readState.level, function(id){
+      readState.level=id; renderLevelBarRead(); newReadQuestion();
+    });
+  }
+  function newReadQuestion(){
+    if(readQueue.length===0 || readQueue[0].level!==readState.level){
+      readQueue = shuffle(KANJI_DB.filter(function(d){return d.level===readState.level;}));
+    }
+    readState.current = readQueue.shift();
+    readState.locked = false;
+    document.getElementById('readFb').className='fb'; document.getElementById('readFb').textContent='';
+    document.getElementById('readNext').style.display='none';
+    document.getElementById('readChar').textContent = readState.current.kanji;
+    var pool = KANJI_DB.filter(function(d){return d.level===readState.level;});
+    var optsSet = [readState.current.reading];
+    var others = shuffle(pool.filter(function(d){return d.reading!==readState.current.reading;}));
+    others.slice(0,3).forEach(function(o){ optsSet.push(o.reading); });
+    var grid = document.getElementById('readOpts');
+    grid.innerHTML='';
+    shuffle(optsSet).forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button'; b.className='opt-btn'; b.textContent=opt;
+      b.addEventListener('click', function(){
+        if(readState.locked) return;
+        var correct = (opt===readState.current.reading);
+        readState.total++;
+        if(correct) readState.score++;
+        updateScorePill(document.getElementById('scoreRead'), readState);
+        var fbEl = document.getElementById('readFb');
+        if(correct){
+          readState.locked=true;
+          b.classList.add('correct-flash');
+          grid.querySelectorAll('.opt-btn').forEach(function(o){ if(o!==b) o.disabled=true; });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+          document.getElementById('readNext').style.display='inline-block';
+          speak(readState.current.reading);
+        } else {
+          b.classList.add('wrong-flash');
+          setTimeout(function(){ b.classList.remove('wrong-flash'); }, 500);
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+      });
+      grid.appendChild(b);
+    });
+  }
+  document.getElementById('readSpeak').addEventListener('click', function(){
+    speak(readState.current.reading);
+  });
+  document.getElementById('readNext').addEventListener('click', newReadQuestion);
+
+  /* =========================================================
+     FIND MODE (reading -> kanji)
+  ========================================================= */
+  var findState = {level:1, score:0, total:0, current:null, locked:false};
+  var findQueue = [];
+  function renderLevelBarFind(){
+    renderLevelBar(document.getElementById('levelBarFind'), KANJI_LEVELS, findState.level, function(id){
+      findState.level=id; renderLevelBarFind(); newFindQuestion();
+    });
+  }
+  function newFindQuestion(){
+    if(findQueue.length===0 || findQueue[0].level!==findState.level){
+      findQueue = shuffle(KANJI_DB.filter(function(d){return d.level===findState.level;}));
+    }
+    findState.current = findQueue.shift();
+    findState.locked = false;
+    document.getElementById('findFb').className='fb'; document.getElementById('findFb').textContent='';
+    document.getElementById('findNext').style.display='none';
+    document.getElementById('findWord').textContent = findState.current.reading;
+    var pool = KANJI_DB.filter(function(d){return d.level===findState.level;});
+    var optsSet = [findState.current.kanji];
+    var others = shuffle(pool.filter(function(d){return d.kanji!==findState.current.kanji;}));
+    others.slice(0,3).forEach(function(o){ optsSet.push(o.kanji); });
+    var grid = document.getElementById('findOpts');
+    grid.innerHTML='';
+    shuffle(optsSet).forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button'; b.className='opt-btn'; b.textContent=opt;
+      b.addEventListener('click', function(){
+        if(findState.locked) return;
+        var correct = (opt===findState.current.kanji);
+        findState.total++;
+        if(correct) findState.score++;
+        updateScorePill(document.getElementById('scoreFind'), findState);
+        var fbEl = document.getElementById('findFb');
+        if(correct){
+          findState.locked=true;
+          b.classList.add('correct-flash');
+          grid.querySelectorAll('.opt-btn').forEach(function(o){ if(o!==b) o.disabled=true; });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+          document.getElementById('findNext').style.display='inline-block';
+          speak(findState.current.reading);
+        } else {
+          b.classList.add('wrong-flash');
+          setTimeout(function(){ b.classList.remove('wrong-flash'); }, 500);
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+      });
+      grid.appendChild(b);
+    });
+  }
+  document.getElementById('findSpeak').addEventListener('click', function(){
+    speak(findState.current.reading);
+  });
+  document.getElementById('findNext').addEventListener('click', newFindQuestion);
+
+  /* =========================================================
+     PIC MODE (icon -> kanji)
+  ========================================================= */
+  var picState = {level:1, score:0, total:0, current:null, locked:false};
+  var picQueue = [];
+  function renderLevelBarPic(){
+    renderLevelBar(document.getElementById('levelBarPic'), KANJI_LEVELS, picState.level, function(id){
+      picState.level=id; renderLevelBarPic(); newPicQuestion();
+    });
+  }
+  function newPicQuestion(){
+    if(picQueue.length===0 || picQueue[0].level!==picState.level){
+      picQueue = shuffle(KANJI_DB.filter(function(d){return d.level===picState.level && d.icon;}));
+    }
+    picState.current = picQueue.shift();
+    picState.locked = false;
+    document.getElementById('picFb').className='fb'; document.getElementById('picFb').textContent='';
+    document.getElementById('picNext').style.display='none';
+    document.getElementById('picIcon').textContent = picState.current.icon;
+    var pool = KANJI_DB.filter(function(d){return d.level===picState.level;});
+    var optsSet = [picState.current.kanji];
+    var others = shuffle(pool.filter(function(d){return d.kanji!==picState.current.kanji;}));
+    others.slice(0,3).forEach(function(o){ optsSet.push(o.kanji); });
+    var grid = document.getElementById('picOpts');
+    grid.innerHTML='';
+    shuffle(optsSet).forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button'; b.className='opt-btn'; b.textContent=opt;
+      b.addEventListener('click', function(){
+        if(picState.locked) return;
+        var correct = (opt===picState.current.kanji);
+        picState.total++;
+        if(correct) picState.score++;
+        updateScorePill(document.getElementById('scorePic'), picState);
+        var fbEl = document.getElementById('picFb');
+        if(correct){
+          picState.locked=true;
+          b.classList.add('correct-flash');
+          grid.querySelectorAll('.opt-btn').forEach(function(o){ if(o!==b) o.disabled=true; });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+          document.getElementById('picNext').style.display='inline-block';
+          speak(picState.current.reading);
+        } else {
+          b.classList.add('wrong-flash');
+          setTimeout(function(){ b.classList.remove('wrong-flash'); }, 500);
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+      });
+      grid.appendChild(b);
+    });
+  }
+  document.getElementById('picSpeak').addEventListener('click', function(){
+    speak('この えに あう かんじは どれかな？');
+  });
+  document.getElementById('picNext').addEventListener('click', newPicQuestion);
+
+  /* =========================================================
+     ORDER MODE (number kanji sequencing)
+  ========================================================= */
+  var ORDER_LEVELS = [
+    {id:1, name:'3こ ならべる', stars:'★☆☆', count:3},
+    {id:2, name:'4こ ならべる', stars:'★★☆', count:4},
+    {id:3, name:'5こ ならべる', stars:'★★★', count:5}
+  ];
+  var orderState = {level:1, score:0, total:0, current:null, answer:[], remaining:[], locked:false, firstAttempt:true};
+  var orderPoolEl = document.getElementById('orderPool');
+  var orderAnswerEl = document.getElementById('orderAnswer');
+  var orderFbEl = document.getElementById('orderFb');
+  var orderNextBtn = document.getElementById('orderNext');
+  var orderCheckBtn = document.getElementById('orderCheck');
+
+  function genOrderQuestion(level){
+    var lv = ORDER_LEVELS.filter(function(l){return l.id===level;})[0];
+    var count = lv.count;
+    var start = rand(1, 10-count+1);
+    var tokens = [];
+    for(var i=0;i<count;i++){ tokens.push(NUMBER_KANJI[start-1+i]); }
+    return {tokens:tokens};
+  }
+  function renderLevelBarOrder(){
+    renderLevelBar(document.getElementById('levelBarOrder'), ORDER_LEVELS, orderState.level, function(id){
+      orderState.level=id; renderLevelBarOrder(); newOrderQuestion();
+    });
+  }
+  function newOrderQuestion(){
+    orderState.current = genOrderQuestion(orderState.level);
+    var tokens = orderState.current.tokens;
+    orderState.answer = [];
+    orderState.remaining = shuffle(tokens.map(function(t,i){ return {text:t, idx:i}; }));
+    var guard=0;
+    while(orderState.remaining.length>1 && orderState.remaining.every(function(t,i){return t.idx===i;}) && guard<20){
+      orderState.remaining = shuffle(orderState.remaining);
+      guard++;
+    }
+    orderState.locked = false;
+    orderState.firstAttempt = true;
+    orderFbEl.className='fb'; orderFbEl.textContent='';
+    orderNextBtn.style.display='none';
+    orderCheckBtn.disabled=false;
+    renderOrderBoard();
+  }
+  function renderOrderBoard(){
+    orderAnswerEl.innerHTML='';
+    if(orderState.answer.length===0){
+      orderAnswerEl.innerHTML='<span class="slot-empty">ここに かんじを ならべます</span>';
+    } else {
+      orderState.answer.forEach(function(tok){
+        var t=document.createElement('button');
+        t.type='button'; t.className='tile answer-tile'; t.textContent=tok.text;
+        t.addEventListener('click', function(){
+          if(orderState.locked) return;
+          orderState.answer = orderState.answer.filter(function(x){return x!==tok;});
+          orderState.remaining.push(tok);
+          renderOrderBoard();
+        });
+        orderAnswerEl.appendChild(t);
+      });
+    }
+    orderPoolEl.innerHTML='';
+    orderState.remaining.forEach(function(tok){
+      var t=document.createElement('button');
+      t.type='button'; t.className='tile'; t.textContent=tok.text;
+      t.addEventListener('click', function(){
+        if(orderState.locked) return;
+        orderState.remaining = orderState.remaining.filter(function(x){return x!==tok;});
+        orderState.answer.push(tok);
+        renderOrderBoard();
+      });
+      orderPoolEl.appendChild(t);
+    });
+  }
+  document.getElementById('orderUndo').addEventListener('click', function(){
+    if(orderState.locked || orderState.answer.length===0) return;
+    var last = orderState.answer.pop();
+    orderState.remaining.push(last);
+    renderOrderBoard();
+  });
+  document.getElementById('orderSpeak').addEventListener('click', function(){
+    speak(orderState.current.tokens.join('、'));
+  });
+  orderCheckBtn.addEventListener('click', function(){
+    if(orderState.remaining.length>0){
+      orderFbEl.className='fb ng'; orderFbEl.textContent='ぜんぶの かんじを つかいましょう。';
+      return;
+    }
+    var correct = orderState.answer.every(function(tok,i){ return tok.idx===i; });
+    if(orderState.firstAttempt){
+      orderState.total++;
+      if(correct) orderState.score++;
+      orderState.firstAttempt=false;
+      updateScorePill(document.getElementById('scoreOrder'), orderState);
+    }
+    if(correct){
+      orderState.locked=true;
+      orderAnswerEl.querySelectorAll('.tile').forEach(function(t){ t.classList.add('correct-flash'); });
+      orderFbEl.className='fb ok'; orderFbEl.textContent='🎉 '+pickRandom(PRAISE);
+      triggerCorrectFeedback();
+      orderNextBtn.style.display='inline-block';
+      orderCheckBtn.disabled=true;
+      speak(orderState.current.tokens.join('、'));
+    } else {
+      orderAnswerEl.querySelectorAll('.tile').forEach(function(t){ t.classList.add('wrong-flash'); });
+      setTimeout(function(){ orderAnswerEl.querySelectorAll('.tile').forEach(function(t){ t.classList.remove('wrong-flash'); }); }, 500);
+      orderFbEl.className='fb ng'; orderFbEl.textContent=pickRandom(TRY_AGAIN);
+    }
+  });
+  orderNextBtn.addEventListener('click', newOrderQuestion);
+
+  /* =========================================================
+     PRINT MODE
+  ========================================================= */
+  var printState = {level:1, type:'read', count:6, showAnswer:false, problems:[]};
+
+  function levelsForPrintType(){
+    return printState.type==='order' ? ORDER_LEVELS : KANJI_LEVELS;
+  }
+  function renderPrintLevelBar(){
+    var levelsForType = levelsForPrintType();
+    if(!levelsForType.some(function(l){return l.id===printState.level;})){
+      printState.level = levelsForType[0].id;
+    }
+    var container = document.getElementById('levelBarPrint');
+    container.innerHTML='';
+    levelsForType.forEach(function(lv){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='chip'+(lv.id===printState.level?' selected':'');
+      b.textContent = lv.stars+' '+lv.name;
+      b.addEventListener('click', function(){
+        printState.level=lv.id; renderPrintLevelBar(); regenerateProblems(); renderWorksheet();
+      });
+      container.appendChild(b);
+    });
+  }
+  document.querySelectorAll('#printTypeChips .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#printTypeChips .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      printState.type = c.getAttribute('data-ptype');
+      renderPrintLevelBar();
+      regenerateProblems();
+      renderWorksheet();
+    });
+  });
+  document.querySelectorAll('#printCountChips .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#printCountChips .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      printState.count = parseInt(c.getAttribute('data-count'),10);
+      regenerateProblems(); renderWorksheet();
+    });
+  });
+  document.getElementById('printShowAnswer').addEventListener('change', function(e){
+    printState.showAnswer = e.target.checked;
+    renderWorksheet();
+  });
+  document.getElementById('printRegenBtn').addEventListener('click', function(){
+    regenerateProblems(); renderWorksheet();
+  });
+  document.getElementById('printOpenBtn').addEventListener('click', function(){
+    renderWorksheet();
+    setTimeout(function(){ window.print(); }, 60);
+  });
+
+  function buildKanjiOptions(item, field){
+    var pool = KANJI_DB.filter(function(d){return d.level===item.level;});
+    var correctVal = item[field];
+    var optsSet = [correctVal];
+    var others = shuffle(pool.filter(function(d){ return d[field] !== correctVal; }));
+    others.slice(0,3).forEach(function(o){ optsSet.push(o[field]); });
+    return shuffle(optsSet);
+  }
+  function sampleFrom(db, level, count){
+    var pool = shuffle(db.filter(function(d){ return d.level===level; }));
+    var out = [];
+    var guard=0;
+    while(out.length<count && guard<500){
+      guard++;
+      if(pool.length===0) pool = shuffle(db.filter(function(d){ return d.level===level; }));
+      out.push(pool.shift());
+    }
+    return out;
+  }
+  function regenerateProblems(){
+    if(printState.type==='read'){
+      var picks = sampleFrom(KANJI_DB, printState.level, printState.count);
+      printState.problems = picks.map(function(p){ return {kanji:p.kanji, reading:p.reading, options:buildKanjiOptions(p,'reading')}; });
+    } else if(printState.type==='find'){
+      var picks2 = sampleFrom(KANJI_DB, printState.level, printState.count);
+      printState.problems = picks2.map(function(p){ return {kanji:p.kanji, reading:p.reading, options:buildKanjiOptions(p,'kanji')}; });
+    } else if(printState.type==='pic'){
+      var withIcon = KANJI_DB.filter(function(d){return d.icon;});
+      var picks3 = sampleFrom(withIcon, printState.level, printState.count);
+      printState.problems = picks3.map(function(p){ return {kanji:p.kanji, icon:p.icon, options:buildKanjiOptions(p,'kanji')}; });
+    } else {
+      var list=[];
+      for(var i=0;i<printState.count;i++){ list.push(genOrderQuestion(printState.level)); }
+      printState.problems = list;
+    }
+  }
+  regenerateProblems();
+
+  /* boxed answer-choice chips so options never split across a line break */
+  function renderOptChips(options){
+    return '<div class="ws-opt-row">'+shuffle(options).map(function(o){ return '<span class="ws-opt-chip">'+o+'</span>'; }).join('')+'</div>';
+  }
+  function typeInstruction(){
+    return printState.type==='read' ? 'よみかたに 〇を つけよう'
+      : printState.type==='find' ? 'あう かんじに 〇を つけよう'
+      : printState.type==='pic' ? 'えに あう かんじに 〇を つけよう'
+      : 'ただしい じゅんばんで、したの せんに かきましょう';
+  }
+  function renderWorksheet(){
+    var levelsForType = levelsForPrintType();
+    var lv = levelsForType.filter(function(l){return l.id===printState.level;})[0];
+    var typeLabel = printState.type==='read' ? '👀 よみかた'
+      : printState.type==='find' ? '🔎 さがそう'
+      : printState.type==='pic' ? '🖼️ えと かんじ'
+      : '🔢 すうじの じゅんばん';
+
+    var html = '';
+    html += '<div class="ws-header"><div style="display:flex;align-items:center;gap:8px;">'
+      + '<div style="width:20px;height:20px;border-radius:50%;background:var(--mieel);border:1px solid #ccc;flex:none;"></div>'
+      + '<div><div style="font-size:11px;color:#333;font-weight:700;">MieeL かんじを まなぼう</div>'
+      + '<h2>'+typeLabel+'（'+lv.name+'）</h2>'
+      + '<div style="font-size:11px;color:#666;margin-top:2px;">'+typeInstruction()+'</div></div></div>'
+      + '<div class="ws-fields" style="flex-direction:column;align-items:flex-end;gap:2px;">'
+      + '<div style="font-size:.75rem;color:#3A9A8C;font-weight:700;">mieel-support-school.com</div>'
+      + '<div><span class="lbl">なまえ：</span><span class="blank">&nbsp;</span><span class="lbl">ひづけ：</span><span class="blank">&nbsp;</span></div></div></div>';
+
+    var gridClass = (printState.type==='order') ? 'ws-grid single-col' : 'ws-grid';
+    html += '<div class="'+gridClass+'">';
+    printState.problems.forEach(function(p, idx){
+      var cellClass = (printState.type==='order') ? 'ws-cell roomy' : 'ws-cell';
+      html += '<div class="'+cellClass+'"><div class="no">もんだい '+(idx+1)+'</div>';
+      if(printState.type==='read'){
+        html += '<div class="ws-sentence">'+p.kanji+'</div>';
+        html += renderOptChips(p.options);
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;text-align:center;">こたえ：'+p.reading+'</div>';
+        }
+      } else if(printState.type==='find'){
+        html += '<div class="ws-sentence" style="font-size:1.3rem;">'+p.reading+'</div>';
+        html += renderOptChips(p.options);
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;text-align:center;">こたえ：'+p.kanji+'</div>';
+        }
+      } else if(printState.type==='pic'){
+        html += '<div class="ws-sentence" style="font-size:2.4rem;">'+p.icon+'</div>';
+        html += renderOptChips(p.options);
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;text-align:center;">こたえ：'+p.kanji+'</div>';
+        }
+      } else {
+        var shuffledTiles = shuffle(p.tokens);
+        html += '<div class="ws-tiles">'+shuffledTiles.map(function(t){return '<span>'+t+'</span>';}).join('')+'</div>';
+        html += '<div style="text-align:center;">こたえ：<span class="ws-writeline"></span></div>';
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;text-align:center;">こたえ：'+p.tokens.join('')+'</div>';
+        }
+      }
+      html += '</div>';
+    });
+    html += '</div>';
+    var ws = document.getElementById('worksheet');
+    if(!ws){
+      ws = document.createElement('div');
+      ws.id='worksheet';
+      document.body.appendChild(ws);
+    }
+    ws.innerHTML = html;
+  }
+  renderPrintLevelBar();
+  renderWorksheet();
+
+  /* =========================================================
+     MODE SWITCHING / GLOBAL UI
+  ========================================================= */
+  document.querySelectorAll('nav.modes button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('nav.modes button').forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+      btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+      var mode = btn.getAttribute('data-mode');
+      document.querySelectorAll('.view').forEach(function(v){ v.classList.add('hidden'); });
+      document.getElementById('view-'+mode).classList.remove('hidden');
+      if(mode==='print') renderWorksheet();
+    });
+  });
+
+  var largeToggle = document.getElementById('btnLargeText');
+  largeToggle.addEventListener('click', function(){
+    var on = document.documentElement.classList.toggle('large-text');
+    largeToggle.setAttribute('aria-pressed', on ? 'true':'false');
+  });
+
+  /* =========================================================
+     INIT
+  ========================================================= */
+  renderLevelBarRead(); newReadQuestion();
+  renderLevelBarFind(); newFindQuestion();
+  renderLevelBarPic(); newPicQuestion();
+  renderLevelBarOrder(); newOrderQuestion();
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>おもさを まなぼう｜MieeL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FBF6EC;
+    --card:#FFFFFF;
+    --ink:#2E2A25;
+    --ink-soft:#8A8072;
+    --line:#EAE1CE;
+    --compare:#3D6B8A;  --compare-soft:#DCE9F0;
+    --scale:#C98A2E;    --scale-soft:#F6E6C7;
+    --convert:#3F9D8B;  --convert-soft:#DBEFEA;
+    --estimate:#C15B6B; --estimate-soft:#F8E1E5;
+    --success:#4F9A63;  --success-soft:#E3F3E6;
+    --danger:#C4573F;   --danger-soft:#FBE4DE;
+    --radius:22px;
+    --shadow:0 6px 18px rgba(46,42,37,0.10);
+    --maxw:960px;
+    --mieel:radial-gradient(circle at 50% 0%,#1B8FE8 0%,#2BB8D6 28%,#3FCB9E 45%,#8FD24A 58%,#F4D027 72%,#F7941E 100%);
+  }
+  *{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact;color-adjust:exact;}
+  html{font-size:17px;}
+  html.large-text{font-size:21px;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+    -webkit-font-smoothing:antialiased;padding-bottom:40px;
+  }
+  button{font-family:inherit;}
+  button:focus-visible, [tabindex]:focus-visible{outline:3px solid var(--compare);outline-offset:2px;}
+
+  .app{max-width:var(--maxw);margin:0 auto;padding:18px 16px 8px;}
+
+  header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
+  .mieel-brand{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .mieel-brand .orb-mini{width:20px;height:20px;border-radius:50%;background:var(--mieel);flex:none;}
+  .mieel-brand strong{color:var(--ink);font-size:.85rem;}
+  .mieel-brand a{font-size:.78rem;color:var(--compare);text-decoration:none;font-weight:600;}
+  .mieel-brand a:hover{text-decoration:underline;}
+  header.top h1{font-size:1.6rem;margin:0;font-weight:800;letter-spacing:.02em;display:flex;align-items:center;gap:.4em;}
+  header.top h1 .icon{font-size:1.25em;}
+  header.top p{margin:4px 0 0;color:var(--ink-soft);font-size:.85rem;font-weight:500;}
+  .icon-btn{
+    border:2px solid var(--ink);background:var(--card);color:var(--ink);border-radius:999px;
+    padding:.5em 1em;font-weight:700;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:.4em;
+  }
+  .icon-btn:hover{background:var(--scale-soft);}
+
+  nav.modes{display:flex;gap:9px;margin-bottom:16px;flex-wrap:wrap;}
+  nav.modes button{
+    flex:1 1 150px;font-weight:800;font-size:1rem;padding:13px 8px;border-radius:var(--radius);
+    border:3px solid transparent;background:var(--card);color:var(--ink-soft);box-shadow:var(--shadow);
+    cursor:pointer;transition:transform .12s ease, border-color .12s ease, color .12s ease;
+  }
+  nav.modes button .sub{display:block;font-size:.68em;font-weight:500;margin-top:2px;}
+  nav.modes button:hover{transform:translateY(-2px);}
+  nav.modes button.active{border-color:var(--ink);color:var(--ink);background:var(--scale-soft);}
+
+  section.panel{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:18px;}
+
+  .level-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+  .level-bar .level-btn{
+    flex:1 1 140px;text-align:left;border:2px solid var(--line);background:#FCFAF3;border-radius:16px;
+    padding:10px 12px;cursor:pointer;font-weight:700;color:var(--ink);
+  }
+  .level-bar .level-btn .stars{color:var(--scale);letter-spacing:1px;display:block;font-size:.9em;}
+  .level-bar .level-btn .name{display:block;font-size:1rem;}
+  .level-bar .level-btn.active{border-color:var(--compare);background:var(--compare-soft);}
+  .level-bar .level-btn:hover{border-color:var(--compare);}
+
+  .score-pill{
+    display:inline-flex;align-items:center;gap:.5em;background:var(--success-soft);color:var(--success);
+    font-weight:800;padding:8px 16px;border-radius:999px;font-size:.95rem;margin-bottom:14px;
+  }
+
+  .stage{min-height:260px;display:flex;flex-direction:column;align-items:center;}
+  .prompt-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;text-align:center;}
+  .prompt-row .q-text{font-weight:800;color:var(--ink);font-size:1.15rem;}
+  .speak-btn{
+    border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:999px;
+    width:40px;height:40px;font-size:1.1rem;cursor:pointer;flex:none;
+  }
+  .speak-btn:hover{background:var(--scale-soft);}
+
+  /* ── compare mode ── */
+  .compare-wrap{width:100%;max-width:640px;display:flex;flex-direction:column;gap:14px;margin-bottom:8px;}
+  .compare-row{
+    display:flex;align-items:center;gap:10px;background:#FCFAF3;border:3px solid var(--line);
+    border-radius:16px;padding:12px 14px;cursor:pointer;transition:.12s;
+  }
+  .compare-row:hover{border-color:var(--compare);}
+  .compare-row .cnum{font-weight:900;color:var(--ink-soft);font-size:1.1rem;width:1.6em;flex:none;text-align:center;}
+  .compare-row .bar{
+    height:34px;border-radius:10px;background:linear-gradient(180deg,var(--compare) 0%,#2c5470 100%);
+    display:flex;align-items:center;justify-content:flex-end;padding-right:8px;flex:none;
+    box-shadow:inset 0 -3px 0 rgba(0,0,0,.15);
+  }
+  .compare-row .bar .cap{font-size:1.3rem;}
+  .compare-row.correct-flash{border-color:var(--success);background:var(--success-soft);}
+  .compare-row.wrong-flash{border-color:var(--danger);background:var(--danger-soft);}
+  .compare-row.locked{cursor:default;pointer-events:none;}
+  .compare-row.dim{opacity:.45;}
+
+  /* ── scale mode ── */
+  .scale-card{background:#FCFAF3;border:2px solid var(--line);border-radius:16px;padding:20px 16px 12px;width:100%;max-width:400px;margin-bottom:18px;display:flex;justify-content:center;}
+  .opt-grid{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-width:640px;}
+  .opt-btn{
+    min-width:96px;padding:14px 18px;border:3px solid var(--scale);background:var(--scale-soft);color:#7a5219;
+    font-size:1.15rem;font-weight:800;border-radius:16px;cursor:pointer;box-shadow:0 5px 0 #8a6220;transition:.1s;
+  }
+  .opt-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #8a6220;}
+  .opt-btn.correct-flash{background:var(--success-soft);border-color:var(--success);box-shadow:0 5px 0 #2a6040;color:#255e3c;}
+  .opt-btn.wrong-flash{background:var(--danger-soft);border-color:var(--danger);box-shadow:0 5px 0 #8a3020;color:#7a2a18;}
+  .opt-btn:disabled{opacity:.35;cursor:not-allowed;}
+
+  /* ── unit mode ── */
+  .unit-card{
+    background:#FCFAF3;border:2px solid var(--line);border-radius:16px;padding:22px 20px;
+    font-size:1.3rem;font-weight:800;line-height:1.7;text-align:center;max-width:640px;margin-bottom:18px;
+  }
+  .unit-opt .opt-btn{border-color:var(--convert);background:var(--convert-soft);color:#215a4f;box-shadow:0 5px 0 #2c6b5d;}
+  .unit-opt .opt-btn.correct-flash{border-color:var(--success);background:var(--success-soft);box-shadow:0 5px 0 #2a6040;}
+  .unit-opt .opt-btn.wrong-flash{border-color:var(--danger);background:var(--danger-soft);box-shadow:0 5px 0 #8a3020;}
+
+  /* ── estimate mode ── */
+  .estimate-icon{font-size:3.2rem;text-align:center;margin-bottom:4px;line-height:1;}
+  .estimate-label{font-size:1.2rem;font-weight:800;text-align:center;margin-bottom:16px;color:var(--ink);}
+  .estimate-opt .opt-btn{border-color:var(--estimate);background:var(--estimate-soft);color:#7a2f3d;box-shadow:0 5px 0 #8a3d4d;min-width:120px;}
+  .estimate-opt .opt-btn.correct-flash{border-color:var(--success);background:var(--success-soft);box-shadow:0 5px 0 #2a6040;color:#255e3c;}
+  .estimate-opt .opt-btn.wrong-flash{border-color:var(--danger);background:var(--danger-soft);box-shadow:0 5px 0 #8a3020;color:#7a2a18;}
+
+  /* ── feedback / footer ── */
+  .fb{margin-top:6px;font-size:1.1rem;font-weight:700;min-height:32px;display:flex;align-items:center;gap:8px;text-align:center;}
+  .fb.ok{color:#2a7a50;} .fb.ng{color:var(--danger);}
+  .action-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;justify-content:center;}
+  .btn{font-weight:800;font-size:.95rem;border-radius:14px;border:none;padding:12px 18px;cursor:pointer;color:#fff;background:var(--ink-soft);}
+  .btn.primary{background:var(--compare);}
+  .btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--ink);}
+  .btn:disabled{opacity:.4;cursor:not-allowed;}
+  .btn:active{transform:scale(.97);}
+
+  /* ── print mode ── */
+  .print-controls{display:flex;flex-direction:column;gap:14px;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{border:2px solid var(--line);background:#FCFAF3;border-radius:999px;padding:9px 16px;font-weight:700;font-size:.88rem;cursor:pointer;color:var(--ink);}
+  .chip.selected{border-color:var(--compare);background:var(--compare-soft);color:var(--compare);}
+  .field-label{font-size:.82rem;font-weight:800;color:var(--ink-soft);margin-bottom:6px;}
+  .toggle-row{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.92rem;}
+  .preview-note{color:var(--ink-soft);font-size:.85rem;margin-top:6px;text-align:center;}
+  #worksheet{display:none;}
+
+  .ws-header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid var(--ink);padding-bottom:10px;margin-bottom:16px;}
+  .ws-header h2{margin:2px 0 0;font-size:1.15rem;}
+  .ws-fields{display:flex;gap:10px;font-size:.9rem;font-weight:700;align-items:flex-end;}
+  .ws-fields .lbl{white-space:nowrap;}
+  .ws-fields .blank{border-bottom:1.5px solid var(--ink);padding:0 6px 4px;display:inline-block;min-width:100px;margin-right:10px;}
+  .ws-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+  .ws-grid.single-col{grid-template-columns:1fr;gap:18px;}
+  .ws-cell{border:2px solid var(--line);border-radius:12px;padding:12px 14px;break-inside:avoid;}
+  .ws-cell.roomy{padding:16px 18px;}
+  .ws-cell .no{font-size:.78rem;font-weight:800;color:var(--ink-soft);margin-bottom:6px;}
+  .ws-sentence{font-size:1rem;font-weight:700;margin-bottom:8px;}
+  .ws-bank{font-size:.82rem;color:var(--ink-soft);margin-top:6px;}
+  .ws-answer{color:var(--success);font-weight:800;}
+  .ws-writeline{display:inline-block;border-bottom:1.8px solid var(--ink);min-width:110px;height:1.5em;vertical-align:bottom;margin-left:6px;}
+  .ws-bars{display:flex;flex-direction:column;gap:8px;margin-bottom:8px;}
+  .ws-bar-row{display:flex;align-items:center;gap:8px;}
+  .ws-bar-row .n{font-weight:900;color:var(--ink-soft);width:1.3em;}
+  .ws-bar{height:22px;border-radius:6px;background:var(--compare);border:1.5px solid var(--compare);opacity:.85;}
+  .ws-scale-wrap{display:flex;justify-content:center;margin-bottom:8px;}
+
+  .hidden{display:none !important;}
+
+  @media (prefers-reduced-motion: reduce){*{transition:none !important;animation:none !important;}}
+
+  /* ── correct-answer overlay (big maru + ping-pong chime) ── */
+  #correctOverlay{
+    position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+    pointer-events:none;z-index:9999;opacity:0;
+  }
+  #correctOverlay.show{animation:overlayFade 1.05s ease forwards;}
+  @keyframes overlayFade{
+    0%{opacity:0;} 8%{opacity:1;} 78%{opacity:1;} 100%{opacity:0;}
+  }
+  .correct-circle-wrap{position:relative;width:230px;height:230px;max-width:60vw;max-height:60vw;filter:drop-shadow(0 6px 14px rgba(0,0,0,.18));}
+  .correct-circle-wrap svg{width:100%;height:100%;transform:rotate(-90deg);}
+  .correct-circle-wrap svg circle{
+    fill:rgba(255,255,255,.9);stroke:#E2483D;stroke-width:15;stroke-linecap:round;
+    stroke-dasharray:660;stroke-dashoffset:660;
+  }
+  .correct-circle-wrap.animate svg circle{animation:circleDraw .55s cubic-bezier(.4,0,.2,1) .05s forwards;}
+  @keyframes circleDraw{ to{ stroke-dashoffset:0; } }
+  .correct-label{
+    position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);
+    text-align:center;font-weight:900;color:#E2483D;font-size:1.15rem;
+    opacity:0;
+  }
+  .correct-circle-wrap.animate .correct-label{animation:labelPop .4s ease .5s forwards;}
+  @keyframes labelPop{ 0%{opacity:0;transform:translateY(-50%) scale(.6);} 60%{opacity:1;transform:translateY(-50%) scale(1.15);} 100%{opacity:1;transform:translateY(-50%) scale(1);} }
+  .correct-ping-text{
+    position:absolute;left:0;right:0;bottom:-34px;text-align:center;
+    font-weight:800;color:#E2483D;font-size:1rem;opacity:0;letter-spacing:.05em;
+  }
+  .correct-circle-wrap.animate .correct-ping-text{animation:labelPop .4s ease .62s forwards;}
+  @media (prefers-reduced-motion: reduce){
+    #correctOverlay.show{animation:none;opacity:1;}
+    .correct-circle-wrap.animate svg circle{animation:none;stroke-dashoffset:0;}
+    .correct-circle-wrap.animate .correct-label, .correct-circle-wrap.animate .correct-ping-text{animation:none;opacity:1;}
+  }
+
+  @media print{
+    body *{visibility:hidden;}
+    #worksheet, #worksheet *{visibility:visible;}
+    #worksheet{display:block !important;position:absolute;left:0;top:0;width:100%;padding:12mm;}
+    .ws-print-btn-wrap{display:none !important;}
+  }
+  @media (max-width:640px){
+    .ws-grid{grid-template-columns:1fr;}
+  }
+
+  footer.hint{max-width:var(--maxw);margin:20px auto 0;padding:0 16px;color:var(--ink-soft);font-size:.8rem;}
+  details.teacher-note{max-width:var(--maxw);margin:0 auto 20px;padding:0 16px;}
+  details.teacher-note summary{cursor:pointer;font-weight:700;color:var(--ink-soft);font-size:.85rem;}
+  details.teacher-note .box{background:#fff;border-radius:14px;padding:14px 16px;margin-top:8px;font-size:.85rem;color:var(--ink-soft);line-height:1.7;box-shadow:var(--shadow);}
+</style>
+</head>
+<body>
+<div id="correctOverlay" aria-hidden="true">
+  <div class="correct-circle-wrap">
+    <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="84"></circle></svg>
+    <div class="correct-label">せいかい！</div>
+    <div class="correct-ping-text">🔔 ピンポーン♪</div>
+  </div>
+</div>
+<div class="app">
+  <header class="top">
+    <div>
+      <div class="mieel-brand">
+        <div class="orb-mini"></div>
+        <strong>MieeL</strong>
+        <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener">www.mieel-support-school.com</a>
+      </div>
+      <h1><span class="icon">⚖️</span>おもさを まなぼう</h1>
+      <p>くらべる・はかりをよむ・たんい・みのまわりで、おもさの かんかくを 育てます</p>
+    </div>
+    <button class="icon-btn" id="btnLargeText" aria-pressed="false">🔠 文字を大きく</button>
+  </header>
+
+  <nav class="modes" role="tablist" aria-label="モードをえらぶ">
+    <button data-mode="compare" class="active" role="tab" aria-selected="true">⚖️ くらべっこ<span class="sub">おもい／かるいを えらぼう</span></button>
+    <button data-mode="scale" role="tab" aria-selected="false">📊 はかり<span class="sub">なんgか よもう</span></button>
+    <button data-mode="unit" role="tab" aria-selected="false">🔄 たんい<span class="sub">g・kg の かんけい</span></button>
+    <button data-mode="estimate" role="tab" aria-selected="false">🎯 みのまわり<span class="sub">だいたいの おもさを えらぼう</span></button>
+    <button data-mode="print" role="tab" aria-selected="false">🖨️ プリント<span class="sub">PDFをつくる</span></button>
+  </nav>
+
+  <!-- ===== COMPARE VIEW ===== -->
+  <section class="panel view" id="view-compare">
+    <div class="level-bar" id="levelBarCompare"></div>
+    <div class="score-pill" id="scoreCompare">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="compareSpeak" title="よみあげ">🔊</button>
+        <div class="q-text" id="compareQ"></div>
+      </div>
+      <div class="compare-wrap" id="compareWrap"></div>
+      <div class="fb" id="compareFb"></div>
+      <div class="action-row">
+        <button class="btn" id="compareNext" style="background:var(--compare);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SCALE VIEW ===== -->
+  <section class="panel view hidden" id="view-scale">
+    <div class="level-bar" id="levelBarScale"></div>
+    <div class="score-pill" id="scoreScale">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="scaleSpeak" title="よみあげ">🔊</button>
+        <div class="q-text">はかりは なんgを さしてるかな？</div>
+      </div>
+      <div class="scale-card" id="scaleCard"></div>
+      <div class="opt-grid" id="scaleOpts"></div>
+      <div class="fb" id="scaleFb"></div>
+      <div class="action-row">
+        <button class="btn" id="scaleNext" style="background:var(--scale);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== UNIT VIEW ===== -->
+  <section class="panel view hidden" id="view-unit">
+    <div class="level-bar" id="levelBarUnit"></div>
+    <div class="score-pill" id="scoreUnit">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="unitSpeak" title="よみあげ">🔊</button>
+        <div style="font-weight:800;color:var(--ink-soft);">こたえを えらぼう</div>
+      </div>
+      <div class="unit-card" id="unitCard"></div>
+      <div class="opt-grid unit-opt" id="unitOpts"></div>
+      <div class="fb" id="unitFb"></div>
+      <div class="action-row">
+        <button class="btn" id="unitNext" style="background:var(--convert);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ESTIMATE VIEW ===== -->
+  <section class="panel view hidden" id="view-estimate">
+    <div class="level-bar" id="levelBarEstimate"></div>
+    <div class="score-pill" id="scoreEstimate">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="estimate-icon" id="estimateIcon"></div>
+      <div class="estimate-label" id="estimateLabel"></div>
+      <div class="opt-grid estimate-opt" id="estimateOpts"></div>
+      <div class="fb" id="estimateFb"></div>
+      <div class="action-row">
+        <button class="btn ghost" id="estimateSpeak">🔊 よみあげ</button>
+        <button class="btn" id="estimateNext" style="background:var(--estimate);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PRINT VIEW ===== -->
+  <section class="panel view hidden" id="view-print">
+    <div class="print-controls">
+      <div>
+        <div class="field-label">もんだいの しゅるい</div>
+        <div class="chip-row" id="printTypeChips">
+          <button class="chip selected" data-ptype="compare">⚖️ くらべっこ</button>
+          <button class="chip" data-ptype="scale">📊 はかり</button>
+          <button class="chip" data-ptype="unit">🔄 たんい</button>
+          <button class="chip" data-ptype="estimate">🎯 みのまわり</button>
+        </div>
+      </div>
+      <div>
+        <div class="field-label">レベル</div>
+        <div class="chip-row" id="levelBarPrint"></div>
+      </div>
+      <div>
+        <div class="field-label">もんだいすう</div>
+        <div class="chip-row" id="printCountChips">
+          <button class="chip" data-count="4">4もん</button>
+          <button class="chip selected" data-count="6">6もん</button>
+          <button class="chip" data-count="8">8もん</button>
+        </div>
+      </div>
+      <div class="toggle-row">
+        <input type="checkbox" id="printShowAnswer">
+        <label for="printShowAnswer">こたえを ひょうじする（指導者用）</label>
+      </div>
+      <div class="action-row" style="margin-top:2px;">
+        <button class="btn ghost" id="printRegenBtn">🔄 もんだいを かえる</button>
+        <button class="btn primary" id="printOpenBtn">🖨️ プリントする</button>
+      </div>
+      <div class="preview-note">「プリントする」を押すと、印刷プレビューが開きます。ブラウザの印刷設定でPDF保存もできます。</div>
+    </div>
+  </section>
+
+  <footer class="hint">
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:5px;">
+      <div style="width:18px;height:18px;border-radius:50%;background:var(--mieel);flex:none;"></div>
+      <strong style="color:var(--ink);">MieeL</strong>
+      <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener" style="color:var(--compare);">mieel-support-school.com</a>
+    </div>
+    © おもさを まなぼう ツール（特別支援教育向け）
+  </footer>
+
+  <details class="teacher-note">
+    <summary>👩‍🏫 指導者の方へ</summary>
+    <div class="box">
+      このアプリは、特別支援学校の算数・数学における「重さ（g・kg）」の学習を目的とした4つの練習モードと、印刷用ワークシート機能で構成されています。「長さ」アプリと対をなす測定領域の単元です。<br>
+      ・<strong>くらべっこ</strong>：直接比較の考え方を育てる、重さの視覚的な比較練習（2〜3個）<br>
+      ・<strong>はかり</strong>：重さ計（はかり）の目盛りを読む練習です<br>
+      ・<strong>たんい</strong>：g・kg の関係（1kg=1000gなど）を選択式で練習します<br>
+      ・<strong>みのまわり</strong>：身近な物の実際の重さを見積もる練習。生活場面で重さの感覚を使う力を育てます<br>
+      くらべっこ・はかり・たんいの3モードは問題を自動生成しているため、繰り返し練習しても毎回ちがう問題が出題されます。各モードにレベル設定があり、児童生徒の実態に応じて選べます。よみあげボタンで音声支援も可能です。プリントモードでは同じ4種類の問題をワークシートとして印刷でき、解答表示の切り替えもできます。
+    </div>
+  </details>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =========================================================
+     UTILS
+  ========================================================= */
+  function shuffle(a){
+    var arr=a.slice();
+    for(var i=arr.length-1;i>0;i--){
+      var j=Math.floor(Math.random()*(i+1));
+      var t=arr[i];arr[i]=arr[j];arr[j]=t;
+    }
+    return arr;
+  }
+  function pickRandom(a){ return a[Math.floor(Math.random()*a.length)]; }
+  function rand(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+  function speak(text){
+    if(!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang='ja-JP'; u.rate=0.85;
+    window.speechSynthesis.speak(u);
+  }
+  function renderLevelBar(container, levels, activeId, onSelect){
+    container.innerHTML='';
+    levels.forEach(function(lv){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='level-btn'+(lv.id===activeId?' active':'');
+      b.innerHTML='<span class="stars">'+lv.stars+'</span><span class="name">'+lv.name+'</span>';
+      b.addEventListener('click', function(){ onSelect(lv.id); });
+      container.appendChild(b);
+    });
+  }
+  function updateScorePill(el, state){
+    el.innerHTML = '✅ '+state.score+' / '+state.total;
+  }
+  var PRAISE = ['やったね！','せいかい！','すごい！','ばっちり！','よくできました！'];
+  var TRY_AGAIN = ['もういちど！','おしい！','ゆっくり かんがえよう。','だいじょうぶ、もう一回！'];
+
+  /* ── correct-answer chime + big maru overlay ── */
+  var sharedAudioCtx = null;
+  function playDing(){
+    try{
+      var Ctx = window.AudioContext || window.webkitAudioContext;
+      if(!Ctx) return;
+      if(!sharedAudioCtx) sharedAudioCtx = new Ctx();
+      var ctx = sharedAudioCtx;
+      if(ctx.state==='suspended'){ ctx.resume(); }
+      function tone(freq, start, dur, peak){
+        var o = ctx.createOscillator();
+        var g = ctx.createGain();
+        o.type='sine'; o.frequency.value=freq;
+        o.connect(g); g.connect(ctx.destination);
+        var t0 = ctx.currentTime+start;
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.linearRampToValueAtTime(peak, t0+0.03);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0+dur);
+        o.start(t0);
+        o.stop(t0+dur+0.03);
+      }
+      tone(880.0, 0,    0.30, 0.30);  /* ピン */
+      tone(1318.5, 0.24, 0.48, 0.26); /* ポーン */
+    }catch(e){ /* audio not available; visual feedback still shows */ }
+  }
+  function triggerCorrectFeedback(){
+    playDing();
+    var overlay = document.getElementById('correctOverlay');
+    if(!overlay) return;
+    var wrap = overlay.querySelector('.correct-circle-wrap');
+    overlay.classList.remove('show');
+    wrap.classList.remove('animate');
+    void overlay.offsetWidth; /* force reflow so animation restarts every time */
+    overlay.classList.add('show');
+    wrap.classList.add('animate');
+  }
+
+  /* generic numeric multiple-choice option builder */
+  function buildOptions(correctVal, deltas, suffix, count){
+    var set=[correctVal];
+    var pool=shuffle(deltas.slice());
+    for(var i=0;i<pool.length && set.length<count;i++){
+      var v=correctVal+pool[i];
+      if(v>0 && set.indexOf(v)===-1) set.push(v);
+    }
+    var guard=0;
+    while(set.length<count && guard<60){
+      guard++;
+      var v2=correctVal+rand(-9,9);
+      if(v2>0 && set.indexOf(v2)===-1) set.push(v2);
+    }
+    var arr=shuffle(set);
+    return {correctLabel: correctVal+suffix, options: arr.map(function(v){return v+suffix;})};
+  }
+  function formatG(g){
+    if(g % 1000 === 0) return (g/1000)+'kg';
+    if(g >= 1000){
+      var kgPart = Math.floor(g/1000);
+      var gPart = g % 1000;
+      return kgPart+'kg'+gPart+'g';
+    }
+    return g+'g';
+  }
+
+  /* =========================================================
+     SCALE SVG BUILDER (shared by scale-mode + print)
+  ========================================================= */
+  function buildScaleSVG(maxG, valueG){
+    var width=140, height=230;
+    var marginBottom=26, marginTop=18;
+    var axisH = height - marginBottom - marginTop;
+    var axisX = 62;
+    function yFor(v){ return height-marginBottom - (v/maxG)*axisH; }
+    var majorStep = maxG/5;
+    var svg = '<svg viewBox="0 0 '+width+' '+height+'" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:150px;height:auto;">';
+    /* fill bar representing the reading */
+    var fillY = yFor(valueG);
+    svg += '<rect x="'+(axisX+8)+'" y="'+fillY+'" width="26" height="'+(height-marginBottom-fillY)+'" rx="4" fill="var(--scale)" opacity="0.85"></rect>';
+    /* axis line */
+    svg += '<line x1="'+axisX+'" y1="'+(height-marginBottom)+'" x2="'+axisX+'" y2="'+marginTop+'" stroke="#2E2A25" stroke-width="2"></line>';
+    for(var s=0; s<=5; s++){
+      var v = Math.round(majorStep*s);
+      var y = yFor(v);
+      svg += '<line x1="'+(axisX-8)+'" y1="'+y+'" x2="'+axisX+'" y2="'+y+'" stroke="#2E2A25" stroke-width="2"></line>';
+      svg += '<text x="'+(axisX-12)+'" y="'+(y+4)+'" font-size="10" text-anchor="end" fill="#2E2A25" font-weight="700">'+v+'g</text>';
+    }
+    /* pointer arrow at value */
+    var py = yFor(valueG);
+    svg += '<polygon points="'+(axisX+34)+','+py+' '+(axisX+44)+','+(py-6)+' '+(axisX+44)+','+(py+6)+'" fill="#2E2A25"></polygon>';
+    svg += '</svg>';
+    return svg;
+  }
+
+  /* =========================================================
+     COMPARE MODE
+  ========================================================= */
+  var COMPARE_LEVELS = [
+    {id:1, name:'2つ くらべ', stars:'★☆☆'},
+    {id:2, name:'3つ くらべ', stars:'★★☆'},
+    {id:3, name:'にてる おもさ', stars:'★★★'}
+  ];
+  var COMPARE_THEMES = [
+    {icon:'📦', noun:'はこ'}, {icon:'🎒', noun:'かばん'}, {icon:'🧳', noun:'スーツケース'},
+    {icon:'🛍️', noun:'ふくろ'}, {icon:'🪣', noun:'バケツ'}, {icon:'🧺', noun:'かご'},
+    {icon:'🎁', noun:'プレゼント'}, {icon:'🥡', noun:'べんとうばこ'}, {icon:'🧸', noun:'ぬいぐるみ'},
+    {icon:'🪵', noun:'まき'}, {icon:'🪨', noun:'いし'}, {icon:'🍎', noun:'くだものかご'}
+  ];
+  var compareState = {level:1, score:0, total:0, current:null, locked:false};
+  var lastCompareThemeNoun = null;
+
+  function genCompareQuestion(level){
+    var count = level===1 ? 2 : 3;
+    var minGap = level===1 ? 80 : (level===2 ? 50 : 20);
+    var range = level===3 ? [100,320] : [50,300];
+    var values=[];
+    var guard=0;
+    while(values.length<count && guard<300){
+      guard++;
+      var v = rand(range[0], range[1]);
+      var ok = values.every(function(x){ return Math.abs(x-v) >= minGap; });
+      if(ok) values.push(v);
+    }
+    if(values.length<count){
+      while(values.length<count){
+        var v2 = rand(range[0], range[1]);
+        if(values.indexOf(v2)===-1) values.push(v2);
+      }
+    }
+    var askType = level===1 ? 'heavier' : pickRandom(['heavier','lighter']);
+    var theme = pickRandom(COMPARE_THEMES);
+    var order = shuffle(values.map(function(v,i){return i;}));
+    var shuffledValues = order.map(function(i){return values[i];});
+    var targetVal = askType==='heavier' ? Math.max.apply(null, shuffledValues) : Math.min.apply(null, shuffledValues);
+    var correctIndex = shuffledValues.indexOf(targetVal);
+    return {theme:theme, values:shuffledValues, askType:askType, correctIndex:correctIndex};
+  }
+  function renderLevelBarCompare(){
+    renderLevelBar(document.getElementById('levelBarCompare'), COMPARE_LEVELS, compareState.level, function(id){
+      compareState.level=id; renderLevelBarCompare(); newCompareQuestion();
+    });
+  }
+  function newCompareQuestion(){
+    compareState.current = genCompareQuestion(compareState.level);
+    if(COMPARE_THEMES.length>1 && compareState.current.theme.noun===lastCompareThemeNoun){
+      compareState.current = genCompareQuestion(compareState.level);
+    }
+    lastCompareThemeNoun = compareState.current.theme.noun;
+    compareState.locked = false;
+    var cur = compareState.current;
+    var qText = cur.askType==='heavier' ? 'いちばん おもい '+cur.theme.noun+' は どれ？' : 'いちばん かるい '+cur.theme.noun+' は どれ？';
+    document.getElementById('compareQ').textContent = qText;
+    document.getElementById('compareFb').className='fb'; document.getElementById('compareFb').textContent='';
+    document.getElementById('compareNext').style.display='none';
+    renderCompareBoard();
+  }
+  function renderCompareBoard(){
+    var cur = compareState.current;
+    var wrap = document.getElementById('compareWrap');
+    wrap.innerHTML='';
+    var maxVal = Math.max.apply(null, cur.values);
+    var available = Math.max(160, Math.min(window.innerWidth, 720) - 110);
+    var pxPerUnit = Math.min(1.2, available / maxVal);
+    cur.values.forEach(function(v, idx){
+      var row = document.createElement('div');
+      row.className='compare-row';
+      var num = document.createElement('div');
+      num.className='cnum'; num.textContent = (idx+1)+'';
+      var bar = document.createElement('div');
+      bar.className='bar';
+      bar.style.width = Math.max(24, v*pxPerUnit)+'px';
+      bar.innerHTML = '<span class="cap">'+cur.theme.icon+'</span>';
+      row.appendChild(num); row.appendChild(bar);
+      row.addEventListener('click', function(){
+        if(compareState.locked) return;
+        var correct = (idx===cur.correctIndex);
+        compareState.total++;
+        if(correct) compareState.score++;
+        updateScorePill(document.getElementById('scoreCompare'), compareState);
+        compareState.locked = true;
+        var fbEl = document.getElementById('compareFb');
+        var rows = wrap.querySelectorAll('.compare-row');
+        if(correct){
+          row.classList.add('correct-flash');
+          rows.forEach(function(r){ if(r!==row) r.classList.add('dim'); });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+          speak(qTextFor(cur));
+        } else {
+          row.classList.add('wrong-flash');
+          rows[cur.correctIndex].classList.add('correct-flash');
+          rows.forEach(function(r,i){ if(i!==cur.correctIndex && r!==row) r.classList.add('dim'); });
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+        rows.forEach(function(r){ r.classList.add('locked'); });
+        document.getElementById('compareNext').style.display='inline-block';
+      });
+      wrap.appendChild(row);
+    });
+  }
+  function qTextFor(cur){
+    return cur.askType==='heavier' ? 'いちばん おもい '+cur.theme.noun+' が せいかいです。' : 'いちばん かるい '+cur.theme.noun+' が せいかいです。';
+  }
+  document.getElementById('compareSpeak').addEventListener('click', function(){
+    speak(document.getElementById('compareQ').textContent);
+  });
+  document.getElementById('compareNext').addEventListener('click', newCompareQuestion);
+
+  /* =========================================================
+     SCALE MODE
+  ========================================================= */
+  var SCALE_LEVELS = [
+    {id:1, name:'100gまで', stars:'★☆☆'},
+    {id:2, name:'1000gまで', stars:'★★☆'},
+    {id:3, name:'こまかく よむ', stars:'★★★'}
+  ];
+  var scaleState = {level:1, score:0, total:0, current:null, locked:false};
+
+  function genScaleQuestion(level){
+    var maxG, valueG, step;
+    if(level===1){
+      maxG=100; step=10; valueG=pickRandom([10,20,30,40,50,60,70,80,90]);
+    } else if(level===2){
+      maxG=1000; step=100; valueG=pickRandom([100,200,300,400,500,600,700,800,900]);
+    } else {
+      maxG=1000; step=50;
+      valueG = rand(1,19)*50;
+    }
+    var deltaPool = level===1 ? [-30,-20,-10,10,20,30] : (level===2 ? [-300,-200,-100,100,200,300] : [-150,-100,-50,50,100,150]);
+    var built = buildOptions(valueG, deltaPool, '', 4);
+    var correctLabel = formatG(valueG);
+    var optionLabels = built.options.map(function(v){ return formatG(parseInt(v,10)); });
+    /* dedupe labels (formatG could theoretically collide across raw values, though unlikely at these steps) */
+    var uniqueLabels = [];
+    optionLabels.forEach(function(l){ if(uniqueLabels.indexOf(l)===-1) uniqueLabels.push(l); });
+    if(uniqueLabels.indexOf(correctLabel)===-1) uniqueLabels[0]=correctLabel;
+    return {maxG:maxG, valueG:valueG, correctLabel:correctLabel, options: shuffle(uniqueLabels)};
+  }
+  function renderLevelBarScale(){
+    renderLevelBar(document.getElementById('levelBarScale'), SCALE_LEVELS, scaleState.level, function(id){
+      scaleState.level=id; renderLevelBarScale(); newScaleQuestion();
+    });
+  }
+  function newScaleQuestion(){
+    scaleState.current = genScaleQuestion(scaleState.level);
+    scaleState.locked = false;
+    document.getElementById('scaleFb').className='fb'; document.getElementById('scaleFb').textContent='';
+    document.getElementById('scaleNext').style.display='none';
+    var cur = scaleState.current;
+    document.getElementById('scaleCard').innerHTML = buildScaleSVG(cur.maxG, cur.valueG);
+    var grid = document.getElementById('scaleOpts');
+    grid.innerHTML='';
+    cur.options.forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button'; b.className='opt-btn'; b.textContent=opt;
+      b.addEventListener('click', function(){
+        if(scaleState.locked) return;
+        var correct = (opt===cur.correctLabel);
+        scaleState.total++;
+        if(correct) scaleState.score++;
+        updateScorePill(document.getElementById('scoreScale'), scaleState);
+        var fbEl = document.getElementById('scaleFb');
+        if(correct){
+          scaleState.locked=true;
+          b.classList.add('correct-flash');
+          grid.querySelectorAll('.opt-btn').forEach(function(o){ if(o!==b) o.disabled=true; });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+          document.getElementById('scaleNext').style.display='inline-block';
+          speak(cur.correctLabel+'です。');
+        } else {
+          b.classList.add('wrong-flash');
+          setTimeout(function(){ b.classList.remove('wrong-flash'); }, 500);
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+      });
+      grid.appendChild(b);
+    });
+  }
+  document.getElementById('scaleSpeak').addEventListener('click', function(){
+    speak('はかりは なんgを さしてるかな？');
+  });
+  document.getElementById('scaleNext').addEventListener('click', newScaleQuestion);
+
+  /* =========================================================
+     UNIT MODE
+  ========================================================= */
+  var UNIT_LEVELS = [
+    {id:1, name:'gの たしざん', stars:'★☆☆'},
+    {id:2, name:'g と kg', stars:'★★☆'},
+    {id:3, name:'まぜて れんしゅう', stars:'★★★'}
+  ];
+  var unitState = {level:1, score:0, total:0, current:null, locked:false};
+
+  function genUnitQuestion(level){
+    if(level===1){
+      var a = rand(1,8)*100;
+      var b = rand(1,8)*100;
+      var built = buildOptions(a+b, [-200,-100,100,200,300,-300], 'g', 4);
+      return {q:a+'gと'+b+'gを あわせると なんg？', correctLabel:built.correctLabel, options:shuffle(built.options)};
+    } else if(level===2){
+      if(Math.random()<0.5){
+        var kg=rand(1,9);
+        var built2 = buildOptions(kg*1000, [-2000,-1000,-500,500,1000,2000], 'g', 4);
+        return {q:kg+'kg は なんg？', correctLabel:built2.correctLabel, options:shuffle(built2.options)};
+      } else {
+        var gVal=pickRandom([1000,2000,3000,4000,5000,6000,7000,8000,9000]);
+        var built3 = buildOptions(gVal/1000, [-3,-2,-1,1,2,3], 'kg', 4);
+        return {q:gVal+'g は なんkg？', correctLabel:built3.correctLabel, options:shuffle(built3.options)};
+      }
+    } else {
+      if(Math.random()<0.5){
+        var kg2=rand(1,3);
+        var gPart=rand(1,900);
+        var total=kg2*1000+gPart;
+        var built4 = buildOptions(total, [-200,-100,100,200,300,-300], 'g', 4);
+        return {q:kg2+'kg'+gPart+'g は なんg？', correctLabel:built4.correctLabel, options:shuffle(built4.options)};
+      } else {
+        var total2=rand(1001,3999);
+        while(total2%1000===0){ total2=rand(1001,3999); }
+        var kgPart=Math.floor(total2/1000);
+        var gPart2=total2%1000;
+        var correctLabel2=kgPart+'kg'+gPart2+'g';
+        var set=[correctLabel2];
+        var tries=[
+          kgPart+'kg'+(gPart2+100)+'g',
+          kgPart+'kg'+Math.max(gPart2-100,1)+'g',
+          (kgPart+1)+'kg'+gPart2+'g',
+          (kgPart>1?kgPart-1:kgPart+1)+'kg'+gPart2+'g',
+          kgPart+'kg'+(gPart2+50)+'g'
+        ];
+        shuffle(tries).forEach(function(t){ if(set.length<4 && set.indexOf(t)===-1) set.push(t); });
+        return {q:total2+'g は なんkg なんg？', correctLabel:correctLabel2, options:shuffle(set)};
+      }
+    }
+  }
+  function renderLevelBarUnit(){
+    renderLevelBar(document.getElementById('levelBarUnit'), UNIT_LEVELS, unitState.level, function(id){
+      unitState.level=id; renderLevelBarUnit(); newUnitQuestion();
+    });
+  }
+  function newUnitQuestion(){
+    unitState.current = genUnitQuestion(unitState.level);
+    unitState.locked = false;
+    document.getElementById('unitFb').className='fb'; document.getElementById('unitFb').textContent='';
+    document.getElementById('unitNext').style.display='none';
+    document.getElementById('unitCard').textContent = unitState.current.q;
+    var grid = document.getElementById('unitOpts');
+    grid.innerHTML='';
+    unitState.current.options.forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button'; b.className='opt-btn'; b.textContent=opt;
+      b.addEventListener('click', function(){
+        if(unitState.locked) return;
+        var correct = (opt===unitState.current.correctLabel);
+        unitState.total++;
+        if(correct) unitState.score++;
+        updateScorePill(document.getElementById('scoreUnit'), unitState);
+        var fbEl = document.getElementById('unitFb');
+        if(correct){
+          unitState.locked=true;
+          b.classList.add('correct-flash');
+          grid.querySelectorAll('.opt-btn').forEach(function(o){ if(o!==b) o.disabled=true; });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+          document.getElementById('unitNext').style.display='inline-block';
+          speak(unitState.current.q+' こたえは '+unitState.current.correctLabel+'です。');
+        } else {
+          b.classList.add('wrong-flash');
+          setTimeout(function(){ b.classList.remove('wrong-flash'); }, 500);
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+      });
+      grid.appendChild(b);
+    });
+  }
+  document.getElementById('unitSpeak').addEventListener('click', function(){
+    speak(unitState.current.q);
+  });
+  document.getElementById('unitNext').addEventListener('click', newUnitQuestion);
+
+  /* =========================================================
+     ESTIMATE MODE
+  ========================================================= */
+  var ESTIMATE_LEVELS = [
+    {id:1, name:'みぢかな もの', stars:'★☆☆'},
+    {id:2, name:'ちかい おもさ', stars:'★★☆'},
+    {id:3, name:'こまかい ちがい', stars:'★★★'}
+  ];
+  var ESTIMATE_DB = [
+    {level:1, icon:'✏️', label:'えんぴつ の おもさ', correct:'5g', options:['5g','5kg','500g','50g']},
+    {level:1, icon:'🧽', label:'けしゴム の おもさ', correct:'10g', options:['10g','10kg','1kg','100g']},
+    {level:1, icon:'🥚', label:'たまご1こ の おもさ', correct:'60g', options:['6g','60g','600g','6kg']},
+    {level:1, icon:'🍎', label:'りんご1こ の おもさ', correct:'200g', options:['20g','200g','2kg','20kg']},
+    {level:1, icon:'📱', label:'スマートフォン の おもさ', correct:'150g', options:['150g','15g','1kg','15kg']},
+    {level:1, icon:'🍌', label:'バナナ1本 の おもさ', correct:'100g', options:['10g','100g','1kg','10kg']},
+    {level:1, icon:'👟', label:'くつ かたほう の おもさ', correct:'250g', options:['250g','25g','2kg','25kg']},
+    {level:1, icon:'🥤', label:'ペットボトル（500ml）の おもさ', correct:'500g', options:['50g','500g','5kg','50kg']},
+    {level:2, icon:'📓', label:'ノート の おもさ', correct:'100g', options:['50g','100g','200g','400g']},
+    {level:2, icon:'🍉', label:'すいか1こ の おもさ', correct:'5kg', options:['500g','2kg','5kg','10kg']},
+    {level:2, icon:'🐱', label:'ねこ の おもさ', correct:'4kg', options:['1kg','2kg','4kg','8kg']},
+    {level:2, icon:'🎒', label:'ランドセル の おもさ', correct:'1kg', options:['300g','600g','1kg','3kg']},
+    {level:2, icon:'📺', label:'テレビ（小型）の おもさ', correct:'5kg', options:['1kg','3kg','5kg','10kg']},
+    {level:2, icon:'🍞', label:'しょくパン1きん の おもさ', correct:'400g', options:['100g','200g','400g','800g']},
+    {level:2, icon:'🧸', label:'ぬいぐるみ（大きい）の おもさ', correct:'800g', options:['200g','400g','800g','2kg']},
+    {level:2, icon:'🥛', label:'ぎゅうにゅう1本（1L）の おもさ', correct:'1kg', options:['500g','1kg','2kg','3kg']},
+    {level:3, icon:'🐶', label:'ちゅうがたけん の おもさ', correct:'15kg', options:['5kg','10kg','15kg','25kg']},
+    {level:3, icon:'👶', label:'あかちゃん（1さい）の おもさ', correct:'9kg', options:['3kg','6kg','9kg','15kg']},
+    {level:3, icon:'🚲', label:'じてんしゃ の おもさ', correct:'12kg', options:['5kg','8kg','12kg','20kg']},
+    {level:3, icon:'🪑', label:'いす の おもさ', correct:'4kg', options:['1kg','2kg','4kg','8kg']},
+    {level:3, icon:'📦', label:'ひっこし用の だんボール の おもさ', correct:'10kg', options:['3kg','5kg','10kg','20kg']},
+    {level:3, icon:'🐘', label:'ぞう の おもさ', correct:'4000kg', options:['400kg','1000kg','4000kg','8000kg']},
+    {level:3, icon:'🚗', label:'じどうしゃ の おもさ', correct:'1000kg', options:['100kg','500kg','1000kg','2000kg']},
+    {level:3, icon:'🧑', label:'おとなの たいじゅう', correct:'60kg', options:['20kg','40kg','60kg','90kg']}
+  ];
+  var estimateState = {level:1, score:0, total:0, current:null, locked:false};
+  var estimateQueue = [];
+
+  function renderLevelBarEstimate(){
+    renderLevelBar(document.getElementById('levelBarEstimate'), ESTIMATE_LEVELS, estimateState.level, function(id){
+      estimateState.level=id; renderLevelBarEstimate(); newEstimateQuestion();
+    });
+  }
+  function newEstimateQuestion(){
+    if(estimateQueue.length===0 || estimateQueue[0].level!==estimateState.level){
+      estimateQueue = shuffle(ESTIMATE_DB.filter(function(d){return d.level===estimateState.level;}));
+    }
+    estimateState.current = estimateQueue.shift();
+    estimateState.locked = false;
+    document.getElementById('estimateFb').className='fb'; document.getElementById('estimateFb').textContent='';
+    document.getElementById('estimateNext').style.display='none';
+    var cur = estimateState.current;
+    document.getElementById('estimateIcon').textContent = cur.icon;
+    document.getElementById('estimateLabel').textContent = cur.label+' は？';
+    var grid = document.getElementById('estimateOpts');
+    grid.innerHTML='';
+    shuffle(cur.options).forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button'; b.className='opt-btn'; b.textContent=opt;
+      b.addEventListener('click', function(){
+        if(estimateState.locked) return;
+        var correct = (opt===cur.correct);
+        estimateState.total++;
+        if(correct) estimateState.score++;
+        updateScorePill(document.getElementById('scoreEstimate'), estimateState);
+        var fbEl = document.getElementById('estimateFb');
+        if(correct){
+          estimateState.locked=true;
+          b.classList.add('correct-flash');
+          grid.querySelectorAll('.opt-btn').forEach(function(o){ if(o!==b) o.disabled=true; });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+          document.getElementById('estimateNext').style.display='inline-block';
+          speak(cur.label+'は、だいたい'+cur.correct+'です。');
+        } else {
+          b.classList.add('wrong-flash');
+          setTimeout(function(){ b.classList.remove('wrong-flash'); }, 500);
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+      });
+      grid.appendChild(b);
+    });
+  }
+  document.getElementById('estimateSpeak').addEventListener('click', function(){
+    var cur = estimateState.current;
+    speak(cur.label+'は どれくらいかな？');
+  });
+  document.getElementById('estimateNext').addEventListener('click', newEstimateQuestion);
+
+  /* =========================================================
+     PRINT MODE
+  ========================================================= */
+  var printState = {level:1, type:'compare', count:6, showAnswer:false, problems:[]};
+
+  function levelsForPrintType(){
+    return printState.type==='compare' ? COMPARE_LEVELS
+      : printState.type==='scale' ? SCALE_LEVELS
+      : printState.type==='unit' ? UNIT_LEVELS
+      : ESTIMATE_LEVELS;
+  }
+  function renderPrintLevelBar(){
+    var levelsForType = levelsForPrintType();
+    if(!levelsForType.some(function(l){return l.id===printState.level;})){
+      printState.level = levelsForType[0].id;
+    }
+    var container = document.getElementById('levelBarPrint');
+    container.innerHTML='';
+    levelsForType.forEach(function(lv){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='chip'+(lv.id===printState.level?' selected':'');
+      b.textContent = lv.stars+' '+lv.name;
+      b.addEventListener('click', function(){
+        printState.level=lv.id; renderPrintLevelBar(); regenerateProblems(); renderWorksheet();
+      });
+      container.appendChild(b);
+    });
+  }
+  document.querySelectorAll('#printTypeChips .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#printTypeChips .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      printState.type = c.getAttribute('data-ptype');
+      renderPrintLevelBar();
+      regenerateProblems();
+      renderWorksheet();
+    });
+  });
+  document.querySelectorAll('#printCountChips .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#printCountChips .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      printState.count = parseInt(c.getAttribute('data-count'),10);
+      regenerateProblems(); renderWorksheet();
+    });
+  });
+  document.getElementById('printShowAnswer').addEventListener('change', function(e){
+    printState.showAnswer = e.target.checked;
+    renderWorksheet();
+  });
+  document.getElementById('printRegenBtn').addEventListener('click', function(){
+    regenerateProblems(); renderWorksheet();
+  });
+  document.getElementById('printOpenBtn').addEventListener('click', function(){
+    renderWorksheet();
+    setTimeout(function(){ window.print(); }, 60);
+  });
+
+  function regenerateProblems(){
+    var list=[];
+    var themeQueue=[];
+    for(var i=0;i<printState.count;i++){
+      if(printState.type==='compare'){
+        var q = genCompareQuestion(printState.level);
+        if(themeQueue.length===0) themeQueue = shuffle(COMPARE_THEMES.slice());
+        q.theme = themeQueue.shift();
+        list.push(q);
+      } else if(printState.type==='scale'){
+        list.push(genScaleQuestion(printState.level));
+      } else if(printState.type==='unit'){
+        list.push(genUnitQuestion(printState.level));
+      } else {
+        var pool = shuffle(ESTIMATE_DB.filter(function(d){return d.level===printState.level;}));
+        list.push(pool[i % pool.length]);
+      }
+    }
+    printState.problems = list;
+  }
+  regenerateProblems();
+
+  function typeInstruction(){
+    return printState.type==='compare' ? '正しい ほうに 〇を つけよう'
+      : printState.type==='scale' ? 'はかりを よんで、なんgか かこう'
+      : printState.type==='unit' ? 'こたえを かこう（えらぶ：した の ことばバンクから）'
+      : 'だいたいの おもさに 〇を つけよう';
+  }
+  function renderWorksheet(){
+    var levelsForType = levelsForPrintType();
+    var lv = levelsForType.filter(function(l){return l.id===printState.level;})[0];
+    var typeLabel = printState.type==='compare' ? '⚖️ くらべっこ'
+      : printState.type==='scale' ? '📊 はかり'
+      : printState.type==='unit' ? '🔄 たんい'
+      : '🎯 みのまわり';
+
+    var html = '';
+    html += '<div class="ws-header"><div style="display:flex;align-items:center;gap:8px;">'
+      + '<div style="width:20px;height:20px;border-radius:50%;background:var(--mieel);border:1px solid #ccc;flex:none;"></div>'
+      + '<div><div style="font-size:11px;color:#333;font-weight:700;">MieeL おもさを まなぼう</div>'
+      + '<h2>'+typeLabel+'（'+lv.name+'）</h2>'
+      + '<div style="font-size:11px;color:#666;margin-top:2px;">'+typeInstruction()+'</div></div></div>'
+      + '<div class="ws-fields" style="flex-direction:column;align-items:flex-end;gap:2px;">'
+      + '<div style="font-size:.75rem;color:#3A9A8C;font-weight:700;">mieel-support-school.com</div>'
+      + '<div><span class="lbl">なまえ：</span><span class="blank">&nbsp;</span><span class="lbl">ひづけ：</span><span class="blank">&nbsp;</span></div></div></div>';
+
+    var gridClass = (printState.type==='scale') ? 'ws-grid single-col' : 'ws-grid';
+    html += '<div class="'+gridClass+'">';
+    printState.problems.forEach(function(p, idx){
+      var cellClass = (printState.type==='scale') ? 'ws-cell roomy' : 'ws-cell';
+      html += '<div class="'+cellClass+'"><div class="no">もんだい '+(idx+1)+'</div>';
+      if(printState.type==='compare'){
+        var qText = p.askType==='heavier' ? 'いちばん おもい '+p.theme.noun+' に 〇を つけよう' : 'いちばん かるい '+p.theme.noun+' に 〇を つけよう';
+        html += '<div class="ws-sentence">'+qText+'</div>';
+        html += '<div class="ws-bars">';
+        p.values.forEach(function(v, i){
+          html += '<div class="ws-bar-row"><span class="n">'+(i+1)+'</span><div class="ws-bar" style="width:'+Math.min(v*0.7,260)+'px;"></div>'
+            + (printState.showAnswer && i===p.correctIndex ? ' <strong class="ws-answer">←こたえ</strong>' : '')
+            + '</div>';
+        });
+        html += '</div>';
+      } else if(printState.type==='scale'){
+        html += '<div class="ws-scale-wrap">'+buildScaleSVG(p.maxG, p.valueG)+'</div>';
+        html += '<div style="margin-top:8px;text-align:center;">こたえ：<span class="ws-writeline"></span></div>';
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;text-align:center;">こたえ：'+p.correctLabel+'</div>';
+        }
+      } else if(printState.type==='unit'){
+        html += '<div class="ws-sentence">'+p.q+'</div>';
+        html += '<div>こたえ：<span class="ws-writeline"></span></div>';
+        html += '<div class="ws-bank">えらぶ：'+shuffle(p.options).join('　／　')+'</div>';
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:4px;font-size:.85rem;">こたえ：'+p.correctLabel+'</div>';
+        }
+      } else {
+        html += '<div class="ws-sentence" style="font-size:1.8rem;text-align:center;">'+p.icon+'</div>';
+        html += '<div class="ws-sentence" style="text-align:center;">'+p.label+' は？</div>';
+        html += '<div class="ws-bank">'+shuffle(p.options).map(function(o){ return (printState.showAnswer && o===p.correct) ? '<strong class="ws-answer">'+o+'</strong>' : o; }).join('　／　')+'</div>';
+      }
+      html += '</div>';
+    });
+    html += '</div>';
+    var ws = document.getElementById('worksheet');
+    if(!ws){
+      ws = document.createElement('div');
+      ws.id='worksheet';
+      document.body.appendChild(ws);
+    }
+    ws.innerHTML = html;
+  }
+  renderPrintLevelBar();
+  renderWorksheet();
+
+  /* =========================================================
+     MODE SWITCHING / GLOBAL UI
+  ========================================================= */
+  document.querySelectorAll('nav.modes button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('nav.modes button').forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+      btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+      var mode = btn.getAttribute('data-mode');
+      document.querySelectorAll('.view').forEach(function(v){ v.classList.add('hidden'); });
+      document.getElementById('view-'+mode).classList.remove('hidden');
+      if(mode==='print') renderWorksheet();
+    });
+  });
+
+  var largeToggle = document.getElementById('btnLargeText');
+  largeToggle.addEventListener('click', function(){
+    var on = document.documentElement.classList.toggle('large-text');
+    largeToggle.setAttribute('aria-pressed', on ? 'true':'false');
+  });
+
+  /* =========================================================
+     INIT
+  ========================================================= */
+  renderLevelBarCompare(); newCompareQuestion();
+  renderLevelBarScale(); newScaleQuestion();
+  renderLevelBarUnit(); newUnitQuestion();
+  renderLevelBarEstimate(); newEstimateQuestion();
+
+})();
+</script>
+</body>
+</html>

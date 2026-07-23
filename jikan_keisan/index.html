@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>じかんの けいさん｜MieeL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF7EF;
+    --card:#FFFFFF;
+    --ink:#2E2A25;
+    --ink-soft:#8A8072;
+    --line:#EAE1CE;
+    --duration:#5B6FA8; --duration-soft:#E3E6F3;
+    --endtime:#C98A2E;  --endtime-soft:#F6E6C7;
+    --convert:#3F9D8B;  --convert-soft:#DBEFEA;
+    --schedule:#C15B6B; --schedule-soft:#F8E1E5;
+    --success:#4F9A63;  --success-soft:#E3F3E6;
+    --danger:#C4573F;   --danger-soft:#FBE4DE;
+    --radius:22px;
+    --shadow:0 6px 18px rgba(46,42,37,0.10);
+    --maxw:960px;
+    --mieel:radial-gradient(circle at 50% 0%,#1B8FE8 0%,#2BB8D6 28%,#3FCB9E 45%,#8FD24A 58%,#F4D027 72%,#F7941E 100%);
+  }
+  *{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact;color-adjust:exact;}
+  html{font-size:17px;}
+  html.large-text{font-size:21px;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+    -webkit-font-smoothing:antialiased;padding-bottom:40px;
+  }
+  button{font-family:inherit;}
+  button:focus-visible, [tabindex]:focus-visible{outline:3px solid var(--convert);outline-offset:2px;}
+
+  .app{max-width:var(--maxw);margin:0 auto;padding:18px 16px 8px;}
+
+  header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
+  .mieel-brand{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .mieel-brand .orb-mini{width:20px;height:20px;border-radius:50%;background:var(--mieel);flex:none;}
+  .mieel-brand strong{color:var(--ink);font-size:.85rem;}
+  .mieel-brand a{font-size:.78rem;color:var(--convert);text-decoration:none;font-weight:600;}
+  .mieel-brand a:hover{text-decoration:underline;}
+  header.top h1{font-size:1.5rem;margin:0;font-weight:800;letter-spacing:.02em;display:flex;align-items:center;gap:.35em;}
+  header.top h1 .icon{font-size:1.15em;}
+  header.top p{margin:4px 0 0;color:var(--ink-soft);font-size:.85rem;font-weight:500;}
+  .icon-btn{
+    border:2px solid var(--ink);background:var(--card);color:var(--ink);border-radius:999px;
+    padding:.5em 1em;font-weight:700;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:.4em;
+  }
+  .icon-btn:hover{background:var(--endtime-soft);}
+
+  nav.modes{display:flex;gap:9px;margin-bottom:16px;flex-wrap:wrap;}
+  nav.modes button{
+    flex:1 1 150px;font-weight:800;font-size:1rem;padding:13px 8px;border-radius:var(--radius);
+    border:3px solid transparent;background:var(--card);color:var(--ink-soft);box-shadow:var(--shadow);
+    cursor:pointer;transition:transform .12s ease, border-color .12s ease, color .12s ease;
+  }
+  nav.modes button .sub{display:block;font-size:.68em;font-weight:500;margin-top:2px;}
+  nav.modes button:hover{transform:translateY(-2px);}
+  nav.modes button.active{border-color:var(--ink);color:var(--ink);background:var(--endtime-soft);}
+
+  section.panel{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:18px;}
+
+  .level-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+  .level-bar .level-btn{
+    flex:1 1 140px;text-align:left;border:2px solid var(--line);background:#FCFAF3;border-radius:16px;
+    padding:10px 12px;cursor:pointer;font-weight:700;color:var(--ink);
+  }
+  .level-bar .level-btn .stars{color:var(--endtime);letter-spacing:1px;display:block;font-size:.9em;}
+  .level-bar .level-btn .name{display:block;font-size:1rem;}
+  .level-bar .level-btn.active{border-color:var(--duration);background:var(--duration-soft);}
+  .level-bar .level-btn:hover{border-color:var(--duration);}
+
+  .score-pill{
+    display:inline-flex;align-items:center;gap:.5em;background:var(--success-soft);color:var(--success);
+    font-weight:800;padding:8px 16px;border-radius:999px;font-size:.95rem;margin-bottom:14px;
+  }
+
+  .stage{min-height:260px;display:flex;flex-direction:column;align-items:center;}
+  .prompt-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;text-align:center;}
+  .prompt-row .q-text{font-weight:800;color:var(--ink);font-size:1.1rem;}
+  .speak-btn{
+    border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:999px;
+    width:40px;height:40px;font-size:1.1rem;cursor:pointer;flex:none;
+  }
+  .speak-btn:hover{background:var(--endtime-soft);}
+
+  .time-card{
+    background:#FCFAF3;border:3px solid var(--line);border-radius:20px;padding:24px 28px;
+    font-size:1.3rem;font-weight:800;text-align:center;max-width:560px;margin-bottom:20px;line-height:1.8;
+  }
+  .time-card .big{font-size:1.6rem;color:var(--ink);}
+  .time-card .arrow{color:var(--ink-soft);font-size:1.3rem;}
+
+  .opt-grid{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-width:640px;}
+  .opt-btn{
+    min-width:100px;padding:14px 18px;border:3px solid var(--duration);background:var(--duration-soft);color:#33406e;
+    font-size:1.15rem;font-weight:800;border-radius:16px;cursor:pointer;box-shadow:0 5px 0 #3d4a7d;transition:.1s;
+  }
+  .opt-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #3d4a7d;}
+  .opt-btn.correct-flash{background:var(--success-soft);border-color:var(--success);box-shadow:0 5px 0 #2a6040;color:#255e3c;}
+  .opt-btn.wrong-flash{background:var(--danger-soft);border-color:var(--danger);box-shadow:0 5px 0 #8a3020;color:#7a2a18;}
+  .opt-btn:disabled{opacity:.35;cursor:not-allowed;}
+
+  .endtime-opt .opt-btn{border-color:var(--endtime);background:var(--endtime-soft);color:#7a5219;box-shadow:0 5px 0 #8a6220;}
+  .endtime-opt .opt-btn.correct-flash{border-color:var(--success);background:var(--success-soft);box-shadow:0 5px 0 #2a6040;}
+  .endtime-opt .opt-btn.wrong-flash{border-color:var(--danger);background:var(--danger-soft);box-shadow:0 5px 0 #8a3020;}
+
+  .convert-opt .opt-btn{border-color:var(--convert);background:var(--convert-soft);color:#215a4f;box-shadow:0 5px 0 #2c6b5d;}
+  .convert-opt .opt-btn.correct-flash{border-color:var(--success);background:var(--success-soft);box-shadow:0 5px 0 #2a6040;}
+  .convert-opt .opt-btn.wrong-flash{border-color:var(--danger);background:var(--danger-soft);box-shadow:0 5px 0 #8a3020;}
+
+  .schedule-opt .opt-btn{border-color:var(--schedule);background:var(--schedule-soft);color:#7a2f3d;box-shadow:0 5px 0 #8a3d4d;}
+  .schedule-opt .opt-btn.correct-flash{border-color:var(--success);background:var(--success-soft);box-shadow:0 5px 0 #2a6040;}
+  .schedule-opt .opt-btn.wrong-flash{border-color:var(--danger);background:var(--danger-soft);box-shadow:0 5px 0 #8a3020;}
+
+  /* ── schedule table ── */
+  .sched-table{border-collapse:collapse;margin:0 auto 20px;background:#FCFAF3;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);width:100%;max-width:480px;}
+  .sched-table th, .sched-table td{border:1px solid var(--line);padding:8px 10px;text-align:center;font-size:.92rem;}
+  .sched-table th{background:#F1EBDA;font-weight:800;}
+  .sched-table td.subj{text-align:left;font-weight:700;}
+  .sched-table tr.hl{background:var(--schedule-soft);}
+
+  /* ── feedback / footer ── */
+  .fb{margin-top:6px;font-size:1.1rem;font-weight:700;min-height:32px;display:flex;align-items:center;gap:8px;text-align:center;}
+  .fb.ok{color:#2a7a50;} .fb.ng{color:var(--danger);}
+  .action-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;justify-content:center;}
+  .btn{font-weight:800;font-size:.95rem;border-radius:14px;border:none;padding:12px 18px;cursor:pointer;color:#fff;background:var(--ink-soft);}
+  .btn.primary{background:var(--duration);}
+  .btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--ink);}
+  .btn:disabled{opacity:.4;cursor:not-allowed;}
+  .btn:active{transform:scale(.97);}
+
+  /* ── print mode ── */
+  .print-controls{display:flex;flex-direction:column;gap:14px;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{border:2px solid var(--line);background:#FCFAF3;border-radius:999px;padding:9px 16px;font-weight:700;font-size:.88rem;cursor:pointer;color:var(--ink);}
+  .chip.selected{border-color:var(--duration);background:var(--duration-soft);color:var(--duration);}
+  .field-label{font-size:.82rem;font-weight:800;color:var(--ink-soft);margin-bottom:6px;}
+  .toggle-row{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.92rem;}
+  .preview-note{color:var(--ink-soft);font-size:.85rem;margin-top:6px;text-align:center;}
+  #worksheet{display:none;}
+
+  .ws-header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid var(--ink);padding-bottom:10px;margin-bottom:16px;}
+  .ws-header h2{margin:2px 0 0;font-size:1.15rem;}
+  .ws-fields{display:flex;gap:10px;font-size:.9rem;font-weight:700;align-items:flex-end;}
+  .ws-fields .lbl{white-space:nowrap;}
+  .ws-fields .blank{border-bottom:1.5px solid var(--ink);padding:0 6px 4px;display:inline-block;min-width:100px;margin-right:10px;}
+  .ws-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+  .ws-grid.single-col{grid-template-columns:1fr;gap:18px;}
+  .ws-cell{border:2px solid var(--line);border-radius:12px;padding:12px 14px;break-inside:avoid;}
+  .ws-cell.roomy{padding:16px 18px;}
+  .ws-cell .no{font-size:.78rem;font-weight:800;color:var(--ink-soft);margin-bottom:6px;}
+  .ws-sentence{font-size:1rem;font-weight:700;margin-bottom:8px;text-align:center;}
+  .ws-bank{font-size:.82rem;color:var(--ink-soft);margin-top:6px;text-align:center;}
+  .ws-answer{color:var(--success);font-weight:800;}
+  .ws-writeline{display:inline-block;border-bottom:1.8px solid var(--ink);min-width:110px;height:1.5em;vertical-align:bottom;margin-left:6px;}
+  .ws-sched-wrap{display:flex;justify-content:center;margin-bottom:8px;}
+  .ws-sched-wrap table th, .ws-sched-wrap table td{padding:5px 8px;font-size:.78rem;}
+
+  .hidden{display:none !important;}
+
+  @media (prefers-reduced-motion: reduce){*{transition:none !important;animation:none !important;}}
+
+  /* ── correct-answer overlay (big maru + ping-pong chime) ── */
+  #correctOverlay{
+    position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+    pointer-events:none;z-index:9999;opacity:0;
+  }
+  #correctOverlay.show{animation:overlayFade 1.05s ease forwards;}
+  @keyframes overlayFade{
+    0%{opacity:0;} 8%{opacity:1;} 78%{opacity:1;} 100%{opacity:0;}
+  }
+  .correct-circle-wrap{position:relative;width:230px;height:230px;max-width:60vw;max-height:60vw;filter:drop-shadow(0 6px 14px rgba(0,0,0,.18));}
+  .correct-circle-wrap svg{width:100%;height:100%;transform:rotate(-90deg);}
+  .correct-circle-wrap svg circle{
+    fill:rgba(255,255,255,.9);stroke:#E2483D;stroke-width:15;stroke-linecap:round;
+    stroke-dasharray:660;stroke-dashoffset:660;
+  }
+  .correct-circle-wrap.animate svg circle{animation:circleDraw .55s cubic-bezier(.4,0,.2,1) .05s forwards;}
+  @keyframes circleDraw{ to{ stroke-dashoffset:0; } }
+  .correct-label{
+    position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);
+    text-align:center;font-weight:900;color:#E2483D;font-size:1.15rem;
+    opacity:0;
+  }
+  .correct-circle-wrap.animate .correct-label{animation:labelPop .4s ease .5s forwards;}
+  @keyframes labelPop{ 0%{opacity:0;transform:translateY(-50%) scale(.6);} 60%{opacity:1;transform:translateY(-50%) scale(1.15);} 100%{opacity:1;transform:translateY(-50%) scale(1);} }
+  .correct-ping-text{
+    position:absolute;left:0;right:0;bottom:-34px;text-align:center;
+    font-weight:800;color:#E2483D;font-size:1rem;opacity:0;letter-spacing:.05em;
+  }
+  .correct-circle-wrap.animate .correct-ping-text{animation:labelPop .4s ease .62s forwards;}
+  @media (prefers-reduced-motion: reduce){
+    #correctOverlay.show{animation:none;opacity:1;}
+    .correct-circle-wrap.animate svg circle{animation:none;stroke-dashoffset:0;}
+    .correct-circle-wrap.animate .correct-label, .correct-circle-wrap.animate .correct-ping-text{animation:none;opacity:1;}
+  }
+
+  @media print{
+    body *{visibility:hidden;}
+    #worksheet, #worksheet *{visibility:visible;}
+    #worksheet{display:block !important;position:absolute;left:0;top:0;width:100%;padding:12mm;}
+    .ws-print-btn-wrap{display:none !important;}
+  }
+  @media (max-width:640px){
+    .ws-grid{grid-template-columns:1fr;}
+  }
+
+  footer.hint{max-width:var(--maxw);margin:20px auto 0;padding:0 16px;color:var(--ink-soft);font-size:.8rem;}
+  details.teacher-note{max-width:var(--maxw);margin:0 auto 20px;padding:0 16px;}
+  details.teacher-note summary{cursor:pointer;font-weight:700;color:var(--ink-soft);font-size:.85rem;}
+  details.teacher-note .box{background:#fff;border-radius:14px;padding:14px 16px;margin-top:8px;font-size:.85rem;color:var(--ink-soft);line-height:1.7;box-shadow:var(--shadow);}
+</style>
+</head>
+<body>
+<div id="correctOverlay" aria-hidden="true">
+  <div class="correct-circle-wrap">
+    <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="84"></circle></svg>
+    <div class="correct-label">せいかい！</div>
+    <div class="correct-ping-text">🔔 ピンポーン♪</div>
+  </div>
+</div>
+<div class="app">
+  <header class="top">
+    <div>
+      <div class="mieel-brand">
+        <div class="orb-mini"></div>
+        <strong>MieeL</strong>
+        <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener">www.mieel-support-school.com</a>
+      </div>
+      <h1><span class="icon">⏱️</span>じかんの けいさん</h1>
+      <p>なんぷん・おわりの じこく・たんい・じかんわりで、じかんの かんかくを 育てます</p>
+    </div>
+    <button class="icon-btn" id="btnLargeText" aria-pressed="false">🔠 文字を大きく</button>
+  </header>
+
+  <nav class="modes" role="tablist" aria-label="モードをえらぶ">
+    <button data-mode="duration" class="active" role="tab" aria-selected="true">⏱️ なんぷん<span class="sub">2つの じこくの あいだ</span></button>
+    <button data-mode="endtime" role="tab" aria-selected="false">⏰ おわりの じこく<span class="sub">なんじなんぷんに なる？</span></button>
+    <button data-mode="convert" role="tab" aria-selected="false">🔄 たんい<span class="sub">じかんと ふんの かんけい</span></button>
+    <button data-mode="schedule" role="tab" aria-selected="false">📅 じかんわり<span class="sub">ひょうを よもう</span></button>
+    <button data-mode="print" role="tab" aria-selected="false">🖨️ プリント<span class="sub">PDFをつくる</span></button>
+  </nav>
+
+  <!-- ===== DURATION VIEW ===== -->
+  <section class="panel view" id="view-duration">
+    <div class="level-bar" id="levelBarDuration"></div>
+    <div class="score-pill" id="scoreDuration">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="durationSpeak" title="よみあげ">🔊</button>
+        <div class="q-text">なんぷん たったかな？</div>
+      </div>
+      <div class="time-card" id="durationCard"></div>
+      <div class="opt-grid" id="durationOpts"></div>
+      <div class="fb" id="durationFb"></div>
+      <div class="action-row">
+        <button class="btn" id="durationNext" style="background:var(--duration);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ENDTIME VIEW ===== -->
+  <section class="panel view hidden" id="view-endtime">
+    <div class="level-bar" id="levelBarEndtime"></div>
+    <div class="score-pill" id="scoreEndtime">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="endtimeSpeak" title="よみあげ">🔊</button>
+        <div class="q-text">なんじなんぷんに なるかな？</div>
+      </div>
+      <div class="time-card" id="endtimeCard"></div>
+      <div class="opt-grid endtime-opt" id="endtimeOpts"></div>
+      <div class="fb" id="endtimeFb"></div>
+      <div class="action-row">
+        <button class="btn" id="endtimeNext" style="background:var(--endtime);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONVERT VIEW ===== -->
+  <section class="panel view hidden" id="view-convert">
+    <div class="level-bar" id="levelBarConvert"></div>
+    <div class="score-pill" id="scoreConvert">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="convertSpeak" title="よみあげ">🔊</button>
+        <div style="font-weight:800;color:var(--ink-soft);">こたえを えらぼう</div>
+      </div>
+      <div class="time-card" id="convertCard"></div>
+      <div class="opt-grid convert-opt" id="convertOpts"></div>
+      <div class="fb" id="convertFb"></div>
+      <div class="action-row">
+        <button class="btn" id="convertNext" style="background:var(--convert);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SCHEDULE VIEW ===== -->
+  <section class="panel view hidden" id="view-schedule">
+    <div class="level-bar" id="levelBarSchedule"></div>
+    <div class="score-pill" id="scoreSchedule">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="scheduleSpeak" title="よみあげ">🔊</button>
+        <div class="q-text" id="scheduleQ"></div>
+      </div>
+      <div id="scheduleTable"></div>
+      <div class="opt-grid schedule-opt" id="scheduleOpts"></div>
+      <div class="fb" id="scheduleFb"></div>
+      <div class="action-row">
+        <button class="btn" id="scheduleNext" style="background:var(--schedule);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PRINT VIEW ===== -->
+  <section class="panel view hidden" id="view-print">
+    <div class="print-controls">
+      <div>
+        <div class="field-label">もんだいの しゅるい</div>
+        <div class="chip-row" id="printTypeChips">
+          <button class="chip selected" data-ptype="duration">⏱️ なんぷん</button>
+          <button class="chip" data-ptype="endtime">⏰ おわりの じこく</button>
+          <button class="chip" data-ptype="convert">🔄 たんい</button>
+          <button class="chip" data-ptype="schedule">📅 じかんわり</button>
+        </div>
+      </div>
+      <div>
+        <div class="field-label">レベル</div>
+        <div class="chip-row" id="levelBarPrint"></div>
+      </div>
+      <div>
+        <div class="field-label">もんだいすう</div>
+        <div class="chip-row" id="printCountChips">
+          <button class="chip" data-count="4">4もん</button>
+          <button class="chip selected" data-count="6">6もん</button>
+          <button class="chip" data-count="8">8もん</button>
+        </div>
+      </div>
+      <div class="toggle-row">
+        <input type="checkbox" id="printShowAnswer">
+        <label for="printShowAnswer">こたえを ひょうじする（指導者用）</label>
+      </div>
+      <div class="action-row" style="margin-top:2px;">
+        <button class="btn ghost" id="printRegenBtn">🔄 もんだいを かえる</button>
+        <button class="btn primary" id="printOpenBtn">🖨️ プリントする</button>
+      </div>
+      <div class="preview-note">「プリントする」を押すと、印刷プレビューが開きます。ブラウザの印刷設定でPDF保存もできます。</div>
+    </div>
+  </section>
+
+  <footer class="hint">
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:5px;">
+      <div style="width:18px;height:18px;border-radius:50%;background:var(--mieel);flex:none;"></div>
+      <strong style="color:var(--ink);">MieeL</strong>
+      <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener" style="color:var(--convert);">mieel-support-school.com</a>
+    </div>
+    © じかんの けいさん ツール（特別支援教育向け）
+  </footer>
+
+  <details class="teacher-note">
+    <summary>👩‍🏫 指導者の方へ</summary>
+    <div class="box">
+      このアプリは、特別支援学校の算数・数学における「時間の量と計算」の学習を目的とした4つの練習モードと、印刷用ワークシート機能で構成されています。時計アプリ（時刻の読み取り）・カレンダーアプリ（日付）を補完する、経過時間の計算スキルを扱います。<br>
+      ・<strong>なんぷん</strong>：2つの時刻の間の経過時間（分）を求める練習です<br>
+      ・<strong>おわりの じこく</strong>：ある時刻から一定の時間が経過した後の時刻を求める練習です<br>
+      ・<strong>たんい</strong>：時間と分の関係（1時間=60分など）を選択式で練習します<br>
+      ・<strong>じかんわり</strong>：簡単な時間割の表を読み、授業の開始・終了時刻や経過時間を答える、実生活に直結した練習です<br>
+      すべての時刻計算は分単位の内部計算に基づいており、正確です。各モードにレベル設定があり、児童生徒の実態に応じて選べます。よみあげボタンで音声支援も可能です。プリントモードでは同じ4種類の問題をワークシートとして印刷でき、解答表示の切り替えもできます。
+    </div>
+  </details>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =========================================================
+     UTILS
+  ========================================================= */
+  function shuffle(a){
+    var arr=a.slice();
+    for(var i=arr.length-1;i>0;i--){
+      var j=Math.floor(Math.random()*(i+1));
+      var t=arr[i];arr[i]=arr[j];arr[j]=t;
+    }
+    return arr;
+  }
+  function pickRandom(a){ return a[Math.floor(Math.random()*a.length)]; }
+  function rand(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+  function speak(text){
+    if(!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang='ja-JP'; u.rate=0.85;
+    window.speechSynthesis.speak(u);
+  }
+  function renderLevelBar(container, levels, activeId, onSelect){
+    container.innerHTML='';
+    levels.forEach(function(lv){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='level-btn'+(lv.id===activeId?' active':'');
+      b.innerHTML='<span class="stars">'+lv.stars+'</span><span class="name">'+lv.name+'</span>';
+      b.addEventListener('click', function(){ onSelect(lv.id); });
+      container.appendChild(b);
+    });
+  }
+  function updateScorePill(el, state){
+    el.innerHTML = '✅ '+state.score+' / '+state.total;
+  }
+  var PRAISE = ['やったね！','せいかい！','すごい！','ばっちり！','よくできました！'];
+  var TRY_AGAIN = ['もういちど！','おしい！','ゆっくり かんがえよう。','だいじょうぶ、もう一回！'];
+
+  /* ── correct-answer chime + big maru overlay ── */
+  var sharedAudioCtx = null;
+  function playDing(){
+    try{
+      var Ctx = window.AudioContext || window.webkitAudioContext;
+      if(!Ctx) return;
+      if(!sharedAudioCtx) sharedAudioCtx = new Ctx();
+      var ctx = sharedAudioCtx;
+      if(ctx.state==='suspended'){ ctx.resume(); }
+      function tone(freq, start, dur, peak){
+        var o = ctx.createOscillator();
+        var g = ctx.createGain();
+        o.type='sine'; o.frequency.value=freq;
+        o.connect(g); g.connect(ctx.destination);
+        var t0 = ctx.currentTime+start;
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.linearRampToValueAtTime(peak, t0+0.03);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0+dur);
+        o.start(t0);
+        o.stop(t0+dur+0.03);
+      }
+      tone(880.0, 0,    0.30, 0.30);  /* ピン */
+      tone(1318.5, 0.24, 0.48, 0.26); /* ポーン */
+    }catch(e){ /* audio not available; visual feedback still shows */ }
+  }
+  function triggerCorrectFeedback(){
+    playDing();
+    var overlay = document.getElementById('correctOverlay');
+    if(!overlay) return;
+    var wrap = overlay.querySelector('.correct-circle-wrap');
+    overlay.classList.remove('show');
+    wrap.classList.remove('animate');
+    void overlay.offsetWidth; /* force reflow so animation restarts every time */
+    overlay.classList.add('show');
+    wrap.classList.add('animate');
+  }
+
+  /* generic numeric multiple-choice option builder */
+  function buildOptions(correctVal, deltas, suffix, count){
+    var set=[correctVal];
+    var pool=shuffle(deltas.slice());
+    for(var i=0;i<pool.length && set.length<count;i++){
+      var v=correctVal+pool[i];
+      if(v>0 && set.indexOf(v)===-1) set.push(v);
+    }
+    var guard=0;
+    while(set.length<count && guard<60){
+      guard++;
+      var v2=correctVal+rand(-9,9);
+      if(v2>0 && set.indexOf(v2)===-1) set.push(v2);
+    }
+    var arr=shuffle(set);
+    return {correctLabel: correctVal+suffix, options: arr.map(function(v){return v+suffix;})};
+  }
+
+  /* =========================================================
+     TIME HELPERS (minutes since 00:00)
+  ========================================================= */
+  function formatClock(totalMin){
+    var h = Math.floor(totalMin/60);
+    var m = totalMin%60;
+    return m===0 ? (h+'じ') : (h+'じ'+m+'ふん');
+  }
+  function formatHM(totalMin){
+    var h = Math.floor(totalMin/60);
+    var m = totalMin%60;
+    if(h===0) return m+'ふん';
+    if(m===0) return h+'じかん';
+    return h+'じかん'+m+'ふん';
+  }
+
+  /* =========================================================
+     DURATION MODE (elapsed minutes between two times)
+  ========================================================= */
+  var DURATION_LEVELS = [
+    {id:1, name:'おなじ じかんの なか', stars:'★☆☆'},
+    {id:2, name:'じを またぐ', stars:'★★☆'},
+    {id:3, name:'ながい じかん', stars:'★★★'}
+  ];
+  var durationState = {level:1, score:0, total:0, current:null, locked:false};
+  function genDurationQuestion(level){
+    var startH, startM, gap;
+    if(level===1){
+      startH = rand(8,15);
+      startM = rand(0,40);
+      gap = rand(5,19);
+      if(startM+gap>=60) gap = 59-startM;
+      if(gap<5) gap=5;
+    } else if(level===2){
+      startH = rand(8,15);
+      startM = rand(30,55);
+      gap = rand(10,45);
+    } else {
+      startH = rand(8,14);
+      startM = rand(0,55);
+      gap = rand(60,150);
+    }
+    var startTotal = startH*60+startM;
+    var endTotal = startTotal+gap;
+    var deltas = [-15,-10,-5,5,10,15,-30,30];
+    var built = buildOptions(gap, deltas, 'ふん', 4);
+    return {startTotal:startTotal, endTotal:endTotal, gap:gap, correctLabel:built.correctLabel, options: shuffle(built.options)};
+  }
+  function renderLevelBarDuration(){
+    renderLevelBar(document.getElementById('levelBarDuration'), DURATION_LEVELS, durationState.level, function(id){
+      durationState.level=id; renderLevelBarDuration(); newDurationQuestion();
+    });
+  }
+  function newDurationQuestion(){
+    durationState.current = genDurationQuestion(durationState.level);
+    durationState.locked = false;
+    document.getElementById('durationFb').className='fb'; document.getElementById('durationFb').textContent='';
+    document.getElementById('durationNext').style.display='none';
+    var cur = durationState.current;
+    document.getElementById('durationCard').innerHTML =
+      '<span class="big">'+formatClock(cur.startTotal)+'</span><br><span class="arrow">⬇</span><br><span class="big">'+formatClock(cur.endTotal)+'</span>';
+    var grid = document.getElementById('durationOpts');
+    grid.innerHTML='';
+    cur.options.forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button'; b.className='opt-btn'; b.textContent=opt;
+      b.addEventListener('click', function(){
+        if(durationState.locked) return;
+        var correct = (opt===cur.correctLabel);
+        durationState.total++;
+        if(correct) durationState.score++;
+        updateScorePill(document.getElementById('scoreDuration'), durationState);
+        var fbEl = document.getElementById('durationFb');
+        if(correct){
+          durationState.locked=true;
+          b.classList.add('correct-flash');
+          grid.querySelectorAll('.opt-btn').forEach(function(o){ if(o!==b) o.disabled=true; });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+          document.getElementById('durationNext').style.display='inline-block';
+          speak(cur.correctLabel+'です。');
+        } else {
+          b.classList.add('wrong-flash');
+          setTimeout(function(){ b.classList.remove('wrong-flash'); }, 500);
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+      });
+      grid.appendChild(b);
+    });
+  }
+  document.getElementById('durationSpeak').addEventListener('click', function(){
+    speak('なんぷん たったかな？');
+  });
+  document.getElementById('durationNext').addEventListener('click', newDurationQuestion);
+
+  /* =========================================================
+     ENDTIME MODE (start + duration = end time)
+  ========================================================= */
+  var ENDTIME_LEVELS = [
+    {id:1, name:'おなじ じかんの なか', stars:'★☆☆'},
+    {id:2, name:'じを またぐ', stars:'★★☆'},
+    {id:3, name:'ながい じかん', stars:'★★★'}
+  ];
+  var endtimeState = {level:1, score:0, total:0, current:null, locked:false};
+  function genEndtimeQuestion(level){
+    var startH, startM, gap;
+    if(level===1){
+      startH = rand(8,15);
+      startM = rand(0,40);
+      gap = rand(5,19);
+      if(startM+gap>=60) gap = 59-startM;
+      if(gap<5) gap=5;
+    } else if(level===2){
+      startH = rand(8,15);
+      startM = rand(30,55);
+      gap = rand(10,45);
+    } else {
+      startH = rand(8,14);
+      startM = rand(0,55);
+      gap = rand(60,150);
+    }
+    var startTotal = startH*60+startM;
+    var endTotal = startTotal+gap;
+    var candidates=[endTotal];
+    [5,-5,10,-10,15,-15,30,-30].forEach(function(d){
+      var v = endTotal+d;
+      if(v>0 && candidates.indexOf(v)===-1) candidates.push(v);
+    });
+    var options = shuffle(candidates).slice(0,4).map(formatClock);
+    var correctLabel = formatClock(endTotal);
+    var uniqueOpts=[];
+    options.forEach(function(o){ if(uniqueOpts.indexOf(o)===-1) uniqueOpts.push(o); });
+    if(uniqueOpts.indexOf(correctLabel)===-1) uniqueOpts[0]=correctLabel;
+    return {startTotal:startTotal, gap:gap, endTotal:endTotal, correctLabel:correctLabel, options: shuffle(uniqueOpts)};
+  }
+  function renderLevelBarEndtime(){
+    renderLevelBar(document.getElementById('levelBarEndtime'), ENDTIME_LEVELS, endtimeState.level, function(id){
+      endtimeState.level=id; renderLevelBarEndtime(); newEndtimeQuestion();
+    });
+  }
+  function newEndtimeQuestion(){
+    endtimeState.current = genEndtimeQuestion(endtimeState.level);
+    endtimeState.locked = false;
+    document.getElementById('endtimeFb').className='fb'; document.getElementById('endtimeFb').textContent='';
+    document.getElementById('endtimeNext').style.display='none';
+    var cur = endtimeState.current;
+    document.getElementById('endtimeCard').innerHTML =
+      '<span class="big">'+formatClock(cur.startTotal)+'</span> から <span style="color:var(--endtime);">'+cur.gap+'ふん</span> たつと？';
+    var grid = document.getElementById('endtimeOpts');
+    grid.innerHTML='';
+    cur.options.forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button'; b.className='opt-btn'; b.textContent=opt;
+      b.addEventListener('click', function(){
+        if(endtimeState.locked) return;
+        var correct = (opt===cur.correctLabel);
+        endtimeState.total++;
+        if(correct) endtimeState.score++;
+        updateScorePill(document.getElementById('scoreEndtime'), endtimeState);
+        var fbEl = document.getElementById('endtimeFb');
+        if(correct){
+          endtimeState.locked=true;
+          b.classList.add('correct-flash');
+          grid.querySelectorAll('.opt-btn').forEach(function(o){ if(o!==b) o.disabled=true; });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+          document.getElementById('endtimeNext').style.display='inline-block';
+          speak(cur.correctLabel+'です。');
+        } else {
+          b.classList.add('wrong-flash');
+          setTimeout(function(){ b.classList.remove('wrong-flash'); }, 500);
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+      });
+      grid.appendChild(b);
+    });
+  }
+  document.getElementById('endtimeSpeak').addEventListener('click', function(){
+    speak('なんじなんぷんに なるかな？');
+  });
+  document.getElementById('endtimeNext').addEventListener('click', newEndtimeQuestion);
+
+  /* =========================================================
+     CONVERT MODE (hour/minute relationships)
+  ========================================================= */
+  var CONVERT_LEVELS = [
+    {id:1, name:'きほんの かんけい', stars:'★☆☆'},
+    {id:2, name:'すこし ふえる', stars:'★★☆'},
+    {id:3, name:'まぜて れんしゅう', stars:'★★★'}
+  ];
+  var convertState = {level:1, score:0, total:0, current:null, locked:false};
+  function genConvertQuestion(level){
+    if(level===1){
+      if(Math.random()<0.5){
+        return {q:'1じかんは なんぷん？', correctLabel:'60ふん', options:shuffle(['60ふん','30ふん','100ふん','50ふん'])};
+      } else {
+        return {q:'60ぷんは なんじかん？', correctLabel:'1じかん', options:shuffle(['1じかん','2じかん','30じかん','6じかん'])};
+      }
+    } else if(level===2){
+      if(Math.random()<0.5){
+        var h = rand(2,4);
+        var built = buildOptions(h*60, [-30,-15,15,30,45,-45], 'ふん', 4);
+        return {q:h+'じかんは なんぷん？', correctLabel:built.correctLabel, options:shuffle(built.options)};
+      } else {
+        var m = pickRandom([60,90,120,150,180,210,240]);
+        var hh = Math.floor(m/60), mm=m%60;
+        var correctLabel = mm===0 ? hh+'じかん' : hh+'じかん'+mm+'ふん';
+        var set=[correctLabel];
+        var tries=[
+          (hh)+'じかん'+(mm+15)+'ふん',
+          (hh+1)+'じかん'+mm+'ふん',
+          (hh>0?hh-1:hh+1)+'じかん'+mm+'ふん',
+          hh+'じかん'+Math.max(mm-15,0)+'ふん'
+        ].filter(function(s){ return s.indexOf('じかん0ふん')===-1 || mm===0; });
+        shuffle(tries).forEach(function(t){ if(set.length<4 && set.indexOf(t)===-1) set.push(t); });
+        while(set.length<4){
+          var extra = (hh+rand(1,2))+'じかん'+mm+'ふん';
+          if(set.indexOf(extra)===-1) set.push(extra);
+        }
+        return {q:m+'ぷんは なんじかん？', correctLabel:correctLabel, options:shuffle(set)};
+      }
+    } else {
+      if(Math.random()<0.5){
+        var h2 = rand(1,3);
+        var mPart = rand(1,55);
+        var totalMin = h2*60+mPart;
+        var built2 = buildOptions(totalMin, [-20,-10,10,20,30,-30], 'ふん', 4);
+        return {q:h2+'じかん'+mPart+'ふんは なんぷん？', correctLabel:built2.correctLabel, options:shuffle(built2.options)};
+      } else {
+        var total2 = rand(61,239);
+        while(total2%60===0){ total2 = rand(61,239); }
+        var hPart=Math.floor(total2/60);
+        var mPart2=total2%60;
+        var correctLabel2 = hPart+'じかん'+mPart2+'ふん';
+        var set2=[correctLabel2];
+        var tries2=[
+          hPart+'じかん'+(mPart2+10)+'ふん',
+          hPart+'じかん'+Math.max(mPart2-10,1)+'ふん',
+          (hPart+1)+'じかん'+mPart2+'ふん',
+          (hPart>1?hPart-1:hPart+1)+'じかん'+mPart2+'ふん'
+        ];
+        shuffle(tries2).forEach(function(t){ if(set2.length<4 && set2.indexOf(t)===-1) set2.push(t); });
+        var guard2=0;
+        while(set2.length<4 && guard2<60){
+          guard2++;
+          var randH = Math.max(1, hPart+rand(-2,2));
+          var randM = Math.max(1, Math.min(59, mPart2+rand(-20,20)));
+          var candidate = randH+'じかん'+randM+'ふん';
+          if(set2.indexOf(candidate)===-1) set2.push(candidate);
+        }
+        return {q:total2+'ぷんは なんじかん なんぷん？', correctLabel:correctLabel2, options:shuffle(set2)};
+      }
+    }
+  }
+  function renderLevelBarConvert(){
+    renderLevelBar(document.getElementById('levelBarConvert'), CONVERT_LEVELS, convertState.level, function(id){
+      convertState.level=id; renderLevelBarConvert(); newConvertQuestion();
+    });
+  }
+  function newConvertQuestion(){
+    convertState.current = genConvertQuestion(convertState.level);
+    convertState.locked = false;
+    document.getElementById('convertFb').className='fb'; document.getElementById('convertFb').textContent='';
+    document.getElementById('convertNext').style.display='none';
+    document.getElementById('convertCard').textContent = convertState.current.q;
+    var grid = document.getElementById('convertOpts');
+    grid.innerHTML='';
+    convertState.current.options.forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button'; b.className='opt-btn'; b.textContent=opt;
+      b.addEventListener('click', function(){
+        if(convertState.locked) return;
+        var correct = (opt===convertState.current.correctLabel);
+        convertState.total++;
+        if(correct) convertState.score++;
+        updateScorePill(document.getElementById('scoreConvert'), convertState);
+        var fbEl = document.getElementById('convertFb');
+        if(correct){
+          convertState.locked=true;
+          b.classList.add('correct-flash');
+          grid.querySelectorAll('.opt-btn').forEach(function(o){ if(o!==b) o.disabled=true; });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+          document.getElementById('convertNext').style.display='inline-block';
+          speak(convertState.current.q+' こたえは '+convertState.current.correctLabel+'です。');
+        } else {
+          b.classList.add('wrong-flash');
+          setTimeout(function(){ b.classList.remove('wrong-flash'); }, 500);
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+      });
+      grid.appendChild(b);
+    });
+  }
+  document.getElementById('convertSpeak').addEventListener('click', function(){
+    speak(convertState.current.q);
+  });
+  document.getElementById('convertNext').addEventListener('click', newConvertQuestion);
+
+  /* =========================================================
+     SCHEDULE MODE
+  ========================================================= */
+  var SCHEDULE_LEVELS = [
+    {id:1, name:'なんじから？', stars:'★☆☆'},
+    {id:2, name:'なんじまで？', stars:'★★☆'},
+    {id:3, name:'なんぷんかん？', stars:'★★★'}
+  ];
+  var SUBJECTS = [
+    {name:'こくご', icon:'📖'}, {name:'さんすう', icon:'🔢'}, {name:'たいいく', icon:'⚽'},
+    {name:'おんがく', icon:'🎵'}, {name:'ずこう', icon:'🎨'}, {name:'せいかつ', icon:'🌱'},
+    {name:'えいご', icon:'🌐'}, {name:'どうとく', icon:'💬'}
+  ];
+  var scheduleState = {level:1, score:0, total:0, current:null, locked:false};
+  function genScheduleTimetable(level){
+    var n = level===1 ? 3 : (level===2 ? 4 : 5);
+    var subjects = shuffle(SUBJECTS.slice()).slice(0,n);
+    var periodLen = 45, breakLen = 10;
+    var startTotal = 9*60;
+    var periods=[];
+    var t = startTotal;
+    subjects.forEach(function(s){
+      periods.push({name:s.name, icon:s.icon, start:t, end:t+periodLen});
+      t += periodLen+breakLen;
+    });
+    return periods;
+  }
+  function genScheduleQuestion(level){
+    var periods = genScheduleTimetable(level);
+    var idx = rand(0, periods.length-1);
+    var target = periods[idx];
+    if(level===1){
+      var built = candidateTimesAround(target.start);
+      return {periods:periods, askType:'start', targetIdx:idx, q:target.icon+' '+target.name+' は なんじから？', correctLabel:formatClock(target.start), options: built};
+    } else if(level===2){
+      var built2 = candidateTimesAround(target.end);
+      return {periods:periods, askType:'end', targetIdx:idx, q:target.icon+' '+target.name+' は なんじに おわる？', correctLabel:formatClock(target.end), options: built2};
+    } else {
+      var idx2;
+      do{ idx2 = rand(0, periods.length-1); } while(idx2===idx);
+      var a = periods[idx], b = periods[idx2];
+      var gap = Math.abs(b.start-a.start);
+      var deltas=[-15,-10,-5,5,10,15,-20,20];
+      var built3 = buildOptions(gap, deltas, 'ふん', 4);
+      return {periods:periods, askType:'gap', targetIdx:idx, targetIdx2:idx2,
+        q:a.icon+' '+a.name+' が はじまってから、'+b.icon+' '+b.name+' が はじまるまで なんぷん？',
+        correctLabel: built3.correctLabel, options: shuffle(built3.options)};
+    }
+  }
+  function candidateTimesAround(totalMin){
+    var candidates=[totalMin];
+    [5,-5,10,-10,15,-15].forEach(function(d){
+      var v = totalMin+d;
+      if(v>0 && candidates.indexOf(v)===-1) candidates.push(v);
+    });
+    var labels=[];
+    shuffle(candidates).forEach(function(v){
+      var lbl = formatClock(v);
+      if(labels.indexOf(lbl)===-1) labels.push(lbl);
+    });
+    labels = labels.slice(0,4);
+    var correctLbl = formatClock(totalMin);
+    if(labels.indexOf(correctLbl)===-1) labels[0]=correctLbl;
+    return shuffle(labels);
+  }
+  function renderLevelBarSchedule(){
+    renderLevelBar(document.getElementById('levelBarSchedule'), SCHEDULE_LEVELS, scheduleState.level, function(id){
+      scheduleState.level=id; renderLevelBarSchedule(); newScheduleQuestion();
+    });
+  }
+  function renderScheduleTable(periods, highlightIdxs){
+    var html = '<table class="sched-table"><thead><tr><th>きょうか</th><th>はじまり</th><th>おわり</th></tr></thead><tbody>';
+    periods.forEach(function(p, i){
+      var cls = highlightIdxs.indexOf(i)>=0 ? ' class="hl"' : '';
+      html += '<tr'+cls+'><td class="subj">'+p.icon+' '+p.name+'</td><td>'+formatClock(p.start)+'</td><td>'+formatClock(p.end)+'</td></tr>';
+    });
+    html += '</tbody></table>';
+    return html;
+  }
+  function newScheduleQuestion(){
+    scheduleState.current = genScheduleQuestion(scheduleState.level);
+    scheduleState.locked = false;
+    document.getElementById('scheduleFb').className='fb'; document.getElementById('scheduleFb').textContent='';
+    document.getElementById('scheduleNext').style.display='none';
+    var cur = scheduleState.current;
+    document.getElementById('scheduleQ').textContent = cur.q;
+    var hl = cur.askType==='gap' ? [cur.targetIdx, cur.targetIdx2] : [cur.targetIdx];
+    document.getElementById('scheduleTable').innerHTML = renderScheduleTable(cur.periods, hl);
+    var grid = document.getElementById('scheduleOpts');
+    grid.innerHTML='';
+    cur.options.forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button'; b.className='opt-btn'; b.textContent=opt;
+      b.addEventListener('click', function(){
+        if(scheduleState.locked) return;
+        var correct = (opt===cur.correctLabel);
+        scheduleState.total++;
+        if(correct) scheduleState.score++;
+        updateScorePill(document.getElementById('scoreSchedule'), scheduleState);
+        var fbEl = document.getElementById('scheduleFb');
+        if(correct){
+          scheduleState.locked=true;
+          b.classList.add('correct-flash');
+          grid.querySelectorAll('.opt-btn').forEach(function(o){ if(o!==b) o.disabled=true; });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+          document.getElementById('scheduleNext').style.display='inline-block';
+          speak('こたえは '+cur.correctLabel+'です。');
+        } else {
+          b.classList.add('wrong-flash');
+          setTimeout(function(){ b.classList.remove('wrong-flash'); }, 500);
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+      });
+      grid.appendChild(b);
+    });
+  }
+  document.getElementById('scheduleSpeak').addEventListener('click', function(){
+    speak(scheduleState.current.q);
+  });
+  document.getElementById('scheduleNext').addEventListener('click', newScheduleQuestion);
+
+  /* =========================================================
+     PRINT MODE
+  ========================================================= */
+  var printState = {level:1, type:'duration', count:6, showAnswer:false, problems:[]};
+
+  function levelsForPrintType(){
+    return printState.type==='duration' ? DURATION_LEVELS
+      : printState.type==='endtime' ? ENDTIME_LEVELS
+      : printState.type==='convert' ? CONVERT_LEVELS
+      : SCHEDULE_LEVELS;
+  }
+  function renderPrintLevelBar(){
+    var levelsForType = levelsForPrintType();
+    if(!levelsForType.some(function(l){return l.id===printState.level;})){
+      printState.level = levelsForType[0].id;
+    }
+    var container = document.getElementById('levelBarPrint');
+    container.innerHTML='';
+    levelsForType.forEach(function(lv){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='chip'+(lv.id===printState.level?' selected':'');
+      b.textContent = lv.stars+' '+lv.name;
+      b.addEventListener('click', function(){
+        printState.level=lv.id; renderPrintLevelBar(); regenerateProblems(); renderWorksheet();
+      });
+      container.appendChild(b);
+    });
+  }
+  document.querySelectorAll('#printTypeChips .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#printTypeChips .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      printState.type = c.getAttribute('data-ptype');
+      renderPrintLevelBar();
+      regenerateProblems();
+      renderWorksheet();
+    });
+  });
+  document.querySelectorAll('#printCountChips .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#printCountChips .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      printState.count = parseInt(c.getAttribute('data-count'),10);
+      regenerateProblems(); renderWorksheet();
+    });
+  });
+  document.getElementById('printShowAnswer').addEventListener('change', function(e){
+    printState.showAnswer = e.target.checked;
+    renderWorksheet();
+  });
+  document.getElementById('printRegenBtn').addEventListener('click', function(){
+    regenerateProblems(); renderWorksheet();
+  });
+  document.getElementById('printOpenBtn').addEventListener('click', function(){
+    renderWorksheet();
+    setTimeout(function(){ window.print(); }, 60);
+  });
+
+  function regenerateProblems(){
+    var list=[];
+    for(var i=0;i<printState.count;i++){
+      if(printState.type==='duration'){
+        list.push(genDurationQuestion(printState.level));
+      } else if(printState.type==='endtime'){
+        list.push(genEndtimeQuestion(printState.level));
+      } else if(printState.type==='convert'){
+        list.push(genConvertQuestion(printState.level));
+      } else {
+        list.push(genScheduleQuestion(printState.level));
+      }
+    }
+    printState.problems = list;
+  }
+  regenerateProblems();
+
+  function typeInstruction(){
+    return printState.type==='duration' ? 'なんぷんか、こたえに 〇を つけよう'
+      : printState.type==='endtime' ? 'なんじなんぷんに なるか、こたえに 〇を つけよう'
+      : printState.type==='convert' ? 'こたえに 〇を つけよう'
+      : 'じかんわりを よんで、こたえに 〇を つけよう';
+  }
+  function renderWorksheet(){
+    var levelsForType = levelsForPrintType();
+    var lv = levelsForType.filter(function(l){return l.id===printState.level;})[0];
+    var typeLabel = printState.type==='duration' ? '⏱️ なんぷん'
+      : printState.type==='endtime' ? '⏰ おわりの じこく'
+      : printState.type==='convert' ? '🔄 たんい'
+      : '📅 じかんわり';
+
+    var html = '';
+    html += '<div class="ws-header"><div style="display:flex;align-items:center;gap:8px;">'
+      + '<div style="width:20px;height:20px;border-radius:50%;background:var(--mieel);border:1px solid #ccc;flex:none;"></div>'
+      + '<div><div style="font-size:11px;color:#333;font-weight:700;">MieeL じかんの けいさん</div>'
+      + '<h2>'+typeLabel+'（'+lv.name+'）</h2>'
+      + '<div style="font-size:11px;color:#666;margin-top:2px;">'+typeInstruction()+'</div></div></div>'
+      + '<div class="ws-fields" style="flex-direction:column;align-items:flex-end;gap:2px;">'
+      + '<div style="font-size:.75rem;color:#3A9A8C;font-weight:700;">mieel-support-school.com</div>'
+      + '<div><span class="lbl">なまえ：</span><span class="blank">&nbsp;</span><span class="lbl">ひづけ：</span><span class="blank">&nbsp;</span></div></div></div>';
+
+    var gridClass = (printState.type==='schedule') ? 'ws-grid single-col' : 'ws-grid';
+    html += '<div class="'+gridClass+'">';
+    printState.problems.forEach(function(p, idx){
+      var cellClass = (printState.type==='schedule') ? 'ws-cell roomy' : 'ws-cell';
+      html += '<div class="'+cellClass+'"><div class="no">もんだい '+(idx+1)+'</div>';
+      if(printState.type==='duration'){
+        html += '<div class="ws-sentence">'+formatClock(p.startTotal)+' から '+formatClock(p.endTotal)+' まで</div>';
+        html += '<div>こたえ：<span class="ws-writeline"></span></div>';
+        html += '<div class="ws-bank">えらぶ：'+shuffle(p.options).join('　／　')+'</div>';
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:4px;font-size:.85rem;">こたえ：'+p.correctLabel+'</div>';
+        }
+      } else if(printState.type==='endtime'){
+        html += '<div class="ws-sentence">'+formatClock(p.startTotal)+' から '+p.gap+'ふん たつと？</div>';
+        html += '<div>こたえ：<span class="ws-writeline"></span></div>';
+        html += '<div class="ws-bank">えらぶ：'+shuffle(p.options).join('　／　')+'</div>';
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:4px;font-size:.85rem;">こたえ：'+p.correctLabel+'</div>';
+        }
+      } else if(printState.type==='convert'){
+        html += '<div class="ws-sentence">'+p.q+'</div>';
+        html += '<div>こたえ：<span class="ws-writeline"></span></div>';
+        html += '<div class="ws-bank">えらぶ：'+shuffle(p.options).join('　／　')+'</div>';
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:4px;font-size:.85rem;">こたえ：'+p.correctLabel+'</div>';
+        }
+      } else {
+        var hl = p.askType==='gap' ? [p.targetIdx, p.targetIdx2] : [p.targetIdx];
+        html += '<div class="ws-sched-wrap">'+renderScheduleTable(p.periods, hl)+'</div>';
+        html += '<div class="ws-sentence">'+p.q+'</div>';
+        html += '<div>こたえ：<span class="ws-writeline"></span></div>';
+        html += '<div class="ws-bank">えらぶ：'+shuffle(p.options).join('　／　')+'</div>';
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:4px;font-size:.85rem;">こたえ：'+p.correctLabel+'</div>';
+        }
+      }
+      html += '</div>';
+    });
+    html += '</div>';
+    var ws = document.getElementById('worksheet');
+    if(!ws){
+      ws = document.createElement('div');
+      ws.id='worksheet';
+      document.body.appendChild(ws);
+    }
+    ws.innerHTML = html;
+  }
+  renderPrintLevelBar();
+  renderWorksheet();
+
+  /* =========================================================
+     MODE SWITCHING / GLOBAL UI
+  ========================================================= */
+  document.querySelectorAll('nav.modes button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('nav.modes button').forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+      btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+      var mode = btn.getAttribute('data-mode');
+      document.querySelectorAll('.view').forEach(function(v){ v.classList.add('hidden'); });
+      document.getElementById('view-'+mode).classList.remove('hidden');
+      if(mode==='print') renderWorksheet();
+    });
+  });
+
+  var largeToggle = document.getElementById('btnLargeText');
+  largeToggle.addEventListener('click', function(){
+    var on = document.documentElement.classList.toggle('large-text');
+    largeToggle.setAttribute('aria-pressed', on ? 'true':'false');
+  });
+
+  /* =========================================================
+     INIT
+  ========================================================= */
+  renderLevelBarDuration(); newDurationQuestion();
+  renderLevelBarEndtime(); newEndtimeQuestion();
+  renderLevelBarConvert(); newConvertQuestion();
+  renderLevelBarSchedule(); newScheduleQuestion();
+
+})();
+</script>
+</body>
+</html>
