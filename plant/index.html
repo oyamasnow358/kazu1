@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>しょくぶつの かんさつ プリント作成</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F5F7EE; --card:#FFFFFF; --ink:#2C3A4A; --ink-soft:#6C7A89;
+    --leaf:#4F9A63; --leaf-soft:#E3F3E6; --soil:#A9744F; --sun:#D9A02A; --sky:#4C7BC9;
+    --coral:#D9583F; --accent-soft:#FBECC9;
+    --radius:22px; --shadow:0 6px 18px rgba(44,58,74,0.10); --maxw:900px;
+  }
+  *{box-sizing:border-box;}
+  html{font-size:17px;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:40px;}
+  .app{max-width:var(--maxw);margin:0 auto;padding:16px 16px 8px;}
+  .hidden{display:none !important;}
+
+  header.top{margin-bottom:14px;}
+  .mieel-brand{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .mieel-brand .orb-mini{width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 50% 0%,#1B8FE8 0%,#2BB8D6 28%,#3FCB9E 45%,#8FD24A 58%,#F4D027 72%,#F7941E 100%);flex:none;}
+  .mieel-brand strong{color:var(--ink);font-size:.85rem;}
+  .mieel-brand a{font-size:.78rem;color:var(--sky);text-decoration:none;font-weight:600;}
+  .mieel-brand a:hover{text-decoration:underline;}
+  header.top h1{font-size:1.5rem;margin:0;font-weight:800;display:flex;align-items:center;gap:.35em;}
+  header.top p{margin:2px 0 0;color:var(--ink-soft);font-size:.85rem;font-weight:500;}
+
+  .subtabs{display:flex;gap:8px;margin-bottom:14px;}
+  .subtabs button{flex:1;font-family:inherit;font-weight:800;padding:12px;border-radius:14px;border:2px solid #E2E7D8;background:#FEFEFA;cursor:pointer;color:var(--ink-soft);}
+  .subtabs button.active{border-color:var(--ink);background:var(--accent-soft);color:var(--ink);}
+
+  section.panel{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:18px;}
+  .settings-group{margin-bottom:16px;}
+  .settings-group:last-child{margin-bottom:0;}
+  .settings-group .lbl{display:block;font-weight:800;font-size:.9rem;color:var(--ink-soft);margin-bottom:8px;}
+  .chip-row{display:flex;gap:8px;flex-wrap:wrap;}
+  .chip{font-family:inherit;font-weight:700;padding:9px 14px;border-radius:999px;border:2px solid #E2E7D8;background:#fff;cursor:pointer;color:var(--ink);font-size:.9rem;}
+  .chip.selected{border-color:var(--ink);background:var(--accent-soft);}
+  .plant-grid{display:flex;gap:8px;flex-wrap:wrap;}
+  .plant-chip{font-family:inherit;font-weight:700;padding:10px 14px;border-radius:14px;border:2px solid #E2E7D8;background:#fff;cursor:pointer;color:var(--ink);font-size:.95rem;display:flex;align-items:center;gap:.4em;}
+  .plant-chip.selected{border-color:var(--leaf);background:var(--leaf-soft);}
+  .plant-chip .emoji{font-size:1.3em;}
+  .check-grid{display:flex;flex-wrap:wrap;gap:10px;}
+  .check-item{display:flex;align-items:center;gap:8px;font-weight:700;background:#FBFBF5;border:2px solid #E2E7D8;border-radius:12px;padding:9px 14px;cursor:pointer;}
+  .check-item input{width:20px;height:20px;}
+  .checkline{display:flex;align-items:center;gap:8px;font-weight:700;}
+  .checkline input{width:20px;height:20px;}
+  .preview-note{color:var(--ink-soft);font-size:.85rem;margin-top:10px;text-align:center;}
+  .action-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;}
+  .icon-btn{border:2px solid var(--ink);background:var(--card);color:var(--ink);border-radius:999px;padding:.6em 1.1em;font-weight:800;font-size:.9rem;cursor:pointer;font-family:inherit;}
+  .icon-btn:hover{background:var(--accent-soft);}
+  .icon-btn.primary{background:var(--leaf);color:#fff;border-color:var(--leaf);}
+
+  /* ---- live preview (screen) ---- */
+  #previewWrap{background:#EEF1E4;border-radius:var(--radius);padding:20px;overflow-x:auto;}
+  #worksheet{background:transparent;}
+  .sheet-page{
+    background:#fff;border:1px solid #E2E7D8;border-radius:10px;box-shadow:0 2px 10px rgba(44,58,74,0.08);
+    padding:14mm;margin:0 auto 22px;max-width:190mm;min-height:120mm;
+  }
+  .sheet-page:last-child{margin-bottom:0;}
+  .ws-header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid var(--ink);padding-bottom:10px;margin-bottom:16px;}
+  .ws-header .title-row{display:flex;align-items:center;gap:.4em;font-size:1.25rem;font-weight:800;}
+  .ws-header .title-row .emoji{font-size:1.5rem;}
+  .ws-fields{display:flex;gap:10px;font-size:.92rem;font-weight:700;align-items:flex-end;flex-wrap:wrap;}
+  .ws-fields .blank{border-bottom:1.5px solid var(--ink);padding:0 6px 4px;display:inline-block;min-width:90px;margin-right:10px;}
+  .ws-row{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:14px;}
+  .ws-field-line{font-weight:700;font-size:1rem;display:flex;align-items:center;gap:6px;}
+  .ws-field-line .line{border-bottom:1.5px solid var(--ink);min-width:70px;display:inline-block;height:1.3em;}
+  .ws-weather{display:flex;gap:14px;align-items:center;margin-bottom:14px;flex-wrap:wrap;}
+  .ws-weather .wlabel{font-weight:800;font-size:.95rem;color:var(--ink-soft);margin-right:4px;}
+  .weather-item{display:flex;flex-direction:column;align-items:center;gap:2px;}
+  .weather-item svg{width:44px;height:44px;}
+  .weather-item span{font-size:.78rem;font-weight:700;}
+  .ws-drawbox{border:2px dashed #C9D2B8;border-radius:12px;min-height:70mm;display:flex;align-items:flex-start;justify-content:flex-start;padding:8px;margin-bottom:14px;position:relative;}
+  .ws-drawbox .draw-label{position:absolute;top:6px;left:10px;font-size:.8rem;font-weight:700;color:#B9C2A8;}
+  .ws-notes{margin-bottom:6px;}
+  .ws-notes .lines{border-bottom:1.5px solid #D8DED0;height:2.1em;}
+  .large-print .ws-field-line, .large-print .ws-weather .wlabel, .large-print .weather-item span, .large-print .draw-label{font-size:1.15em;}
+  .large-print .ws-header .title-row{font-size:1.5rem;}
+
+  /* table type */
+  table.ws-table{width:100%;border-collapse:collapse;margin-top:4px;}
+  table.ws-table th, table.ws-table td{border:1.5px solid #C9D2B8;padding:8px 6px;text-align:center;font-size:.92rem;}
+  table.ws-table th{background:var(--leaf-soft);font-weight:800;}
+  table.ws-table td{height:34px;}
+  table.ws-table td.no-col{font-weight:800;color:var(--ink-soft);width:34px;}
+  .large-print table.ws-table th, .large-print table.ws-table td{font-size:1.1em;padding:10px 6px;}
+
+  footer.hint{max-width:var(--maxw);margin:20px auto 0;padding:0 16px;color:var(--ink-soft);font-size:.78rem;text-align:center;}
+
+  @media print{
+    body *{visibility:hidden;}
+    #worksheet, #worksheet *{visibility:visible;}
+    #worksheet{position:absolute;left:0;top:0;width:100%;margin:0;padding:0;}
+    .sheet-page{box-shadow:none;border:none;border-radius:0;max-width:none;margin:0;padding:12mm;page-break-after:always;}
+    .sheet-page:last-child{page-break-after:auto;}
+    .no-print{display:none !important;}
+  }
+  @media (max-width:600px){
+    .ws-row{flex-direction:column;gap:8px;}
+  }
+</style>
+<style id="pageOrientStyle"></style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="mieel-brand">
+      <div class="orb-mini"></div>
+      <strong>MieeL</strong>
+      <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener">www.mieel-support-school.com</a>
+    </div>
+    <h1>🌱 しょくぶつの かんさつ プリント作成</h1>
+    <p>あさがお・ひまわり などの観察記録シートを、その場でつくって印刷できます</p>
+  </header>
+
+  <section class="panel no-print">
+    <div class="subtabs">
+      <button data-type="sheet" class="active">📝 かんさつシート（1回ぶん・大きく記録）</button>
+      <button data-type="table">📊 きろくひょう（複数回をまとめて記録）</button>
+    </div>
+
+    <div class="settings-group">
+      <span class="lbl">① どの しょくぶつ？</span>
+      <div class="plant-grid" id="plantGrid"></div>
+    </div>
+
+    <div class="settings-group">
+      <span class="lbl">② きろくする こうもく（チェックしたものだけ プリントに入ります）</span>
+      <div class="check-grid" id="itemChecks"></div>
+    </div>
+
+    <div class="settings-group" id="sheetOnlySettings">
+      <span class="lbl">③ なんまい いんさつしますか？</span>
+      <div class="chip-row" id="copiesChips">
+        <button class="chip selected" data-copies="1">1まい</button>
+        <button class="chip" data-copies="2">2まい</button>
+        <button class="chip" data-copies="4">4まい</button>
+      </div>
+    </div>
+
+    <div class="settings-group hidden" id="tableOnlySettings">
+      <span class="lbl">③ きろくの かいすう（れつの数）</span>
+      <div class="chip-row" id="rowsChips">
+        <button class="chip" data-rows="4">4かい</button>
+        <button class="chip selected" data-rows="6">6かい</button>
+        <button class="chip" data-rows="8">8かい</button>
+      </div>
+    </div>
+
+    <div class="settings-group">
+      <span class="lbl">④ その他</span>
+      <div class="chip-row" style="margin-bottom:10px;">
+        <span class="lbl" style="margin:0 8px 0 0;display:inline;">文字の大きさ：</span>
+        <button class="chip selected" data-textsize="normal">ふつう</button>
+        <button class="chip" data-textsize="large">おおきく</button>
+      </div>
+      <label class="checkline"><input type="checkbox" id="showNameField" checked> なまえ・くみ らんを 入れる</label>
+    </div>
+
+    <div class="action-row">
+      <button class="icon-btn" id="regenBtn">🔄 つくりなおす</button>
+      <button class="icon-btn primary" id="printBtn">🖨️ いんさつ / PDFをつくる</button>
+    </div>
+    <p class="preview-note">下にプレビューが表示されます。設定を変えるとすぐに反映されます。「いんさつ / PDFをつくる」を押すと印刷ダイアログが開きます。PDFとして保存する場合は送信先で「PDFに保存」を選んでください。</p>
+  </section>
+
+  <section class="panel no-print" style="padding:16px;">
+    <div id="previewWrap">
+      <div id="worksheet"></div>
+    </div>
+  </section>
+
+  <footer class="hint no-print">
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:5px;">
+      <div style="width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 50% 0%,#1B8FE8 0%,#2BB8D6 28%,#3FCB9E 45%,#8FD24A 58%,#F4D027 72%,#F7941E 100%);flex:none;"></div>
+      <strong style="color:var(--ink);">MieeL</strong>
+      <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener" style="color:var(--sky);">mieel-support-school.com</a>
+    </div>
+    © しょくぶつの かんさつ プリント作成（特別支援教育向け）
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =========================================================
+     プラント(観察対象)の定義
+  ========================================================= */
+  var PLANTS = [
+    {id:'asagao',  name:'あさがお',     emoji:'🌸'},
+    {id:'himawari',name:'ひまわり',     emoji:'🌻'},
+    {id:'tomato',  name:'ミニトマト',   emoji:'🍅'},
+    {id:'edamame', name:'えだまめ',     emoji:'🌱'},
+    {id:'kyuri',   name:'きゅうり',     emoji:'🥒'},
+    {id:'other',   name:'そのほか',     emoji:'🪴'}
+  ];
+  function plantById(id){
+    for(var i=0;i<PLANTS.length;i++){ if(PLANTS[i].id===id) return PLANTS[i]; }
+    return PLANTS[0];
+  }
+
+  /* きろく項目の定義。id はチェックボックスと突き合わせるキー */
+  var ITEMS = [
+    {id:'height', label:'たかさ（高さ）', unit:'cm'},
+    {id:'leaves', label:'はの かず（葉の数）', unit:'まい'},
+    {id:'flowers',label:'はなの かず（花の数）', unit:'こ'},
+    {id:'fruits', label:'みの かず（実の数）', unit:'こ'},
+    {id:'weather',label:'てんき（天気）', unit:null},
+    {id:'notes',  label:'きづいたこと（気づいたこと）', unit:null}
+  ];
+  var DEFAULT_ITEMS = ['height','leaves','weather'];
+
+  /* =========================================================
+     天気アイコン(SVG)
+  ========================================================= */
+  function sunIcon(){
+    var s='<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">';
+    s+='<circle cx="50" cy="50" r="20" fill="none" stroke="var(--ink)" stroke-width="6"/>';
+    for(var i=0;i<8;i++){
+      var deg=i*45, rad=deg*Math.PI/180;
+      var x1=50+30*Math.cos(rad), y1=50+30*Math.sin(rad);
+      var x2=50+42*Math.cos(rad), y2=50+42*Math.sin(rad);
+      s+='<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="var(--ink)" stroke-width="6" stroke-linecap="round"/>';
+    }
+    s+='</svg>';
+    return s;
+  }
+  function cloudIcon(){
+    return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">'
+      + '<ellipse cx="50" cy="64" rx="34" ry="16" fill="none" stroke="var(--ink)" stroke-width="6"/>'
+      + '<circle cx="34" cy="46" r="16" fill="none" stroke="var(--ink)" stroke-width="6"/>'
+      + '<circle cx="56" cy="40" r="20" fill="none" stroke="var(--ink)" stroke-width="6"/>'
+      + '<circle cx="74" cy="50" r="14" fill="none" stroke="var(--ink)" stroke-width="6"/>'
+      + '</svg>';
+  }
+  function rainIcon(){
+    return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">'
+      + '<ellipse cx="48" cy="42" rx="28" ry="13" fill="none" stroke="var(--ink)" stroke-width="6"/>'
+      + '<circle cx="34" cy="30" r="12" fill="none" stroke="var(--ink)" stroke-width="6"/>'
+      + '<circle cx="54" cy="26" r="15" fill="none" stroke="var(--ink)" stroke-width="6"/>'
+      + '<line x1="34" y1="66" x2="28" y2="82" stroke="var(--ink)" stroke-width="6" stroke-linecap="round"/>'
+      + '<line x1="52" y1="66" x2="46" y2="86" stroke="var(--ink)" stroke-width="6" stroke-linecap="round"/>'
+      + '<line x1="70" y1="66" x2="64" y2="82" stroke="var(--ink)" stroke-width="6" stroke-linecap="round"/>'
+      + '</svg>';
+  }
+  var WEATHERS = [
+    {id:'sunny', label:'はれ', icon:sunIcon},
+    {id:'cloudy',label:'くもり', icon:cloudIcon},
+    {id:'rainy', label:'あめ', icon:rainIcon}
+  ];
+
+  /* =========================================================
+     状態
+  ========================================================= */
+  var state = {
+    type:'sheet', plantId:'asagao', items: DEFAULT_ITEMS.slice(),
+    copies:1, rows:6, textSize:'normal', showName:true
+  };
+
+  function esc(str){
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  /* =========================================================
+     設定UIの描画
+  ========================================================= */
+  function renderPlantGrid(){
+    var box=document.getElementById('plantGrid');
+    box.innerHTML='';
+    PLANTS.forEach(function(p){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='plant-chip'+(state.plantId===p.id?' selected':'');
+      b.innerHTML='<span class="emoji">'+p.emoji+'</span><span>'+esc(p.name)+'</span>';
+      b.addEventListener('click', function(){
+        state.plantId=p.id;
+        renderPlantGrid();
+        renderWorksheet();
+      });
+      box.appendChild(b);
+    });
+  }
+  function renderItemChecks(){
+    var box=document.getElementById('itemChecks');
+    box.innerHTML='';
+    ITEMS.forEach(function(it){
+      var label=document.createElement('label');
+      label.className='check-item';
+      var checked = state.items.indexOf(it.id)!==-1;
+      label.innerHTML = '<input type="checkbox" data-item="'+it.id+'" '+(checked?'checked':'')+'> '+esc(it.label);
+      label.querySelector('input').addEventListener('change', function(e){
+        var idx=state.items.indexOf(it.id);
+        if(e.target.checked && idx===-1){ state.items.push(it.id); }
+        if(!e.target.checked && idx!==-1){ state.items.splice(idx,1); }
+        renderWorksheet();
+      });
+      box.appendChild(label);
+    });
+  }
+  document.querySelectorAll('.subtabs button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.subtabs button').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      state.type = btn.getAttribute('data-type');
+      document.getElementById('sheetOnlySettings').classList.toggle('hidden', state.type!=='sheet');
+      document.getElementById('tableOnlySettings').classList.toggle('hidden', state.type!=='table');
+      renderWorksheet();
+    });
+  });
+  document.querySelectorAll('#copiesChips .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#copiesChips .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      state.copies=parseInt(c.getAttribute('data-copies'),10);
+      renderWorksheet();
+    });
+  });
+  document.querySelectorAll('#rowsChips .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#rowsChips .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      state.rows=parseInt(c.getAttribute('data-rows'),10);
+      renderWorksheet();
+    });
+  });
+  document.querySelectorAll('[data-textsize]').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('[data-textsize]').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      state.textSize=c.getAttribute('data-textsize');
+      renderWorksheet();
+    });
+  });
+  document.getElementById('showNameField').addEventListener('change', function(e){
+    state.showName = e.target.checked;
+    renderWorksheet();
+  });
+  document.getElementById('regenBtn').addEventListener('click', renderWorksheet);
+  document.getElementById('printBtn').addEventListener('click', function(){
+    renderWorksheet();
+    setTimeout(function(){ window.print(); }, 60);
+  });
+
+  /* =========================================================
+     ワークシート生成(かんさつシート)
+  ========================================================= */
+  function hasItem(id){ return state.items.indexOf(id)!==-1; }
+
+  function renderNameFields(){
+    if(!state.showName) return '';
+    return '<div class="ws-fields">'
+      + '<span>なまえ：</span><span class="blank">&nbsp;</span>'
+      + '<span>くみ：</span><span class="blank">&nbsp;</span>'
+      + '<span>にち：</span><span class="blank">&nbsp;</span>がつ<span class="blank">&nbsp;</span>にち'
+      + '</div>';
+  }
+  function renderWeatherRow(){
+    if(!hasItem('weather')) return '';
+    var html='<div class="ws-weather"><span class="wlabel">てんき：</span>';
+    WEATHERS.forEach(function(w){
+      html += '<div class="weather-item">'+w.icon()+'<span>'+w.label+'</span></div>';
+    });
+    html += '</div>';
+    return html;
+  }
+  function renderMeasureRow(){
+    var measureIds = ['height','leaves','flowers','fruits'].filter(hasItem);
+    if(measureIds.length===0) return '';
+    var byId={height:{label:'たかさ',unit:'cm'},leaves:{label:'はの かず',unit:'まい'},flowers:{label:'はなの かず',unit:'こ'},fruits:{label:'みの かず',unit:'こ'}};
+    var html='<div class="ws-row">';
+    measureIds.forEach(function(id){
+      var m=byId[id];
+      html += '<div class="ws-field-line">'+m.label+'：<span class="line" style="min-width:60px;"></span>'+(m.unit?m.unit:'')+'</div>';
+    });
+    html += '</div>';
+    return html;
+  }
+  function renderNotes(){
+    if(!hasItem('notes')) return '';
+    return '<div class="ws-notes">'
+      + '<div class="ws-field-line">きづいたこと：</div>'
+      + '<div class="lines"></div><div class="lines"></div>'
+      + '</div>';
+  }
+  function renderDrawBox(){
+    return '<div class="ws-drawbox"><span class="draw-label">え（絵）をかこう</span></div>';
+  }
+
+  function renderSheetPage(plant){
+    var html='<div class="sheet-page">';
+    html += '<div class="ws-header"><div class="title-row"><span class="emoji">'+plant.emoji+'</span>'+esc(plant.name)+'の かんさつ</div>'
+      + '<div style="display:flex;align-items:center;gap:6px;font-size:.72rem;font-weight:700;color:#666;"><div style="width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 50% 0%,#1B8FE8 0%,#2BB8D6 28%,#3FCB9E 45%,#8FD24A 58%,#F4D027 72%,#F7941E 100%);border:1px solid #ccc;flex:none;"></div>MieeL <span style="color:#3A9A8C;">mieel-support-school.com</span></div></div>';
+    html += renderNameFields();
+    html += renderWeatherRow();
+    html += renderMeasureRow();
+    html += renderDrawBox();
+    html += renderNotes();
+    html += '</div>';
+    return html;
+  }
+  function renderSheetType(){
+    var plant = plantById(state.plantId);
+    var html='';
+    for(var i=0;i<state.copies;i++){ html += renderSheetPage(plant); }
+    return html;
+  }
+
+  /* =========================================================
+     ワークシート生成(きろくひょう)
+  ========================================================= */
+  function renderTableType(){
+    var plant = plantById(state.plantId);
+    var byId={height:{label:'たかさ(cm)'},leaves:{label:'はの かず'},flowers:{label:'はなの かず'},fruits:{label:'みの かず'}};
+    var measureIds = ['height','leaves','flowers','fruits'].filter(hasItem);
+    var showWeather = hasItem('weather');
+    var showNotesCol = hasItem('notes');
+
+    var html='<div class="sheet-page">';
+    html += '<div class="ws-header"><div class="title-row"><span class="emoji">'+plant.emoji+'</span>'+esc(plant.name)+'の せいちょう きろくひょう</div>'
+      + '<div style="display:flex;align-items:center;gap:6px;font-size:.72rem;font-weight:700;color:#666;"><div style="width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 50% 0%,#1B8FE8 0%,#2BB8D6 28%,#3FCB9E 45%,#8FD24A 58%,#F4D027 72%,#F7941E 100%);border:1px solid #ccc;flex:none;"></div>MieeL <span style="color:#3A9A8C;">mieel-support-school.com</span></div></div>';
+    html += renderNameFields();
+
+    html += '<table class="ws-table"><thead><tr>';
+    html += '<th>かい</th><th>日づけ</th>';
+    if(showWeather) html += '<th>てんき</th>';
+    measureIds.forEach(function(id){ html += '<th>'+byId[id].label+'</th>'; });
+    if(showNotesCol) html += '<th>きづいたこと</th>';
+    html += '</tr></thead><tbody>';
+    for(var r=1;r<=state.rows;r++){
+      html += '<tr><td class="no-col">'+r+'</td><td></td>';
+      if(showWeather) html += '<td></td>';
+      measureIds.forEach(function(){ html += '<td></td>'; });
+      if(showNotesCol) html += '<td></td>';
+      html += '</tr>';
+    }
+    html += '</tbody></table>';
+    html += '</div>';
+    return html;
+  }
+
+  /* =========================================================
+     全体描画
+  ========================================================= */
+  function renderWorksheet(){
+    var html = state.type==='sheet' ? renderSheetType() : renderTableType();
+    var ws = document.getElementById('worksheet');
+    ws.innerHTML = html;
+    ws.classList.toggle('large-print', state.textSize==='large');
+    /* きろくひょうは列数が多くなりがちなので、印刷時は横向きにするヒントを出す */
+    document.getElementById('pageOrientStyle').textContent =
+      state.type==='table' ? '@page{size:landscape;}' : '';
+  }
+
+  renderPlantGrid();
+  renderItemChecks();
+  renderWorksheet();
+
+})();
+</script>
+</body>
+</html>

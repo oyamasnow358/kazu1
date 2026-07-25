@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>くらべっこ｜ことばの いみ あそび</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF6EC;
+    --card:#FFFFFF;
+    --ink:#2C3A4A;
+    --ink-soft:#6C7A89;
+    --coral:#D9583F;
+    --teal:#2E7D8C;
+    --purple:#8E6FB0;
+    --amber:#D9A02A;
+    --green:#4F9A63;
+    --accent-soft:#FBECC9;
+    --success:#4F9A63;
+    --success-soft:#E3F3E6;
+    --gold:#F0B94A;
+    --radius:24px;
+    --shadow:0 6px 18px rgba(44,58,74,0.10);
+    --maxw:760px;
+  }
+  *{box-sizing:border-box;}
+  html{font-size:18px;}
+  html.large-text{font-size:23px;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+    -webkit-font-smoothing:antialiased;padding-bottom:40px;
+  }
+  .app{max-width:var(--maxw);margin:0 auto;padding:16px 16px 8px;}
+  .hidden{display:none !important;}
+
+  header.top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
+  .mieel-brand{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .mieel-brand .orb-mini{width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 50% 0%,#1B8FE8 0%,#2BB8D6 28%,#3FCB9E 45%,#8FD24A 58%,#F4D027 72%,#F7941E 100%);flex:none;}
+  .mieel-brand strong{color:var(--ink);font-size:.85rem;}
+  .mieel-brand a{font-size:.78rem;color:var(--teal);text-decoration:none;font-weight:600;}
+  .mieel-brand a:hover{text-decoration:underline;}
+  header.top h1{font-size:1.5rem;margin:0;font-weight:800;display:flex;align-items:center;gap:.35em;}
+  header.top p{margin:2px 0 0;color:var(--ink-soft);font-size:.82rem;font-weight:500;}
+  .icon-btn{
+    border:2px solid var(--ink);background:var(--card);color:var(--ink);border-radius:999px;
+    padding:.5em 1em;font-weight:700;font-size:.82rem;cursor:pointer;font-family:inherit;
+  }
+  .icon-btn:hover{background:var(--accent-soft);}
+  .icon-btn:focus-visible, button:focus-visible{outline:3px solid var(--teal);outline-offset:2px;}
+
+  nav.modes{display:flex;gap:10px;margin-bottom:14px;}
+  nav.modes button{
+    flex:1;font-family:inherit;font-weight:800;font-size:1.02rem;padding:13px 10px;
+    border-radius:var(--radius);border:3px solid transparent;background:var(--card);
+    color:var(--ink-soft);box-shadow:var(--shadow);cursor:pointer;
+  }
+  nav.modes button.active{border-color:var(--ink);color:var(--ink);background:var(--accent-soft);}
+
+  section.panel{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:18px;}
+
+  /* --- teacher settings (collapsible) --- */
+  details.settings-box{margin-bottom:16px;}
+  details.settings-box summary{
+    cursor:pointer;font-weight:800;color:var(--ink-soft);font-size:.88rem;
+    list-style:none;display:flex;align-items:center;gap:.4em;
+  }
+  details.settings-box summary::-webkit-details-marker{display:none;}
+  details.settings-box summary::before{content:"▸";display:inline-block;transition:transform .15s ease;}
+  details.settings-box[open] summary::before{transform:rotate(90deg);}
+  details.settings-box .box{background:#FCFAF3;border:2px solid #EFE9D8;border-radius:16px;padding:14px;margin-top:8px;}
+  .settings-group{margin-bottom:14px;}
+  .settings-group:last-child{margin-bottom:0;}
+  .settings-group .lbl{display:block;font-weight:800;font-size:.85rem;color:var(--ink-soft);margin-bottom:6px;}
+  .chip-row{display:flex;gap:8px;flex-wrap:wrap;}
+  .chip{
+    font-family:inherit;font-weight:700;padding:9px 14px;border-radius:999px;border:2px solid #E4DFD2;
+    background:#fff;cursor:pointer;color:var(--ink);font-size:.9rem;
+  }
+  .chip.selected{border-color:var(--ink);background:var(--accent-soft);}
+  .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;}
+  .cat-chip{
+    font-family:inherit;font-weight:700;padding:10px 8px;border-radius:14px;border:2px solid #E4DFD2;
+    background:#fff;cursor:pointer;color:var(--ink);font-size:.85rem;text-align:center;
+  }
+  .cat-chip.selected{border-color:var(--ink);background:var(--accent-soft);}
+
+  /* --- play header --- */
+  .play-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+  .star-counter{
+    font-weight:800;font-size:1.05rem;background:var(--success-soft);color:var(--success);
+    padding:6px 14px;border-radius:999px;display:inline-flex;align-items:center;gap:.3em;
+  }
+  .current-category{font-weight:800;color:var(--ink-soft);font-size:.92rem;}
+
+  .prompt-row{
+    display:flex;align-items:center;justify-content:center;gap:14px;margin:10px 0 18px;flex-wrap:wrap;
+  }
+  .speaker-big{
+    width:56px;height:56px;border-radius:50%;border:none;background:var(--teal);color:#fff;
+    font-size:1.5rem;cursor:pointer;flex:0 0 auto;
+  }
+  .speaker-big:active{transform:scale(.94);}
+  .prompt-text{font-size:1.7rem;font-weight:800;text-align:center;color:var(--ink);}
+
+  .cards-row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:10px;}
+  .compare-card{
+    flex:1 1 160px;max-width:230px;min-height:200px;border:5px solid #E4DFD2;border-radius:22px;
+    background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;
+    transition:transform .12s ease, border-color .15s ease, box-shadow .15s ease;
+    padding:10px;
+  }
+  .compare-card:hover:not(.locked){transform:translateY(-3px);border-color:var(--teal);}
+  .compare-card svg{width:100%;height:auto;max-height:160px;display:block;}
+  .compare-card .emoji-big{font-size:5.2rem;line-height:1;}
+  .compare-card.correct-flash{
+    border-color:var(--success);background:var(--success-soft);
+    animation:bounce .5s ease;
+  }
+  .compare-card.wrong-gentle{border-color:var(--gold);background:#FFF7E4;animation:shake .4s ease;}
+  .compare-card.hint-glow{
+    border-color:var(--gold);
+    box-shadow:0 0 0 6px rgba(240,185,74,0.35);
+    animation:pulseGlow 1s ease-in-out infinite;
+  }
+  .compare-card.locked{cursor:default;}
+  @keyframes bounce{
+    0%{transform:scale(1);} 35%{transform:scale(1.08);} 60%{transform:scale(0.98);} 100%{transform:scale(1);}
+  }
+  @keyframes shake{
+    0%,100%{transform:translateX(0);} 25%{transform:translateX(-6px);} 75%{transform:translateX(6px);}
+  }
+  @keyframes pulseGlow{
+    0%,100%{box-shadow:0 0 0 4px rgba(240,185,74,0.25);} 50%{box-shadow:0 0 0 10px rgba(240,185,74,0.4);}
+  }
+
+  .praise-banner{
+    text-align:center;font-weight:800;font-size:1.3rem;color:var(--success);margin-top:8px;min-height:1.6em;
+  }
+
+  .checkline{display:flex;align-items:center;gap:8px;font-weight:700;}
+  .checkline input{width:20px;height:20px;}
+  .preview-note{color:var(--ink-soft);font-size:.85rem;margin-top:10px;text-align:center;}
+
+  #worksheet{display:none;}
+  .ws-header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid var(--ink);padding-bottom:10px;margin-bottom:18px;}
+  .ws-header h2{margin:0;font-size:1.25rem;}
+  .ws-fields{display:flex;gap:10px;font-size:.95rem;font-weight:700;align-items:flex-end;}
+  .ws-fields .blank{border-bottom:1.5px solid var(--ink);padding:0 6px 4px;display:inline-block;min-width:110px;margin-right:14px;}
+  .ws-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+  .ws-cell{border:2px solid #E4DFD2;border-radius:14px;padding:12px;break-inside:avoid;page-break-inside:avoid;}
+  .ws-cell .no{font-weight:800;color:var(--ink-soft);font-size:.8rem;margin-bottom:4px;}
+  .ws-cell .q{font-weight:800;font-size:1.05rem;margin-bottom:8px;text-align:center;}
+  .ws-choices{display:flex;gap:10px;justify-content:center;}
+  .ws-choice{
+    border:2px solid #E4DFD2;border-radius:12px;padding:8px;width:100px;height:100px;
+    display:flex;align-items:center;justify-content:center;position:relative;
+  }
+  .ws-choice svg{width:100%;height:100%;}
+  .ws-choice .emoji-big{font-size:2.6rem;}
+  .ws-choice.correct-answer{border-color:var(--success);}
+  .ws-choice.correct-answer::after{
+    content:"○";position:absolute;inset:-8px;border:4px solid var(--success);border-radius:16px;
+  }
+  .ws-print-btn-wrap{display:flex;justify-content:center;margin-top:6px;}
+
+  footer.hint{max-width:var(--maxw);margin:20px auto 0;padding:0 16px;color:var(--ink-soft);font-size:.78rem;text-align:center;}
+
+  @media (prefers-reduced-motion: reduce){ *{animation:none !important;transition:none !important;} }
+
+  @media print{
+    body *{visibility:hidden;}
+    #worksheet, #worksheet *{visibility:visible;}
+    #worksheet{display:block !important;position:absolute;left:0;top:0;width:100%;padding:12mm;}
+    .no-print{display:none !important;}
+  }
+  @media (max-width:480px){
+    .prompt-text{font-size:1.35rem;}
+    .compare-card{min-height:160px;}
+    .ws-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div>
+      <div class="mieel-brand">
+        <div class="orb-mini"></div>
+        <strong>MieeL</strong>
+        <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener">www.mieel-support-school.com</a>
+      </div>
+      <h1>🧩 くらべっこ</h1>
+      <p>おおきい・ちいさい など、ことばの いみを あそびながら おぼえよう</p>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="icon-btn" id="btnSound" aria-pressed="true">🔊 おと</button>
+      <button class="icon-btn" id="btnLargeText" aria-pressed="false">🔠 文字を大きく</button>
+    </div>
+  </header>
+
+  <nav class="modes">
+    <button data-mode="play" class="active">🧩 あそぶ</button>
+    <button data-mode="print">🖨️ プリント</button>
+  </nav>
+
+  <!-- ===== PLAY VIEW ===== -->
+  <section class="panel" id="view-play">
+    <details class="settings-box" id="teacherSettingsPlay">
+      <summary>⚙️ せんせい・保護者用 せってい</summary>
+      <div class="box">
+        <div class="settings-group">
+          <span class="lbl">① どのことば？</span>
+          <div class="cat-grid" id="catGridPlay"></div>
+        </div>
+        <div class="settings-group">
+          <span class="lbl">② むずかしさ（ちがいの大きさ）</span>
+          <div class="chip-row" id="diffChipsPlay">
+            <button class="chip selected" data-diff="1">はっきり</button>
+            <button class="chip" data-diff="2">ふつう</button>
+            <button class="chip" data-diff="3">びみょう</button>
+          </div>
+        </div>
+        <div class="settings-group">
+          <span class="lbl">③ せんたくしの かず</span>
+          <div class="chip-row" id="choiceCountChipsPlay">
+            <button class="chip selected" data-cc="2">2まい</button>
+            <button class="chip" data-cc="3">3まい</button>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <div class="play-header">
+      <div class="star-counter">⭐ <span id="starCount">0</span></div>
+      <div class="current-category" id="currentCategoryLabel"></div>
+    </div>
+
+    <div class="prompt-row">
+      <button class="speaker-big" id="promptSpeak" aria-label="もういちど きく">🔊</button>
+      <div class="prompt-text" id="promptText"></div>
+    </div>
+
+    <div class="cards-row" id="cardsRow"></div>
+    <div class="praise-banner" id="praiseBanner"></div>
+  </section>
+
+  <!-- ===== PRINT VIEW ===== -->
+  <section class="panel hidden" id="view-print">
+    <div class="settings-group">
+      <span class="lbl">① どのことば？</span>
+      <div class="cat-grid" id="catGridPrint"></div>
+    </div>
+    <div class="settings-group">
+      <span class="lbl">② むずかしさ</span>
+      <div class="chip-row" id="diffChipsPrint">
+        <button class="chip selected" data-diff="1">はっきり</button>
+        <button class="chip" data-diff="2">ふつう</button>
+        <button class="chip" data-diff="3">びみょう</button>
+      </div>
+    </div>
+    <div class="settings-group">
+      <span class="lbl">③ せんたくしの かず</span>
+      <div class="chip-row" id="choiceCountChipsPrint">
+        <button class="chip selected" data-cc="2">2まい</button>
+        <button class="chip" data-cc="3">3まい</button>
+      </div>
+    </div>
+    <div class="settings-group">
+      <span class="lbl">④ もんだいの かず</span>
+      <div class="chip-row" id="printCountChips">
+        <button class="chip" data-count="6">6もん</button>
+        <button class="chip selected" data-count="9">9もん</button>
+        <button class="chip" data-count="12">12もん</button>
+      </div>
+    </div>
+    <label class="checkline" style="margin:12px 0;">
+      <input type="checkbox" id="printShowAnswer"> こたえ（○をつけたもの）を のせる（先生用）
+    </label>
+    <div class="chip-row" style="margin-top:4px;">
+      <button class="icon-btn" id="printRegenBtn">🔄 もんだいをつくりなおす</button>
+      <button class="icon-btn" id="printOpenBtn" style="background:var(--teal);color:#fff;border-color:var(--teal);">🖨️ いんさつ / PDFをつくる</button>
+    </div>
+    <p class="preview-note">下にプレビューが表示されます。「いんさつ / PDFをつくる」を押すと印刷ダイアログが開きます。PDFとして保存する場合は送信先で「PDFに保存」を選んでください。</p>
+  </section>
+
+  <div id="worksheet"></div>
+
+  <details class="teacher-note">
+    <summary style="cursor:pointer;font-weight:700;color:var(--ink-soft);font-size:.85rem;">👩‍🏫 先生・保護者の方へ</summary>
+    <div style="background:#fff;border-radius:14px;padding:14px 16px;margin-top:8px;font-size:.85rem;color:var(--ink-soft);line-height:1.7;box-shadow:var(--shadow);">
+      対義語（おおきい⇔ちいさい など）の理解を、視覚的な比較を通して繰り返し練習できるツールです。1回ごとに問う語（肯定語／否定語）や左右の位置をランダムに変えているため、どちらの意味も、絵の位置に頼らず学べるよう配慮しています。<br><br>
+      間違えた場合は不正解を強く示さず、正しいカードをやさしく光らせて注意を引く「エラーレス（誤りなし）学習」に近い方式にしています。星の数はできたことの記録のみで、失敗数は表示しません。<br><br>
+      「せんせい・保護者用 せってい」から扱う言葉のペア・難易度（サイズ差）・選択肢の数を調整できます。読み上げには端末の音声合成を利用しており、初回はブラウザの自動再生制限により無音になる場合があります（一度画面をタップすると有効になります）。
+    </div>
+  </details>
+
+  <footer class="hint">
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:5px;">
+      <div style="width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 50% 0%,#1B8FE8 0%,#2BB8D6 28%,#3FCB9E 45%,#8FD24A 58%,#F4D027 72%,#F7941E 100%);flex:none;"></div>
+      <strong style="color:var(--ink);">MieeL</strong>
+      <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener" style="color:var(--teal);">mieel-support-school.com</a>
+    </div>
+    © くらべっこ（特別支援教育向け・ことばの概念学習ツール）
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =========================================================
+     基本ヘルパー
+  ========================================================= */
+  function shuffleArr(arr){
+    for(var i=arr.length-1;i>0;i--){
+      var j=Math.floor(Math.random()*(i+1));
+      var t=arr[i]; arr[i]=arr[j]; arr[j]=t;
+    }
+    return arr;
+  }
+  function speak(text){
+    try{
+      if(!soundEnabled || !('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      var u=new SpeechSynthesisUtterance(text);
+      u.lang='ja-JP'; u.rate=0.82; u.pitch=1.1;
+      window.speechSynthesis.speak(u);
+    }catch(e){}
+  }
+  var soundEnabled = true;
+  var _acx=null;
+  function playTone(freq,duration,startDelay,volume){
+    if(!soundEnabled) return;
+    try{
+      if(!window.AudioContext && !window.webkitAudioContext) return;
+      if(!_acx) _acx = new (window.AudioContext||window.webkitAudioContext)();
+      if(_acx.state==='suspended') _acx.resume();
+      var t0=_acx.currentTime+(startDelay||0);
+      var osc=_acx.createOscillator(), gain=_acx.createGain();
+      osc.type='sine';
+      osc.frequency.setValueAtTime(freq,t0);
+      gain.gain.setValueAtTime(0,t0);
+      gain.gain.linearRampToValueAtTime(volume||0.13, t0+0.02);
+      gain.gain.linearRampToValueAtTime(0, t0+duration);
+      osc.connect(gain); gain.connect(_acx.destination);
+      osc.start(t0); osc.stop(t0+duration+0.02);
+    }catch(e){}
+  }
+  function playCorrectChime(){ playTone(523.25,0.16,0,0.12); playTone(659.25,0.18,0.14,0.12); playTone(783.99,0.26,0.30,0.12); }
+  function playGentleTick(){ playTone(320,0.14,0,0.05); }
+
+  /* =========================================================
+     概念(ことば)カテゴリの定義
+  ========================================================= */
+  var SIZE_RANGES = {
+    'circle-size':[24,80],
+    'bar-length':[36,130],
+    'bar-height':[34,120],
+    'bar-thickness':[8,46]
+  };
+
+  var CONCEPTS = [
+    {id:'big',   pos:'おおきい', neg:'ちいさい', shape:'circle-size',   color:'var(--coral)'},
+    {id:'long',  pos:'ながい',   neg:'みじかい', shape:'bar-length',    color:'var(--teal)'},
+    {id:'many',  pos:'おおい',   neg:'すくない', shape:'dots-count',    color:'var(--purple)'},
+    {id:'tall',  pos:'たかい',   neg:'ひくい',   shape:'bar-height',    color:'var(--amber)'},
+    {id:'thick', pos:'ふとい',   neg:'ほそい',   shape:'bar-thickness', color:'var(--green)'},
+    {id:'heavy', pos:'おもい',   neg:'かるい',   shape:'emoji-pool',
+      pool:[['🐘','🪶'],['🪨','🎈'],['🚗','🍃'],['⚓','🧵']]},
+    {id:'fast',  pos:'はやい',   neg:'おそい',   shape:'emoji-pool',
+      pool:[['🐇','🐢'],['🏎️','🐌'],['🐆','🚶'],['✈️','🐌']]},
+    {id:'hot',   pos:'あつい',   neg:'つめたい', shape:'emoji-pool',
+      pool:[['🔥','❄️'],['☀️','⛄'],['♨️','🧊']]},
+    {id:'bright',pos:'あかるい', neg:'くらい',   shape:'emoji-pool',
+      pool:[['☀️','🌙'],['💡','🌑'],['⭐','🌚']]}
+  ];
+  var RANDOM_CAT = {id:'random', pos:'いろいろ', neg:'いろいろ', shape:null, label:'🎲 いろいろ(ランダム)'};
+
+  function conceptById(id){
+    for(var i=0;i<CONCEPTS.length;i++){ if(CONCEPTS[i].id===id) return CONCEPTS[i]; }
+    return CONCEPTS[0];
+  }
+  function catLabel(c){ return c.pos+'・'+c.neg; }
+
+  /* =========================================================
+     図形・絵文字の描画(SVG文字列を返す。操作なしの表示専用)
+  ========================================================= */
+  var BOX = 150; // 表示ボックスの基準サイズ(px相当)
+
+  function svgWrap(inner){
+    return '<svg viewBox="0 0 '+BOX+' '+BOX+'" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>';
+  }
+  function shapeCircle(px, color){
+    var r = px/2;
+    return svgWrap('<circle cx="'+(BOX/2)+'" cy="'+(BOX/2)+'" r="'+r+'" fill="'+color+'" stroke="var(--ink)" stroke-width="4"/>');
+  }
+  function shapeBarLength(px, color){
+    var h=40, x=(BOX-px)/2, y=(BOX-h)/2;
+    return svgWrap('<rect x="'+x+'" y="'+y+'" width="'+px+'" height="'+h+'" rx="10" fill="'+color+'" stroke="var(--ink)" stroke-width="4"/>');
+  }
+  function shapeBarHeight(px, color){
+    var w=40, x=(BOX-w)/2, y=BOX-10-px;
+    return svgWrap(
+      '<line x1="8" y1="'+(BOX-10)+'" x2="'+(BOX-8)+'" y2="'+(BOX-10)+'" stroke="var(--ink-soft)" stroke-width="3"/>'
+      + '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+px+'" rx="8" fill="'+color+'" stroke="var(--ink)" stroke-width="4"/>'
+    );
+  }
+  function shapeBarThickness(px, color){
+    var w=128, x=(BOX-w)/2, y=(BOX-px)/2;
+    return svgWrap('<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+px+'" rx="'+Math.min(10,px/2)+'" fill="'+color+'" stroke="var(--ink)" stroke-width="4"/>');
+  }
+  function shapeDots(count, color){
+    var cols = Math.min(5,count);
+    var rows = Math.ceil(count/cols);
+    var r=11, gapX = cols>1?(110/(cols-1)):0, gapY = rows>1?(110/(rows-1)):0;
+    var startY=(BOX-(rows-1)*gapY)/2;
+    if(rows===1){ startY=BOX/2; }
+    var out='';
+    for(var row=0; row<rows; row++){
+      var inRow = Math.min(cols, count-row*cols);
+      var rowStartX = (BOX-(inRow-1)*gapX)/2;
+      for(var c=0;c<inRow;c++){
+        var cx = inRow>1 ? rowStartX + c*gapX : BOX/2;
+        var cy = rows>1 ? startY + row*gapY : BOX/2;
+        out += '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+color+'" stroke="var(--ink)" stroke-width="3"/>';
+      }
+    }
+    return svgWrap(out);
+  }
+  function renderShape(shapeType, value, color){
+    switch(shapeType){
+      case 'circle-size': return shapeCircle(value, color);
+      case 'bar-length': return shapeBarLength(value, color);
+      case 'bar-height': return shapeBarHeight(value, color);
+      case 'bar-thickness': return shapeBarThickness(value, color);
+      case 'dots-count': return shapeDots(value, color);
+      default: return '';
+    }
+  }
+  function emojiVisual(char){
+    return '<div class="emoji-big">'+char+'</div>';
+  }
+
+  /* =========================================================
+     問題(比較ペア)の生成
+  ========================================================= */
+  /* 2〜3個の値を、範囲内に確実に収まる形で・最小差を保証しながら生成する。
+     「累積のすき間を按分する」方式にすることで、最大値が範囲を超えることが
+     数学的に起こらないようにしている(この点は当初、乱数の重ね掛けで計算しており
+     レベル1(はっきり)×3択のときに表示枠からはみ出すケースがあったため修正した)。 */
+  var SIZE_GAP_FRAC = {1:0.34, 2:0.22, 3:0.11}; // レベルごとの最小差(範囲に対する割合)
+  function genSizedValues(minPx, maxPx, level, n){
+    var span = maxPx-minPx;
+    var minGap = span*SIZE_GAP_FRAC[level];
+    var totalGap = minGap*(n-1);
+    if(totalGap > span){ minGap = span/(n-1); totalGap = minGap*(n-1); }
+    var slack = span-totalGap; // 最小差を確保したうえで残る自由度
+    var extra=[]; for(var i=0;i<n;i++){ extra.push(Math.random()); }
+    var sumExtra = extra.reduce(function(a,b){return a+b;},0) || 1;
+    var acc=0, vals=[];
+    for(var i=0;i<n;i++){
+      acc += (extra[i]/sumExtra)*slack;
+      vals.push(minPx + minGap*i + acc);
+    }
+    return vals; // 昇順・範囲内であることが保証される
+  }
+  function genSizedPair(minPx,maxPx,level){
+    var v=genSizedValues(minPx,maxPx,level,2);
+    return {small:v[0], large:v[1]};
+  }
+  function genSizedTriple(minPx,maxPx,level){
+    return genSizedValues(minPx,maxPx,level,3);
+  }
+
+  var COUNT_GAP = {1:4, 2:3, 3:2}; // レベルごとの個数の最小差
+  var COUNT_MIN=2, COUNT_MAX=14;
+  function genCountValues(level, n){
+    var span = COUNT_MAX-COUNT_MIN;
+    var gap=COUNT_GAP[level];
+    var totalGap=gap*(n-1);
+    if(totalGap>span){ gap=Math.max(1, Math.floor(span/(n-1))); totalGap=gap*(n-1); }
+    var slack=span-totalGap;
+    var extra=[]; for(var i=0;i<n;i++){ extra.push(Math.random()); }
+    var sumExtra = extra.reduce(function(a,b){return a+b;},0) || 1;
+    var acc=0, vals=[];
+    for(var i=0;i<n;i++){
+      acc += (extra[i]/sumExtra)*slack;
+      vals.push(Math.round(COUNT_MIN + gap*i + acc));
+    }
+    // 四捨五入で差が詰まった場合の保険(昇順・最小差1を保証)
+    for(var i=1;i<vals.length;i++){
+      if(vals[i]<=vals[i-1]) vals[i]=vals[i-1]+1;
+    }
+    if(vals[vals.length-1]>COUNT_MAX){
+      var over=vals[vals.length-1]-COUNT_MAX;
+      vals=vals.map(function(v){ return v-over; });
+    }
+    return vals;
+  }
+  function genCountPair(level){
+    var v=genCountValues(level,2);
+    return {small:v[0], large:v[1]};
+  }
+  function genCountTriple(level){
+    return genCountValues(level,3);
+  }
+
+  function pickPool(concept){
+    return concept.pool[Math.floor(Math.random()*concept.pool.length)];
+  }
+
+  /* choiceCount枚のカード情報 [{visualHtml, correct}] を返す */
+  function buildChoices(concept, level, choiceCount){
+    var askPositive = Math.random()<0.5;
+    var askedWord = askPositive ? concept.pos : concept.neg;
+    var cards=[];
+
+    if(concept.shape==='emoji-pool'){
+      var used=[];
+      var main=pickPool(concept);
+      var correctEmoji = askPositive?main[0]:main[1];
+      var wrongEmoji = askPositive?main[1]:main[0];
+      cards.push({visual:emojiVisual(correctEmoji), correct:true});
+      cards.push({visual:emojiVisual(wrongEmoji), correct:false});
+      used.push(correctEmoji, wrongEmoji);
+      if(choiceCount===3){
+        var guard=0, extra=null;
+        while(guard<20){
+          guard++;
+          var p=pickPool(concept);
+          var cand = Math.random()<0.5?p[0]:p[1];
+          if(used.indexOf(cand)===-1){ extra=cand; break; }
+        }
+        if(extra) cards.push({visual:emojiVisual(extra), correct:false});
+      }
+    } else if(concept.shape==='dots-count'){
+      if(choiceCount===3){
+        var triple=genCountTriple(level);
+        var correctVal = askPositive?triple[2]:triple[0];
+        triple.forEach(function(v){
+          cards.push({visual:renderShape('dots-count', v, concept.color), correct:v===correctVal});
+        });
+      } else {
+        var pair=genCountPair(level);
+        var cv = askPositive?pair.large:pair.small;
+        var wv = askPositive?pair.small:pair.large;
+        cards.push({visual:renderShape('dots-count', cv, concept.color), correct:true});
+        cards.push({visual:renderShape('dots-count', wv, concept.color), correct:false});
+      }
+    } else {
+      var range = SIZE_RANGES[concept.shape];
+      if(choiceCount===3){
+        var trip=genSizedTriple(range[0],range[1],level);
+        var correctPx = askPositive?trip[2]:trip[0];
+        trip.forEach(function(v){
+          cards.push({visual:renderShape(concept.shape, v, concept.color), correct:v===correctPx});
+        });
+      } else {
+        var pr=genSizedPair(range[0],range[1],level);
+        var cpx = askPositive?pr.large:pr.small;
+        var wpx = askPositive?pr.small:pr.large;
+        cards.push({visual:renderShape(concept.shape, cpx, concept.color), correct:true});
+        cards.push({visual:renderShape(concept.shape, wpx, concept.color), correct:false});
+      }
+    }
+    shuffleArr(cards);
+    return {askedWord:askedWord, cards:cards};
+  }
+
+  /* =========================================================
+     PLAY MODE
+  ========================================================= */
+  var playState = {
+    catId:'big', level:1, choiceCount:2, stars:0,
+    current:null // {concept, askedWord, cards}
+  };
+
+  function activeCategoryList(){ return CONCEPTS; }
+
+  function renderCatGrid(container, current, onPick, includeRandom){
+    container.innerHTML='';
+    if(includeRandom){
+      var rb=document.createElement('button');
+      rb.className='cat-chip'+(current==='random'?' selected':'');
+      rb.textContent=RANDOM_CAT.label;
+      rb.addEventListener('click', function(){ onPick('random'); });
+      container.appendChild(rb);
+    }
+    CONCEPTS.forEach(function(c){
+      var b=document.createElement('button');
+      b.className='cat-chip'+(current===c.id?' selected':'');
+      b.textContent=catLabel(c);
+      b.addEventListener('click', function(){ onPick(c.id); });
+      container.appendChild(b);
+    });
+  }
+
+  function currentPlayConcept(){
+    if(playState.catId==='random'){
+      return CONCEPTS[Math.floor(Math.random()*CONCEPTS.length)];
+    }
+    return conceptById(playState.catId);
+  }
+
+  function renderCatGridPlay(){
+    renderCatGrid(document.getElementById('catGridPlay'), playState.catId, function(id){
+      playState.catId=id; renderCatGridPlay(); newQuestion();
+    }, true);
+  }
+  document.querySelectorAll('#diffChipsPlay .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#diffChipsPlay .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      playState.level=parseInt(c.getAttribute('data-diff'),10);
+      newQuestion();
+    });
+  });
+  document.querySelectorAll('#choiceCountChipsPlay .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#choiceCountChipsPlay .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      playState.choiceCount=parseInt(c.getAttribute('data-cc'),10);
+      newQuestion();
+    });
+  });
+
+  function newQuestion(){
+    var concept = currentPlayConcept();
+    var q = buildChoices(concept, playState.level, playState.choiceCount);
+    playState.current = {concept:concept, askedWord:q.askedWord, cards:q.cards, locked:false};
+    document.getElementById('currentCategoryLabel').textContent = catLabel(concept);
+    document.getElementById('promptText').textContent = 'どっちが '+q.askedWord+'？';
+    document.getElementById('praiseBanner').textContent='';
+    renderCards();
+    speak('どっちが '+q.askedWord+'？');
+  }
+  function renderCards(){
+    var row=document.getElementById('cardsRow');
+    row.innerHTML='';
+    playState.current.cards.forEach(function(cardData, idx){
+      var el=document.createElement('button');
+      el.type='button';
+      el.className='compare-card';
+      el.setAttribute('aria-label','こたえの カード '+(idx+1));
+      el.innerHTML=cardData.visual;
+      el.addEventListener('click', function(){ onCardTap(cardData, el); });
+      row.appendChild(el);
+    });
+  }
+  function onCardTap(cardData, el){
+    if(playState.current.locked) return;
+    if(cardData.correct){
+      playState.current.locked=true;
+      el.classList.add('correct-flash');
+      document.querySelectorAll('.compare-card').forEach(function(c){ c.classList.add('locked'); });
+      playState.stars++;
+      document.getElementById('starCount').textContent = playState.stars;
+      var praise = ["やったね！","せいかい！","すごい！","ばっちり！"][Math.floor(Math.random()*4)];
+      document.getElementById('praiseBanner').textContent = '⭐ '+praise;
+      playCorrectChime();
+      speak(praise);
+      setTimeout(newQuestion, 2000);
+    } else {
+      el.classList.add('wrong-gentle');
+      playGentleTick();
+      setTimeout(function(){ el.classList.remove('wrong-gentle'); }, 450);
+      // エラーレス学習：正解カードをやさしくハイライトして注意を引く
+      var cards=document.querySelectorAll('.compare-card');
+      playState.current.cards.forEach(function(cd, i){
+        if(cd.correct) cards[i].classList.add('hint-glow');
+      });
+      setTimeout(function(){
+        document.querySelectorAll('.compare-card').forEach(function(c){ c.classList.remove('hint-glow'); });
+      }, 1800);
+    }
+  }
+  document.getElementById('promptSpeak').addEventListener('click', function(){
+    if(playState.current) speak('どっちが '+playState.current.askedWord+'？');
+  });
+
+  renderCatGridPlay();
+  newQuestion();
+
+  /* =========================================================
+     PRINT MODE
+  ========================================================= */
+  var printState = {catId:'big', level:1, choiceCount:2, count:9, showAnswer:false, problems:[]};
+
+  function renderCatGridPrint(){
+    renderCatGrid(document.getElementById('catGridPrint'), printState.catId, function(id){
+      printState.catId=id; renderCatGridPrint(); regeneratePrintProblems(); renderWorksheet();
+    }, true);
+  }
+  document.querySelectorAll('#diffChipsPrint .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#diffChipsPrint .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      printState.level=parseInt(c.getAttribute('data-diff'),10);
+      regeneratePrintProblems(); renderWorksheet();
+    });
+  });
+  document.querySelectorAll('#choiceCountChipsPrint .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#choiceCountChipsPrint .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      printState.choiceCount=parseInt(c.getAttribute('data-cc'),10);
+      regeneratePrintProblems(); renderWorksheet();
+    });
+  });
+  document.querySelectorAll('#printCountChips .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#printCountChips .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      printState.count=parseInt(c.getAttribute('data-count'),10);
+      regeneratePrintProblems(); renderWorksheet();
+    });
+  });
+  document.getElementById('printShowAnswer').addEventListener('change', function(e){
+    printState.showAnswer=e.target.checked; renderWorksheet();
+  });
+  document.getElementById('printRegenBtn').addEventListener('click', function(){
+    regeneratePrintProblems(); renderWorksheet();
+  });
+  document.getElementById('printOpenBtn').addEventListener('click', function(){
+    renderWorksheet();
+    setTimeout(function(){ window.print(); }, 60);
+  });
+
+  function regeneratePrintProblems(){
+    var list=[];
+    for(var i=0;i<printState.count;i++){
+      var concept = printState.catId==='random'
+        ? CONCEPTS[Math.floor(Math.random()*CONCEPTS.length)]
+        : conceptById(printState.catId);
+      var q = buildChoices(concept, printState.level, printState.choiceCount);
+      list.push({concept:concept, askedWord:q.askedWord, cards:q.cards});
+    }
+    printState.problems=list;
+  }
+  regeneratePrintProblems();
+
+  function renderWorksheet(){
+    var catName = printState.catId==='random' ? RANDOM_CAT.label : catLabel(conceptById(printState.catId));
+    var html='';
+    html += '<div class="ws-header"><div style="display:flex;align-items:center;gap:8px;">'
+      + '<div style="width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 50% 0%,#1B8FE8 0%,#2BB8D6 28%,#3FCB9E 45%,#8FD24A 58%,#F4D027 72%,#F7941E 100%);border:1px solid #ccc;flex:none;"></div>'
+      + '<div><div style="font-size:11px;color:#333;font-weight:700;">MieeL くらべっこ</div><h2>くらべっこ プリント（'+catName+'）</h2></div></div>'
+      + '<div class="ws-fields" style="flex-direction:column;align-items:flex-end;gap:2px;">'
+      + '<div style="font-size:.75rem;color:#3A9A8C;font-weight:700;">mieel-support-school.com</div>'
+      + '<div><span class="lbl">なまえ：</span><span class="blank">&nbsp;</span><span class="lbl">ひづけ：</span><span class="blank">&nbsp;</span></div></div></div>';
+    html += '<div class="ws-grid">';
+    printState.problems.forEach(function(p, idx){
+      html += '<div class="ws-cell"><div class="no">もんだい '+(idx+1)+'</div>';
+      html += '<div class="q">どちらが「'+p.askedWord+'」？　○をつけよう</div>';
+      html += '<div class="ws-choices">';
+      p.cards.forEach(function(cd){
+        html += '<div class="ws-choice'+(printState.showAnswer && cd.correct ? ' correct-answer':'')+'">'+cd.visual+'</div>';
+      });
+      html += '</div></div>';
+    });
+    html += '</div>';
+    document.getElementById('worksheet').innerHTML = html;
+  }
+
+  renderCatGridPrint();
+  renderWorksheet();
+
+  /* =========================================================
+     MODE SWITCHING / GLOBAL UI
+  ========================================================= */
+  document.querySelectorAll('nav.modes button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('nav.modes button').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      var mode=btn.getAttribute('data-mode');
+      document.getElementById('view-play').classList.toggle('hidden', mode!=='play');
+      document.getElementById('view-print').classList.toggle('hidden', mode!=='print');
+      if(mode==='print') renderWorksheet();
+    });
+  });
+
+  document.getElementById('btnSound').addEventListener('click', function(){
+    soundEnabled=!soundEnabled;
+    var btn=document.getElementById('btnSound');
+    btn.setAttribute('aria-pressed', soundEnabled?'true':'false');
+    btn.textContent = soundEnabled ? '🔊 おと' : '🔇 おと';
+  });
+  document.getElementById('btnLargeText').addEventListener('click', function(){
+    var on=document.documentElement.classList.toggle('large-text');
+    document.getElementById('btnLargeText').setAttribute('aria-pressed', on?'true':'false');
+  });
+
+})();
+</script>
+</body>
+</html>
