@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>ぼうさいの がくしゅう｜MieeL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF7EF;
+    --card:#FFFFFF;
+    --ink:#2E2A25;
+    --ink-soft:#8A8072;
+    --line:#EAE1CE;
+    --eq:#8B5A3C;     --eq-soft:#EDE0D3;
+    --fire:#C4573F;   --fire-soft:#FBE4DE;
+    --kit:#3F9D8B;    --kit-soft:#DBEFEA;
+    --sort2:#3D6B8A;  --sort2-soft:#DCE9F0;
+    --danger2:#C15B6B; --danger2-soft:#F8E1E5;
+    --safe:#4F9A63;   --safe-soft:#DDEFE0;
+    --success:#4F9A63; --success-soft:#E3F3E6;
+    --danger:#C4573F;  --danger-soft:#FBE4DE;
+    --radius:22px;
+    --shadow:0 6px 18px rgba(46,42,37,0.10);
+    --maxw:960px;
+    --mieel:radial-gradient(circle at 50% 0%,#1B8FE8 0%,#2BB8D6 28%,#3FCB9E 45%,#8FD24A 58%,#F4D027 72%,#F7941E 100%);
+  }
+  *{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact;color-adjust:exact;}
+  html{font-size:17px;}
+  html.large-text{font-size:21px;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+    -webkit-font-smoothing:antialiased;padding-bottom:40px;
+  }
+  button{font-family:inherit;}
+  button:focus-visible, [tabindex]:focus-visible{outline:3px solid var(--kit);outline-offset:2px;}
+
+  .app{max-width:var(--maxw);margin:0 auto;padding:18px 16px 8px;}
+
+  header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
+  .mieel-brand{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .mieel-brand .orb-mini{width:20px;height:20px;border-radius:50%;background:var(--mieel);flex:none;}
+  .mieel-brand strong{color:var(--ink);font-size:.85rem;}
+  .mieel-brand a{font-size:.78rem;color:var(--kit);text-decoration:none;font-weight:600;}
+  .mieel-brand a:hover{text-decoration:underline;}
+  header.top h1{font-size:1.5rem;margin:0;font-weight:800;letter-spacing:.02em;display:flex;align-items:center;gap:.35em;}
+  header.top h1 .icon{font-size:1.15em;}
+  header.top p{margin:4px 0 0;color:var(--ink-soft);font-size:.85rem;font-weight:500;}
+  .icon-btn{
+    border:2px solid var(--ink);background:var(--card);color:var(--ink);border-radius:999px;
+    padding:.5em 1em;font-weight:700;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:.4em;
+  }
+  .icon-btn:hover{background:var(--kit-soft);}
+
+  nav.modes{display:flex;gap:9px;margin-bottom:16px;flex-wrap:wrap;}
+  nav.modes button{
+    flex:1 1 150px;font-weight:800;font-size:1rem;padding:13px 8px;border-radius:var(--radius);
+    border:3px solid transparent;background:var(--card);color:var(--ink-soft);box-shadow:var(--shadow);
+    cursor:pointer;transition:transform .12s ease, border-color .12s ease, color .12s ease;
+  }
+  nav.modes button .sub{display:block;font-size:.68em;font-weight:500;margin-top:2px;}
+  nav.modes button:hover{transform:translateY(-2px);}
+  nav.modes button.active{border-color:var(--ink);color:var(--ink);background:var(--kit-soft);}
+
+  section.panel{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:18px;}
+
+  .level-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+  .level-bar .level-btn{
+    flex:1 1 140px;text-align:left;border:2px solid var(--line);background:#FCFAF3;border-radius:16px;
+    padding:10px 12px;cursor:pointer;font-weight:700;color:var(--ink);
+  }
+  .level-bar .level-btn .stars{color:var(--danger2);letter-spacing:1px;display:block;font-size:.9em;}
+  .level-bar .level-btn .name{display:block;font-size:1rem;}
+  .level-bar .level-btn.active{border-color:var(--kit);background:var(--kit-soft);}
+  .level-bar .level-btn:hover{border-color:var(--kit);}
+
+  .score-pill{
+    display:inline-flex;align-items:center;gap:.5em;background:var(--success-soft);color:var(--success);
+    font-weight:800;padding:8px 16px;border-radius:999px;font-size:.95rem;margin-bottom:14px;
+  }
+
+  .stage{min-height:260px;display:flex;flex-direction:column;align-items:center;}
+  .prompt-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;text-align:center;}
+  .prompt-row .q-text{font-weight:800;color:var(--ink);font-size:1.05rem;}
+  .speak-btn{
+    border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:999px;
+    width:40px;height:40px;font-size:1.1rem;cursor:pointer;flex:none;
+  }
+  .speak-btn:hover{background:var(--kit-soft);}
+
+  .word-bubble{
+    background:#FCFAF3;border:3px solid var(--line);border-radius:20px;padding:22px 30px;
+    font-size:1.15rem;font-weight:700;text-align:center;max-width:600px;margin-bottom:20px;line-height:1.6;
+  }
+  .word-bubble .icon{font-size:2.4rem;display:block;margin-bottom:8px;}
+
+  .opt-grid{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-width:640px;}
+  .opt-btn{
+    padding:14px 18px;border:3px solid var(--eq);background:var(--eq-soft);color:#5c3a25;
+    font-size:1rem;font-weight:800;border-radius:16px;cursor:pointer;box-shadow:0 5px 0 #6b452c;transition:.1s;
+    max-width:100%;
+  }
+  .opt-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #6b452c;}
+  .opt-btn.correct-flash{background:var(--success-soft);border-color:var(--success);box-shadow:0 5px 0 #2a6040;color:#255e3c;}
+  .opt-btn.wrong-flash{background:var(--danger-soft);border-color:var(--danger);box-shadow:0 5px 0 #8a3020;color:#7a2a18;}
+  .opt-btn:disabled{opacity:.35;cursor:not-allowed;}
+
+  .fire-opt .opt-btn{border-color:var(--fire);background:var(--fire-soft);color:#7a2a18;box-shadow:0 5px 0 #8a3020;}
+  .fire-opt .opt-btn.correct-flash{border-color:var(--success);background:var(--success-soft);box-shadow:0 5px 0 #2a6040;}
+  .fire-opt .opt-btn.wrong-flash{border-color:var(--danger);background:var(--danger-soft);box-shadow:0 5px 0 #8a3020;}
+
+  /* ── bucket sort (kit / danger modes) ── */
+  .bucket-row{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;max-width:640px;}
+  .bucket-btn{
+    flex:1 1 220px;min-width:200px;padding:22px 16px;border-radius:20px;cursor:pointer;
+    font-size:1.1rem;font-weight:800;display:flex;flex-direction:column;align-items:center;gap:8px;
+    border:3px solid; transition:.1s;
+  }
+  .bucket-btn .emoji{font-size:2.2rem;}
+  .bucket-btn.kit-yes{border-color:var(--kit);background:var(--kit-soft);color:#215a4f;box-shadow:0 5px 0 #2c6b5d;}
+  .bucket-btn.kit-no{border-color:var(--danger2);background:var(--danger2-soft);color:#7a2f3d;box-shadow:0 5px 0 #8a3d4d;}
+  .bucket-btn.danger{border-color:var(--danger2);background:var(--danger2-soft);color:#7a2f3d;box-shadow:0 5px 0 #8a3d4d;}
+  .bucket-btn.safe{border-color:var(--safe);background:var(--safe-soft);color:#255e3c;box-shadow:0 5px 0 #2a6040;}
+  .bucket-btn:active{transform:translateY(4px);box-shadow:none;}
+  .bucket-btn.correct-flash{border-color:var(--success) !important;background:var(--success-soft) !important;color:#255e3c !important;box-shadow:0 5px 0 #2a6040 !important;}
+  .bucket-btn.wrong-flash{border-color:var(--danger) !important;background:var(--danger-soft) !important;color:#7a2a18 !important;box-shadow:0 5px 0 #8a3020 !important;}
+  .bucket-btn:disabled{opacity:.45;cursor:not-allowed;}
+
+  /* ── feedback / footer ── */
+  .fb{margin-top:6px;font-size:1.1rem;font-weight:700;min-height:32px;display:flex;align-items:center;gap:8px;text-align:center;}
+  .fb.ok{color:#2a7a50;} .fb.ng{color:var(--danger);}
+  .action-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;justify-content:center;}
+  .btn{font-weight:800;font-size:.95rem;border-radius:14px;border:none;padding:12px 18px;cursor:pointer;color:#fff;background:var(--ink-soft);}
+  .btn.primary{background:var(--kit);}
+  .btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--ink);}
+  .btn:disabled{opacity:.4;cursor:not-allowed;}
+  .btn:active{transform:scale(.97);}
+
+  /* ── print mode ── */
+  .print-controls{display:flex;flex-direction:column;gap:14px;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{border:2px solid var(--line);background:#FCFAF3;border-radius:999px;padding:9px 16px;font-weight:700;font-size:.88rem;cursor:pointer;color:var(--ink);}
+  .chip.selected{border-color:var(--kit);background:var(--kit-soft);color:var(--kit);}
+  .field-label{font-size:.82rem;font-weight:800;color:var(--ink-soft);margin-bottom:6px;}
+  .toggle-row{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.92rem;}
+  .preview-note{color:var(--ink-soft);font-size:.85rem;margin-top:6px;text-align:center;}
+  #worksheet{display:none;}
+
+  .ws-header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid var(--ink);padding-bottom:10px;margin-bottom:16px;}
+  .ws-header h2{margin:2px 0 0;font-size:1.15rem;}
+  .ws-fields{display:flex;gap:10px;font-size:.9rem;font-weight:700;align-items:flex-end;}
+  .ws-fields .lbl{white-space:nowrap;}
+  .ws-fields .blank{border-bottom:1.5px solid var(--ink);padding:0 6px 4px;display:inline-block;min-width:100px;margin-right:10px;}
+  .ws-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+  .ws-cell{border:2px solid var(--line);border-radius:12px;padding:12px 14px;break-inside:avoid;}
+  .ws-cell .no{font-size:.78rem;font-weight:800;color:var(--ink-soft);margin-bottom:6px;}
+  .ws-sentence{font-size:1rem;font-weight:700;margin-bottom:8px;text-align:center;}
+  .ws-answer{color:var(--success);font-weight:800;}
+  .ws-choice-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;justify-content:center;}
+  .ws-choice{border:1.5px solid var(--ink);border-radius:8px;padding:5px 10px;font-size:.85rem;font-weight:700;}
+  .ws-opt-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;justify-content:center;}
+  .ws-opt-chip{border:1.5px solid var(--ink);border-radius:10px;padding:6px 12px;font-size:.85rem;font-weight:700;color:var(--ink);background:#fff;}
+
+  .hidden{display:none !important;}
+
+  @media (prefers-reduced-motion: reduce){*{transition:none !important;animation:none !important;}}
+
+  /* ── correct-answer overlay (big maru + ping-pong chime) ── */
+  #correctOverlay{
+    position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+    pointer-events:none;z-index:9999;opacity:0;
+  }
+  #correctOverlay.show{animation:overlayFade 1.05s ease forwards;}
+  @keyframes overlayFade{
+    0%{opacity:0;} 8%{opacity:1;} 78%{opacity:1;} 100%{opacity:0;}
+  }
+  .correct-circle-wrap{position:relative;width:230px;height:230px;max-width:60vw;max-height:60vw;filter:drop-shadow(0 6px 14px rgba(0,0,0,.18));}
+  .correct-circle-wrap svg{width:100%;height:100%;transform:rotate(-90deg);}
+  .correct-circle-wrap svg circle{
+    fill:rgba(255,255,255,.9);stroke:#E2483D;stroke-width:15;stroke-linecap:round;
+    stroke-dasharray:660;stroke-dashoffset:660;
+  }
+  .correct-circle-wrap.animate svg circle{animation:circleDraw .55s cubic-bezier(.4,0,.2,1) .05s forwards;}
+  @keyframes circleDraw{ to{ stroke-dashoffset:0; } }
+  .correct-label{
+    position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);
+    text-align:center;font-weight:900;color:#E2483D;font-size:1.15rem;
+    opacity:0;
+  }
+  .correct-circle-wrap.animate .correct-label{animation:labelPop .4s ease .5s forwards;}
+  @keyframes labelPop{ 0%{opacity:0;transform:translateY(-50%) scale(.6);} 60%{opacity:1;transform:translateY(-50%) scale(1.15);} 100%{opacity:1;transform:translateY(-50%) scale(1);} }
+  .correct-ping-text{
+    position:absolute;left:0;right:0;bottom:-34px;text-align:center;
+    font-weight:800;color:#E2483D;font-size:1rem;opacity:0;letter-spacing:.05em;
+  }
+  .correct-circle-wrap.animate .correct-ping-text{animation:labelPop .4s ease .62s forwards;}
+  @media (prefers-reduced-motion: reduce){
+    #correctOverlay.show{animation:none;opacity:1;}
+    .correct-circle-wrap.animate svg circle{animation:none;stroke-dashoffset:0;}
+    .correct-circle-wrap.animate .correct-label, .correct-circle-wrap.animate .correct-ping-text{animation:none;opacity:1;}
+  }
+
+  @media print{
+    body *{visibility:hidden;}
+    #worksheet, #worksheet *{visibility:visible;}
+    #worksheet{display:block !important;position:absolute;left:0;top:0;width:100%;padding:12mm;}
+    .ws-print-btn-wrap{display:none !important;}
+  }
+  @media (max-width:640px){
+    .ws-grid{grid-template-columns:1fr;}
+  }
+
+  footer.hint{max-width:var(--maxw);margin:20px auto 0;padding:0 16px;color:var(--ink-soft);font-size:.8rem;}
+  details.teacher-note{max-width:var(--maxw);margin:0 auto 20px;padding:0 16px;}
+  details.teacher-note summary{cursor:pointer;font-weight:700;color:var(--ink-soft);font-size:.85rem;}
+  details.teacher-note .box{background:#fff;border-radius:14px;padding:14px 16px;margin-top:8px;font-size:.85rem;color:var(--ink-soft);line-height:1.7;box-shadow:var(--shadow);}
+</style>
+</head>
+<body>
+<div id="correctOverlay" aria-hidden="true">
+  <div class="correct-circle-wrap">
+    <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="84"></circle></svg>
+    <div class="correct-label">せいかい！</div>
+    <div class="correct-ping-text">🔔 ピンポーン♪</div>
+  </div>
+</div>
+<div class="app">
+  <header class="top">
+    <div>
+      <div class="mieel-brand">
+        <div class="orb-mini"></div>
+        <strong>MieeL</strong>
+        <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener">www.mieel-support-school.com</a>
+      </div>
+      <h1><span class="icon">🎒</span>ぼうさいの がくしゅう</h1>
+      <p>じしん・かじ・ひなんリュック・あんぜんを まなんで、じぶんの みを まもろう</p>
+    </div>
+    <button class="icon-btn" id="btnLargeText" aria-pressed="false">🔠 文字を大きく</button>
+  </header>
+
+  <nav class="modes" role="tablist" aria-label="モードをえらぶ">
+    <button data-mode="eq" class="active" role="tab" aria-selected="true">🏚️ じしん<span class="sub">きたら どうする？</span></button>
+    <button data-mode="fire" role="tab" aria-selected="false">🔥 かじ<span class="sub">きたら どうする？</span></button>
+    <button data-mode="kit" role="tab" aria-selected="false">🎒 ひなんリュック<span class="sub">いる？ いらない？</span></button>
+    <button data-mode="sort" role="tab" aria-selected="false">⚠️ あんぜん？きけん？<span class="sub">わけてみよう</span></button>
+    <button data-mode="print" role="tab" aria-selected="false">🖨️ プリント<span class="sub">PDFをつくる</span></button>
+  </nav>
+
+  <!-- ===== EARTHQUAKE VIEW ===== -->
+  <section class="panel view" id="view-eq">
+    <div class="level-bar" id="levelBarEq"></div>
+    <div class="score-pill" id="scoreEq">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="eqSpeak" title="よみあげ">🔊</button>
+      </div>
+      <div class="word-bubble"><span class="icon">🏚️</span><span id="eqScene"></span></div>
+      <div class="opt-grid" id="eqOpts"></div>
+      <div class="fb" id="eqFb"></div>
+      <div class="action-row">
+        <button class="btn" id="eqNext" style="background:var(--eq);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FIRE VIEW ===== -->
+  <section class="panel view hidden" id="view-fire">
+    <div class="level-bar" id="levelBarFire"></div>
+    <div class="score-pill" id="scoreFire">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="fireSpeak" title="よみあげ">🔊</button>
+      </div>
+      <div class="word-bubble"><span class="icon">🔥</span><span id="fireScene"></span></div>
+      <div class="opt-grid fire-opt" id="fireOpts"></div>
+      <div class="fb" id="fireFb"></div>
+      <div class="action-row">
+        <button class="btn" id="fireNext" style="background:var(--fire);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== KIT VIEW ===== -->
+  <section class="panel view hidden" id="view-kit">
+    <div class="level-bar" id="levelBarKit"></div>
+    <div class="score-pill" id="scoreKit">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="kitSpeak" title="よみあげ">🔊</button>
+        <div class="q-text">これは ひなんリュックに いる？</div>
+      </div>
+      <div class="word-bubble" id="kitWord"></div>
+      <div class="bucket-row">
+        <button class="bucket-btn kit-yes" id="kitBtnYes"><span class="emoji">✅</span>いる</button>
+        <button class="bucket-btn kit-no" id="kitBtnNo"><span class="emoji">❌</span>いらない</button>
+      </div>
+      <div class="fb" id="kitFb"></div>
+      <div class="action-row">
+        <button class="btn" id="kitNext" style="background:var(--kit);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SORT VIEW ===== -->
+  <section class="panel view hidden" id="view-sort">
+    <div class="level-bar" id="levelBarSort"></div>
+    <div class="score-pill" id="scoreSort">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="sortSpeak" title="よみあげ">🔊</button>
+        <div class="q-text">この こうどうは どっち？</div>
+      </div>
+      <div class="word-bubble" id="sortWord"></div>
+      <div class="bucket-row">
+        <button class="bucket-btn danger" id="sortBtnDanger"><span class="emoji">⚠️</span>きけん</button>
+        <button class="bucket-btn safe" id="sortBtnSafe"><span class="emoji">✅</span>あんぜん</button>
+      </div>
+      <div class="fb" id="sortFb"></div>
+      <div class="action-row">
+        <button class="btn" id="sortNext" style="background:var(--danger2);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PRINT VIEW ===== -->
+  <section class="panel view hidden" id="view-print">
+    <div class="print-controls">
+      <div>
+        <div class="field-label">もんだいの しゅるい</div>
+        <div class="chip-row" id="printTypeChips">
+          <button class="chip selected" data-ptype="eq">🏚️ じしん</button>
+          <button class="chip" data-ptype="fire">🔥 かじ</button>
+          <button class="chip" data-ptype="kit">🎒 ひなんリュック</button>
+          <button class="chip" data-ptype="sort">⚠️ あんぜん？きけん？</button>
+        </div>
+      </div>
+      <div>
+        <div class="field-label">レベル</div>
+        <div class="chip-row" id="levelBarPrint"></div>
+      </div>
+      <div>
+        <div class="field-label">もんだいすう</div>
+        <div class="chip-row" id="printCountChips">
+          <button class="chip" data-count="4">4もん</button>
+          <button class="chip selected" data-count="6">6もん</button>
+          <button class="chip" data-count="8">8もん</button>
+        </div>
+      </div>
+      <div class="toggle-row">
+        <input type="checkbox" id="printShowAnswer">
+        <label for="printShowAnswer">こたえを ひょうじする（指導者用）</label>
+      </div>
+      <div class="action-row" style="margin-top:2px;">
+        <button class="btn ghost" id="printRegenBtn">🔄 もんだいを かえる</button>
+        <button class="btn primary" id="printOpenBtn">🖨️ プリントする</button>
+      </div>
+      <div class="preview-note">「プリントする」を押すと、印刷プレビューが開きます。ブラウザの印刷設定でPDF保存もできます。</div>
+    </div>
+  </section>
+
+  <footer class="hint">
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:5px;">
+      <div style="width:18px;height:18px;border-radius:50%;background:var(--mieel);flex:none;"></div>
+      <strong style="color:var(--ink);">MieeL</strong>
+      <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener" style="color:var(--kit);">mieel-support-school.com</a>
+    </div>
+    © ぼうさいの がくしゅう ツール（特別支援教育向け）
+  </footer>
+
+  <details class="teacher-note">
+    <summary>👩‍🏫 指導者の方へ</summary>
+    <div class="box">
+      このアプリは、特別支援学校の自立活動・生活単元学習における「防災教育」の学習を目的とした4つの練習モードと、印刷用ワークシート機能で構成されています。「こうつうあんぜん」アプリの姉妹編にあたります。<br>
+      ・<strong>じしん</strong>：地震発生時・発生後の様々な場面で、とるべき安全な行動を選ぶ練習です<br>
+      ・<strong>かじ</strong>：火事発生時の初期対応・避難行動について、具体的な場面で正しい行動を選ぶ練習です<br>
+      ・<strong>ひなんリュック</strong>：非常持ち出し袋に入れるべき物と、そうでない物を分類する練習です<br>
+      ・<strong>あんぜん？きけん？</strong>：災害時の様々な行動を「あんぜん」「きけん」に分類し、判断力を養う練習です<br>
+      各モードにレベル設定があり、児童生徒の実態に応じて選べます。よみあげボタンで音声支援も可能です。プリントモードでは同じ4種類の問題をワークシートとして印刷でき、解答表示の切り替えもできます。実際の避難訓練と組み合わせてご活用ください。
+    </div>
+  </details>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =========================================================
+     UTILS
+  ========================================================= */
+  function shuffle(a){
+    var arr=a.slice();
+    for(var i=arr.length-1;i>0;i--){
+      var j=Math.floor(Math.random()*(i+1));
+      var t=arr[i];arr[i]=arr[j];arr[j]=t;
+    }
+    return arr;
+  }
+  function pickRandom(a){ return a[Math.floor(Math.random()*a.length)]; }
+  function speak(text){
+    if(!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang='ja-JP'; u.rate=0.85;
+    window.speechSynthesis.speak(u);
+  }
+  function renderLevelBar(container, levels, activeId, onSelect){
+    container.innerHTML='';
+    levels.forEach(function(lv){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='level-btn'+(lv.id===activeId?' active':'');
+      b.innerHTML='<span class="stars">'+lv.stars+'</span><span class="name">'+lv.name+'</span>';
+      b.addEventListener('click', function(){ onSelect(lv.id); });
+      container.appendChild(b);
+    });
+  }
+  function updateScorePill(el, state){
+    el.innerHTML = '✅ '+state.score+' / '+state.total;
+  }
+  var PRAISE = ['やったね！','せいかい！','すごい！','ばっちり！','よくできました！'];
+  var TRY_AGAIN = ['もういちど！','おしい！','ゆっくり かんがえよう。','だいじょうぶ、もう一回！'];
+
+  /* ── correct-answer chime + big maru overlay ── */
+  var sharedAudioCtx = null;
+  function playDing(){
+    try{
+      var Ctx = window.AudioContext || window.webkitAudioContext;
+      if(!Ctx) return;
+      if(!sharedAudioCtx) sharedAudioCtx = new Ctx();
+      var ctx = sharedAudioCtx;
+      if(ctx.state==='suspended'){ ctx.resume(); }
+      function tone(freq, start, dur, peak){
+        var o = ctx.createOscillator();
+        var g = ctx.createGain();
+        o.type='sine'; o.frequency.value=freq;
+        o.connect(g); g.connect(ctx.destination);
+        var t0 = ctx.currentTime+start;
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.linearRampToValueAtTime(peak, t0+0.03);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0+dur);
+        o.start(t0);
+        o.stop(t0+dur+0.03);
+      }
+      tone(880.0, 0,    0.30, 0.30);  /* ピン */
+      tone(1318.5, 0.24, 0.48, 0.26); /* ポーン */
+    }catch(e){ /* audio not available; visual feedback still shows */ }
+  }
+  var overlayHideTimer = null;
+  function triggerCorrectFeedback(){
+    playDing();
+    var overlay = document.getElementById('correctOverlay');
+    if(!overlay) return;
+    var wrap = overlay.querySelector('.correct-circle-wrap');
+    if(overlayHideTimer){ clearTimeout(overlayHideTimer); overlayHideTimer=null; }
+    overlay.classList.remove('show');
+    wrap.classList.remove('animate');
+    void overlay.offsetWidth; /* force reflow so animation restarts every time */
+    overlay.classList.add('show');
+    wrap.classList.add('animate');
+    /* JS fail-safe: force-hide even if the CSS animation stalls or gets
+       interrupted (e.g. background-tab throttling under heavy multi-device
+       access), so the circle can never get stuck on screen. */
+    overlayHideTimer = setTimeout(function(){
+      overlay.classList.remove('show');
+      wrap.classList.remove('animate');
+      overlayHideTimer = null;
+    }, 1300);
+  }
+
+  /* =========================================================
+     DATA
+  ========================================================= */
+  var EQ_LEVELS = [
+    {id:1, name:'わかりやすい ばめん', stars:'★☆☆'},
+    {id:2, name:'すこし かんがえる', stars:'★★☆'},
+    {id:3, name:'なやましい ばめん', stars:'★★★'}
+  ];
+  var EQ_DB = [
+    {level:1, scene:'じしんが きたら、さいしょに なにを する？', correct:'あたまを まもる', options:['あたまを まもる','そとに はしって でる','なにも しない']},
+    {level:1, scene:'きょうしつで じしんが きた', correct:'つくえの したに かくれる', options:['つくえの したに かくれる','まどの ちかくに いく','たっている']},
+    {level:1, scene:'じしんが おさまった', correct:'せんせいの はなしを きく', options:['せんせいの はなしを きく','すぐに ひとりで あるく','おおごえで さわぐ']},
+    {level:1, scene:'エレベーターに のっているときに じしんが きた', correct:'ちかい かいで おりる', options:['ちかい かいで おりる','そのまま のりつづける','ドアを むりに あける']},
+    {level:1, scene:'キッチンで じしんが きた', correct:'ひや ガスから はなれる', options:['ひや ガスから はなれる','コンロの ちかくに いる','なべを もったまま うごく']},
+    {level:1, scene:'ほんだなの ちかくで じしんが きた', correct:'ほんだなから はなれる', options:['ほんだなから はなれる','ほんだなに ちかづく','ほんだなを おさえる']},
+    {level:1, scene:'そとで じしんが きた', correct:'ひろい ばしょに いく', options:['ひろい ばしょに いく','たてものの ちかくに いる','でんちゅうの したに いる']},
+    {level:1, scene:'じしんの あと', correct:'ラジオや テレビで じょうほうを きく', options:['ラジオや テレビで じょうほうを きく','なにも きにしない','うわさだけを しんじる']},
+    {level:2, scene:'じしんで でんきが きえた', correct:'あわてずに、あかりを さがす', options:['あわてずに、あかりを さがす','ろうそくを すぐ つける','あかるい ばしょを さがさない']},
+    {level:2, scene:'つなみの けいほうが でた', correct:'たかい ばしょに にげる', options:['たかい ばしょに にげる','うみに ちかづく','ようすを みに いく']},
+    {level:2, scene:'じしんの あと、ガスの においが する', correct:'まどを あけて、そとに でる', options:['まどを あけて、そとに でる','かでんの スイッチを いれる','ひを つける']},
+    {level:2, scene:'かぞくと はぐれて しまった', correct:'きめておいた ばしょに いく', options:['きめておいた ばしょに いく','ひとりで さがしまわる','うごかずに ないている']},
+    {level:2, scene:'じしんの あと、みずが とまった', correct:'ためておいた みずを つかう', options:['ためておいた みずを つかう','すぐに おふろに はいる','みずを むだづかいする']},
+    {level:2, scene:'よしんが つづいている', correct:'ひきつづき きをつける', options:['ひきつづき きをつける','もう だいじょうぶと おもう','いつもどおりに すごす']},
+    {level:2, scene:'ひなんじょに ついた', correct:'かかりの ひとの はなしを きく', options:['かかりの ひとの はなしを きく','すきかってに うごく','れつに わりこむ']},
+    {level:2, scene:'ひなんじょで こまっている ひとが いる', correct:'たすけを よぶ か てつだう', options:['たすけを よぶ か てつだう','みて みぬふりを する','わらう']},
+    {level:3, scene:'がっこうに いるときに おおきな じしんが きた', correct:'せんせいの しじに したがう', options:['せんせいの しじに したがう','かってに うちに かえる','まどから とびだす']},
+    {level:3, scene:'いえに ひとりで いるときに じしんが きた', correct:'あんぜんな ばしょで まもる しせいを とる', options:['あんぜんな ばしょで まもる しせいを とる','パニックに なって そとに とびだす','なにも せずに ぼうっとする']},
+    {level:3, scene:'ひなん する とき、エレベーターと かいだんが ある', correct:'かいだんを つかう', options:['かいだんを つかう','エレベーターを つかう','どちらも つかわない']},
+    {level:3, scene:'よるに じしんが きた', correct:'あしもとに きをつけて ひなんする', options:['あしもとに きをつけて ひなんする','くらいまま はしる','でんきを つけっぱなしに する']},
+    {level:3, scene:'ひなん さきで しらない ひとと いっしょに なった', correct:'たすけあって かつどうする', options:['たすけあって かつどうする','ひとりで こうどうする','きょうりょくしない']},
+    {level:3, scene:'じしんの あと、たてものに ひびが はいっている', correct:'ちかづかない', options:['ちかづかない','なかに はいって かくにんする','きにしない']},
+    {level:3, scene:'かぞくと あんぴを かくにんしたい', correct:'きめておいた れんらくほうほうを つかう', options:['きめておいた れんらくほうほうを つかう','なんども でんわを かけつづける','なにも しない']},
+    {level:3, scene:'ひなん くんれんの とき', correct:'ほんばんの つもりで しんけんに おこなう', options:['ほんばんの つもりで しんけんに おこなう','ふざけて うごく','めんどうだと おもって さぼる']}
+  ];
+
+  var FIRE_LEVELS = [
+    {id:1, name:'わかりやすい ばめん', stars:'★☆☆'},
+    {id:2, name:'すこし かんがえる', stars:'★★☆'},
+    {id:3, name:'なやましい ばめん', stars:'★★★'}
+  ];
+  var FIRE_DB = [
+    {level:1, scene:'かじを みつけたら', correct:'おおごえで「かじだ」と しらせる', options:['おおごえで「かじだ」と しらせる','だまって にげる','ひに ちかづく']},
+    {level:1, scene:'けむりが へやに はいってきた', correct:'ひくい しせいで にげる', options:['ひくい しせいで にげる','たったまま あるく','けむりを すいこむ']},
+    {level:1, scene:'ふくに ひが ついた', correct:'ころがって けす', options:['ころがって けす','はしって にげる','てで はたく']},
+    {level:1, scene:'ひなんする とき', correct:'エレベーターを つかわない', options:['エレベーターを つかわない','エレベーターを つかう','いそいで エレベーターに のる']},
+    {level:1, scene:'ドアが あついとき', correct:'ドアを あけない', options:['ドアを あけない','すぐに あける','けって あける']},
+    {level:1, scene:'かさいほうちきが なった', correct:'すぐに ひなんの じゅんびを する', options:['すぐに ひなんの じゅんびを する','むしする','おとを けす']},
+    {level:1, scene:'しょうかきを みつけた', correct:'つかいかたが わかる ひとが つかう', options:['つかいかたが わかる ひとが つかう','こどもだけで つかう','ほうっておく']},
+    {level:1, scene:'にげるとき', correct:'ハンカチなどで くちを おおう', options:['ハンカチなどで くちを おおう','なにも つけずに すう','おおきく いきを すう']},
+    {level:2, scene:'てんぷらあぶらから ひが でた', correct:'なべの ふたを して ひを けす', options:['なべの ふたを して ひを けす','みずを かける','あぶらを かける']},
+    {level:2, scene:'コンセントから けむりが でている', correct:'ブレーカーを おとす', options:['ブレーカーを おとす','そのまま つかいつづける','てで さわって かくにんする']},
+    {level:2, scene:'かじの げんばに もどりたい', correct:'ぜったいに もどらない', options:['ぜったいに もどらない','わすれものを とりに もどる','ようすを みに もどる']},
+    {level:2, scene:'ひなん けいろが けむりで ふさがれている', correct:'べつの けいろを さがす', options:['べつの けいろを さがす','むりに すすむ','うごかない']},
+    {level:2, scene:'ろうかに けむりが たまっている', correct:'かがんで すすむ', options:['かがんで すすむ','たったまま すすむ','はしって つっきる']},
+    {level:2, scene:'しょうぼうしゃが きた', correct:'みちを あけて きょうりょくする', options:['みちを あけて きょうりょくする','じゃまに なる ばしょに いる','きょうみほんいで ちかづく']},
+    {level:2, scene:'ともだちが にげおくれているかもしれない', correct:'おとなや しょうぼうしに しらせる', options:['おとなや しょうぼうしに しらせる','じぶんで さがしに もどる','なにも しない']},
+    {level:2, scene:'かじの あと', correct:'あんぜんが かくにんされるまで もどらない', options:['あんぜんが かくにんされるまで もどらない','すぐに たてものに はいる','きんじょの ひとと なかに はいる']},
+    {level:3, scene:'ねている ときに かさいほうちきの おとで めが さめた', correct:'すぐに おきて、じょうきょうを かくにんする', options:['すぐに おきて、じょうきょうを かくにんする','ねぼけたまま むしする','おとが とまるまで まつ']},
+    {level:3, scene:'にげる とき、たいせつな ものを とりに もどりたい', correct:'ものより いのちを ゆうせんする', options:['ものより いのちを ゆうせんする','かならず とりに もどる','ぐずぐずと まよいつづける']},
+    {level:3, scene:'まどから けむりが みえない かいに いる', correct:'あんぜんが かくにんできるまで ひなんの じゅんびを する', options:['あんぜんが かくにんできるまで ひなんの じゅんびを する','だいじょうぶだと おもって うごかない','すぐに まどから とびおりようとする']},
+    {level:3, scene:'かじの げんいんに なりそうな ものを みつけた', correct:'おとなに つたえる', options:['おとなに つたえる','じぶんで しょりしようとする','みなかったことに する']},
+    {level:3, scene:'ひなん くんれんちゅうに、ほんとうの けいほうが なった', correct:'くんれんと おなじように しんけんに ひなんする', options:['くんれんと おなじように しんけんに ひなんする','くんれんだと おもって むしする','ようすを みてから うごく']},
+    {level:3, scene:'エレベーターの まえに ひとが あつまっている', correct:'かいだんの ばしょを さがす', options:['かいだんの ばしょを さがす','むりに エレベーターに のろうとする','ひとを おしのける']},
+    {level:3, scene:'かじの げんばに ちかづく やじうまが いる', correct:'じぶんは ちかづかず、あんぜんな ばしょに いる', options:['じぶんは ちかづかず、あんぜんな ばしょに いる','いっしょに ちかづいて みる','しゃしんを とりに いく']},
+    {level:3, scene:'にげたあと、けが人が いる', correct:'おとなや きゅうきゅうたいに しらせる', options:['おとなや きゅうきゅうたいに しらせる','じぶんだけで なんとかしようとする','みすごす']}
+  ];
+
+  var KIT_LEVELS = [
+    {id:1, name:'はっきり わかる', stars:'★☆☆'},
+    {id:2, name:'すこし かんがえる', stars:'★★☆'},
+    {id:3, name:'よく かんがえる', stars:'★★★'}
+  ];
+  var KIT_DB = [
+    {level:1, icon:'💧', text:'水', correct:'yes'},
+    {level:1, icon:'🍞', text:'たべもの', correct:'yes'},
+    {level:1, icon:'🔦', text:'かいちゅうでんとう', correct:'yes'},
+    {level:1, icon:'🧻', text:'タオル', correct:'yes'},
+    {level:1, icon:'📺', text:'テレビ', correct:'no'},
+    {level:1, icon:'🧊', text:'れいぞうこ', correct:'no'},
+    {level:1, icon:'🎹', text:'ピアノ', correct:'no'},
+    {level:1, icon:'🛏️', text:'ベッド', correct:'no'},
+    {level:2, icon:'📻', text:'けいたいラジオ', correct:'yes'},
+    {level:2, icon:'🩹', text:'きゅうきゅうばんそうこう', correct:'yes'},
+    {level:2, icon:'📣', text:'ホイッスル（ふえ）', correct:'yes'},
+    {level:2, icon:'🧥', text:'うわぎ', correct:'yes'},
+    {level:2, icon:'🚲', text:'じてんしゃ', correct:'no'},
+    {level:2, icon:'🧸', text:'おおきい ぬいぐるみ', correct:'no'},
+    {level:2, icon:'🛋️', text:'ソファ', correct:'no'},
+    {level:2, icon:'📚', text:'おおきい ほん（ずかん）', correct:'no'},
+    {level:3, icon:'💰', text:'げんきん', correct:'yes'},
+    {level:3, icon:'🪪', text:'ほけんしょうの コピー', correct:'yes'},
+    {level:3, icon:'🔋', text:'モバイルバッテリー', correct:'yes'},
+    {level:3, icon:'😷', text:'マスク', correct:'yes'},
+    {level:3, icon:'🎮', text:'テレビゲーム', correct:'no'},
+    {level:3, icon:'❄️', text:'エアコン', correct:'no'},
+    {level:3, icon:'🪞', text:'おおきい かがみ', correct:'no'},
+    {level:3, icon:'💄', text:'フルセットの けしょうどうぐ', correct:'no'}
+  ];
+
+  var SORT_LEVELS = [
+    {id:1, name:'はっきり わかる', stars:'★☆☆'},
+    {id:2, name:'すこし かんがえる', stars:'★★☆'},
+    {id:3, name:'よく かんがえる', stars:'★★★'}
+  ];
+  var SORT_DB = [
+    {level:1, text:'じしんの とき、まどの ちかくに いる', correct:'danger'},
+    {level:1, text:'かじの とき、エレベーターに のる', correct:'danger'},
+    {level:1, text:'つなみけいほうで うみに ちかづく', correct:'danger'},
+    {level:1, text:'かさいほうちきを むしする', correct:'danger'},
+    {level:1, text:'じしんの とき、つくえの したに かくれる', correct:'safe'},
+    {level:1, text:'かじの とき、かいだんを つかう', correct:'safe'},
+    {level:1, text:'つなみけいほうで たかい ところに にげる', correct:'safe'},
+    {level:1, text:'かさいほうちきが なったら すぐ ひなんする', correct:'safe'},
+    {level:2, text:'けむりの なかを たったまま あるく', correct:'danger'},
+    {level:2, text:'ひなんの とき、ものを とりに もどる', correct:'danger'},
+    {level:2, text:'じしんの あと、ガスの ちかくで ひを つかう', correct:'danger'},
+    {level:2, text:'ひなんじょで かってに うごく', correct:'danger'},
+    {level:2, text:'けむりの なかは かがんで すすむ', correct:'safe'},
+    {level:2, text:'いのちを いちばんに かんがえる', correct:'safe'},
+    {level:2, text:'ガスの もとせんを しめる', correct:'safe'},
+    {level:2, text:'かかりの ひとの しじに したがう', correct:'safe'},
+    {level:3, text:'くんれんちゅう、ふざけて あるく', correct:'danger'},
+    {level:3, text:'よしんちゅうに あんしんしきって うごく', correct:'danger'},
+    {level:3, text:'ひなん さきで じょうほうを かくにんしない', correct:'danger'},
+    {level:3, text:'じぶんだけで きけんな ばしょに ちかづく', correct:'danger'},
+    {level:3, text:'くんれんを ほんばんの つもりで おこなう', correct:'safe'},
+    {level:3, text:'よしんに ひきつづき きをつける', correct:'safe'},
+    {level:3, text:'ラジオなどで じょうほうを かくにんする', correct:'safe'},
+    {level:3, text:'あぶないと おもったら すぐ はなれる', correct:'safe'}
+  ];
+
+  /* =========================================================
+     EQ MODE
+  ========================================================= */
+  var eqState = {level:1, score:0, total:0, current:null, locked:false};
+  var eqQueue = [];
+  function renderLevelBarEq(){
+    renderLevelBar(document.getElementById('levelBarEq'), EQ_LEVELS, eqState.level, function(id){
+      eqState.level=id; renderLevelBarEq(); newEqQuestion();
+    });
+  }
+  function newEqQuestion(){
+    if(eqQueue.length===0 || eqQueue[0].level!==eqState.level){
+      eqQueue = shuffle(EQ_DB.filter(function(d){return d.level===eqState.level;}));
+    }
+    eqState.current = eqQueue.shift();
+    eqState.locked = false;
+    document.getElementById('eqScene').textContent = eqState.current.scene;
+    document.getElementById('eqFb').className='fb'; document.getElementById('eqFb').textContent='';
+    document.getElementById('eqNext').style.display='none';
+    var grid = document.getElementById('eqOpts');
+    grid.innerHTML='';
+    shuffle(eqState.current.options).forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button'; b.className='opt-btn'; b.textContent=opt;
+      b.addEventListener('click', function(){
+        if(eqState.locked) return;
+        var correct = (opt===eqState.current.correct);
+        eqState.total++;
+        if(correct) eqState.score++;
+        updateScorePill(document.getElementById('scoreEq'), eqState);
+        var fbEl = document.getElementById('eqFb');
+        if(correct){
+          eqState.locked=true;
+          b.classList.add('correct-flash');
+          grid.querySelectorAll('.opt-btn').forEach(function(o){ if(o!==b) o.disabled=true; });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+          document.getElementById('eqNext').style.display='inline-block';
+          speak(opt);
+        } else {
+          b.classList.add('wrong-flash');
+          setTimeout(function(){ b.classList.remove('wrong-flash'); }, 500);
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+      });
+      grid.appendChild(b);
+    });
+  }
+  document.getElementById('eqSpeak').addEventListener('click', function(){
+    speak(eqState.current.scene);
+  });
+  document.getElementById('eqNext').addEventListener('click', newEqQuestion);
+
+  /* =========================================================
+     FIRE MODE
+  ========================================================= */
+  var fireState = {level:1, score:0, total:0, current:null, locked:false};
+  var fireQueue = [];
+  function renderLevelBarFire(){
+    renderLevelBar(document.getElementById('levelBarFire'), FIRE_LEVELS, fireState.level, function(id){
+      fireState.level=id; renderLevelBarFire(); newFireQuestion();
+    });
+  }
+  function newFireQuestion(){
+    if(fireQueue.length===0 || fireQueue[0].level!==fireState.level){
+      fireQueue = shuffle(FIRE_DB.filter(function(d){return d.level===fireState.level;}));
+    }
+    fireState.current = fireQueue.shift();
+    fireState.locked = false;
+    document.getElementById('fireScene').textContent = fireState.current.scene;
+    document.getElementById('fireFb').className='fb'; document.getElementById('fireFb').textContent='';
+    document.getElementById('fireNext').style.display='none';
+    var grid = document.getElementById('fireOpts');
+    grid.innerHTML='';
+    shuffle(fireState.current.options).forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button'; b.className='opt-btn'; b.textContent=opt;
+      b.addEventListener('click', function(){
+        if(fireState.locked) return;
+        var correct = (opt===fireState.current.correct);
+        fireState.total++;
+        if(correct) fireState.score++;
+        updateScorePill(document.getElementById('scoreFire'), fireState);
+        var fbEl = document.getElementById('fireFb');
+        if(correct){
+          fireState.locked=true;
+          b.classList.add('correct-flash');
+          grid.querySelectorAll('.opt-btn').forEach(function(o){ if(o!==b) o.disabled=true; });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+          document.getElementById('fireNext').style.display='inline-block';
+          speak(opt);
+        } else {
+          b.classList.add('wrong-flash');
+          setTimeout(function(){ b.classList.remove('wrong-flash'); }, 500);
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+      });
+      grid.appendChild(b);
+    });
+  }
+  document.getElementById('fireSpeak').addEventListener('click', function(){
+    speak(fireState.current.scene);
+  });
+  document.getElementById('fireNext').addEventListener('click', newFireQuestion);
+
+  /* =========================================================
+     KIT MODE
+  ========================================================= */
+  var kitState = {level:1, score:0, total:0, current:null, locked:false};
+  var kitQueue = [];
+  function renderLevelBarKit(){
+    renderLevelBar(document.getElementById('levelBarKit'), KIT_LEVELS, kitState.level, function(id){
+      kitState.level=id; renderLevelBarKit(); newKitQuestion();
+    });
+  }
+  function newKitQuestion(){
+    if(kitQueue.length===0 || kitQueue[0].level!==kitState.level){
+      kitQueue = shuffle(KIT_DB.filter(function(d){return d.level===kitState.level;}));
+    }
+    kitState.current = kitQueue.shift();
+    kitState.locked = false;
+    document.getElementById('kitWord').innerHTML = '<span class="icon">'+kitState.current.icon+'</span>'+kitState.current.text;
+    document.getElementById('kitFb').className='fb'; document.getElementById('kitFb').textContent='';
+    document.getElementById('kitNext').style.display='none';
+    document.getElementById('kitBtnYes').disabled=false;
+    document.getElementById('kitBtnNo').disabled=false;
+    document.getElementById('kitBtnYes').classList.remove('correct-flash','wrong-flash');
+    document.getElementById('kitBtnNo').classList.remove('correct-flash','wrong-flash');
+  }
+  function handleKitAnswer(choice, btnEl, otherBtnEl){
+    if(kitState.locked) return;
+    var cur = kitState.current;
+    var correct = (choice===cur.correct);
+    kitState.total++;
+    if(correct) kitState.score++;
+    updateScorePill(document.getElementById('scoreKit'), kitState);
+    var fbEl = document.getElementById('kitFb');
+    kitState.locked = true;
+    document.getElementById('kitBtnYes').disabled=true;
+    document.getElementById('kitBtnNo').disabled=true;
+    if(correct){
+      btnEl.classList.add('correct-flash');
+      fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+      triggerCorrectFeedback();
+      speak(cur.text);
+    } else {
+      btnEl.classList.add('wrong-flash');
+      otherBtnEl.classList.add('correct-flash');
+      fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+    }
+    document.getElementById('kitNext').style.display='inline-block';
+  }
+  document.getElementById('kitBtnYes').addEventListener('click', function(){
+    handleKitAnswer('yes', document.getElementById('kitBtnYes'), document.getElementById('kitBtnNo'));
+  });
+  document.getElementById('kitBtnNo').addEventListener('click', function(){
+    handleKitAnswer('no', document.getElementById('kitBtnNo'), document.getElementById('kitBtnYes'));
+  });
+  document.getElementById('kitSpeak').addEventListener('click', function(){
+    speak(kitState.current.text);
+  });
+  document.getElementById('kitNext').addEventListener('click', newKitQuestion);
+
+  /* =========================================================
+     SORT MODE
+  ========================================================= */
+  var sortState = {level:1, score:0, total:0, current:null, locked:false};
+  var sortQueue = [];
+  function renderLevelBarSort(){
+    renderLevelBar(document.getElementById('levelBarSort'), SORT_LEVELS, sortState.level, function(id){
+      sortState.level=id; renderLevelBarSort(); newSortQuestion();
+    });
+  }
+  function newSortQuestion(){
+    if(sortQueue.length===0 || sortQueue[0].level!==sortState.level){
+      sortQueue = shuffle(SORT_DB.filter(function(d){return d.level===sortState.level;}));
+    }
+    sortState.current = sortQueue.shift();
+    sortState.locked = false;
+    document.getElementById('sortWord').textContent = sortState.current.text;
+    document.getElementById('sortFb').className='fb'; document.getElementById('sortFb').textContent='';
+    document.getElementById('sortNext').style.display='none';
+    document.getElementById('sortBtnDanger').disabled=false;
+    document.getElementById('sortBtnSafe').disabled=false;
+    document.getElementById('sortBtnDanger').classList.remove('correct-flash','wrong-flash');
+    document.getElementById('sortBtnSafe').classList.remove('correct-flash','wrong-flash');
+  }
+  function handleSortAnswer(choice, btnEl, otherBtnEl){
+    if(sortState.locked) return;
+    var cur = sortState.current;
+    var correct = (choice===cur.correct);
+    sortState.total++;
+    if(correct) sortState.score++;
+    updateScorePill(document.getElementById('scoreSort'), sortState);
+    var fbEl = document.getElementById('sortFb');
+    sortState.locked = true;
+    document.getElementById('sortBtnDanger').disabled=true;
+    document.getElementById('sortBtnSafe').disabled=true;
+    if(correct){
+      btnEl.classList.add('correct-flash');
+      fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+      triggerCorrectFeedback();
+      speak(cur.text);
+    } else {
+      btnEl.classList.add('wrong-flash');
+      otherBtnEl.classList.add('correct-flash');
+      fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+    }
+    document.getElementById('sortNext').style.display='inline-block';
+  }
+  document.getElementById('sortBtnDanger').addEventListener('click', function(){
+    handleSortAnswer('danger', document.getElementById('sortBtnDanger'), document.getElementById('sortBtnSafe'));
+  });
+  document.getElementById('sortBtnSafe').addEventListener('click', function(){
+    handleSortAnswer('safe', document.getElementById('sortBtnSafe'), document.getElementById('sortBtnDanger'));
+  });
+  document.getElementById('sortSpeak').addEventListener('click', function(){
+    speak(sortState.current.text);
+  });
+  document.getElementById('sortNext').addEventListener('click', newSortQuestion);
+
+  /* =========================================================
+     PRINT MODE
+  ========================================================= */
+  var printState = {level:1, type:'eq', count:6, showAnswer:false, problems:[]};
+
+  function levelsForPrintType(){
+    return printState.type==='eq' ? EQ_LEVELS
+      : printState.type==='fire' ? FIRE_LEVELS
+      : printState.type==='kit' ? KIT_LEVELS
+      : SORT_LEVELS;
+  }
+  function renderPrintLevelBar(){
+    var levelsForType = levelsForPrintType();
+    if(!levelsForType.some(function(l){return l.id===printState.level;})){
+      printState.level = levelsForType[0].id;
+    }
+    var container = document.getElementById('levelBarPrint');
+    container.innerHTML='';
+    levelsForType.forEach(function(lv){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='chip'+(lv.id===printState.level?' selected':'');
+      b.textContent = lv.stars+' '+lv.name;
+      b.addEventListener('click', function(){
+        printState.level=lv.id; renderPrintLevelBar(); regenerateProblems(); renderWorksheet();
+      });
+      container.appendChild(b);
+    });
+  }
+  document.querySelectorAll('#printTypeChips .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#printTypeChips .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      printState.type = c.getAttribute('data-ptype');
+      renderPrintLevelBar();
+      regenerateProblems();
+      renderWorksheet();
+    });
+  });
+  document.querySelectorAll('#printCountChips .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#printCountChips .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      printState.count = parseInt(c.getAttribute('data-count'),10);
+      regenerateProblems(); renderWorksheet();
+    });
+  });
+  document.getElementById('printShowAnswer').addEventListener('change', function(e){
+    printState.showAnswer = e.target.checked;
+    renderWorksheet();
+  });
+  document.getElementById('printRegenBtn').addEventListener('click', function(){
+    regenerateProblems(); renderWorksheet();
+  });
+  document.getElementById('printOpenBtn').addEventListener('click', function(){
+    renderWorksheet();
+    setTimeout(function(){ window.print(); }, 60);
+  });
+
+  function sampleFrom(db, level, count){
+    var pool = shuffle(db.filter(function(d){ return d.level===level; }));
+    var out = [];
+    var guard=0;
+    while(out.length<count && guard<500){
+      guard++;
+      if(pool.length===0) pool = shuffle(db.filter(function(d){ return d.level===level; }));
+      out.push(pool.shift());
+    }
+    return out;
+  }
+  function regenerateProblems(){
+    var db = printState.type==='eq' ? EQ_DB
+      : printState.type==='fire' ? FIRE_DB
+      : printState.type==='kit' ? KIT_DB
+      : SORT_DB;
+    printState.problems = sampleFrom(db, printState.level, printState.count);
+  }
+  regenerateProblems();
+
+  /* boxed answer-choice chips so options never split across a line break */
+  function renderOptChips(options){
+    return '<div class="ws-opt-row">'+shuffle(options).map(function(o){ return '<span class="ws-opt-chip">'+o+'</span>'; }).join('')+'</div>';
+  }
+  function typeInstruction(){
+    return printState.type==='eq' ? 'ただしい こうどうに 〇を つけよう'
+      : printState.type==='fire' ? 'ただしい こうどうに 〇を つけよう'
+      : printState.type==='kit' ? '「いる」か「いらない」か、こたえに 〇を つけよう'
+      : '「あんぜん」か「きけん」か、こたえに 〇を つけよう';
+  }
+  function renderWorksheet(){
+    var levelsForType = levelsForPrintType();
+    var lv = levelsForType.filter(function(l){return l.id===printState.level;})[0];
+    var typeLabel = printState.type==='eq' ? '🏚️ じしん'
+      : printState.type==='fire' ? '🔥 かじ'
+      : printState.type==='kit' ? '🎒 ひなんリュック'
+      : '⚠️ あんぜん？きけん？';
+
+    var html = '';
+    html += '<div class="ws-header"><div style="display:flex;align-items:center;gap:8px;">'
+      + '<div style="width:20px;height:20px;border-radius:50%;background:var(--mieel);border:1px solid #ccc;flex:none;"></div>'
+      + '<div><div style="font-size:11px;color:#333;font-weight:700;">MieeL ぼうさいの がくしゅう</div>'
+      + '<h2>'+typeLabel+'（'+lv.name+'）</h2>'
+      + '<div style="font-size:11px;color:#666;margin-top:2px;">'+typeInstruction()+'</div></div></div>'
+      + '<div class="ws-fields" style="flex-direction:column;align-items:flex-end;gap:2px;">'
+      + '<div style="font-size:.75rem;color:#3A9A8C;font-weight:700;">mieel-support-school.com</div>'
+      + '<div><span class="lbl">なまえ：</span><span class="blank">&nbsp;</span><span class="lbl">ひづけ：</span><span class="blank">&nbsp;</span></div></div></div>';
+
+    html += '<div class="ws-grid">';
+    printState.problems.forEach(function(p, idx){
+      html += '<div class="ws-cell"><div class="no">もんだい '+(idx+1)+'</div>';
+      if(printState.type==='eq' || printState.type==='fire'){
+        html += '<div class="ws-sentence">'+p.scene+'</div>';
+        html += renderOptChips(p.options);
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;text-align:center;">こたえ：'+p.correct+'</div>';
+        }
+      } else if(printState.type==='kit'){
+        html += '<div class="ws-sentence">'+p.icon+' '+p.text+'</div>';
+        html += '<div class="ws-choice-row"><span class="ws-choice">✅ いる</span><span class="ws-choice">❌ いらない</span></div>';
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;text-align:center;">こたえ：'+(p.correct==='yes'?'✅ いる':'❌ いらない')+'</div>';
+        }
+      } else {
+        html += '<div class="ws-sentence">「'+p.text+'」</div>';
+        html += '<div class="ws-choice-row"><span class="ws-choice">⚠️ きけん</span><span class="ws-choice">✅ あんぜん</span></div>';
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;text-align:center;">こたえ：'+(p.correct==='danger'?'⚠️ きけん':'✅ あんぜん')+'</div>';
+        }
+      }
+      html += '</div>';
+    });
+    html += '</div>';
+    var ws = document.getElementById('worksheet');
+    if(!ws){
+      ws = document.createElement('div');
+      ws.id='worksheet';
+      document.body.appendChild(ws);
+    }
+    ws.innerHTML = html;
+  }
+  renderPrintLevelBar();
+  renderWorksheet();
+
+  /* =========================================================
+     MODE SWITCHING / GLOBAL UI
+  ========================================================= */
+  document.querySelectorAll('nav.modes button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('nav.modes button').forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+      btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+      var mode = btn.getAttribute('data-mode');
+      document.querySelectorAll('.view').forEach(function(v){ v.classList.add('hidden'); });
+      document.getElementById('view-'+mode).classList.remove('hidden');
+      if(mode==='print') renderWorksheet();
+    });
+  });
+
+  var largeToggle = document.getElementById('btnLargeText');
+  largeToggle.addEventListener('click', function(){
+    var on = document.documentElement.classList.toggle('large-text');
+    largeToggle.setAttribute('aria-pressed', on ? 'true':'false');
+  });
+
+  /* =========================================================
+     INIT
+  ========================================================= */
+  renderLevelBarEq(); newEqQuestion();
+  renderLevelBarFire(); newFireQuestion();
+  renderLevelBarKit(); newKitQuestion();
+  renderLevelBarSort(); newSortQuestion();
+
+})();
+</script>
+</body>
+</html>

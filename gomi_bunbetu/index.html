@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>ゴミの ぶんべつ｜MieeL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F5F8F5;
+    --card:#FFFFFF;
+    --ink:#2E2A25;
+    --ink-soft:#8A8072;
+    --line:#E4EAE4;
+    --item:#3F9D8B;    --item-soft:#DBEFEA;
+    --recycle:#5B6FA8; --recycle-soft:#E3E6F3;
+    --prep:#C98A2E;    --prep-soft:#F6E6C7;
+    --odd:#C15B6B;     --odd-soft:#F8E1E5;
+    --success:#4F9A63; --success-soft:#E3F3E6;
+    --danger:#C4573F;  --danger-soft:#FBE4DE;
+    --radius:22px;
+    --shadow:0 6px 18px rgba(46,42,37,0.10);
+    --maxw:960px;
+    --mieel:radial-gradient(circle at 50% 0%,#1B8FE8 0%,#2BB8D6 28%,#3FCB9E 45%,#8FD24A 58%,#F4D027 72%,#F7941E 100%);
+  }
+  *{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact;color-adjust:exact;}
+  html{font-size:17px;}
+  html.large-text{font-size:21px;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+    -webkit-font-smoothing:antialiased;padding-bottom:40px;
+  }
+  button{font-family:inherit;}
+  button:focus-visible, [tabindex]:focus-visible{outline:3px solid var(--item);outline-offset:2px;}
+
+  .app{max-width:var(--maxw);margin:0 auto;padding:18px 16px 8px;}
+
+  header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
+  .mieel-brand{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .mieel-brand .orb-mini{width:20px;height:20px;border-radius:50%;background:var(--mieel);flex:none;}
+  .mieel-brand strong{color:var(--ink);font-size:.85rem;}
+  .mieel-brand a{font-size:.78rem;color:var(--item);text-decoration:none;font-weight:600;}
+  .mieel-brand a:hover{text-decoration:underline;}
+  header.top h1{font-size:1.55rem;margin:0;font-weight:800;letter-spacing:.02em;display:flex;align-items:center;gap:.35em;}
+  header.top h1 .icon{font-size:1.15em;}
+  header.top p{margin:4px 0 0;color:var(--ink-soft);font-size:.85rem;font-weight:500;}
+  .icon-btn{
+    border:2px solid var(--ink);background:var(--card);color:var(--ink);border-radius:999px;
+    padding:.5em 1em;font-weight:700;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:.4em;
+  }
+  .icon-btn:hover{background:var(--prep-soft);}
+
+  nav.modes{display:flex;gap:9px;margin-bottom:16px;flex-wrap:wrap;}
+  nav.modes button{
+    flex:1 1 150px;font-weight:800;font-size:1rem;padding:13px 8px;border-radius:var(--radius);
+    border:3px solid transparent;background:var(--card);color:var(--ink-soft);box-shadow:var(--shadow);
+    cursor:pointer;transition:transform .12s ease, border-color .12s ease, color .12s ease;
+  }
+  nav.modes button .sub{display:block;font-size:.68em;font-weight:500;margin-top:2px;}
+  nav.modes button:hover{transform:translateY(-2px);}
+  nav.modes button.active{border-color:var(--ink);color:var(--ink);background:var(--prep-soft);}
+
+  section.panel{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:18px;}
+
+  .level-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+  .level-bar .level-btn{
+    flex:1 1 140px;text-align:left;border:2px solid var(--line);background:#FAFBF9;border-radius:16px;
+    padding:10px 12px;cursor:pointer;font-weight:700;color:var(--ink);
+  }
+  .level-bar .level-btn .stars{color:var(--odd);letter-spacing:1px;display:block;font-size:.9em;}
+  .level-bar .level-btn .name{display:block;font-size:1rem;}
+  .level-bar .level-btn.active{border-color:var(--item);background:var(--item-soft);}
+  .level-bar .level-btn:hover{border-color:var(--item);}
+
+  .score-pill{
+    display:inline-flex;align-items:center;gap:.5em;background:var(--success-soft);color:var(--success);
+    font-weight:800;padding:8px 16px;border-radius:999px;font-size:.95rem;margin-bottom:14px;
+  }
+
+  .stage{min-height:260px;display:flex;flex-direction:column;align-items:center;}
+  .prompt-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;text-align:center;}
+  .prompt-row .q-text{font-weight:800;color:var(--ink-soft);font-size:1rem;}
+  .speak-btn{
+    border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:999px;
+    width:40px;height:40px;font-size:1.1rem;cursor:pointer;flex:none;
+  }
+  .speak-btn:hover{background:var(--prep-soft);}
+
+  .word-bubble{
+    background:#FAFBF9;border:3px solid var(--line);border-radius:20px;padding:22px 30px;
+    font-size:1.3rem;font-weight:800;text-align:center;max-width:600px;margin-bottom:20px;line-height:1.6;
+  }
+  .word-bubble .icon{font-size:3.2rem;display:block;margin-bottom:8px;}
+
+  .opt-grid{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-width:640px;}
+  .opt-btn{
+    padding:14px 18px;border:3px solid var(--item);background:var(--item-soft);color:#215a4f;
+    font-size:1.05rem;font-weight:800;border-radius:16px;cursor:pointer;box-shadow:0 5px 0 #2c6b5d;transition:.1s;
+    max-width:100%;
+  }
+  .opt-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #2c6b5d;}
+  .opt-btn.correct-flash{background:var(--success-soft);border-color:var(--success);box-shadow:0 5px 0 #2a6040;color:#255e3c;}
+  .opt-btn.wrong-flash{background:var(--danger-soft);border-color:var(--danger);box-shadow:0 5px 0 #8a3020;color:#7a2a18;}
+  .opt-btn:disabled{opacity:.35;cursor:not-allowed;}
+
+  .prep-opt .opt-btn{border-color:var(--prep);background:var(--prep-soft);color:#7a5219;box-shadow:0 5px 0 #8a6220;}
+  .prep-opt .opt-btn.correct-flash{border-color:var(--success);background:var(--success-soft);box-shadow:0 5px 0 #2a6040;}
+  .prep-opt .opt-btn.wrong-flash{border-color:var(--danger);background:var(--danger-soft);box-shadow:0 5px 0 #8a3020;}
+
+  /* ── bucket sort (recycle mode) ── */
+  .bucket-row{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;max-width:640px;}
+  .bucket-btn{
+    flex:1 1 220px;min-width:200px;padding:22px 16px;border-radius:20px;cursor:pointer;
+    font-size:1.1rem;font-weight:800;display:flex;flex-direction:column;align-items:center;gap:8px;
+    border:3px solid; transition:.1s;
+  }
+  .bucket-btn .emoji{font-size:2.2rem;}
+  .bucket-btn.recycle-yes{border-color:var(--recycle);background:var(--recycle-soft);color:#33406e;box-shadow:0 5px 0 #3d4a7d;}
+  .bucket-btn.recycle-no{border-color:var(--odd);background:var(--odd-soft);color:#7a2f3d;box-shadow:0 5px 0 #8a3d4d;}
+  .bucket-btn:active{transform:translateY(4px);box-shadow:none;}
+  .bucket-btn.correct-flash{border-color:var(--success) !important;background:var(--success-soft) !important;color:#255e3c !important;box-shadow:0 5px 0 #2a6040 !important;}
+  .bucket-btn.wrong-flash{border-color:var(--danger) !important;background:var(--danger-soft) !important;color:#7a2a18 !important;box-shadow:0 5px 0 #8a3020 !important;}
+  .bucket-btn:disabled{opacity:.45;cursor:not-allowed;}
+
+  /* ── odd-one-out grid ── */
+  .odd-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:400px;margin-bottom:8px;}
+  .odd-cell{
+    background:#FAFBF9;border:3px solid var(--line);border-radius:16px;padding:14px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;font-size:3rem;transition:.12s;
+  }
+  .odd-cell:hover{border-color:var(--odd);}
+  .odd-cell.correct-flash{border-color:var(--success);background:var(--success-soft);}
+  .odd-cell.wrong-flash{border-color:var(--danger);background:var(--danger-soft);}
+  .odd-cell.locked{pointer-events:none;}
+  .odd-cell.dim{opacity:.4;}
+
+  /* ── feedback / footer ── */
+  .fb{margin-top:6px;font-size:1.1rem;font-weight:700;min-height:32px;display:flex;align-items:center;gap:8px;text-align:center;}
+  .fb.ok{color:#2a7a50;} .fb.ng{color:var(--danger);}
+  .action-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;justify-content:center;}
+  .btn{font-weight:800;font-size:.95rem;border-radius:14px;border:none;padding:12px 18px;cursor:pointer;color:#fff;background:var(--ink-soft);}
+  .btn.primary{background:var(--item);}
+  .btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--ink);}
+  .btn:disabled{opacity:.4;cursor:not-allowed;}
+  .btn:active{transform:scale(.97);}
+
+  /* ── print mode ── */
+  .print-controls{display:flex;flex-direction:column;gap:14px;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{border:2px solid var(--line);background:#FAFBF9;border-radius:999px;padding:9px 16px;font-weight:700;font-size:.88rem;cursor:pointer;color:var(--ink);}
+  .chip.selected{border-color:var(--item);background:var(--item-soft);color:var(--item);}
+  .field-label{font-size:.82rem;font-weight:800;color:var(--ink-soft);margin-bottom:6px;}
+  .toggle-row{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.92rem;}
+  .preview-note{color:var(--ink-soft);font-size:.85rem;margin-top:6px;text-align:center;}
+  #worksheet{display:none;}
+
+  .ws-header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid var(--ink);padding-bottom:10px;margin-bottom:16px;}
+  .ws-header h2{margin:2px 0 0;font-size:1.15rem;}
+  .ws-fields{display:flex;gap:10px;font-size:.9rem;font-weight:700;align-items:flex-end;}
+  .ws-fields .lbl{white-space:nowrap;}
+  .ws-fields .blank{border-bottom:1.5px solid var(--ink);padding:0 6px 4px;display:inline-block;min-width:100px;margin-right:10px;}
+  .ws-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+  .ws-cell{border:2px solid var(--line);border-radius:12px;padding:12px 14px;break-inside:avoid;}
+  .ws-cell .no{font-size:.78rem;font-weight:800;color:var(--ink-soft);margin-bottom:6px;}
+  .ws-sentence{font-size:1rem;font-weight:700;margin-bottom:8px;text-align:center;}
+  .ws-answer{color:var(--success);font-weight:800;}
+  .ws-opt-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;justify-content:center;}
+  .ws-opt-chip{border:1.5px solid var(--ink);border-radius:10px;padding:6px 12px;font-size:.85rem;font-weight:700;color:var(--ink);background:#fff;}
+  .ws-choice-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;justify-content:center;}
+  .ws-choice{border:1.5px solid var(--ink);border-radius:8px;padding:5px 10px;font-size:.85rem;font-weight:700;}
+  .ws-odd-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:8px;}
+  .ws-odd-cell{border:1.5px solid var(--line);border-radius:8px;padding:10px;display:flex;align-items:center;justify-content:center;font-size:2rem;}
+  .ws-odd-cell.ans{border-color:var(--success);border-width:2px;}
+
+  .hidden{display:none !important;}
+
+  @media (prefers-reduced-motion: reduce){*{transition:none !important;animation:none !important;}}
+
+  /* ── correct-answer overlay (big maru + ping-pong chime) ── */
+  #correctOverlay{
+    position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+    pointer-events:none;z-index:9999;opacity:0;
+  }
+  #correctOverlay.show{animation:overlayFade 1.05s ease forwards;}
+  @keyframes overlayFade{
+    0%{opacity:0;} 8%{opacity:1;} 78%{opacity:1;} 100%{opacity:0;}
+  }
+  .correct-circle-wrap{position:relative;width:230px;height:230px;max-width:60vw;max-height:60vw;filter:drop-shadow(0 6px 14px rgba(0,0,0,.18));}
+  .correct-circle-wrap svg{width:100%;height:100%;transform:rotate(-90deg);}
+  .correct-circle-wrap svg circle{
+    fill:rgba(255,255,255,.9);stroke:#E2483D;stroke-width:15;stroke-linecap:round;
+    stroke-dasharray:660;stroke-dashoffset:660;
+  }
+  .correct-circle-wrap.animate svg circle{animation:circleDraw .55s cubic-bezier(.4,0,.2,1) .05s forwards;}
+  @keyframes circleDraw{ to{ stroke-dashoffset:0; } }
+  .correct-label{
+    position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);
+    text-align:center;font-weight:900;color:#E2483D;font-size:1.15rem;
+    opacity:0;
+  }
+  .correct-circle-wrap.animate .correct-label{animation:labelPop .4s ease .5s forwards;}
+  @keyframes labelPop{ 0%{opacity:0;transform:translateY(-50%) scale(.6);} 60%{opacity:1;transform:translateY(-50%) scale(1.15);} 100%{opacity:1;transform:translateY(-50%) scale(1);} }
+  .correct-ping-text{
+    position:absolute;left:0;right:0;bottom:-34px;text-align:center;
+    font-weight:800;color:#E2483D;font-size:1rem;opacity:0;letter-spacing:.05em;
+  }
+  .correct-circle-wrap.animate .correct-ping-text{animation:labelPop .4s ease .62s forwards;}
+  @media (prefers-reduced-motion: reduce){
+    #correctOverlay.show{animation:none;opacity:1;}
+    .correct-circle-wrap.animate svg circle{animation:none;stroke-dashoffset:0;}
+    .correct-circle-wrap.animate .correct-label, .correct-circle-wrap.animate .correct-ping-text{animation:none;opacity:1;}
+  }
+
+  @media print{
+    body *{visibility:hidden;}
+    #worksheet, #worksheet *{visibility:visible;}
+    #worksheet{display:block !important;position:absolute;left:0;top:0;width:100%;padding:12mm;}
+    .ws-print-btn-wrap{display:none !important;}
+  }
+  @media (max-width:640px){
+    .ws-grid{grid-template-columns:1fr;}
+  }
+
+  footer.hint{max-width:var(--maxw);margin:20px auto 0;padding:0 16px;color:var(--ink-soft);font-size:.8rem;}
+  details.teacher-note{max-width:var(--maxw);margin:0 auto 20px;padding:0 16px;}
+  details.teacher-note summary{cursor:pointer;font-weight:700;color:var(--ink-soft);font-size:.85rem;}
+  details.teacher-note .box{background:#fff;border-radius:14px;padding:14px 16px;margin-top:8px;font-size:.85rem;color:var(--ink-soft);line-height:1.7;box-shadow:var(--shadow);}
+</style>
+</head>
+<body>
+<div id="correctOverlay" aria-hidden="true">
+  <div class="correct-circle-wrap">
+    <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="84"></circle></svg>
+    <div class="correct-label">せいかい！</div>
+    <div class="correct-ping-text">🔔 ピンポーン♪</div>
+  </div>
+</div>
+<div class="app">
+  <header class="top">
+    <div>
+      <div class="mieel-brand">
+        <div class="orb-mini"></div>
+        <strong>MieeL</strong>
+        <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener">www.mieel-support-school.com</a>
+      </div>
+      <h1><span class="icon">🗑️</span>ゴミの ぶんべつ</h1>
+      <p>どの ゴミ・リサイクル・すてる まえに・なかまはずれで、わけかたを まなぼう</p>
+    </div>
+    <button class="icon-btn" id="btnLargeText" aria-pressed="false">🔠 文字を大きく</button>
+  </header>
+
+  <nav class="modes" role="tablist" aria-label="モードをえらぶ">
+    <button data-mode="item" class="active" role="tab" aria-selected="true">🗑️ どの ゴミ？<span class="sub">なんの ゴミかな？</span></button>
+    <button data-mode="recycle" role="tab" aria-selected="false">♻️ リサイクル<span class="sub">できる？ できない？</span></button>
+    <button data-mode="prep" role="tab" aria-selected="false">🧴 すてる まえに<span class="sub">なにを する？</span></button>
+    <button data-mode="odd" role="tab" aria-selected="false">🔍 なかまはずれ<span class="sub">ちがう ゴミは どれ？</span></button>
+    <button data-mode="print" role="tab" aria-selected="false">🖨️ プリント<span class="sub">PDFをつくる</span></button>
+  </nav>
+
+  <!-- ===== ITEM VIEW ===== -->
+  <section class="panel view" id="view-item">
+    <div class="level-bar" id="levelBarItem"></div>
+    <div class="score-pill" id="scoreItem">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="itemSpeak" title="よみあげ">🔊</button>
+        <div class="q-text">なんの ゴミかな？</div>
+      </div>
+      <div class="word-bubble" id="itemWord"></div>
+      <div class="opt-grid" id="itemOpts"></div>
+      <div class="fb" id="itemFb"></div>
+      <div class="action-row">
+        <button class="btn" id="itemNext" style="background:var(--item);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== RECYCLE VIEW ===== -->
+  <section class="panel view hidden" id="view-recycle">
+    <div class="level-bar" id="levelBarRecycle"></div>
+    <div class="score-pill" id="scoreRecycle">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="recycleSpeak" title="よみあげ">🔊</button>
+        <div class="q-text">これは リサイクルできる？</div>
+      </div>
+      <div class="word-bubble" id="recycleWord"></div>
+      <div class="bucket-row">
+        <button class="bucket-btn recycle-yes" id="recycleBtnYes"><span class="emoji">♻️</span>できる</button>
+        <button class="bucket-btn recycle-no" id="recycleBtnNo"><span class="emoji">🗑️</span>できない</button>
+      </div>
+      <div class="fb" id="recycleFb"></div>
+      <div class="action-row">
+        <button class="btn" id="recycleNext" style="background:var(--recycle);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PREP VIEW ===== -->
+  <section class="panel view hidden" id="view-prep">
+    <div class="level-bar" id="levelBarPrep"></div>
+    <div class="score-pill" id="scorePrep">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="prepSpeak" title="よみあげ">🔊</button>
+      </div>
+      <div class="word-bubble"><span class="icon">🧴</span><span id="prepScene"></span></div>
+      <div class="opt-grid prep-opt" id="prepOpts"></div>
+      <div class="fb" id="prepFb"></div>
+      <div class="action-row">
+        <button class="btn" id="prepNext" style="background:var(--prep);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ODD VIEW ===== -->
+  <section class="panel view hidden" id="view-odd">
+    <div class="level-bar" id="levelBarOdd"></div>
+    <div class="score-pill" id="scoreOdd">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="prompt-row">
+        <button class="speak-btn" id="oddSpeak" title="よみあげ">🔊</button>
+        <div class="q-text">なかまはずれは どれ？</div>
+      </div>
+      <div class="odd-grid" id="oddGrid"></div>
+      <div class="fb" id="oddFb"></div>
+      <div class="action-row">
+        <button class="btn" id="oddNext" style="background:var(--odd);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PRINT VIEW ===== -->
+  <section class="panel view hidden" id="view-print">
+    <div class="print-controls">
+      <div>
+        <div class="field-label">もんだいの しゅるい</div>
+        <div class="chip-row" id="printTypeChips">
+          <button class="chip selected" data-ptype="item">🗑️ どの ゴミ？</button>
+          <button class="chip" data-ptype="recycle">♻️ リサイクル</button>
+          <button class="chip" data-ptype="prep">🧴 すてる まえに</button>
+          <button class="chip" data-ptype="odd">🔍 なかまはずれ</button>
+        </div>
+      </div>
+      <div>
+        <div class="field-label">レベル</div>
+        <div class="chip-row" id="levelBarPrint"></div>
+      </div>
+      <div>
+        <div class="field-label">もんだいすう</div>
+        <div class="chip-row" id="printCountChips">
+          <button class="chip" data-count="4">4もん</button>
+          <button class="chip selected" data-count="6">6もん</button>
+          <button class="chip" data-count="8">8もん</button>
+        </div>
+      </div>
+      <div class="toggle-row">
+        <input type="checkbox" id="printShowAnswer">
+        <label for="printShowAnswer">こたえを ひょうじする（指導者用）</label>
+      </div>
+      <div class="action-row" style="margin-top:2px;">
+        <button class="btn ghost" id="printRegenBtn">🔄 もんだいを かえる</button>
+        <button class="btn primary" id="printOpenBtn">🖨️ プリントする</button>
+      </div>
+      <div class="preview-note">「プリントする」を押すと、印刷プレビューが開きます。ブラウザの印刷設定でPDF保存もできます。</div>
+    </div>
+  </section>
+
+  <footer class="hint">
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:5px;">
+      <div style="width:18px;height:18px;border-radius:50%;background:var(--mieel);flex:none;"></div>
+      <strong style="color:var(--ink);">MieeL</strong>
+      <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener" style="color:var(--item);">mieel-support-school.com</a>
+    </div>
+    © ゴミの ぶんべつ ツール（特別支援教育向け）
+  </footer>
+
+  <details class="teacher-note">
+    <summary>👩‍🏫 指導者の方へ</summary>
+    <div class="box">
+      このアプリは、特別支援学校の生活科・社会科における「ゴミの分別・リサイクル」の学習を目的とした4つの練習モードと、印刷用ワークシート機能で構成されています。<br>
+      ・<strong>どの ゴミ？</strong>：もえるゴミ・もえないゴミ・かん/びん・ペットボトル・かみ の5分類24項目を練習します<br>
+      ・<strong>リサイクル</strong>：資源として再利用できる物とそうでない物を分類する練習です<br>
+      ・<strong>すてる まえに</strong>：ペットボトルのフタを外す、缶の中を洗うなど、捨てる前の準備を考える練習です<br>
+      ・<strong>なかまはずれ</strong>：同じ分別区分の物の中から、違う区分の物を見つける視覚的な弁別練習です<br>
+      <strong>※分別ルールは自治体によって異なります。</strong>本アプリは全国的に広く教えられている標準的な分類（もえるゴミ・もえないゴミ・かん/びん・ペットボトル・かみ）を扱っており、実際の指導では、お住まいの自治体の分別ルールと合わせてご確認ください。<br>
+      各モードにレベル設定があり、児童生徒の実態に応じて選べます。よみあげボタンで音声支援も可能です。プリントモードでは同じ4種類の問題をワークシートとして印刷でき、解答表示の切り替えもできます。
+    </div>
+  </details>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =========================================================
+     UTILS
+  ========================================================= */
+  function shuffle(a){
+    var arr=a.slice();
+    for(var i=arr.length-1;i>0;i--){
+      var j=Math.floor(Math.random()*(i+1));
+      var t=arr[i];arr[i]=arr[j];arr[j]=t;
+    }
+    return arr;
+  }
+  function pickRandom(a){ return a[Math.floor(Math.random()*a.length)]; }
+  function rand(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+  function speak(text){
+    if(!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang='ja-JP'; u.rate=0.85;
+    window.speechSynthesis.speak(u);
+  }
+  function renderLevelBar(container, levels, activeId, onSelect){
+    container.innerHTML='';
+    levels.forEach(function(lv){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='level-btn'+(lv.id===activeId?' active':'');
+      b.innerHTML='<span class="stars">'+lv.stars+'</span><span class="name">'+lv.name+'</span>';
+      b.addEventListener('click', function(){ onSelect(lv.id); });
+      container.appendChild(b);
+    });
+  }
+  function updateScorePill(el, state){
+    el.innerHTML = '✅ '+state.score+' / '+state.total;
+  }
+  var PRAISE = ['やったね！','せいかい！','すごい！','ばっちり！','よくできました！'];
+  var TRY_AGAIN = ['もういちど！','おしい！','ゆっくり かんがえよう。','だいじょうぶ、もう一回！'];
+
+  /* ── correct-answer chime + big maru overlay ── */
+  var sharedAudioCtx = null;
+  function playDing(){
+    try{
+      var Ctx = window.AudioContext || window.webkitAudioContext;
+      if(!Ctx) return;
+      if(!sharedAudioCtx) sharedAudioCtx = new Ctx();
+      var ctx = sharedAudioCtx;
+      if(ctx.state==='suspended'){ ctx.resume(); }
+      function tone(freq, start, dur, peak){
+        var o = ctx.createOscillator();
+        var g = ctx.createGain();
+        o.type='sine'; o.frequency.value=freq;
+        o.connect(g); g.connect(ctx.destination);
+        var t0 = ctx.currentTime+start;
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.linearRampToValueAtTime(peak, t0+0.03);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0+dur);
+        o.start(t0);
+        o.stop(t0+dur+0.03);
+      }
+      tone(880.0, 0,    0.30, 0.30);  /* ピン */
+      tone(1318.5, 0.24, 0.48, 0.26); /* ポーン */
+    }catch(e){ /* audio not available; visual feedback still shows */ }
+  }
+  var overlayHideTimer = null;
+  function triggerCorrectFeedback(){
+    playDing();
+    var overlay = document.getElementById('correctOverlay');
+    if(!overlay) return;
+    var wrap = overlay.querySelector('.correct-circle-wrap');
+    if(overlayHideTimer){ clearTimeout(overlayHideTimer); overlayHideTimer=null; }
+    overlay.classList.remove('show');
+    wrap.classList.remove('animate');
+    void overlay.offsetWidth; /* force reflow so animation restarts every time */
+    overlay.classList.add('show');
+    wrap.classList.add('animate');
+    /* JS fail-safe: force-hide even if the CSS animation stalls or gets
+       interrupted (e.g. background-tab throttling under heavy multi-device
+       access), so the circle can never get stuck on screen. */
+    overlayHideTimer = setTimeout(function(){
+      overlay.classList.remove('show');
+      wrap.classList.remove('animate');
+      overlayHideTimer = null;
+    }, 1300);
+  }
+
+  /* =========================================================
+     DATA
+  ========================================================= */
+  var ITEM_LEVELS = [
+    {id:1, name:'わかりやすい もの', stars:'★☆☆'},
+    {id:2, name:'いろいろな もの', stars:'★★☆'},
+    {id:3, name:'よく かんがえる もの', stars:'★★★'}
+  ];
+  var CATEGORIES = ['もえるゴミ','もえないゴミ','かん・びん','ペットボトル','かみ・だんボール'];
+  var ITEM_DB = [
+    {level:1, icon:'🍌', item:'たべのこし', category:'もえるゴミ'},
+    {level:1, icon:'🗞️', item:'しんぶんし', category:'かみ・だんボール'},
+    {level:1, icon:'🥫', item:'かんづめの かん', category:'かん・びん'},
+    {level:1, icon:'💧', item:'みずの ペットボトル', category:'ペットボトル'},
+    {level:1, icon:'🍽️', item:'われた おさら', category:'もえないゴミ'},
+    {level:1, icon:'📦', item:'だんボールばこ', category:'かみ・だんボール'},
+    {level:1, icon:'🥤', item:'ジュースの かん', category:'かん・びん'},
+    {level:1, icon:'🧻', item:'つかった ティッシュ', category:'もえるゴミ'},
+    {level:2, icon:'🪞', item:'われた かがみ', category:'もえないゴミ'},
+    {level:2, icon:'🫙', item:'ジャムの びん', category:'かん・びん'},
+    {level:2, icon:'🧃', item:'おちゃの ペットボトル', category:'ペットボトル'},
+    {level:2, icon:'📰', item:'ざっし', category:'かみ・だんボール'},
+    {level:2, icon:'🍂', item:'おちば', category:'もえるゴミ'},
+    {level:2, icon:'💡', item:'きれた でんきゅう', category:'もえないゴミ'},
+    {level:2, icon:'🥛', item:'ぎゅうにゅうパック（あらった もの）', category:'かみ・だんボール'},
+    {level:2, icon:'🍾', item:'のみものの びん', category:'かん・びん'},
+    {level:3, icon:'🥚', item:'たまごの から', category:'もえるゴミ'},
+    {level:3, icon:'🔧', item:'ちいさい きんぞく', category:'もえないゴミ'},
+    {level:3, icon:'🧴', item:'ちょうみりょうの びん', category:'かん・びん'},
+    {level:3, icon:'🧋', item:'たんさんの ペットボトル', category:'ペットボトル'},
+    {level:3, icon:'📋', item:'カレンダー', category:'かみ・だんボール'},
+    {level:3, icon:'🪵', item:'きの えだ', category:'もえるゴミ'},
+    {level:3, icon:'🕶️', item:'われた めがね', category:'もえないゴミ'},
+    {level:3, icon:'🛍️', item:'かみぶくろ', category:'かみ・だんボール'}
+  ];
+
+  var RECYCLE_LEVELS = [
+    {id:1, name:'はっきり わかる', stars:'★☆☆'},
+    {id:2, name:'すこし かんがえる', stars:'★★☆'},
+    {id:3, name:'よく かんがえる', stars:'★★★'}
+  ];
+  var RECYCLE_DB = [
+    {level:1, icon:'🥫', item:'あきかん', correct:'yes'},
+    {level:1, icon:'🗞️', item:'しんぶんし', correct:'yes'},
+    {level:1, icon:'🧴', item:'ペットボトル', correct:'yes'},
+    {level:1, icon:'📦', item:'だんボール', correct:'yes'},
+    {level:1, icon:'🍌', item:'たべのこし', correct:'no'},
+    {level:1, icon:'🍽️', item:'われた しょっき', correct:'no'},
+    {level:1, icon:'🧻', item:'つかった ティッシュ', correct:'no'},
+    {level:1, icon:'💡', item:'きれた でんきゅう', correct:'no'},
+    {level:2, icon:'🫙', item:'あきびん', correct:'yes'},
+    {level:2, icon:'🥛', item:'あらった ぎゅうにゅうパック', correct:'yes'},
+    {level:2, icon:'📰', item:'ざっし', correct:'yes'},
+    {level:2, icon:'🧃', item:'べつの ペットボトル', correct:'yes'},
+    {level:2, icon:'🍂', item:'おちば', correct:'no'},
+    {level:2, icon:'🪞', item:'われた かがみ', correct:'no'},
+    {level:2, icon:'🥚', item:'たまごの から', correct:'no'},
+    {level:2, icon:'🔧', item:'きんぞくくず', correct:'no'},
+    {level:3, icon:'🧻', item:'きれいな アルミホイル', correct:'yes'},
+    {level:3, icon:'📋', item:'カレンダー', correct:'yes'},
+    {level:3, icon:'🛍️', item:'かみぶくろ', correct:'yes'},
+    {level:3, icon:'🥫', item:'かんづめの かん（あき）', correct:'yes'},
+    {level:3, icon:'🧴', item:'つかいおわった あぶら', correct:'no'},
+    {level:3, icon:'👕', item:'よごれた ぬの', correct:'no'},
+    {level:3, icon:'🕶️', item:'われた めがね', correct:'no'},
+    {level:3, icon:'🪒', item:'つかいすての かみそり', correct:'no'}
+  ];
+
+  var PREP_LEVELS = [
+    {id:1, name:'きほんの じゅんび', stars:'★☆☆'},
+    {id:2, name:'すこし かんがえる', stars:'★★☆'},
+    {id:3, name:'よく かんがえる', stars:'★★★'}
+  ];
+  var PREP_DB = [
+    {level:1, scene:'ペットボトルを すてる とき', correct:'フタと ラベルを とる', options:['フタと ラベルを とる','そのまま すてる','わらずに すてる']},
+    {level:1, scene:'かんを すてる とき', correct:'なかを あらう', options:['なかを あらう','そのまま すてる','なかみを のこす']},
+    {level:1, scene:'びんを すてる とき', correct:'なかを あらう', options:['なかを あらう','そのまま すてる','ふたを つけたまま すてる']},
+    {level:1, scene:'だんボールを すてる とき', correct:'たたんで まとめる', options:['たたんで まとめる','おおきいまま すてる','ぬらして すてる']},
+    {level:1, scene:'しんぶんしを すてる とき', correct:'ひもで しばる', options:['ひもで しばる','ばらばらの まま すてる','ぬらして すてる']},
+    {level:1, scene:'われた ガラスを すてる とき', correct:'しんぶんしに つつむ', options:['しんぶんしに つつむ','そのまま すてる','てで もつ']},
+    {level:1, scene:'でんきゅうを すてる とき', correct:'われないように つつむ', options:['われないように つつむ','そのまま すてる','ふんで こわす']},
+    {level:1, scene:'スプレーかんを すてる とき', correct:'なかみを ぜんぶ つかいきる', options:['なかみを ぜんぶ つかいきる','なかみが のこったまま すてる','ふって すてる']},
+    {level:2, scene:'ぎゅうにゅうパックを すてる とき', correct:'あらって、ひらいて かわかす', options:['あらって、ひらいて かわかす','そのまま すてる','ぬれたまま すてる']},
+    {level:2, scene:'ようきに たべものが のこっている', correct:'なかみを すてて から あらう', options:['なかみを すてて から あらう','なかみごと すてる','あらわずに すてる']},
+    {level:2, scene:'とがった ものを すてる とき', correct:'かみに つつんで「きけん」と かく', options:['かみに つつんで「きけん」と かく','そのまま すてる','ふくろに いれずに すてる']},
+    {level:2, scene:'おおきい かぐを すてる とき', correct:'しやくしょに れんらくする', options:['しやくしょに れんらくする','かってに すてる','わって ちいさくする']},
+    {level:2, scene:'でんちを すてる とき', correct:'せんようの かいしゅうばこに いれる', options:['せんようの かいしゅうばこに いれる','もえないゴミに まぜる','みずに ぬらして すてる']},
+    {level:2, scene:'アルミホイルを すてる とき', correct:'よごれを おとして まとめる', options:['よごれを おとして まとめる','よごれたまま すてる','ばらばらに すてる']},
+    {level:2, scene:'ペットボトルの ラベルを すてる とき', correct:'プラスチックゴミに する', options:['プラスチックゴミに する','ペットボトルと いっしょに する','もえるゴミに する']},
+    {level:2, scene:'かみコップを すてる とき', correct:'すすいでから かみゴミに する', options:['すすいでから かみゴミに する','いつも かみゴミに する','きにせず すてる']},
+    {level:3, scene:'なにゴミか わからない ものが ある', correct:'しやくしょの ぶんべつひょうを かくにんする', options:['しやくしょの ぶんべつひょうを かくにんする','てきとうに すてる','いつも おなじ ゴミに いれる']},
+    {level:3, scene:'リサイクルマークが ついている', correct:'マークを かくにんして ただしく わける', options:['マークを かくにんして ただしく わける','マークを むしする','きにせず もえるゴミに する']},
+    {level:3, scene:'かんと びんが まざっている', correct:'べつべつに わける', options:['べつべつに わける','いっしょに すてる','どちらかだけ すてる']},
+    {level:3, scene:'しげんゴミの ひを まちがえた', correct:'つぎの かいしゅうびまで まつ', options:['つぎの かいしゅうびまで まつ','べつの ひに かってに だす','ほうっておく']},
+    {level:3, scene:'ゴミぶくろが やぶれそう', correct:'あたらしい ふくろに いれかえる', options:['あたらしい ふくろに いれかえる','そのまま だす','てで おさえながら はこぶ']},
+    {level:3, scene:'リサイクルできるか わからない プラスチック', correct:'ようきほうそう マークを さがす', options:['ようきほうそう マークを さがす','かんがえずに すてる','いつも もえないゴミに する']},
+    {level:3, scene:'ふくすうの しゅるいの ゴミが まざった ようき', correct:'わけられる ぶぶんは わける', options:['わけられる ぶぶんは わける','めんどうなので まぜたまま だす','きにしない']},
+    {level:3, scene:'ひっこしさきの ゴミの ルールが わからない', correct:'しやくしょや かんばんで かくにんする', options:['しやくしょや かんばんで かくにんする','まえの ばしょと おなじだと おもう','てきとうに だす']}
+  ];
+
+  var ODD_LEVELS = [
+    {id:1, name:'はっきり ちがう', stars:'★☆☆', pool:['もえるゴミ','かん・びん','ペットボトル']},
+    {id:2, name:'いろいろな しゅるい', stars:'★★☆', pool:['もえるゴミ','もえないゴミ','かん・びん','ペットボトル']},
+    {id:3, name:'にてる ゴミも', stars:'★★★', pool:['もえるゴミ','もえないゴミ','かん・びん','ペットボトル','かみ・だんボール']}
+  ];
+  var CATEGORY_ICONS = {
+    'もえるゴミ': ['🍌','🍂','🧻','🥚','🪵','👕','🥡'],
+    'もえないゴミ': ['🍽️','🪞','💡','🪒','🏺','🔧','🕶️'],
+    'かん・びん': ['🥫','🫙','🧴','🍾'],
+    'ペットボトル': ['💧','🧃','🧋'],
+    'かみ・だんボール': ['🗞️','📦','📰','📋','🛍️']
+  };
+
+  /* =========================================================
+     ITEM MODE
+  ========================================================= */
+  var itemState = {level:1, score:0, total:0, current:null, locked:false};
+  var itemQueue = [];
+  function renderLevelBarItem(){
+    renderLevelBar(document.getElementById('levelBarItem'), ITEM_LEVELS, itemState.level, function(id){
+      itemState.level=id; renderLevelBarItem(); newItemQuestion();
+    });
+  }
+  function newItemQuestion(){
+    if(itemQueue.length===0 || itemQueue[0].level!==itemState.level){
+      itemQueue = shuffle(ITEM_DB.filter(function(d){return d.level===itemState.level;}));
+    }
+    itemState.current = itemQueue.shift();
+    itemState.locked = false;
+    var cur = itemState.current;
+    document.getElementById('itemWord').innerHTML = '<span class="icon">'+cur.icon+'</span>'+cur.item;
+    document.getElementById('itemFb').className='fb'; document.getElementById('itemFb').textContent='';
+    document.getElementById('itemNext').style.display='none';
+    var grid = document.getElementById('itemOpts');
+    grid.innerHTML='';
+    shuffle(CATEGORIES).forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button'; b.className='opt-btn'; b.textContent=opt;
+      b.addEventListener('click', function(){
+        if(itemState.locked) return;
+        var correct = (opt===cur.category);
+        itemState.total++;
+        if(correct) itemState.score++;
+        updateScorePill(document.getElementById('scoreItem'), itemState);
+        var fbEl = document.getElementById('itemFb');
+        if(correct){
+          itemState.locked=true;
+          b.classList.add('correct-flash');
+          grid.querySelectorAll('.opt-btn').forEach(function(o){ if(o!==b) o.disabled=true; });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+          document.getElementById('itemNext').style.display='inline-block';
+          speak(cur.item+'は '+cur.category+'です。');
+        } else {
+          b.classList.add('wrong-flash');
+          setTimeout(function(){ b.classList.remove('wrong-flash'); }, 500);
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+      });
+      grid.appendChild(b);
+    });
+  }
+  document.getElementById('itemSpeak').addEventListener('click', function(){
+    speak(itemState.current.item+'は なんの ゴミかな？');
+  });
+  document.getElementById('itemNext').addEventListener('click', newItemQuestion);
+
+  /* =========================================================
+     RECYCLE MODE
+  ========================================================= */
+  var recycleState = {level:1, score:0, total:0, current:null, locked:false};
+  var recycleQueue = [];
+  function renderLevelBarRecycle(){
+    renderLevelBar(document.getElementById('levelBarRecycle'), RECYCLE_LEVELS, recycleState.level, function(id){
+      recycleState.level=id; renderLevelBarRecycle(); newRecycleQuestion();
+    });
+  }
+  function newRecycleQuestion(){
+    if(recycleQueue.length===0 || recycleQueue[0].level!==recycleState.level){
+      recycleQueue = shuffle(RECYCLE_DB.filter(function(d){return d.level===recycleState.level;}));
+    }
+    recycleState.current = recycleQueue.shift();
+    recycleState.locked = false;
+    document.getElementById('recycleWord').innerHTML = '<span class="icon">'+recycleState.current.icon+'</span>'+recycleState.current.item;
+    document.getElementById('recycleFb').className='fb'; document.getElementById('recycleFb').textContent='';
+    document.getElementById('recycleNext').style.display='none';
+    document.getElementById('recycleBtnYes').disabled=false;
+    document.getElementById('recycleBtnNo').disabled=false;
+    document.getElementById('recycleBtnYes').classList.remove('correct-flash','wrong-flash');
+    document.getElementById('recycleBtnNo').classList.remove('correct-flash','wrong-flash');
+  }
+  function handleRecycleAnswer(choice, btnEl, otherBtnEl){
+    if(recycleState.locked) return;
+    var cur = recycleState.current;
+    var correct = (choice===cur.correct);
+    recycleState.total++;
+    if(correct) recycleState.score++;
+    updateScorePill(document.getElementById('scoreRecycle'), recycleState);
+    var fbEl = document.getElementById('recycleFb');
+    recycleState.locked = true;
+    document.getElementById('recycleBtnYes').disabled=true;
+    document.getElementById('recycleBtnNo').disabled=true;
+    if(correct){
+      btnEl.classList.add('correct-flash');
+      fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+      triggerCorrectFeedback();
+      speak(cur.item+'です。');
+    } else {
+      btnEl.classList.add('wrong-flash');
+      otherBtnEl.classList.add('correct-flash');
+      fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+    }
+    document.getElementById('recycleNext').style.display='inline-block';
+  }
+  document.getElementById('recycleBtnYes').addEventListener('click', function(){
+    handleRecycleAnswer('yes', document.getElementById('recycleBtnYes'), document.getElementById('recycleBtnNo'));
+  });
+  document.getElementById('recycleBtnNo').addEventListener('click', function(){
+    handleRecycleAnswer('no', document.getElementById('recycleBtnNo'), document.getElementById('recycleBtnYes'));
+  });
+  document.getElementById('recycleSpeak').addEventListener('click', function(){
+    speak(recycleState.current.item);
+  });
+  document.getElementById('recycleNext').addEventListener('click', newRecycleQuestion);
+
+  /* =========================================================
+     PREP MODE
+  ========================================================= */
+  var prepState = {level:1, score:0, total:0, current:null, locked:false};
+  var prepQueue = [];
+  function renderLevelBarPrep(){
+    renderLevelBar(document.getElementById('levelBarPrep'), PREP_LEVELS, prepState.level, function(id){
+      prepState.level=id; renderLevelBarPrep(); newPrepQuestion();
+    });
+  }
+  function newPrepQuestion(){
+    if(prepQueue.length===0 || prepQueue[0].level!==prepState.level){
+      prepQueue = shuffle(PREP_DB.filter(function(d){return d.level===prepState.level;}));
+    }
+    prepState.current = prepQueue.shift();
+    prepState.locked = false;
+    document.getElementById('prepScene').textContent = prepState.current.scene;
+    document.getElementById('prepFb').className='fb'; document.getElementById('prepFb').textContent='';
+    document.getElementById('prepNext').style.display='none';
+    var grid = document.getElementById('prepOpts');
+    grid.innerHTML='';
+    shuffle(prepState.current.options).forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button'; b.className='opt-btn'; b.textContent=opt;
+      b.addEventListener('click', function(){
+        if(prepState.locked) return;
+        var correct = (opt===prepState.current.correct);
+        prepState.total++;
+        if(correct) prepState.score++;
+        updateScorePill(document.getElementById('scorePrep'), prepState);
+        var fbEl = document.getElementById('prepFb');
+        if(correct){
+          prepState.locked=true;
+          b.classList.add('correct-flash');
+          grid.querySelectorAll('.opt-btn').forEach(function(o){ if(o!==b) o.disabled=true; });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+          document.getElementById('prepNext').style.display='inline-block';
+          speak(opt);
+        } else {
+          b.classList.add('wrong-flash');
+          setTimeout(function(){ b.classList.remove('wrong-flash'); }, 500);
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+      });
+      grid.appendChild(b);
+    });
+  }
+  document.getElementById('prepSpeak').addEventListener('click', function(){
+    speak(prepState.current.scene);
+  });
+  document.getElementById('prepNext').addEventListener('click', newPrepQuestion);
+
+  /* =========================================================
+     ODD MODE
+  ========================================================= */
+  var oddState = {level:1, score:0, total:0, current:null, locked:false};
+  function genOddQuestion(level){
+    var lv = ODD_LEVELS.filter(function(l){return l.id===level;})[0];
+    var pool = lv.pool;
+    var mainCat = pickRandom(pool);
+    var oddCat = pickRandom(pool.filter(function(c){return c!==mainCat;}));
+    var mainIcons = shuffle(CATEGORY_ICONS[mainCat].slice()).slice(0,3);
+    var oddIcon = pickRandom(CATEGORY_ICONS[oddCat]);
+    var arr = mainIcons.concat([oddIcon]);
+    var order = shuffle(arr.map(function(v,i){return i;}));
+    var icons = order.map(function(i){return arr[i];});
+    /* the odd icon is guaranteed unique among the 4 (no icon is reused across categories,
+       and within a category all icons are distinct), so its position after shuffling is
+       simply where oddIcon landed */
+    var correctIndex = icons.indexOf(oddIcon);
+    return {icons:icons, correctIndex:correctIndex};
+  }
+  function renderLevelBarOdd(){
+    renderLevelBar(document.getElementById('levelBarOdd'), ODD_LEVELS, oddState.level, function(id){
+      oddState.level=id; renderLevelBarOdd(); newOddQuestion();
+    });
+  }
+  function newOddQuestion(){
+    oddState.current = genOddQuestion(oddState.level);
+    oddState.locked = false;
+    document.getElementById('oddFb').className='fb'; document.getElementById('oddFb').textContent='';
+    document.getElementById('oddNext').style.display='none';
+    var grid = document.getElementById('oddGrid');
+    grid.innerHTML='';
+    oddState.current.icons.forEach(function(icon, idx){
+      var cell = document.createElement('div');
+      cell.className='odd-cell';
+      cell.textContent = icon;
+      cell.addEventListener('click', function(){
+        if(oddState.locked) return;
+        var correct = (idx===oddState.current.correctIndex);
+        oddState.total++;
+        if(correct) oddState.score++;
+        updateScorePill(document.getElementById('scoreOdd'), oddState);
+        oddState.locked = true;
+        var fbEl = document.getElementById('oddFb');
+        var cells = grid.querySelectorAll('.odd-cell');
+        if(correct){
+          cell.classList.add('correct-flash');
+          cells.forEach(function(c){ if(c!==cell) c.classList.add('dim'); });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+        } else {
+          cell.classList.add('wrong-flash');
+          cells[oddState.current.correctIndex].classList.add('correct-flash');
+          cells.forEach(function(c,i){ if(i!==oddState.current.correctIndex && c!==cell) c.classList.add('dim'); });
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+        cells.forEach(function(c){ c.classList.add('locked'); });
+        document.getElementById('oddNext').style.display='inline-block';
+      });
+      grid.appendChild(cell);
+    });
+  }
+  document.getElementById('oddSpeak').addEventListener('click', function(){
+    speak('なかまはずれは どれかな？');
+  });
+  document.getElementById('oddNext').addEventListener('click', newOddQuestion);
+
+  /* =========================================================
+     PRINT MODE
+  ========================================================= */
+  var printState = {level:1, type:'item', count:6, showAnswer:false, problems:[]};
+
+  function levelsForPrintType(){
+    return printState.type==='item' ? ITEM_LEVELS
+      : printState.type==='recycle' ? RECYCLE_LEVELS
+      : printState.type==='prep' ? PREP_LEVELS
+      : ODD_LEVELS;
+  }
+  function renderPrintLevelBar(){
+    var levelsForType = levelsForPrintType();
+    if(!levelsForType.some(function(l){return l.id===printState.level;})){
+      printState.level = levelsForType[0].id;
+    }
+    var container = document.getElementById('levelBarPrint');
+    container.innerHTML='';
+    levelsForType.forEach(function(lv){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='chip'+(lv.id===printState.level?' selected':'');
+      b.textContent = lv.stars+' '+lv.name;
+      b.addEventListener('click', function(){
+        printState.level=lv.id; renderPrintLevelBar(); regenerateProblems(); renderWorksheet();
+      });
+      container.appendChild(b);
+    });
+  }
+  document.querySelectorAll('#printTypeChips .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#printTypeChips .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      printState.type = c.getAttribute('data-ptype');
+      renderPrintLevelBar();
+      regenerateProblems();
+      renderWorksheet();
+    });
+  });
+  document.querySelectorAll('#printCountChips .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#printCountChips .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      printState.count = parseInt(c.getAttribute('data-count'),10);
+      regenerateProblems(); renderWorksheet();
+    });
+  });
+  document.getElementById('printShowAnswer').addEventListener('change', function(e){
+    printState.showAnswer = e.target.checked;
+    renderWorksheet();
+  });
+  document.getElementById('printRegenBtn').addEventListener('click', function(){
+    regenerateProblems(); renderWorksheet();
+  });
+  document.getElementById('printOpenBtn').addEventListener('click', function(){
+    renderWorksheet();
+    setTimeout(function(){ window.print(); }, 60);
+  });
+
+  function sampleFrom(db, level, count){
+    var pool = shuffle(db.filter(function(d){ return d.level===level; }));
+    var out = [];
+    var guard=0;
+    while(out.length<count && guard<500){
+      guard++;
+      if(pool.length===0) pool = shuffle(db.filter(function(d){ return d.level===level; }));
+      out.push(pool.shift());
+    }
+    return out;
+  }
+  function regenerateProblems(){
+    if(printState.type==='item'){
+      printState.problems = sampleFrom(ITEM_DB, printState.level, printState.count);
+    } else if(printState.type==='recycle'){
+      printState.problems = sampleFrom(RECYCLE_DB, printState.level, printState.count);
+    } else if(printState.type==='prep'){
+      printState.problems = sampleFrom(PREP_DB, printState.level, printState.count);
+    } else {
+      var list=[];
+      for(var i=0;i<printState.count;i++){ list.push(genOddQuestion(printState.level)); }
+      printState.problems = list;
+    }
+  }
+  regenerateProblems();
+
+  /* boxed answer-choice chips so options never split across a line break */
+  function renderOptChips(options){
+    return '<div class="ws-opt-row">'+shuffle(options).map(function(o){ return '<span class="ws-opt-chip">'+o+'</span>'; }).join('')+'</div>';
+  }
+  function typeInstruction(){
+    return printState.type==='item' ? 'ぶんるいに 〇を つけよう'
+      : printState.type==='recycle' ? '「できる」か「できない」か、こたえに 〇を つけよう'
+      : printState.type==='prep' ? 'ただしい じゅんびに 〇を つけよう'
+      : 'なかまはずれに 〇を つけよう';
+  }
+  function renderWorksheet(){
+    var levelsForType = levelsForPrintType();
+    var lv = levelsForType.filter(function(l){return l.id===printState.level;})[0];
+    var typeLabel = printState.type==='item' ? '🗑️ どの ゴミ？'
+      : printState.type==='recycle' ? '♻️ リサイクル'
+      : printState.type==='prep' ? '🧴 すてる まえに'
+      : '🔍 なかまはずれ';
+
+    var html = '';
+    html += '<div class="ws-header"><div style="display:flex;align-items:center;gap:8px;">'
+      + '<div style="width:20px;height:20px;border-radius:50%;background:var(--mieel);border:1px solid #ccc;flex:none;"></div>'
+      + '<div><div style="font-size:11px;color:#333;font-weight:700;">MieeL ゴミの ぶんべつ</div>'
+      + '<h2>'+typeLabel+'（'+lv.name+'）</h2>'
+      + '<div style="font-size:11px;color:#666;margin-top:2px;">'+typeInstruction()+'</div></div></div>'
+      + '<div class="ws-fields" style="flex-direction:column;align-items:flex-end;gap:2px;">'
+      + '<div style="font-size:.75rem;color:#3A9A8C;font-weight:700;">mieel-support-school.com</div>'
+      + '<div><span class="lbl">なまえ：</span><span class="blank">&nbsp;</span><span class="lbl">ひづけ：</span><span class="blank">&nbsp;</span></div></div></div>';
+
+    html += '<div class="ws-grid">';
+    printState.problems.forEach(function(p, idx){
+      html += '<div class="ws-cell"><div class="no">もんだい '+(idx+1)+'</div>';
+      if(printState.type==='item'){
+        html += '<div class="ws-sentence" style="font-size:1.6rem;">'+p.icon+' '+p.item+'</div>';
+        html += renderOptChips(CATEGORIES);
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;text-align:center;">こたえ：'+p.category+'</div>';
+        }
+      } else if(printState.type==='recycle'){
+        html += '<div class="ws-sentence" style="font-size:1.6rem;">'+p.icon+' '+p.item+'</div>';
+        html += '<div class="ws-choice-row"><span class="ws-choice">♻️ できる</span><span class="ws-choice">🗑️ できない</span></div>';
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;text-align:center;">こたえ：'+(p.correct==='yes'?'♻️ できる':'🗑️ できない')+'</div>';
+        }
+      } else if(printState.type==='prep'){
+        html += '<div class="ws-sentence">'+p.scene+'</div>';
+        html += renderOptChips(p.options);
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;text-align:center;">こたえ：'+p.correct+'</div>';
+        }
+      } else {
+        html += '<div class="ws-odd-grid">'+p.icons.map(function(ic,i){
+          var cls = (printState.showAnswer && i===p.correctIndex) ? 'ws-odd-cell ans' : 'ws-odd-cell';
+          return '<div class="'+cls+'">'+ic+'</div>';
+        }).join('')+'</div>';
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:4px;font-size:.85rem;text-align:center;">こたえ：'+(p.correctIndex+1)+'ばんめ</div>';
+        }
+      }
+      html += '</div>';
+    });
+    html += '</div>';
+    var ws = document.getElementById('worksheet');
+    if(!ws){
+      ws = document.createElement('div');
+      ws.id='worksheet';
+      document.body.appendChild(ws);
+    }
+    ws.innerHTML = html;
+  }
+  renderPrintLevelBar();
+  renderWorksheet();
+
+  /* =========================================================
+     MODE SWITCHING / GLOBAL UI
+  ========================================================= */
+  document.querySelectorAll('nav.modes button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('nav.modes button').forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+      btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+      var mode = btn.getAttribute('data-mode');
+      document.querySelectorAll('.view').forEach(function(v){ v.classList.add('hidden'); });
+      document.getElementById('view-'+mode).classList.remove('hidden');
+      if(mode==='print') renderWorksheet();
+    });
+  });
+
+  var largeToggle = document.getElementById('btnLargeText');
+  largeToggle.addEventListener('click', function(){
+    var on = document.documentElement.classList.toggle('large-text');
+    largeToggle.setAttribute('aria-pressed', on ? 'true':'false');
+  });
+
+  /* =========================================================
+     INIT
+  ========================================================= */
+  renderLevelBarItem(); newItemQuestion();
+  renderLevelBarRecycle(); newRecycleQuestion();
+  renderLevelBarPrep(); newPrepQuestion();
+  renderLevelBarOdd(); newOddQuestion();
+
+})();
+</script>
+</body>
+</html>
