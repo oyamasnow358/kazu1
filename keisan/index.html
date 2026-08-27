@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>たしざん・ひきざん｜MieeL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF7EF;
+    --card:#FFFFFF;
+    --ink:#2E2A25;
+    --ink-soft:#8A8072;
+    --line:#EAE1CE;
+    --add:#3F9D8B;    --add-soft:#DBEFEA;
+    --sub:#C15B6B;    --sub-soft:#F8E1E5;
+    --mix:#8B5FA3;    --mix-soft:#EEE3F5;
+    --dot:#2E2A25;
+    --success:#4F9A63; --success-soft:#E3F3E6;
+    --danger:#C4573F;  --danger-soft:#FBE4DE;
+    --radius:22px;
+    --shadow:0 6px 18px rgba(46,42,37,0.10);
+    --maxw:960px;
+    --mieel:radial-gradient(circle at 50% 0%,#1B8FE8 0%,#2BB8D6 28%,#3FCB9E 45%,#8FD24A 58%,#F4D027 72%,#F7941E 100%);
+  }
+  *{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact;color-adjust:exact;}
+  html{font-size:17px;}
+  html.large-text{font-size:21px;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+    -webkit-font-smoothing:antialiased;padding-bottom:40px;
+  }
+  button{font-family:inherit;}
+  button:focus-visible, [tabindex]:focus-visible{outline:3px solid var(--add);outline-offset:2px;}
+
+  .app{max-width:var(--maxw);margin:0 auto;padding:18px 16px 8px;}
+
+  header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
+  .mieel-brand{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .mieel-brand .orb-mini{width:20px;height:20px;border-radius:50%;background:var(--mieel);flex:none;}
+  .mieel-brand strong{color:var(--ink);font-size:.85rem;}
+  .mieel-brand a{font-size:.78rem;color:var(--add);text-decoration:none;font-weight:600;}
+  .mieel-brand a:hover{text-decoration:underline;}
+  header.top h1{font-size:1.55rem;margin:0;font-weight:800;letter-spacing:.02em;display:flex;align-items:center;gap:.35em;}
+  header.top h1 .icon{font-size:1.15em;}
+  header.top p{margin:4px 0 0;color:var(--ink-soft);font-size:.85rem;font-weight:500;}
+  .icon-btn{
+    border:2px solid var(--ink);background:var(--card);color:var(--ink);border-radius:999px;
+    padding:.5em 1em;font-weight:700;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:.4em;
+  }
+  .icon-btn:hover{background:var(--sub-soft);}
+
+  nav.modes{display:flex;gap:9px;margin-bottom:16px;flex-wrap:wrap;}
+  nav.modes button{
+    flex:1 1 150px;font-weight:800;font-size:1rem;padding:13px 8px;border-radius:var(--radius);
+    border:3px solid transparent;background:var(--card);color:var(--ink-soft);box-shadow:var(--shadow);
+    cursor:pointer;transition:transform .12s ease, border-color .12s ease, color .12s ease;
+  }
+  nav.modes button .sub{display:block;font-size:.68em;font-weight:500;margin-top:2px;}
+  nav.modes button:hover{transform:translateY(-2px);}
+  nav.modes button.active{border-color:var(--ink);color:var(--ink);background:var(--mix-soft);}
+
+  section.panel{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:18px;}
+
+  .settings-box{background:#FCFAF3;border:2px solid var(--line);border-radius:18px;padding:14px 16px;margin-bottom:16px;}
+  .settings-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:10px;}
+  .settings-row:last-child{margin-bottom:0;}
+  .settings-row .set-label{font-weight:800;font-size:.85rem;color:var(--ink-soft);min-width:150px;flex:none;}
+  .settings-chip{border:2px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-weight:800;font-size:.9rem;cursor:pointer;color:var(--ink);}
+  .settings-chip.selected{border-color:var(--add);background:var(--add-soft);color:#215a4f;}
+  .settings-chip.selected.sub-sel{border-color:var(--sub);background:var(--sub-soft);color:#7a2f3d;}
+
+  .score-pill{
+    display:inline-flex;align-items:center;gap:.5em;background:var(--success-soft);color:var(--success);
+    font-weight:800;padding:8px 16px;border-radius:999px;font-size:.95rem;margin-bottom:14px;
+  }
+
+  .stage{min-height:280px;display:flex;flex-direction:column;align-items:center;}
+  .problem-text{font-size:1.7rem;font-weight:900;color:var(--ink);text-align:center;margin-bottom:6px;}
+  .problem-sub{font-size:.9rem;color:var(--ink-soft);font-weight:700;text-align:center;margin-bottom:18px;}
+  .speak-btn{
+    border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:999px;
+    width:38px;height:38px;font-size:1rem;cursor:pointer;flex:none;margin-left:8px;
+  }
+  .speak-btn:hover{background:var(--sub-soft);}
+
+  .given-row{display:flex;align-items:flex-start;justify-content:center;gap:14px;margin-bottom:18px;flex-wrap:wrap;}
+  .given-group{background:#FCFAF3;border:2px solid var(--line);border-radius:16px;padding:10px 14px;text-align:center;}
+  .given-group .glabel{font-size:.75rem;font-weight:800;color:var(--ink-soft);margin-bottom:6px;}
+  .opsym{font-size:1.8rem;font-weight:900;color:var(--ink-soft);margin-top:22px;}
+
+  .dot-track{
+    display:flex;flex-wrap:wrap;align-items:flex-start;gap:10px;justify-content:center;
+    background:#FCFAF3;border:3px dashed var(--line);border-radius:18px;padding:14px 16px;
+    min-height:70px;max-width:640px;width:100%;
+  }
+  .dot-track.answer-track{border-style:solid;border-color:var(--add);background:var(--add-soft);}
+  .dot-track.sub-track{border-style:solid;border-color:var(--sub);background:var(--sub-soft);}
+
+  .dot-bundle-wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start;justify-content:center;}
+  .dot-bundle{
+    display:grid;grid-template-columns:repeat(5,1fr);gap:4px;
+    background:#fff;border:2.5px solid var(--ink);border-radius:10px;padding:6px 7px 16px;position:relative;cursor:pointer;
+  }
+  .dot-bundle .bundle-label{position:absolute;bottom:1px;left:0;right:0;text-align:center;font-size:.62rem;font-weight:800;color:var(--ink-soft);}
+  .dot-loose{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;align-items:center;width:fit-content;}
+
+  .dot{
+    width:22px;height:22px;border-radius:50%;background:var(--dot);flex:none;cursor:pointer;
+    transition:transform .1s ease;border:none;padding:0;
+  }
+  .dot:active{transform:scale(.85);}
+  .dot.group-gap{margin-right:12px;}
+  .dot.crossed{
+    background:#fff;border:2.5px solid var(--danger);position:relative;width:22px;height:22px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .dot.crossed::after{content:'✕';color:var(--danger);font-weight:900;font-size:12px;line-height:1;}
+  .dot.mini{width:14px;height:14px;}
+  .dot.mini.group-gap{margin-right:8px;}
+  .add-dot-btn{
+    height:26px;min-width:26px;border-radius:13px;border:3px dashed var(--add);background:#fff;color:var(--add);
+    font-weight:900;font-size:.85rem;cursor:pointer;flex:none;display:flex;align-items:center;justify-content:center;
+    line-height:1;padding:0 8px;align-self:center;
+  }
+  .add-dot-btn:hover{background:var(--add-soft);}
+  .add-btn-row{display:flex;gap:8px;align-self:center;}
+
+  .count-display{font-size:2.2rem;font-weight:900;color:var(--ink);margin:14px 0 6px;text-align:center;}
+  .count-display .unit{font-size:1rem;color:var(--ink-soft);font-weight:700;margin-left:4px;}
+
+  .keypad-wrap{background:#FCFAF3;border:2px solid var(--line);border-radius:18px;padding:14px;margin-top:16px;max-width:280px;width:100%;}
+  .keypad-title{font-size:.78rem;font-weight:800;color:var(--ink-soft);text-align:center;margin-bottom:8px;}
+  .keypad-display{
+    background:#fff;border:2px solid var(--ink);border-radius:12px;height:46px;
+    display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:900;color:var(--ink);
+    margin-bottom:10px;min-width:80px;
+  }
+  .keypad-display.placeholder{color:var(--ink-soft);}
+  .keypad-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .keypad-key{
+    background:#fff;border:2px solid var(--line);border-radius:10px;padding:12px 0;
+    font-size:1.15rem;font-weight:800;color:var(--ink);cursor:pointer;
+  }
+  .keypad-key:active{transform:scale(.95);}
+  .keypad-key.clear{color:var(--danger);border-color:var(--danger);background:var(--danger-soft);}
+  .keypad-key.confirm{color:#fff;background:var(--add);border-color:var(--add);}
+  .keypad-key.confirm.sub-confirm{background:var(--sub);border-color:var(--sub);}
+
+  .fb{margin-top:6px;font-size:1.1rem;font-weight:700;min-height:32px;display:flex;align-items:center;gap:8px;text-align:center;}
+  .fb.ok{color:#2a7a50;} .fb.ng{color:var(--danger);}
+  .action-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;justify-content:center;}
+  .btn{font-weight:800;font-size:.95rem;border-radius:14px;border:none;padding:12px 20px;cursor:pointer;color:#fff;background:var(--ink-soft);}
+  .btn.primary{background:var(--add);}
+  .btn.primary.sub-btn{background:var(--sub);}
+  .btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--ink);}
+  .btn:disabled{opacity:.4;cursor:not-allowed;}
+  .btn:active{transform:scale(.97);}
+
+  .print-controls{display:flex;flex-direction:column;gap:14px;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{border:2px solid var(--line);background:#FCFAF3;border-radius:999px;padding:9px 16px;font-weight:700;font-size:.88rem;cursor:pointer;color:var(--ink);}
+  .chip.selected{border-color:var(--mix);background:var(--mix-soft);color:var(--mix);}
+  .field-label{font-size:.82rem;font-weight:800;color:var(--ink-soft);margin-bottom:6px;}
+  .toggle-row{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.92rem;}
+  .preview-note{color:var(--ink-soft);font-size:.85rem;margin-top:6px;text-align:center;}
+  #worksheet{display:none;}
+
+  .ws-header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid var(--ink);padding-bottom:10px;margin-bottom:16px;}
+  .ws-header h2{margin:2px 0 0;font-size:1.15rem;}
+  .ws-fields{display:flex;gap:10px;font-size:.9rem;font-weight:700;align-items:flex-end;}
+  .ws-fields .lbl{white-space:nowrap;}
+  .ws-fields .blank{border-bottom:1.5px solid var(--ink);padding:0 6px 4px;display:inline-block;min-width:100px;margin-right:10px;}
+  .ws-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+  .ws-cell{border:2px solid var(--line);border-radius:12px;padding:14px 16px;break-inside:avoid;}
+  .ws-cell .no{font-size:.78rem;font-weight:800;color:var(--ink-soft);margin-bottom:8px;}
+  .ws-problem{font-size:1.3rem;font-weight:900;margin-bottom:10px;text-align:center;}
+  .ws-dotrow{display:flex;flex-wrap:wrap;gap:5px;align-items:flex-start;margin-bottom:8px;justify-content:center;}
+  .ws-bundle-wrap{display:flex;flex-wrap:wrap;gap:6px;align-items:flex-start;justify-content:center;margin-bottom:8px;}
+  .ws-bundle{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;background:#fff;border:1.6px solid var(--ink);border-radius:8px;padding:4px 4px 12px;position:relative;}
+  .ws-bundle .bundle-label{position:absolute;bottom:0;left:0;right:0;text-align:center;font-size:.5rem;font-weight:800;color:var(--ink-soft);}
+  .ws-loose{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;align-items:center;width:fit-content;}
+  .ws-dot{width:13px;height:13px;border-radius:50%;background:var(--dot);flex:none;}
+  .ws-dot.group-gap{margin-right:8px;}
+  .ws-dot.outline{background:#fff;border:1.4px solid var(--ink);}
+  .ws-dot.crossed{background:#fff;border:1.4px solid var(--danger);position:relative;display:flex;align-items:center;justify-content:center;font-size:8px;color:var(--danger);font-weight:900;}
+  .ws-glabel{font-size:.68rem;font-weight:800;color:var(--ink-soft);text-align:center;margin-bottom:4px;}
+  .ws-instruction{font-size:.78rem;color:var(--ink-soft);margin:4px 0 8px;text-align:center;}
+  .ws-answerline{display:flex;align-items:center;justify-content:center;gap:8px;font-weight:800;margin-top:8px;}
+  .ws-answerline .box{border:2px solid var(--ink);border-radius:8px;min-width:60px;height:38px;display:inline-block;}
+  .ws-answer{color:var(--success);font-weight:800;}
+
+  .hidden{display:none !important;}
+
+  @media (prefers-reduced-motion: reduce){*{transition:none !important;animation:none !important;}}
+
+  #correctOverlay{
+    position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+    pointer-events:none;z-index:9999;opacity:0;
+  }
+  #correctOverlay.show{animation:overlayFade 1.05s ease forwards;}
+  @keyframes overlayFade{
+    0%{opacity:0;} 8%{opacity:1;} 78%{opacity:1;} 100%{opacity:0;}
+  }
+  .correct-circle-wrap{position:relative;width:230px;height:230px;max-width:60vw;max-height:60vw;filter:drop-shadow(0 6px 14px rgba(0,0,0,.18));}
+  .correct-circle-wrap svg{width:100%;height:100%;transform:rotate(-90deg);}
+  .correct-circle-wrap svg circle{
+    fill:rgba(255,255,255,.9);stroke:#E2483D;stroke-width:15;stroke-linecap:round;
+    stroke-dasharray:660;stroke-dashoffset:660;
+  }
+  .correct-circle-wrap.animate svg circle{animation:circleDraw .55s cubic-bezier(.4,0,.2,1) .05s forwards;}
+  @keyframes circleDraw{ to{ stroke-dashoffset:0; } }
+  .correct-label{
+    position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);
+    text-align:center;font-weight:900;color:#E2483D;font-size:1.15rem;
+    opacity:0;
+  }
+  .correct-circle-wrap.animate .correct-label{animation:labelPop .4s ease .5s forwards;}
+  @keyframes labelPop{ 0%{opacity:0;transform:translateY(-50%) scale(.6);} 60%{opacity:1;transform:translateY(-50%) scale(1.15);} 100%{opacity:1;transform:translateY(-50%) scale(1);} }
+  .correct-ping-text{
+    position:absolute;left:0;right:0;bottom:-34px;text-align:center;
+    font-weight:800;color:#E2483D;font-size:1rem;opacity:0;letter-spacing:.05em;
+  }
+  .correct-circle-wrap.animate .correct-ping-text{animation:labelPop .4s ease .62s forwards;}
+  @media (prefers-reduced-motion: reduce){
+    #correctOverlay.show{animation:none;opacity:1;}
+    .correct-circle-wrap.animate svg circle{animation:none;stroke-dashoffset:0;}
+    .correct-circle-wrap.animate .correct-label, .correct-circle-wrap.animate .correct-ping-text{animation:none;opacity:1;}
+  }
+
+  @media print{
+    body *{visibility:hidden;}
+    #worksheet, #worksheet *{visibility:visible;}
+    #worksheet{display:block !important;position:absolute;left:0;top:0;width:100%;padding:12mm;}
+  }
+  @media (max-width:640px){
+    .ws-grid{grid-template-columns:1fr;}
+  }
+
+  footer.hint{max-width:var(--maxw);margin:20px auto 0;padding:0 16px;color:var(--ink-soft);font-size:.8rem;}
+  details.teacher-note{max-width:var(--maxw);margin:0 auto 20px;padding:0 16px;}
+  details.teacher-note summary{cursor:pointer;font-weight:700;color:var(--ink-soft);font-size:.85rem;}
+  details.teacher-note .box{background:#fff;border-radius:14px;padding:14px 16px;margin-top:8px;font-size:.85rem;color:var(--ink-soft);line-height:1.7;box-shadow:var(--shadow);}
+</style>
+</head>
+<body>
+<div id="correctOverlay" aria-hidden="true">
+  <div class="correct-circle-wrap">
+    <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="84"></circle></svg>
+    <div class="correct-label">せいかい！</div>
+    <div class="correct-ping-text">🔔 ピンポーン♪</div>
+  </div>
+</div>
+<div class="app">
+  <header class="top">
+    <div>
+      <div class="mieel-brand">
+        <div class="orb-mini"></div>
+        <strong>MieeL</strong>
+        <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener">www.mieel-support-school.com</a>
+      </div>
+      <h1><span class="icon">⚫</span>たしざん・ひきざん</h1>
+      <p>くろポチ（10のまとまり つき）と すうじにゅうりょくで、くりあがり・くりさがりまで まなべます</p>
+    </div>
+    <button class="icon-btn" id="btnLargeText" aria-pressed="false">🔠 文字を大きく</button>
+  </header>
+
+  <nav class="modes" role="tablist" aria-label="モードをえらぶ">
+    <button data-mode="add" class="active" role="tab" aria-selected="true">➕ たしざん<span class="sub">ポチ・すうじで たそう</span></button>
+    <button data-mode="sub" role="tab" aria-selected="false">➖ ひきざん<span class="sub">ポチ・すうじで ひこう</span></button>
+    <button data-mode="mix" role="tab" aria-selected="false">🔀 まぜて<span class="sub">たしざん・ひきざん</span></button>
+    <button data-mode="print" role="tab" aria-selected="false">🖨️ プリント<span class="sub">PDFをつくる</span></button>
+  </nav>
+
+  <!-- ===== ADD VIEW ===== -->
+  <section class="panel view" id="view-add">
+    <div class="settings-box">
+      <div class="settings-row">
+        <span class="set-label">こたえは いくつまで</span>
+        <div class="chip-row" id="addSumChips"></div>
+      </div>
+      <div class="settings-row">
+        <span class="set-label">ちいさいほうの かずの せいげん</span>
+        <div class="chip-row" id="addSmallChips"></div>
+      </div>
+      <div class="settings-row">
+        <span class="set-label">くりあがり</span>
+        <div class="chip-row" id="addCarryChips"></div>
+      </div>
+      <div class="settings-row">
+        <span class="set-label">くろポチの ひょうじ</span>
+        <div class="chip-row" id="addDotVisChips"></div>
+      </div>
+    </div>
+    <div class="score-pill" id="scoreAdd">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="problem-text" id="addProblemText"></div>
+      <div class="problem-sub">くろポチを タップするか、すうじで こたえよう</div>
+      <div class="given-row" id="addGivenRow"></div>
+      <div class="count-display" id="addCountDisplay">0<span class="unit">こ</span></div>
+      <div class="dot-track answer-track" id="addAnswerTrack"></div>
+      <div class="keypad-wrap">
+        <div class="keypad-title">🔢 すうじで こたえる（ポチが なくても OK）</div>
+        <div class="keypad-display placeholder" id="addKeypadDisplay">－</div>
+        <div class="keypad-grid">
+          <button type="button" class="keypad-key" data-digit="1">1</button>
+          <button type="button" class="keypad-key" data-digit="2">2</button>
+          <button type="button" class="keypad-key" data-digit="3">3</button>
+          <button type="button" class="keypad-key" data-digit="4">4</button>
+          <button type="button" class="keypad-key" data-digit="5">5</button>
+          <button type="button" class="keypad-key" data-digit="6">6</button>
+          <button type="button" class="keypad-key" data-digit="7">7</button>
+          <button type="button" class="keypad-key" data-digit="8">8</button>
+          <button type="button" class="keypad-key" data-digit="9">9</button>
+          <button type="button" class="keypad-key clear" id="addKeypadClear">⌫</button>
+          <button type="button" class="keypad-key" data-digit="0">0</button>
+          <button type="button" class="keypad-key confirm" id="addKeypadConfirm">✔</button>
+        </div>
+      </div>
+      <div class="fb" id="addFb"></div>
+      <div class="action-row">
+        <button class="speak-btn" id="addSpeak" title="よみあげ">🔊</button>
+        <button class="btn ghost" id="addClear">🔄 リセット</button>
+        <button class="btn primary" id="addCheck">✔ こたえあわせ</button>
+        <button class="btn" id="addNext" style="background:var(--add);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SUB VIEW ===== -->
+  <section class="panel view hidden" id="view-sub">
+    <div class="settings-box">
+      <div class="settings-row">
+        <span class="set-label">ひかれる かずは いくつまで</span>
+        <div class="chip-row" id="subMinuendChips"></div>
+      </div>
+      <div class="settings-row">
+        <span class="set-label">ひく かずの せいげん</span>
+        <div class="chip-row" id="subSubtrahendChips"></div>
+      </div>
+      <div class="settings-row">
+        <span class="set-label">くりさがり</span>
+        <div class="chip-row" id="subBorrowChips"></div>
+      </div>
+      <div class="settings-row">
+        <span class="set-label">くろポチの ひょうじ</span>
+        <div class="chip-row" id="subDotVisChips"></div>
+      </div>
+    </div>
+    <div class="score-pill" id="scoreSub">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="problem-text" id="subProblemText"></div>
+      <div class="problem-sub">くろポチを タップするか、すうじで こたえよう</div>
+      <div class="count-display" id="subCountDisplay">のこり <span id="subRemain">0</span><span class="unit">こ</span></div>
+      <div class="dot-track sub-track" id="subDotTrack"></div>
+      <div class="keypad-wrap">
+        <div class="keypad-title">🔢 すうじで こたえる（のこりの かず・ポチが なくても OK）</div>
+        <div class="keypad-display placeholder" id="subKeypadDisplay">－</div>
+        <div class="keypad-grid">
+          <button type="button" class="keypad-key" data-digit="1">1</button>
+          <button type="button" class="keypad-key" data-digit="2">2</button>
+          <button type="button" class="keypad-key" data-digit="3">3</button>
+          <button type="button" class="keypad-key" data-digit="4">4</button>
+          <button type="button" class="keypad-key" data-digit="5">5</button>
+          <button type="button" class="keypad-key" data-digit="6">6</button>
+          <button type="button" class="keypad-key" data-digit="7">7</button>
+          <button type="button" class="keypad-key" data-digit="8">8</button>
+          <button type="button" class="keypad-key" data-digit="9">9</button>
+          <button type="button" class="keypad-key clear" id="subKeypadClear">⌫</button>
+          <button type="button" class="keypad-key" data-digit="0">0</button>
+          <button type="button" class="keypad-key confirm sub-confirm" id="subKeypadConfirm">✔</button>
+        </div>
+      </div>
+      <div class="fb" id="subFb"></div>
+      <div class="action-row">
+        <button class="speak-btn" id="subSpeak" title="よみあげ">🔊</button>
+        <button class="btn ghost" id="subClear">🔄 リセット</button>
+        <button class="btn primary sub-btn" id="subCheck">✔ こたえあわせ</button>
+        <button class="btn" id="subNext" style="background:var(--sub);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MIX VIEW ===== -->
+  <section class="panel view hidden" id="view-mix">
+    <div class="score-pill" id="scoreMix">✅ 0 / 0</div>
+    <p style="text-align:center;color:var(--ink-soft);font-size:.85rem;font-weight:700;margin-top:0;">
+      「たしざん」「ひきざん」タブで せっていした ないようを つかって、まぜて れんしゅうします。
+    </p>
+    <div class="stage" id="mixStage"></div>
+  </section>
+
+  <!-- ===== PRINT VIEW ===== -->
+  <section class="panel view hidden" id="view-print">
+    <div class="print-controls">
+      <div>
+        <div class="field-label">もんだいの しゅるい</div>
+        <div class="chip-row" id="printTypeChips">
+          <button class="chip selected" data-ptype="add">➕ たしざん</button>
+          <button class="chip" data-ptype="sub">➖ ひきざん</button>
+          <button class="chip" data-ptype="mix">🔀 まぜて</button>
+        </div>
+      </div>
+      <div id="printSettingsWrap">
+        <div class="field-label" id="printSet1Label">こたえは いくつまで</div>
+        <div class="chip-row" id="printSet1Chips"></div>
+        <div class="field-label" id="printSet2Label" style="margin-top:10px;">ちいさいほうの かずの せいげん</div>
+        <div class="chip-row" id="printSet2Chips"></div>
+        <div class="field-label" id="printSet3Label" style="margin-top:10px;">くりあがり／くりさがり</div>
+        <div class="chip-row" id="printSet3Chips"></div>
+        <div class="field-label" style="margin-top:10px;">くろポチの ひょうじ</div>
+        <div class="chip-row" id="printDotVisChips"></div>
+      </div>
+      <div>
+        <div class="field-label">もんだいすう</div>
+        <div class="chip-row" id="printCountChips">
+          <button class="chip" data-count="4">4もん</button>
+          <button class="chip selected" data-count="6">6もん</button>
+          <button class="chip" data-count="8">8もん</button>
+          <button class="chip" data-count="10">10もん</button>
+        </div>
+      </div>
+      <div class="toggle-row">
+        <input type="checkbox" id="printShowAnswer">
+        <label for="printShowAnswer">こたえを ひょうじする（指導者用）</label>
+      </div>
+      <div class="action-row" style="margin-top:2px;">
+        <button class="btn ghost" id="printRegenBtn">🔄 もんだいを かえる</button>
+        <button class="btn primary" id="printOpenBtn">🖨️ プリントする</button>
+      </div>
+      <div class="preview-note">「プリントする」を押すと、印刷プレビューが開きます。ブラウザの印刷設定でPDF保存もできます。</div>
+    </div>
+  </section>
+
+  <footer class="hint">
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:5px;">
+      <div style="width:18px;height:18px;border-radius:50%;background:var(--mieel);flex:none;"></div>
+      <strong style="color:var(--ink);">MieeL</strong>
+      <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener" style="color:var(--add);">mieel-support-school.com</a>
+    </div>
+    © たしざん・ひきざん ツール（特別支援教育向け）
+  </footer>
+
+  <details class="teacher-note">
+    <summary>👩‍🏫 指導者の方へ</summary>
+    <div class="box">
+      このアプリは、黒ポチ（●）を数と直接連動させたおはじき型の操作教具と、数字キーパッドによる直接入力の両方を備えています。ポチ操作が不要な児童生徒は、キーパッドで直接答えることができます（どちらの方法で入力しても、内部的には同じ「今の答え」として扱われ、答え合わせされます）。<br>
+      ・<strong>くりあがり／くりさがり</strong>：「なし」「あり」「せいげんなし」の3段階で明示的に指定できます。「あり」を選ぶと、必ず繰り上がり（またはひき算では繰り下がり）が発生する問題だけが出題されます<br>
+      ・<strong>10のまとまり表示</strong>：答えが10以上になると、黒ポチが自動的に「10のまとまり（5個×2段のブロック）」＋「ばら」の形で表示され、実際の繰り上がり指導と同じ視覚支援になります。まとまりごと、または1個ずつタップして増減・×印をつけられます<br>
+      ・数の範囲は「こたえは いくつまで」で3〜100まで細かく設定できます。片方の数の上限（例：1をたす練習だけ）も独立して設定できます<br>
+      間違えてもリセットされず、その場で調整して再挑戦できる設計です。プリントモードでは同じ黒ポチのレイアウトと設定を使ってワークシートを作成できます。
+    </div>
+  </details>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  function pickRandom(a){ return a[Math.floor(Math.random()*a.length)]; }
+  function rand(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+  function speak(text){
+    if(!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang='ja-JP'; u.rate=0.85;
+    window.speechSynthesis.speak(u);
+  }
+  var PRAISE = ['やったね！','せいかい！','すごい！','ばっちり！','よくできました！'];
+  var TRY_AGAIN = ['もういちど かぞえてみよう！','おしい！','ゆっくり かんがえよう。','だいじょうぶ、もう一回！'];
+
+  var sharedAudioCtx = null;
+  function playDing(){
+    try{
+      var Ctx = window.AudioContext || window.webkitAudioContext;
+      if(!Ctx) return;
+      if(!sharedAudioCtx) sharedAudioCtx = new Ctx();
+      var ctx = sharedAudioCtx;
+      if(ctx.state==='suspended'){ ctx.resume(); }
+      function tone(freq, start, dur, peak){
+        var o = ctx.createOscillator();
+        var g = ctx.createGain();
+        o.type='sine'; o.frequency.value=freq;
+        o.connect(g); g.connect(ctx.destination);
+        var t0 = ctx.currentTime+start;
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.linearRampToValueAtTime(peak, t0+0.03);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0+dur);
+        o.start(t0);
+        o.stop(t0+dur+0.03);
+      }
+      tone(880.0, 0,    0.30, 0.30);
+      tone(1318.5, 0.24, 0.48, 0.26);
+    }catch(e){}
+  }
+  var overlayHideTimer = null;
+  function triggerCorrectFeedback(){
+    playDing();
+    var overlay = document.getElementById('correctOverlay');
+    if(!overlay) return;
+    var wrap = overlay.querySelector('.correct-circle-wrap');
+    if(overlayHideTimer){ clearTimeout(overlayHideTimer); overlayHideTimer=null; }
+    overlay.classList.remove('show');
+    wrap.classList.remove('animate');
+    void overlay.offsetWidth;
+    overlay.classList.add('show');
+    wrap.classList.add('animate');
+    overlayHideTimer = setTimeout(function(){
+      overlay.classList.remove('show');
+      wrap.classList.remove('animate');
+      overlayHideTimer = null;
+    }, 1300);
+  }
+
+  /* =========================================================
+     CARRY / BORROW DETECTION (column arithmetic, matches how
+     carrying/borrowing is taught: check each place value column
+     with proper carry/borrow propagation)
+  ========================================================= */
+  function hasCarry(a,b){
+    var carry=0, had=false;
+    var x=a, y=b;
+    while(x>0 || y>0 || carry>0){
+      var s = (x%10)+(y%10)+carry;
+      if(s>=10){ carry=1; had=true; } else { carry=0; }
+      x = Math.floor(x/10); y = Math.floor(y/10);
+    }
+    return had;
+  }
+  function hasBorrow(minuend, subtrahend){
+    var borrow=0, had=false;
+    var x=minuend, y=subtrahend;
+    while(x>0 || y>0){
+      var dx = (x%10) - borrow;
+      var dy = y%10;
+      if(dx < dy){ dx += 10; borrow=1; had=true; } else { borrow=0; }
+      x = Math.floor(x/10); y = Math.floor(y/10);
+    }
+    return had;
+  }
+
+  /* =========================================================
+     DOT RENDERING (base-10 bundling for numbers >= 10)
+  ========================================================= */
+  function buildDots(count, opts){
+    opts = opts || {};
+    var tens = Math.floor(count/10);
+    var ones = count % 10;
+    var idx = 0;
+    var html = '<div class="dot-bundle-wrap">';
+    for(var t=0; t<tens; t++){
+      html += '<div class="dot-bundle" data-bundle-start="'+idx+'">';
+      for(var j=0;j<10;j++){
+        var isCrossed = opts.crossedSet && opts.crossedSet.has(idx);
+        var cls = 'dot bundle-dot'+(opts.mini?' mini':'')+(isCrossed?' crossed':'');
+        html += '<button type="button" class="'+cls+'" data-idx="'+idx+'" aria-label="'+(idx+1)+'こめ"></button>';
+        idx++;
+      }
+      html += '<span class="bundle-label">10</span></div>';
+    }
+    if(ones>0 || tens===0){
+      html += '<div class="dot-loose">';
+      for(var k=0;k<ones;k++){
+        var isCrossed2 = opts.crossedSet && opts.crossedSet.has(idx);
+        var cls2 = 'dot'+(opts.mini?' mini':'')+(isCrossed2?' crossed':'');
+        html += '<button type="button" class="'+cls2+'" data-idx="'+idx+'" aria-label="'+(idx+1)+'こめ"></button>';
+        idx++;
+      }
+      html += '</div>';
+    }
+    html += '</div>';
+    return html;
+  }
+
+  /* =========================================================
+     ADDITION MODE
+  ========================================================= */
+  var ADD_SUM_OPTIONS = [3,4,5,6,7,8,9,10,12,15,18,20,30,50,99,100];
+  var ADD_SMALL_OPTIONS = [null,1,2,3,4,5];
+  var CARRY_OPTIONS = [
+    {value:'any', label:'せいげんなし'},
+    {value:'none', label:'くりあがり なし'},
+    {value:'required', label:'くりあがり あり'}
+  ];
+  var BORROW_OPTIONS = [
+    {value:'any', label:'せいげんなし'},
+    {value:'none', label:'くりさがり なし'},
+    {value:'required', label:'くりさがり あり'}
+  ];
+  /* ── black-dot visibility: some students don't need the manipulative and
+     answer purely via the numeric keypad, so dots can be hidden app-wide
+     (this also drives the equivalent print-worksheet toggle below) ── */
+  var showDots = true;
+  var DOT_VIS_OPTIONS = [
+    {value:true, label:'👁️ ひょうじする'},
+    {value:false, label:'🙈 ひょうじしない'}
+  ];
+  function renderDotVisChips(containerId, selClass){
+    renderChipRow(document.getElementById(containerId), DOT_VIS_OPTIONS, function(){return showDots;}, function(v){
+      showDots = v;
+      renderDotVisChips('addDotVisChips');
+      renderDotVisChips('subDotVisChips', 'sub-sel');
+      if(addState.current) renderAddAnswerTrack();
+      if(addState.current) renderAddGivenRow();
+      if(subState.current) renderSubTrack();
+      var mixView = document.getElementById('view-mix');
+      if(mixState.current && mixView && !mixView.classList.contains('hidden')) renderMixStage();
+    }, selClass);
+  }
+  var addSettings = {maxSum:10, maxSmall:null, carry:'any'};
+  var addState = {score:0, total:0, current:null, answerCount:0, locked:false};
+
+  function genAddition(maxSum, maxSmall, carryMode){
+    var result, guard=0;
+    do{
+      var constrained, other;
+      if(maxSmall){
+        var cap = Math.min(maxSmall, maxSum-1);
+        constrained = rand(1, cap);
+        other = rand(1, maxSum-constrained);
+      } else {
+        constrained = rand(1, maxSum-1);
+        other = rand(1, maxSum-constrained);
+      }
+      var a,b;
+      if(Math.random()<0.5){ a=constrained; b=other; } else { a=other; b=constrained; }
+      result = {a:a, b:b, sum:a+b};
+      guard++;
+    } while(carryMode && carryMode!=='any' && guard<800 &&
+      ((carryMode==='none' && hasCarry(result.a,result.b)) ||
+       (carryMode==='required' && !hasCarry(result.a,result.b))));
+    return result;
+  }
+
+  function renderChipRow(container, options, currentValueGetter, onSelect, selClass){
+    container.innerHTML='';
+    options.forEach(function(opt){
+      var value = (opt!==null && typeof opt==='object') ? opt.value : opt;
+      var label = (opt!==null && typeof opt==='object') ? opt.label : (opt===null?'せいげんなし':(opt+'まで'));
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='settings-chip'+(selClass?(' '+selClass):'')+(value===currentValueGetter()?' selected':'');
+      b.textContent = label;
+      b.addEventListener('click', function(){ onSelect(value); });
+      container.appendChild(b);
+    });
+  }
+
+  function renderAddSettings(){
+    renderChipRow(document.getElementById('addSumChips'), ADD_SUM_OPTIONS, function(){return addSettings.maxSum;}, function(v){
+      addSettings.maxSum = v;
+      if(addSettings.maxSmall && addSettings.maxSmall > v-1) addSettings.maxSmall = null;
+      renderAddSettings(); newAddProblem();
+    });
+    renderChipRow(document.getElementById('addSmallChips'), ADD_SMALL_OPTIONS, function(){return addSettings.maxSmall;}, function(v){
+      addSettings.maxSmall = v;
+      renderAddSettings(); newAddProblem();
+    });
+    renderChipRow(document.getElementById('addCarryChips'), CARRY_OPTIONS, function(){return addSettings.carry;}, function(v){
+      addSettings.carry = v;
+      renderAddSettings(); newAddProblem();
+    });
+    renderDotVisChips('addDotVisChips');
+  }
+
+  function renderAddGivenRow(){
+    var cur = addState.current;
+    var givenRow = document.getElementById('addGivenRow');
+    if(!showDots){
+      givenRow.innerHTML = '';
+      return;
+    }
+    givenRow.innerHTML =
+      '<div class="given-group"><div class="glabel">'+cur.a+'こ</div>'+buildDots(cur.a,{mini:true})+'</div>'
+      + '<div class="opsym">+</div>'
+      + '<div class="given-group"><div class="glabel">'+cur.b+'こ</div>'+buildDots(cur.b,{mini:true})+'</div>';
+  }
+
+  function newAddProblem(){
+    addState.current = genAddition(addSettings.maxSum, addSettings.maxSmall, addSettings.carry);
+    addState.answerCount = 0;
+    addState.locked = false;
+    addKeypadBuffer = '';
+    document.getElementById('addFb').className='fb'; document.getElementById('addFb').textContent='';
+    document.getElementById('addNext').style.display='none';
+    document.getElementById('addCheck').disabled=false;
+    var cur = addState.current;
+    document.getElementById('addProblemText').textContent = cur.a+' + '+cur.b+' = ？';
+    renderAddGivenRow();
+    renderAddKeypadDisplay();
+    renderAddAnswerTrack();
+  }
+  function renderAddAnswerTrack(){
+    document.getElementById('addCountDisplay').innerHTML = addState.answerCount+'<span class="unit">こ</span>';
+    var track = document.getElementById('addAnswerTrack');
+    if(!showDots){
+      track.style.display='none';
+      return;
+    }
+    track.style.display='';
+    var maxAllowed = Math.max(addState.current.sum + 10, 15);
+    var html = buildDots(addState.answerCount, {});
+    var btnRow = '<div class="add-btn-row">';
+    if(addState.answerCount + 10 <= maxAllowed){
+      btnRow += '<button type="button" class="add-dot-btn" id="addBundleBtn">＋10</button>';
+    }
+    if(addState.answerCount < maxAllowed){
+      btnRow += '<button type="button" class="add-dot-btn" id="addDotBtn">＋1</button>';
+    }
+    btnRow += '</div>';
+    track.innerHTML = html + btnRow;
+    track.querySelectorAll('.dot').forEach(function(dotEl){
+      dotEl.addEventListener('click', function(){
+        if(addState.locked) return;
+        addState.answerCount = Math.max(0, addState.answerCount-1);
+        renderAddAnswerTrack();
+      });
+    });
+    var addBtn = document.getElementById('addDotBtn');
+    if(addBtn){
+      addBtn.addEventListener('click', function(){
+        if(addState.locked) return;
+        addState.answerCount++;
+        renderAddAnswerTrack();
+      });
+    }
+    var bundleBtn = document.getElementById('addBundleBtn');
+    if(bundleBtn){
+      bundleBtn.addEventListener('click', function(){
+        if(addState.locked) return;
+        addState.answerCount += 10;
+        renderAddAnswerTrack();
+      });
+    }
+  }
+  document.getElementById('addClear').addEventListener('click', function(){
+    if(addState.locked) return;
+    addState.answerCount = 0;
+    addKeypadBuffer = '';
+    renderAddKeypadDisplay();
+    renderAddAnswerTrack();
+  });
+  document.getElementById('addCheck').addEventListener('click', function(){
+    if(addState.locked) return;
+    var cur = addState.current;
+    var correct = (addState.answerCount === cur.sum);
+    addState.total++;
+    if(correct) addState.score++;
+    document.getElementById('scoreAdd').innerHTML = '✅ '+addState.score+' / '+addState.total;
+    var fbEl = document.getElementById('addFb');
+    if(correct){
+      addState.locked = true;
+      document.getElementById('addCheck').disabled = true;
+      fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+      triggerCorrectFeedback();
+      document.getElementById('addNext').style.display='inline-block';
+      speak(cur.a+'たす'+cur.b+'は'+cur.sum+'です。');
+    } else {
+      fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN)+'（いま '+addState.answerCount+'こ）';
+    }
+  });
+  document.getElementById('addNext').addEventListener('click', newAddProblem);
+  document.getElementById('addSpeak').addEventListener('click', function(){
+    var cur = addState.current;
+    speak(cur.a+' たす '+cur.b+'は いくつかな？');
+  });
+
+  var addKeypadBuffer = '';
+  function renderAddKeypadDisplay(){
+    var el = document.getElementById('addKeypadDisplay');
+    if(addKeypadBuffer===''){ el.textContent='－'; el.classList.add('placeholder'); }
+    else { el.textContent=addKeypadBuffer; el.classList.remove('placeholder'); }
+  }
+  document.querySelectorAll('#view-add .keypad-key[data-digit]').forEach(function(k){
+    k.addEventListener('click', function(){
+      if(addState.locked) return;
+      var d = k.getAttribute('data-digit');
+      var next = addKeypadBuffer + d;
+      if(next.length>3) next = d;
+      addKeypadBuffer = next;
+      renderAddKeypadDisplay();
+    });
+  });
+  document.getElementById('addKeypadClear').addEventListener('click', function(){
+    if(addState.locked) return;
+    addKeypadBuffer = addKeypadBuffer.slice(0,-1);
+    renderAddKeypadDisplay();
+  });
+  document.getElementById('addKeypadConfirm').addEventListener('click', function(){
+    if(addState.locked) return;
+    if(addKeypadBuffer==='') return;
+    var val = parseInt(addKeypadBuffer,10);
+    var maxAllowed = Math.max(addState.current.sum + 10, 15);
+    addState.answerCount = Math.min(Math.max(val,0), maxAllowed);
+    addKeypadBuffer='';
+    renderAddKeypadDisplay();
+    renderAddAnswerTrack();
+  });
+
+  /* =========================================================
+     SUBTRACTION MODE
+  ========================================================= */
+  var SUB_MINUEND_OPTIONS = [3,4,5,6,7,8,9,10,12,15,18,20,30,50,99,100];
+  var SUB_SUBTRAHEND_OPTIONS = [null,1,2,3,4,5];
+  var subSettings = {maxMinuend:10, maxSubtrahend:null, borrow:'any'};
+  var subState = {score:0, total:0, current:null, crossed:null, locked:false};
+
+  function genSubtraction(maxMinuend, maxSubtrahend, borrowMode){
+    var result, guard=0;
+    do{
+      var minuend = rand(1, maxMinuend);
+      var subCap = maxSubtrahend ? Math.min(minuend, maxSubtrahend) : minuend;
+      subCap = Math.max(1, subCap);
+      var subtrahend = rand(1, subCap);
+      result = {minuend:minuend, subtrahend:subtrahend, remainder:minuend-subtrahend};
+      guard++;
+    } while(borrowMode && borrowMode!=='any' && guard<800 &&
+      ((borrowMode==='none' && hasBorrow(result.minuend,result.subtrahend)) ||
+       (borrowMode==='required' && !hasBorrow(result.minuend,result.subtrahend))));
+    return result;
+  }
+
+  function renderSubSettings(){
+    renderChipRow(document.getElementById('subMinuendChips'), SUB_MINUEND_OPTIONS, function(){return subSettings.maxMinuend;}, function(v){
+      subSettings.maxMinuend = v;
+      if(subSettings.maxSubtrahend && subSettings.maxSubtrahend > v) subSettings.maxSubtrahend = null;
+      renderSubSettings(); newSubProblem();
+    }, 'sub-sel');
+    renderChipRow(document.getElementById('subSubtrahendChips'), SUB_SUBTRAHEND_OPTIONS, function(){return subSettings.maxSubtrahend;}, function(v){
+      subSettings.maxSubtrahend = v;
+      renderSubSettings(); newSubProblem();
+    }, 'sub-sel');
+    renderChipRow(document.getElementById('subBorrowChips'), BORROW_OPTIONS, function(){return subSettings.borrow;}, function(v){
+      subSettings.borrow = v;
+      renderSubSettings(); newSubProblem();
+    }, 'sub-sel');
+    renderDotVisChips('subDotVisChips', 'sub-sel');
+  }
+
+  function newSubProblem(){
+    subState.current = genSubtraction(subSettings.maxMinuend, subSettings.maxSubtrahend, subSettings.borrow);
+    subState.crossed = new Set();
+    subState.locked = false;
+    subKeypadBuffer = '';
+    document.getElementById('subFb').className='fb'; document.getElementById('subFb').textContent='';
+    document.getElementById('subNext').style.display='none';
+    document.getElementById('subCheck').disabled=false;
+    var cur = subState.current;
+    document.getElementById('subProblemText').textContent = cur.minuend+' － '+cur.subtrahend+' = ？';
+    renderSubKeypadDisplay();
+    renderSubTrack();
+  }
+  function renderSubTrack(){
+    var cur = subState.current;
+    var remain = cur.minuend - subState.crossed.size;
+    document.getElementById('subRemain').textContent = remain;
+    var track = document.getElementById('subDotTrack');
+    if(!showDots){
+      track.style.display='none';
+      return;
+    }
+    track.style.display='';
+    track.innerHTML = buildDots(cur.minuend, {crossedSet:subState.crossed});
+    track.querySelectorAll('.dot').forEach(function(dotEl){
+      dotEl.addEventListener('click', function(){
+        if(subState.locked) return;
+        var idx = parseInt(dotEl.getAttribute('data-idx'),10);
+        if(subState.crossed.has(idx)) subState.crossed.delete(idx);
+        else subState.crossed.add(idx);
+        renderSubTrack();
+      });
+    });
+  }
+  document.getElementById('subClear').addEventListener('click', function(){
+    if(subState.locked) return;
+    subState.crossed = new Set();
+    subKeypadBuffer = '';
+    renderSubKeypadDisplay();
+    renderSubTrack();
+  });
+  document.getElementById('subCheck').addEventListener('click', function(){
+    if(subState.locked) return;
+    var cur = subState.current;
+    var remain = cur.minuend - subState.crossed.size;
+    var correct = (remain === cur.remainder && subState.crossed.size === cur.subtrahend);
+    subState.total++;
+    if(correct) subState.score++;
+    document.getElementById('scoreSub').innerHTML = '✅ '+subState.score+' / '+subState.total;
+    var fbEl = document.getElementById('subFb');
+    if(correct){
+      subState.locked = true;
+      document.getElementById('subCheck').disabled = true;
+      fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+      triggerCorrectFeedback();
+      document.getElementById('subNext').style.display='inline-block';
+      speak(cur.minuend+'ひく'+cur.subtrahend+'は'+cur.remainder+'です。');
+    } else {
+      fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN)+'（いま のこり '+remain+'こ）';
+    }
+  });
+  document.getElementById('subNext').addEventListener('click', newSubProblem);
+  document.getElementById('subSpeak').addEventListener('click', function(){
+    var cur = subState.current;
+    speak(cur.minuend+' ひく '+cur.subtrahend+'は いくつかな？');
+  });
+
+  var subKeypadBuffer = '';
+  function renderSubKeypadDisplay(){
+    var el = document.getElementById('subKeypadDisplay');
+    if(subKeypadBuffer===''){ el.textContent='－'; el.classList.add('placeholder'); }
+    else { el.textContent=subKeypadBuffer; el.classList.remove('placeholder'); }
+  }
+  document.querySelectorAll('#view-sub .keypad-key[data-digit]').forEach(function(k){
+    k.addEventListener('click', function(){
+      if(subState.locked) return;
+      var d = k.getAttribute('data-digit');
+      var next = subKeypadBuffer + d;
+      if(next.length>3) next = d;
+      subKeypadBuffer = next;
+      renderSubKeypadDisplay();
+    });
+  });
+  document.getElementById('subKeypadClear').addEventListener('click', function(){
+    if(subState.locked) return;
+    subKeypadBuffer = subKeypadBuffer.slice(0,-1);
+    renderSubKeypadDisplay();
+  });
+  document.getElementById('subKeypadConfirm').addEventListener('click', function(){
+    if(subState.locked) return;
+    if(subKeypadBuffer==='') return;
+    var val = parseInt(subKeypadBuffer,10);
+    var cur = subState.current;
+    val = Math.min(Math.max(val,0), cur.minuend);
+    var crossCount = cur.minuend - val;
+    var newCrossed = new Set();
+    for(var i=0;i<crossCount;i++) newCrossed.add(i);
+    subState.crossed = newCrossed;
+    subKeypadBuffer='';
+    renderSubKeypadDisplay();
+    renderSubTrack();
+  });
+
+  /* =========================================================
+     MIX MODE (reuses add/sub settings + generators)
+  ========================================================= */
+  var mixState = {score:0, total:0, opType:null, current:null, answerCount:0, crossed:null, locked:false};
+  var mixKeypadBuffer = '';
+  function newMixProblem(){
+    mixState.opType = Math.random()<0.5 ? 'add' : 'sub';
+    mixState.locked = false;
+    mixKeypadBuffer = '';
+    if(mixState.opType==='add'){
+      mixState.current = genAddition(addSettings.maxSum, addSettings.maxSmall, addSettings.carry);
+      mixState.answerCount = 0;
+    } else {
+      mixState.current = genSubtraction(subSettings.maxMinuend, subSettings.maxSubtrahend, subSettings.borrow);
+      mixState.crossed = new Set();
+    }
+    renderMixStage();
+  }
+  function buildKeypadHTML(title, idPrefix){
+    var digits = [1,2,3,4,5,6,7,8,9].map(function(d){ return '<button type="button" class="keypad-key" data-digit="'+d+'">'+d+'</button>'; }).join('');
+    return '<div class="keypad-wrap">'
+      + '<div class="keypad-title">'+title+'</div>'
+      + '<div class="keypad-display placeholder" id="'+idPrefix+'Display">－</div>'
+      + '<div class="keypad-grid">' + digits
+      + '<button type="button" class="keypad-key clear" id="'+idPrefix+'Clear">⌫</button>'
+      + '<button type="button" class="keypad-key" data-digit="0">0</button>'
+      + '<button type="button" class="keypad-key confirm" id="'+idPrefix+'Confirm">✔</button>'
+      + '</div></div>';
+  }
+  function renderMixStage(){
+    var stage = document.getElementById('mixStage');
+    var cur = mixState.current;
+    if(mixState.opType==='add'){
+      var maxAllowed = Math.max(cur.sum + 10, 15);
+      var btnRow = '<div class="add-btn-row">';
+      if(mixState.answerCount + 10 <= maxAllowed) btnRow += '<button type="button" class="add-dot-btn" id="mixBundleBtn">＋10</button>';
+      if(mixState.answerCount < maxAllowed) btnRow += '<button type="button" class="add-dot-btn" id="mixAddBtn">＋1</button>';
+      btnRow += '</div>';
+      var givenRowHtml = !showDots ? '' : (''
+        +   '<div class="given-row">'
+        +     '<div class="given-group"><div class="glabel">'+cur.a+'こ</div>'+buildDots(cur.a,{mini:true})+'</div>'
+        +     '<div class="opsym">+</div>'
+        +     '<div class="given-group"><div class="glabel">'+cur.b+'こ</div>'+buildDots(cur.b,{mini:true})+'</div>'
+        +   '</div>');
+      var trackHtml = !showDots ? '' : (buildDots(mixState.answerCount,{})+btnRow);
+      var html = ''
+        + '<div class="problem-text">'+cur.a+' + '+cur.b+' = ？</div>'
+        + '<div class="problem-sub">くろポチを タップするか、すうじで こたえよう</div>'
+        + givenRowHtml
+        + '<div class="count-display">'+mixState.answerCount+'<span class="unit">こ</span></div>'
+        + '<div class="dot-track answer-track" id="mixTrack" style="'+(showDots?'':'display:none;')+'">'+trackHtml+'</div>'
+        + buildKeypadHTML('🔢 すうじで こたえる（ポチが なくても OK）', 'mixKeypad')
+        + '<div class="fb" id="mixFb"></div>'
+        + '<div class="action-row">'
+        +   '<button class="speak-btn" id="mixSpeak" title="よみあげ">🔊</button>'
+        +   '<button class="btn ghost" id="mixClear">🔄 リセット</button>'
+        +   '<button class="btn primary" id="mixCheck">✔ こたえあわせ</button>'
+        +   '<button class="btn" id="mixNext" style="background:var(--mix);display:none;">つぎへ ▶</button>'
+        + '</div>';
+      stage.innerHTML = html;
+      wireMixAddHandlers();
+    } else {
+      var remain = cur.minuend - mixState.crossed.size;
+      var trackHtml2 = !showDots ? '' : buildDots(cur.minuend,{crossedSet:mixState.crossed});
+      var html2 = ''
+        + '<div class="problem-text">'+cur.minuend+' － '+cur.subtrahend+' = ？</div>'
+        + '<div class="problem-sub">くろポチを タップするか、すうじで こたえよう</div>'
+        + '<div class="count-display">のこり <span id="mixRemain">'+remain+'</span><span class="unit">こ</span></div>'
+        + '<div class="dot-track sub-track" id="mixTrack" style="'+(showDots?'':'display:none;')+'">'+trackHtml2+'</div>'
+        + buildKeypadHTML('🔢 すうじで こたえる（のこりの かず）', 'mixKeypad')
+        + '<div class="fb" id="mixFb"></div>'
+        + '<div class="action-row">'
+        +   '<button class="speak-btn" id="mixSpeak" title="よみあげ">🔊</button>'
+        +   '<button class="btn ghost" id="mixClear">🔄 リセット</button>'
+        +   '<button class="btn primary sub-btn" id="mixCheck">✔ こたえあわせ</button>'
+        +   '<button class="btn" id="mixNext" style="background:var(--mix);display:none;">つぎへ ▶</button>'
+        + '</div>';
+      stage.innerHTML = html2;
+      wireMixSubHandlers();
+    }
+    renderMixKeypadDisplay();
+    wireMixKeypad();
+    document.getElementById('mixSpeak').addEventListener('click', function(){
+      if(mixState.opType==='add') speak(cur.a+' たす '+cur.b+'は いくつかな？');
+      else speak(cur.minuend+' ひく '+cur.subtrahend+'は いくつかな？');
+    });
+    document.getElementById('mixClear').addEventListener('click', function(){
+      if(mixState.locked) return;
+      if(mixState.opType==='add') mixState.answerCount=0; else mixState.crossed=new Set();
+      mixKeypadBuffer='';
+      renderMixStage();
+    });
+    document.getElementById('mixCheck').addEventListener('click', function(){
+      if(mixState.locked) return;
+      var correct;
+      var cur2 = mixState.current;
+      if(mixState.opType==='add'){
+        correct = (mixState.answerCount === cur2.sum);
+      } else {
+        var rem = cur2.minuend - mixState.crossed.size;
+        correct = (rem === cur2.remainder && mixState.crossed.size === cur2.subtrahend);
+      }
+      mixState.total++;
+      if(correct) mixState.score++;
+      document.getElementById('scoreMix').innerHTML = '✅ '+mixState.score+' / '+mixState.total;
+      var fbEl = document.getElementById('mixFb');
+      if(correct){
+        mixState.locked = true;
+        document.getElementById('mixCheck').disabled = true;
+        fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+        triggerCorrectFeedback();
+        document.getElementById('mixNext').style.display='inline-block';
+      } else {
+        fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+      }
+    });
+    document.getElementById('mixNext').addEventListener('click', newMixProblem);
+  }
+  function renderMixKeypadDisplay(){
+    var el = document.getElementById('mixKeypadDisplay');
+    if(!el) return;
+    if(mixKeypadBuffer===''){ el.textContent='－'; el.classList.add('placeholder'); }
+    else { el.textContent=mixKeypadBuffer; el.classList.remove('placeholder'); }
+  }
+  function wireMixKeypad(){
+    document.querySelectorAll('#mixStage .keypad-key[data-digit]').forEach(function(k){
+      k.addEventListener('click', function(){
+        if(mixState.locked) return;
+        var d = k.getAttribute('data-digit');
+        var next = mixKeypadBuffer + d;
+        if(next.length>3) next = d;
+        mixKeypadBuffer = next;
+        renderMixKeypadDisplay();
+      });
+    });
+    var clearBtn = document.getElementById('mixKeypadClear');
+    if(clearBtn){
+      clearBtn.addEventListener('click', function(){
+        if(mixState.locked) return;
+        mixKeypadBuffer = mixKeypadBuffer.slice(0,-1);
+        renderMixKeypadDisplay();
+      });
+    }
+    var confirmBtn = document.getElementById('mixKeypadConfirm');
+    if(confirmBtn){
+      confirmBtn.addEventListener('click', function(){
+        if(mixState.locked) return;
+        if(mixKeypadBuffer==='') return;
+        var val = parseInt(mixKeypadBuffer,10);
+        var cur = mixState.current;
+        if(mixState.opType==='add'){
+          var maxAllowed = Math.max(cur.sum + 10, 15);
+          mixState.answerCount = Math.min(Math.max(val,0), maxAllowed);
+        } else {
+          val = Math.min(Math.max(val,0), cur.minuend);
+          var crossCount = cur.minuend - val;
+          var newCrossed = new Set();
+          for(var i=0;i<crossCount;i++) newCrossed.add(i);
+          mixState.crossed = newCrossed;
+        }
+        mixKeypadBuffer='';
+        renderMixStage();
+      });
+    }
+  }
+  function wireMixAddHandlers(){
+    var track = document.getElementById('mixTrack');
+    track.querySelectorAll('.dot').forEach(function(dotEl){
+      dotEl.addEventListener('click', function(){
+        if(mixState.locked) return;
+        mixState.answerCount = Math.max(0, mixState.answerCount-1);
+        renderMixStage();
+      });
+    });
+    var addBtn = document.getElementById('mixAddBtn');
+    if(addBtn){
+      addBtn.addEventListener('click', function(){
+        if(mixState.locked) return;
+        mixState.answerCount++;
+        renderMixStage();
+      });
+    }
+    var bundleBtn = document.getElementById('mixBundleBtn');
+    if(bundleBtn){
+      bundleBtn.addEventListener('click', function(){
+        if(mixState.locked) return;
+        mixState.answerCount += 10;
+        renderMixStage();
+      });
+    }
+  }
+  function wireMixSubHandlers(){
+    var track = document.getElementById('mixTrack');
+    track.querySelectorAll('.dot').forEach(function(dotEl){
+      dotEl.addEventListener('click', function(){
+        if(mixState.locked) return;
+        var idx = parseInt(dotEl.getAttribute('data-idx'),10);
+        if(mixState.crossed.has(idx)) mixState.crossed.delete(idx);
+        else mixState.crossed.add(idx);
+        renderMixStage();
+      });
+    });
+  }
+
+  /* =========================================================
+     PRINT MODE
+  ========================================================= */
+  var printState = {type:'add', count:6, showAnswer:false, showDots:true, problems:[]};
+
+  function renderPrintSettings(){
+    renderChipRow(document.getElementById('printDotVisChips'), DOT_VIS_OPTIONS, function(){return printState.showDots;}, function(v){
+      printState.showDots = v;
+      renderPrintSettings(); renderWorksheet();
+    });
+    var label1 = document.getElementById('printSet1Label');
+    var label2 = document.getElementById('printSet2Label');
+    var label3 = document.getElementById('printSet3Label');
+    var chips1 = document.getElementById('printSet1Chips');
+    var chips2 = document.getElementById('printSet2Chips');
+    var chips3 = document.getElementById('printSet3Chips');
+    chips1.innerHTML=''; chips2.innerHTML=''; chips3.innerHTML='';
+    if(printState.type==='sub'){
+      label1.textContent = 'ひかれる かずは いくつまで';
+      label2.textContent = 'ひく かずの せいげん';
+      label3.textContent = 'くりさがり';
+      renderChipRow(chips1, SUB_MINUEND_OPTIONS, function(){return subSettings.maxMinuend;}, function(v){ subSettings.maxMinuend=v; if(subSettings.maxSubtrahend && subSettings.maxSubtrahend>v) subSettings.maxSubtrahend=null; renderPrintSettings(); regenerateProblems(); renderWorksheet(); });
+      renderChipRow(chips2, SUB_SUBTRAHEND_OPTIONS, function(){return subSettings.maxSubtrahend;}, function(v){ subSettings.maxSubtrahend=v; renderPrintSettings(); regenerateProblems(); renderWorksheet(); });
+      renderChipRow(chips3, BORROW_OPTIONS, function(){return subSettings.borrow;}, function(v){ subSettings.borrow=v; renderPrintSettings(); regenerateProblems(); renderWorksheet(); });
+    } else if(printState.type==='add'){
+      label1.textContent = 'こたえは いくつまで';
+      label2.textContent = 'ちいさいほうの かずの せいげん';
+      label3.textContent = 'くりあがり';
+      renderChipRow(chips1, ADD_SUM_OPTIONS, function(){return addSettings.maxSum;}, function(v){ addSettings.maxSum=v; if(addSettings.maxSmall && addSettings.maxSmall>v-1) addSettings.maxSmall=null; renderPrintSettings(); regenerateProblems(); renderWorksheet(); });
+      renderChipRow(chips2, ADD_SMALL_OPTIONS, function(){return addSettings.maxSmall;}, function(v){ addSettings.maxSmall=v; renderPrintSettings(); regenerateProblems(); renderWorksheet(); });
+      renderChipRow(chips3, CARRY_OPTIONS, function(){return addSettings.carry;}, function(v){ addSettings.carry=v; renderPrintSettings(); regenerateProblems(); renderWorksheet(); });
+    } else {
+      label1.textContent = 'たしざんの こたえは いくつまで（まぜて用）';
+      label2.textContent = 'ひきざんの ひかれるかずは いくつまで（まぜて用）';
+      label3.textContent = 'くりあがり／くりさがり（りょうほうに てきよう）';
+      renderChipRow(chips1, ADD_SUM_OPTIONS, function(){return addSettings.maxSum;}, function(v){ addSettings.maxSum=v; renderPrintSettings(); regenerateProblems(); renderWorksheet(); });
+      renderChipRow(chips2, SUB_MINUEND_OPTIONS, function(){return subSettings.maxMinuend;}, function(v){ subSettings.maxMinuend=v; renderPrintSettings(); regenerateProblems(); renderWorksheet(); });
+      renderChipRow(chips3, CARRY_OPTIONS, function(){return addSettings.carry;}, function(v){
+        addSettings.carry=v;
+        subSettings.borrow = (v==='none') ? 'none' : (v==='required' ? 'required' : 'any');
+        renderPrintSettings(); regenerateProblems(); renderWorksheet();
+      });
+    }
+  }
+  document.querySelectorAll('#printTypeChips .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#printTypeChips .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      printState.type = c.getAttribute('data-ptype');
+      renderPrintSettings();
+      regenerateProblems(); renderWorksheet();
+    });
+  });
+  document.querySelectorAll('#printCountChips .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#printCountChips .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      printState.count = parseInt(c.getAttribute('data-count'),10);
+      regenerateProblems(); renderWorksheet();
+    });
+  });
+  document.getElementById('printShowAnswer').addEventListener('change', function(e){
+    printState.showAnswer = e.target.checked;
+    renderWorksheet();
+  });
+  document.getElementById('printRegenBtn').addEventListener('click', function(){
+    regenerateProblems(); renderWorksheet();
+  });
+  document.getElementById('printOpenBtn').addEventListener('click', function(){
+    renderWorksheet();
+    setTimeout(function(){ window.print(); }, 60);
+  });
+
+  function regenerateProblems(){
+    var list=[];
+    for(var i=0;i<printState.count;i++){
+      if(printState.type==='add'){
+        list.push({op:'add', data: genAddition(addSettings.maxSum, addSettings.maxSmall, addSettings.carry)});
+      } else if(printState.type==='sub'){
+        list.push({op:'sub', data: genSubtraction(subSettings.maxMinuend, subSettings.maxSubtrahend, subSettings.borrow)});
+      } else {
+        if(Math.random()<0.5) list.push({op:'add', data: genAddition(addSettings.maxSum, addSettings.maxSmall, addSettings.carry)});
+        else list.push({op:'sub', data: genSubtraction(subSettings.maxMinuend, subSettings.maxSubtrahend, subSettings.borrow)});
+      }
+    }
+    printState.problems = list;
+  }
+  regenerateProblems();
+
+  function buildPrintDots(count, opts){
+    opts = opts || {};
+    var tens = Math.floor(count/10);
+    var ones = count % 10;
+    var idx = 0;
+    var html = '';
+    if(tens>0){
+      html += '<div class="ws-bundle-wrap">';
+      for(var t=0;t<tens;t++){
+        html += '<div class="ws-bundle">';
+        for(var j=0;j<10;j++){
+          var cls = 'ws-dot'+(opts.outline?' outline':'')+(opts.crossN && idx<opts.crossN ? ' crossed':'');
+          html += '<span class="'+cls+'">'+(opts.crossN && idx<opts.crossN ? '✕':'')+'</span>';
+          idx++;
+        }
+        html += '<span class="bundle-label">10</span></div>';
+      }
+      html += '</div>';
+    }
+    if(ones>0 || tens===0){
+      html += '<div class="ws-loose">';
+      for(var k=0;k<ones;k++){
+        var cls2 = 'ws-dot'+(opts.outline?' outline':'')+(opts.crossN && idx<opts.crossN ? ' crossed':'');
+        html += '<span class="'+cls2+'">'+(opts.crossN && idx<opts.crossN ? '✕':'')+'</span>';
+        idx++;
+      }
+      html += '</div>';
+    }
+    return html;
+  }
+  function renderWorksheet(){
+    var typeLabel = printState.type==='add' ? '➕ たしざん' : (printState.type==='sub' ? '➖ ひきざん' : '🔀 まぜて（たしざん・ひきざん）');
+    var instruction = printState.type==='sub'
+      ? 'くろい まるに ×を つけて、のこりの かずを かこう'
+      : printState.type==='mix'
+      ? 'もんだいごとに、まるを かいたり ×を つけたり して、こたえを かこう'
+      : 'うえの かずを あわせて、□に まるを かいて、こたえを かこう';
+
+    var html = '';
+    html += '<div class="ws-header"><div style="display:flex;align-items:center;gap:8px;">'
+      + '<div style="width:20px;height:20px;border-radius:50%;background:var(--mieel);border:1px solid #ccc;flex:none;"></div>'
+      + '<div><div style="font-size:11px;color:#333;font-weight:700;">MieeL たしざん・ひきざん</div>'
+      + '<h2>'+typeLabel+'</h2>'
+      + '<div style="font-size:11px;color:#666;margin-top:2px;">'+instruction+'</div></div></div>'
+      + '<div class="ws-fields" style="flex-direction:column;align-items:flex-end;gap:2px;">'
+      + '<div style="font-size:.75rem;color:#3A9A8C;font-weight:700;">mieel-support-school.com</div>'
+      + '<div><span class="lbl">なまえ：</span><span class="blank">&nbsp;</span><span class="lbl">ひづけ：</span><span class="blank">&nbsp;</span></div></div></div>';
+
+    html += '<div class="ws-grid">';
+    printState.problems.forEach(function(p, idx){
+      html += '<div class="ws-cell"><div class="no">もんだい '+(idx+1)+'</div>';
+      if(p.op==='add'){
+        var d = p.data;
+        html += '<div class="ws-problem">'+d.a+' + '+d.b+' = ？</div>';
+        if(printState.showDots){
+          html += '<div class="ws-glabel">'+d.a+'こ</div>' + buildPrintDots(d.a,{});
+          html += '<div class="ws-glabel" style="margin-top:6px;">'+d.b+'こ</div>' + buildPrintDots(d.b,{});
+          html += '<div class="ws-instruction">↓ あわせた かずだけ、まるを かこう</div>';
+          html += buildPrintDots(d.sum, {outline:true});
+        }
+        html += '<div class="ws-answerline">こたえ：<span class="box"></span></div>';
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;text-align:center;">こたえ：'+d.sum+'</div>';
+        }
+      } else {
+        var d2 = p.data;
+        html += '<div class="ws-problem">'+d2.minuend+' － '+d2.subtrahend+' = ？</div>';
+        if(printState.showDots){
+          html += '<div class="ws-instruction">↓ '+d2.subtrahend+'こに ×を つけよう</div>';
+          html += buildPrintDots(d2.minuend, {});
+        }
+        html += '<div class="ws-answerline">のこりの かず：<span class="box"></span></div>';
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;text-align:center;">こたえ：'+d2.remainder+'</div>';
+        }
+      }
+      html += '</div>';
+    });
+    html += '</div>';
+    var ws = document.getElementById('worksheet');
+    if(!ws){
+      ws = document.createElement('div');
+      ws.id='worksheet';
+      document.body.appendChild(ws);
+    }
+    ws.innerHTML = html;
+  }
+  renderPrintSettings();
+  renderWorksheet();
+
+  /* =========================================================
+     MODE SWITCHING / GLOBAL UI
+  ========================================================= */
+  document.querySelectorAll('nav.modes button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('nav.modes button').forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+      btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+      var mode = btn.getAttribute('data-mode');
+      document.querySelectorAll('.view').forEach(function(v){ v.classList.add('hidden'); });
+      document.getElementById('view-'+mode).classList.remove('hidden');
+      if(mode==='print'){ renderPrintSettings(); renderWorksheet(); }
+      if(mode==='mix' && !mixState.current){ newMixProblem(); }
+    });
+  });
+
+  var largeToggle = document.getElementById('btnLargeText');
+  largeToggle.addEventListener('click', function(){
+    var on = document.documentElement.classList.toggle('large-text');
+    largeToggle.setAttribute('aria-pressed', on ? 'true':'false');
+  });
+
+  /* =========================================================
+     INIT
+  ========================================================= */
+  renderAddSettings(); newAddProblem();
+  renderSubSettings(); newSubProblem();
+
+})();
+</script>
+</body>
+</html>
