@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>学校公開のご案内｜岩槻はるかぜ特別支援学校</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap');
+
+  :root{
+    --ink:#233126;
+    --forest:#3c5a44;
+    --forest-deep:#2a4232;
+    --moss:#7f9c74;
+    --sand:#f3efe4;
+    --paper:#fbfaf5;
+    --line:#c9cdb6;
+    --accent:#b8763b;
+  }
+
+  *{ box-sizing:border-box; -webkit-print-color-adjust:exact; print-color-adjust:exact; color-adjust:exact; }
+
+  html,body{
+    margin:0;
+    padding:0;
+    background:#e7e6dd;
+    color:var(--ink);
+    font-family:"Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  }
+
+  .page{
+    width:210mm;
+    min-height:297mm;
+    margin:8mm auto;
+    background:var(--paper);
+    position:relative;
+    box-shadow:0 4px 24px rgba(0,0,0,0.18);
+    padding:11mm 14mm 9mm;
+  }
+
+  .frame{
+    position:absolute;
+    inset:5mm;
+    border:1px solid var(--line);
+    pointer-events:none;
+  }
+
+  .bg-blob{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    background-image:
+      radial-gradient(circle at 92% 6%, rgba(127,156,116,0.16) 0, transparent 42%),
+      radial-gradient(circle at 4% 98%, rgba(184,118,59,0.10) 0, transparent 38%);
+  }
+
+  header{
+    position:relative;
+    text-align:center;
+    padding-bottom:5mm;
+    margin-bottom:5mm;
+    border-bottom:2px solid var(--forest);
+  }
+
+  .kicker{
+    font-size:9.5pt;
+    letter-spacing:0.06em;
+    color:var(--forest-deep);
+    margin-bottom:2mm;
+  }
+
+  h1{
+    font-family:"Shippori Mincho", serif;
+    font-weight:700;
+    font-size:23pt;
+    color:var(--forest-deep);
+    margin:0 0 1mm;
+    letter-spacing:0.04em;
+  }
+
+  .subhead{
+    font-size:10pt;
+    color:var(--ink);
+    opacity:0.75;
+  }
+
+  .theme-box{
+    background-color:var(--forest-deep);
+    background-image:linear-gradient(135deg, var(--forest) 0%, var(--forest-deep) 100%);
+    color:var(--sand);
+    border-radius:3px;
+    padding:5mm 8mm;
+    margin-bottom:5mm;
+    text-align:center;
+  }
+
+  .theme-label{
+    font-size:8.5pt;
+    letter-spacing:0.12em;
+    color:var(--moss);
+    margin-bottom:1.5mm;
+  }
+
+  .theme-title{
+    font-family:"Shippori Mincho", serif;
+    font-size:15pt;
+    font-weight:700;
+    line-height:1.5;
+    margin:0;
+    color:var(--sand);
+  }
+
+  .theme-sub{
+    font-size:9.5pt;
+    margin-top:1.5mm;
+    color:#e7ead9;
+  }
+
+  .lead{
+    font-size:9.7pt;
+    line-height:1.85;
+    text-align:justify;
+    margin:0 0 5mm;
+    color:var(--ink);
+  }
+
+  table.info{
+    width:100%;
+    border-collapse:collapse;
+    border-top:1px solid var(--line);
+    margin-bottom:5mm;
+  }
+
+  table.info td{
+    border-bottom:1px solid var(--line);
+    padding:3mm;
+    font-size:9.7pt;
+    line-height:1.6;
+    vertical-align:middle;
+  }
+
+  table.info td.info-label{
+    background-color:var(--sand);
+    font-family:"Shippori Mincho", serif;
+    font-weight:700;
+    color:var(--forest-deep);
+    letter-spacing:0.06em;
+    width:28mm;
+    white-space:nowrap;
+  }
+
+  .section-title{
+    font-family:"Shippori Mincho", serif;
+    font-size:12.5pt;
+    font-weight:700;
+    color:var(--forest-deep);
+    margin:0 0 3mm;
+  }
+
+  .section-title::before{
+    content:"";
+    width:4mm;
+    height:4mm;
+    background-color:var(--accent);
+    border-radius:1px;
+    display:inline-block;
+    margin-right:2.5mm;
+    vertical-align:middle;
+  }
+
+  table.sched{
+    width:100%;
+    border-collapse:collapse;
+    font-size:9.7pt;
+    margin-bottom:5mm;
+  }
+
+  table.sched th{
+    background-color:var(--forest);
+    color:var(--sand);
+    font-weight:500;
+    padding:2.2mm 3mm;
+    text-align:left;
+    letter-spacing:0.04em;
+    font-size:9pt;
+  }
+
+  table.sched td{
+    padding:2.6mm 3mm;
+    border-bottom:1px solid var(--line);
+  }
+
+  table.sched tr:last-child td{
+    border-bottom:none;
+    background-color:var(--sand);
+  }
+
+  .time-cell{
+    font-weight:700;
+    color:var(--forest-deep);
+    white-space:nowrap;
+    width:28mm;
+  }
+
+  .highlight-content{
+    font-weight:700;
+  }
+
+  .note{
+    font-size:8.7pt;
+    color:var(--ink);
+    opacity:0.8;
+    background-color:var(--sand);
+    border-left:3px solid var(--accent);
+    padding:2.5mm 3.5mm;
+    margin-bottom:5mm;
+  }
+
+  footer{
+    border-top:2px solid var(--forest);
+    padding-top:4mm;
+    font-size:8.8pt;
+    line-height:1.75;
+  }
+
+  footer table{
+    width:100%;
+    border-collapse:collapse;
+  }
+
+  footer table td{
+    vertical-align:bottom;
+  }
+
+  .contact-title{
+    font-family:"Shippori Mincho", serif;
+    font-weight:700;
+    color:var(--forest-deep);
+    font-size:9.5pt;
+    margin-bottom:1.5mm;
+    letter-spacing:0.05em;
+  }
+
+  footer a{
+    color:var(--forest-deep);
+    text-decoration:none;
+  }
+
+  .signoff{
+    text-align:right;
+    font-size:9.3pt;
+    font-weight:700;
+    color:var(--forest-deep);
+  }
+
+  .print-bar{
+    max-width:210mm;
+    margin:0 auto 4mm;
+    text-align:center;
+  }
+
+  .print-btn{
+    background-color:var(--forest-deep);
+    color:#fff;
+    border:none;
+    padding:3mm 8mm;
+    font-size:11pt;
+    font-family:inherit;
+    border-radius:4px;
+    cursor:pointer;
+    letter-spacing:0.04em;
+    box-shadow:0 2px 8px rgba(0,0,0,0.25);
+  }
+
+  @media print{
+    html,body{ background:#fff; margin:0; padding:0; }
+    .print-bar{ display:none; }
+    .page{
+      margin:0;
+      box-shadow:none;
+      width:210mm;
+      min-height:0;
+      padding:11mm 14mm 9mm;
+    }
+    @page{
+      size:A4;
+      margin:0;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="print-bar">
+  <button class="print-btn" onclick="window.print()">この案内を印刷する</button>
+</div>
+
+<div class="page">
+  <div class="bg-blob"></div>
+  <div class="frame"></div>
+
+  <header>
+    <div class="kicker">埼玉県特別支援教育課「教育課程の未来デザイン」研究指定校</div>
+    <h1>岩槻はるかぜ特別支援学校</h1>
+    <div class="subhead">学校公開のご案内</div>
+  </header>
+
+  <div class="theme-box">
+    <div class="theme-label">研究テーマ</div>
+    <p class="theme-title">はるかぜから全県へ、そして、未来へ</p>
+    <div class="theme-sub">～ 特別支援教育サポートアプリ MieeL（ミエル）の開発と活用を目指して ～</div>
+  </div>
+
+  <p class="lead">
+    埼玉県特別支援教育課が進める研究指定を今年度から受け、本校で運用しているWebアプリ「MieeL（ミエル）」を活用して授業実践を蓄積・共有する仕組みづくりに取り組んでいます。当日は、その授業の様子と研究概要をご紹介します。
+  </p>
+
+  <table class="info">
+    <tr>
+      <td class="info-label">日　時</td>
+      <td>令和７年１１月１７日（火）　９：５０ ～ １２：００</td>
+    </tr>
+    <tr>
+      <td class="info-label">会　場</td>
+      <td>岩槻はるかぜ特別支援学校</td>
+    </tr>
+    <tr>
+      <td class="info-label">駐車場</td>
+      <td>校内駐車場を３０台分ご用意しています。</td>
+    </tr>
+    <tr>
+      <td class="info-label">持ち物</td>
+      <td>タブレット端末（お持ちでない場合はスマートフォンでも可）</td>
+    </tr>
+  </table>
+
+  <section class="schedule">
+    <h2 class="section-title">当日のスケジュール</h2>
+    <table class="sched">
+      <thead>
+        <tr><th style="width:28mm;">時間</th><th>内容</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="time-cell">9:50 〜 10:00</td>
+          <td>受付</td>
+        </tr>
+        <tr>
+          <td class="time-cell">10:00 〜 10:40</td>
+          <td>校内見学</td>
+        </tr>
+        <tr>
+          <td class="time-cell">10:40 〜 12:00</td>
+          <td class="highlight-content">授業動画＆研究概要説明</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div class="note">
+    ※ 研究概要等の資料は、岩槻はるかぜ特別支援学校のホームページにも掲載しています。
+  </div>
+
+  <footer>
+    <table>
+      <tr>
+        <td>
+          <div class="contact-title">【問い合わせ先】</div>
+          〒339-0077　埼玉県さいたま市岩槻区馬込2426-1<br>
+          TEL 048-795-6450　　FAX 048-757-7002<br>
+          E-Mail　<a href="mailto:koyama.takayuki.8e@spec.ed.jp">koyama.takayuki.8e@spec.ed.jp</a>
+        </td>
+        <td class="signoff">研究部主任　小山 貴之</td>
+      </tr>
+    </table>
+  </footer>
+</div>
+
+</body>
+</html>
