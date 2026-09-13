@@ -1,0 +1,689 @@
+<title>MieeL操作マニュアル</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F3EC;
+    --surface:#FFFFFF;
+    --surface-2:#FBF8F1;
+    --ink:#20302B;
+    --ink-soft:#5C6B63;
+    --ink-faint:#8A968F;
+    --line:#DED5BF;
+    --accent:#0E7C66;
+    --accent-ink:#FFFFFF;
+    --accent-soft:#E3F1EA;
+    --accent-soft-line:#BFDFD2;
+    --amber:#9C5A10;
+    --amber-soft:#F8ECD9;
+    --amber-line:#E6CFA0;
+    --chip-bg:#EDEAE0;
+    --shadow:0 1px 2px rgba(32,48,43,.06), 0 8px 24px -12px rgba(32,48,43,.12);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#121815;
+      --surface:#171F1B;
+      --surface-2:#1B2420;
+      --ink:#EAE7DD;
+      --ink-soft:#9FAEA6;
+      --ink-faint:#71807A;
+      --line:#2B3733;
+      --accent:#3FC0A0;
+      --accent-ink:#08211B;
+      --accent-soft:#17332B;
+      --accent-soft-line:#264A3E;
+      --amber:#E4A24C;
+      --amber-soft:#2E2617;
+      --amber-line:#4B3B20;
+      --chip-bg:#212B26;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#121815;
+    --surface:#171F1B;
+    --surface-2:#1B2420;
+    --ink:#EAE7DD;
+    --ink-soft:#9FAEA6;
+    --ink-faint:#71807A;
+    --line:#2B3733;
+    --accent:#3FC0A0;
+    --accent-ink:#08211B;
+    --accent-soft:#17332B;
+    --accent-soft-line:#264A3E;
+    --amber:#E4A24C;
+    --amber-soft:#2E2617;
+    --amber-line:#4B3B20;
+    --chip-bg:#212B26;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans JP",sans-serif;
+    line-height:1.85;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.mincho{font-family:"Shippori Mincho",serif;}
+  .mono{font-family:"JetBrains Mono",ui-monospace,monospace;}
+  a{color:inherit;}
+  img{max-width:100%;}
+
+  /* ---------- layout shell ---------- */
+  .shell{display:flex;min-height:100vh;}
+  .rail{
+    width:272px;flex:0 0 272px;
+    border-right:1px solid var(--line);
+    position:sticky;top:0;height:100vh;overflow-y:auto;
+    padding:28px 22px 40px;
+    background:var(--surface-2);
+  }
+  .rail-brand{margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--line);}
+  .rail-mark{display:block;font-family:"Shippori Mincho",serif;font-weight:800;font-size:26px;letter-spacing:.02em;}
+  .rail-sub{display:block;margin-top:4px;font-size:12px;color:var(--ink-soft);letter-spacing:.14em;}
+  .rail-toggle{display:none;}
+  .rail-nav{display:flex;flex-direction:column;gap:2px;}
+  .rail-nav a{
+    display:flex;align-items:baseline;gap:10px;
+    padding:8px 10px;border-radius:8px;
+    font-size:13.5px;text-decoration:none;color:var(--ink-soft);
+    transition:background .15s,color .15s;
+  }
+  .rail-nav a .idx{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--ink-faint);flex:0 0 auto;}
+  .rail-nav a:hover{background:var(--chip-bg);color:var(--ink);}
+  .rail-nav a.active{background:var(--accent-soft);color:var(--accent);font-weight:700;}
+  .rail-nav a.active .idx{color:var(--accent);}
+  .rail-group-label{margin:16px 0 4px;padding:0 10px;font-size:10.5px;letter-spacing:.16em;color:var(--ink-faint);}
+
+  .content{flex:1;min-width:0;max-width:840px;padding:56px 56px 120px;}
+
+  /* ---------- hero / intro ---------- */
+  .hero{margin-bottom:64px;padding-bottom:44px;border-bottom:1px solid var(--line);}
+  .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.18em;color:var(--accent);font-weight:700;margin-bottom:18px;}
+  .hero-eyebrow::before{content:"";width:20px;height:1px;background:var(--accent);}
+  .hero h1{font-size:44px;line-height:1.3;font-weight:800;margin:0 0 18px;text-wrap:balance;}
+  .hero p.lead{font-size:16.5px;color:var(--ink-soft);max-width:62ch;margin:0 0 28px;}
+  .hero-stats{display:flex;gap:28px;flex-wrap:wrap;margin-bottom:32px;}
+  .hero-stat b{display:block;font-family:"Shippori Mincho",serif;font-size:28px;font-weight:800;}
+  .hero-stat span{display:block;font-size:11.5px;color:var(--ink-soft);letter-spacing:.06em;margin-top:2px;}
+
+  .pattern-card{
+    background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    padding:26px 28px;box-shadow:var(--shadow);
+  }
+  .pattern-card h3{font-size:15px;margin:0 0 14px;display:flex;align-items:center;gap:8px;}
+  .pattern-flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13.5px;}
+  .pattern-flow .pf-step{
+    background:var(--accent-soft);border:1px solid var(--accent-soft-line);color:var(--accent);
+    padding:9px 14px;border-radius:10px;font-weight:700;display:flex;align-items:center;gap:8px;
+  }
+  .pattern-flow .pf-step small{font-family:"JetBrains Mono",monospace;font-weight:700;opacity:.75;}
+  .pattern-flow .pf-arrow{color:var(--ink-faint);font-size:16px;}
+  .pattern-note{margin-top:14px;font-size:13px;color:var(--ink-soft);}
+
+  /* ---------- chapters ---------- */
+  .chapter{margin-bottom:84px;scroll-margin-top:28px;}
+  .chapter-head{display:flex;gap:20px;align-items:flex-start;margin-bottom:22px;}
+  .chapter-num{
+    font-family:"Shippori Mincho",serif;font-weight:800;font-size:46px;color:var(--accent-soft-line);
+    line-height:1;flex:0 0 auto;
+  }
+  .chapter-titles h2{font-size:28px;font-weight:800;margin:0 0 6px;text-wrap:balance;}
+  .chapter-titles .kicker{font-size:12px;letter-spacing:.1em;color:var(--ink-faint);font-family:"JetBrains Mono",monospace;}
+  .chapter-lead{
+    font-size:15.5px;color:var(--ink-soft);max-width:64ch;margin:0 0 26px;
+    padding-left:18px;border-left:3px solid var(--accent-soft-line);
+  }
+
+  .subhead{font-size:12px;letter-spacing:.12em;color:var(--ink-faint);font-weight:700;margin:26px 0 14px;text-transform:uppercase;}
+  .subhead:first-of-type{margin-top:0;}
+
+  .steps{list-style:none;margin:0 0 8px;padding:0;position:relative;}
+  .steps li{
+    position:relative;display:flex;gap:16px;padding:0 0 22px 0;
+  }
+  .steps li:last-child{padding-bottom:2px;}
+  .steps li::before{
+    content:"";position:absolute;left:14px;top:30px;bottom:0;width:1px;background:var(--line);
+  }
+  .steps li:last-child::before{display:none;}
+  .step-num{
+    flex:0 0 auto;width:29px;height:29px;border-radius:50%;
+    background:var(--surface);border:1.5px solid var(--accent);color:var(--accent);
+    display:flex;align-items:center;justify-content:center;font-family:"JetBrains Mono",monospace;
+    font-weight:700;font-size:13px;z-index:1;
+  }
+  .step-body{padding-top:3px;}
+  .step-body b{font-weight:700;}
+  .step-body .sub{display:block;margin-top:4px;font-size:13.5px;color:var(--ink-soft);}
+
+  .callout{
+    display:flex;gap:12px;border-radius:12px;padding:16px 18px;margin:18px 0;
+    font-size:14px;line-height:1.75;
+  }
+  .callout .c-icon{flex:0 0 auto;font-size:16px;line-height:1.5;}
+  .callout.info{background:var(--accent-soft);border:1px solid var(--accent-soft-line);color:var(--ink);}
+  .callout.warn{background:var(--amber-soft);border:1px solid var(--amber-line);color:var(--ink);}
+  .callout b{color:var(--accent);}
+  .callout.warn b{color:var(--amber);}
+
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:16px 0 22px;}
+  .mini-card{
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 18px 16px;
+  }
+  .mini-card .mc-tag{
+    display:inline-block;font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.06em;
+    background:var(--chip-bg);color:var(--ink-soft);padding:3px 8px;border-radius:5px;margin-bottom:10px;
+  }
+  .mini-card h4{margin:0 0 6px;font-size:15.5px;font-weight:700;}
+  .mini-card p{margin:0;font-size:13.5px;color:var(--ink-soft);}
+
+  .fact-table{width:100%;border-collapse:collapse;margin:14px 0 24px;font-size:13.5px;}
+  .fact-table th,.fact-table td{text-align:left;padding:9px 14px;border-bottom:1px solid var(--line);vertical-align:top;}
+  .fact-table th{width:120px;color:var(--ink-faint);font-weight:700;font-size:11.5px;letter-spacing:.05em;}
+  .fact-table-wrap{overflow-x:auto;}
+
+  .tag-row{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 22px;}
+  .tag-row span{
+    font-size:12.5px;background:var(--chip-bg);color:var(--ink-soft);padding:5px 11px;border-radius:999px;
+    border:1px solid var(--line);
+  }
+
+  .chapter-foot{
+    margin-top:26px;padding-top:18px;border-top:1px dashed var(--line);
+    font-size:12.5px;color:var(--ink-faint);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  }
+
+  footer.end{
+    margin-top:20px;padding-top:32px;border-top:1px solid var(--line);
+    color:var(--ink-faint);font-size:12.5px;
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width:920px){
+    .shell{display:block;}
+    .rail{
+      position:sticky;top:0;width:auto;height:auto;z-index:20;
+      display:flex;flex-direction:column;padding:14px 18px;border-right:none;border-bottom:1px solid var(--line);
+    }
+    .rail-brand{margin:0;padding:0;border:none;display:flex;align-items:baseline;gap:10px;}
+    .rail-toggle{
+      display:inline-flex;margin-left:auto;align-items:center;gap:6px;
+      background:var(--chip-bg);border:1px solid var(--line);color:var(--ink);
+      font-size:12.5px;font-weight:700;padding:8px 14px;border-radius:999px;cursor:pointer;
+      font-family:"Zen Kaku Gothic New",sans-serif;
+    }
+    .rail-nav{
+      display:none;max-height:60vh;overflow-y:auto;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);
+    }
+    .rail-nav.open{display:flex;}
+    .content{padding:36px 22px 100px;}
+    .hero h1{font-size:32px;}
+    .chapter-num{font-size:34px;}
+    .chapter-titles h2{font-size:22px;}
+  }
+
+  ::selection{background:var(--accent-soft);color:var(--accent);}
+</style>
+
+<div class="shell">
+  <aside class="rail">
+    <div class="rail-brand">
+      <span class="rail-mark">MieeL</span>
+      <span class="rail-sub">操作マニュアル</span>
+    </div>
+    <button class="rail-toggle" id="railToggle" type="button">目次 ▾</button>
+    <nav class="rail-nav" id="railNav">
+      <a href="#intro"><span class="idx">00</span>MieeLとは</a>
+      <div class="rail-group-label">MieeL 各機能</div>
+      <a href="#f01"><span class="idx">01</span>自活＆日生指導ライブラリ</a>
+      <a href="#f02"><span class="idx">02</span>発達チャート</a>
+      <a href="#f03"><span class="idx">03</span>AI 授業作成</a>
+      <a href="#f04"><span class="idx">04</span>AI 個別の教育支援/指導計画</a>
+      <a href="#f05"><span class="idx">05</span>早引き学習指導要領</a>
+      <a href="#f06"><span class="idx">06</span>授業カードライブラリ</a>
+      <a href="#f07"><span class="idx">07</span>動画ギャラリー</a>
+      <a href="#f08"><span class="idx">08</span>研究・分析</a>
+      <a href="#f09"><span class="idx">09</span>ICT倉庫</a>
+      <a href="#f10"><span class="idx">10</span>自立活動の指導計画サーチ</a>
+      <a href="#f11"><span class="idx">11</span>教材ボックス</a>
+      <a href="#f12"><span class="idx">12</span>進路ガイド</a>
+      <a href="#f13"><span class="idx">13</span>MieeLコーディネーター</a>
+      <a href="#f14"><span class="idx">14</span>集まれ指導実践</a>
+    </nav>
+  </aside>
+
+  <main class="content">
+
+    <header class="hero" id="intro">
+      <span class="hero-eyebrow">GUIDE BOOK</span>
+      <h1>MieeL 操作マニュアル</h1>
+      <p class="lead">MieeLは、特別支援教育の「経験」に「データ」をプラスするWebサービスです。指導案づくりから発達の記録、進路の情報まで、学校現場で使う機能を一つにまとめています。このマニュアルは、はじめて触る先生でも迷わないように、全14機能の使い方を専門用語なしで説明したものです。</p>
+
+      <div class="pattern-card">
+        <h3>🔁 まず知っておくと迷わない、共通の使い方パターン</h3>
+        <div class="pattern-flow">
+          <span class="pf-step"><small>1</small>MieeLで文章（プロンプト）を作る</span>
+          <span class="pf-arrow">→</span>
+          <span class="pf-step"><small>2</small>コピーしてChatGPT・Geminiに貼り付ける</span>
+          <span class="pf-arrow">→</span>
+          <span class="pf-step"><small>3</small>AIの回答をMieeLに戻す</span>
+        </div>
+        <p class="pattern-note">MieeLの「AI ○○作成」系の機能は、自分の中にAIを内蔵しているわけではなく、この3ステップで外部のAI（ChatGPTやGemini）を賢く使うための「指示文の下書き係」です。この流れさえ覚えておけば、どの機能もほぼ同じ感覚で使えます。困ったときはトップページ右下のチャット「MieeL AIアシスタント」にも質問できます。</p>
+      </div>
+    </header>
+
+    <!-- 01 ================================================= -->
+    <section class="chapter" id="f01">
+      <div class="chapter-head">
+        <span class="chapter-num">01</span>
+        <div class="chapter-titles">
+          <span class="kicker">SEARCH SUPPORT</span>
+          <h2>自活＆日生指導ライブラリ</h2>
+        </div>
+      </div>
+      <p class="chapter-lead">自立活動・日常生活の指導の実践事例を検索できるデータベースです。自分の実践を投稿することもできます。</p>
+
+      <div class="subhead">実践を探す</div>
+      <ol class="steps">
+        <li><span class="step-num">1</span><div class="step-body"><b>キーワードを入力</b><span class="sub">複数のキーワードはスペース区切りでOK。「健康の保持」「心理的な安定」など自立活動6区分のボタンや、タグでも絞り込めます。</span></div></li>
+        <li><span class="step-num">2</span><div class="step-body"><b>一覧またはリスト表示を切り替えて眺める</b><span class="sub">画面右上のアイコンでカード表示・リスト表示を切り替えられます。</span></div></li>
+        <li><span class="step-num">3</span><div class="step-body"><b>カードをクリックして詳細を見る</b><span class="sub">対象の実態・設定した課題・期待される変容・具体的な指導内容・ICTの活用・写真・関連資料（指導フロー図など）がまとまっています。</span></div></li>
+        <li><span class="step-num">4</span><div class="step-body"><b>参考になったら保存する</b><span class="sub">♡（いいね）と🔖（ブックマーク）で記録できます。コメントも1事例につき1回書き込めます。詳細ページ右上の「PDF保存」でその場でPDF化も可能です。</span></div></li>
+      </ol>
+
+      <div class="subhead">実践を投稿する</div>
+      <ol class="steps">
+        <li><span class="step-num">1</span><div class="step-body"><b>「実践を投稿」タブを開き、管理者パスワードを入力</b><span class="sub">パスワードは学校の担当者・管理者に確認してください。</span></div></li>
+        <li><span class="step-num">2</span><div class="step-body"><b>「Googleフォームを開く」から実践内容を登録</b></div></li>
+        <li><span class="step-num">3</span><div class="step-body"><b>文章化に迷ったら「AIフォーム回答アシスタント」を使う</b><span class="sub">支援のメモを入力して「AI命令書を作る」→出てきた指示文をChatGPT等に貼り付けると、回答の下書きを考えてもらえます。</span></div></li>
+      </ol>
+
+      <div class="callout warn"><span class="c-icon">🔒</span><div><b>投稿には管理者パスワードが必要です。</b>写真を掲載する場合は、氏名や学校名など個人が特定される情報が写り込んでいないか必ず確認してください。</div></div>
+
+      <div class="chapter-foot"><span>こんな時に開く：授業や支援のアイデアに詰まったとき</span><span>タグ：検索 / 投稿 / いいね・コメント</span></div>
+    </section>
+
+    <!-- 02 ================================================= -->
+    <section class="chapter" id="f02">
+      <div class="chapter-head">
+        <span class="chapter-num">02</span>
+        <div class="chapter-titles">
+          <span class="kicker">DEVELOPMENT CHART</span>
+          <h2>発達チャート</h2>
+        </div>
+      </div>
+      <p class="chapter-lead">お子さんの発達段階を12項目選ぶだけで、レーダーチャートにまとめて確認・保存できます。</p>
+
+      <ol class="steps">
+        <li><span class="step-num">1</span><div class="step-body"><b>年齢モードを選ぶ</b><span class="sub">「7歳以下」「7〜12歳」「12歳以上」の3つ。年齢に応じて項目と選択肢の内容が切り替わります。</span></div></li>
+        <li><span class="step-num">2</span><div class="step-body"><b>12項目それぞれで、今の発達段階に近い選択肢を選ぶ</b><span class="sub">迷ったら各カードの「目安を見る」を開くと、その段階ごとの具体的な様子の例が読めます。</span></div></li>
+        <li><span class="step-num">3</span><div class="step-body"><b>画面下の進捗が100%になったら「チャートを作成して書き込む」をクリック</b></div></li>
+        <li><span class="step-num">4</span><div class="step-body"><b>新しいタブでレーダーチャートのレポートが自動的に開く</b><span class="sub">保存・印刷や後からの再表示（「レポートを再表示」）にも対応しています。</span></div></li>
+      </ol>
+
+      <div class="callout info"><span class="c-icon">💡</span><div>この発達段階の目安は、特定の検査や指標に基づくものではなく、<b>MieeLが独自にまとめた参考の目安</b>です。ポップアップがブロックされた場合は、完了画面に出る「レポートを開く」リンクから開けます。</div></div>
+
+      <div class="chapter-foot"><span>こんな時に開く：実態把握や個別の指導計画の土台づくり</span><span>タグ：発達 / チャート / 記録</span></div>
+    </section>
+
+    <!-- 03 ================================================= -->
+    <section class="chapter" id="f03">
+      <div class="chapter-head">
+        <span class="chapter-num">03</span>
+        <div class="chapter-titles">
+          <span class="kicker">LESSON PLAN AI</span>
+          <h2>AI 授業作成</h2>
+        </div>
+      </div>
+      <p class="chapter-lead">4つのモードで、AIによる授業づくりをサポートします。やりたいことに合わせてモードを選んでください。</p>
+
+      <div class="card-grid">
+        <div class="mini-card"><span class="mc-tag">MODE 1</span><h4>教材作成モード</h4><p>アイデア段階から、授業の構成案づくり→スライド・プリント用プロンプトの作成までを3ステップで。Gamma・Canva・NotebookLM等の外部ツールとの連携方法も案内してくれます。</p></div>
+        <div class="mini-card"><span class="mc-tag">MODE 2</span><h4>指導法・教材案モード</h4><p>「各教科の授業」または「日常生活の指導」を選び、条件を入力するだけで、具体的な手立てや教材案のプロンプトが1つ完成します。</p></div>
+        <div class="mini-card"><span class="mc-tag">MODE 3</span><h4>指導案作成モード</h4><p>基本情報とアイデアを入力→AIとの1回のやり取りで指導案が完成→Excelの指導案としてダウンロード。</p></div>
+        <div class="mini-card"><span class="mc-tag">MODE 4</span><h4>準ずる教育モード</h4><p>通常学級／準ずる教育（視覚・聴覚・肢体・病弱）向け。知的障害教育のような発達段階別の内容置き換えは行わず、教科書・学習指導要領に準拠した指導案を作ります。</p></div>
+      </div>
+
+      <div class="subhead">指導案作成モード・準ずる教育モードの流れ（どちらも共通）</div>
+      <ol class="steps">
+        <li><span class="step-num">1</span><div class="step-body"><b>基本情報とアイデアを入力</b><span class="sub">学部学年・教科名・単元名・時間・障害種など。授業タイトルが未定でもOK、目標や評価基準などの詳細設定は空欄にしておけばAIが自動で補ってくれます。</span></div></li>
+        <li><span class="step-num">2</span><div class="step-body"><b>「プロンプトを作成」→コピーしてChatGPT（推奨）またはGeminiに貼り付けて送信</b></div></li>
+        <li><span class="step-num">3</span><div class="step-body"><b>AIの回答をそのまま貼り付ける</b><span class="sub">前置きの文章やコピー跡が混ざっていても、そのまま貼り付けて大丈夫です。自動で必要な部分だけ読み取ります。</span></div></li>
+        <li><span class="step-num">4</span><div class="step-body"><b>「指導案Excelを出力する」で、指導案が仕上がった状態のExcelがダウンロードされる</b></div></li>
+      </ol>
+
+      <div class="callout info"><span class="c-icon">🧠</span><div>「教材作成モード」「指導法・教材案モード」「指導案作成モード」では<b>知的発達段階（初期／中間低め／中間高め／高）</b>を選べます。「準ずる教育モード」にはこの選択はありません。</div></div>
+
+      <div class="chapter-foot"><span>こんな時に開く：授業や指導案づくりの時間を短縮したいとき</span><span>タグ：AI / 指導案 / Excel出力</span></div>
+    </section>
+
+    <!-- 04 ================================================= -->
+    <section class="chapter" id="f04">
+      <div class="chapter-head">
+        <span class="chapter-num">04</span>
+        <div class="chapter-titles">
+          <span class="kicker">PLANNING ASSIST</span>
+          <h2>AI 個別の教育支援/指導計画作成</h2>
+        </div>
+      </div>
+      <p class="chapter-lead">お子さんの実態を入力するだけで、個別の教育支援計画・指導計画づくりに使うAI用の文章を5種類まで自動生成します。</p>
+
+      <div class="subhead">出力モードを選ぶ</div>
+      <div class="card-grid">
+        <div class="mini-card"><span class="mc-tag">通常モード</span><h4>文章で出力</h4><p>Wordなどに手動でコピペする場合はこちら。</p></div>
+        <div class="mini-card"><span class="mc-tag">おすすめ</span><h4>Excel作成モード</h4><p>プランのドキュメントを直接作成。Excelファイルに入力された状態で出力されます。</p></div>
+      </div>
+
+      <div class="subhead">5つのプロンプトを順番に作る</div>
+      <div class="fact-table-wrap">
+      <table class="fact-table">
+        <tr><th>共通入力</th><td>「実態や課題」を1か所に入力すれば、①②のプロンプトで共通して使われます。</td></tr>
+        <tr><th>① プランA</th><td>ニーズ・合理的配慮／所属校の支援目標・支援内容</td></tr>
+        <tr><th>② プランB</th><td>指導方針・実態（6区分＋その他の7領域）</td></tr>
+        <tr><th>③</th><td>教科を選んで、各教科の目標と手立て</td></tr>
+        <tr><th>④</th><td>教科ごとの活動の様子から評価文を作成</td></tr>
+        <tr><th>⑤</th><td>前期・後期の保護者向け所見</td></tr>
+      </table>
+      </div>
+      <p style="font-size:13.5px;color:var(--ink-soft);margin-top:-10px;">各プロンプトの「生成」ボタン→出てきた文章をコピー→ChatGPT（画面上部にボタンあり）やGeminiに貼り付けて回答をもらう、という流れです。</p>
+
+      <div class="callout info"><span class="c-icon">📥</span><div><b>Excel作成モードの場合：</b>①②のAIの回答をそのまま画面の入力欄にコピペして「Excelを作成してダウンロード」を押すと、①②まで入力済みの個別の指導計画Excelが手に入ります。③〜⑤は通常モードと同じく、できあがったExcelに直接書き込んでください。</div></div>
+
+      <div class="subhead">補助ツール：個人情報削除＆ワード化ツール</div>
+      <p>過去に作ったプランA・Bのファイルから、氏名などの個人情報を一括で消してAIに読み込ませやすい文章に変換できるExcelファイル（マクロ入り）をダウンロードできます。開くとOfficeの警告が出ますが、これはマクロ入りファイルに共通する挙動で、「コンテンツの有効化」を押すと個人情報を消す処理が動きます。過去の指導計画をAIに参考として読み込ませたいときの下準備に便利です。</p>
+
+      <div class="callout warn"><span class="c-icon">🔒</span><div>ChatGPTやGeminiなど<b>外部のAIサービスに氏名・生年月日といった個人情報を入力しない</b>でください。</div></div>
+
+      <div class="chapter-foot"><span>こんな時に開く：個別の教育支援計画・指導計画の作成時期</span><span>タグ：AI / 支援計画 / Excel / 個人情報削除</span></div>
+    </section>
+
+    <!-- 05 ================================================= -->
+    <section class="chapter" id="f05">
+      <div class="chapter-head">
+        <span class="chapter-num">05</span>
+        <div class="chapter-titles">
+          <span class="kicker">GUIDELINES</span>
+          <h2>早引き学習指導要領</h2>
+        </div>
+      </div>
+      <p class="chapter-lead">学部・障害種別・教科を選ぶだけで、特別支援学校学習指導要領の必要な部分だけをすぐに表示します。</p>
+
+      <ol class="steps">
+        <li><span class="step-num">1</span><div class="step-body"><b>学部を選ぶ</b></div></li>
+        <li><span class="step-num">2</span><div class="step-body"><b>障害種別を選ぶ</b><span class="sub">「知的障害」を選んだ場合は、続けて教科・段階も選びます。</span></div></li>
+        <li><span class="step-num">3</span><div class="step-body"><b>「表示する」をクリック</b><span class="sub">該当する学習指導要領の本文がそのまま表示されます。</span></div></li>
+      </ol>
+
+      <div class="callout info"><span class="c-icon">📖</span><div>表示される文章は<b>文部科学省の告示本文そのもの</b>です（法令・告示は著作権法上、著作権の対象にならないため原文を掲載しています）。正式な内容は文部科学省の公式発表で必ずご確認ください。</div></div>
+
+      <div class="chapter-foot"><span>こんな時に開く：指導案作成前の要領確認</span><span>タグ：学習指導要領 / 検索</span></div>
+    </section>
+
+    <!-- 06 ================================================= -->
+    <section class="chapter" id="f06">
+      <div class="chapter-head">
+        <span class="chapter-num">06</span>
+        <div class="chapter-titles">
+          <span class="kicker">LESSON CARD LIBRARY</span>
+          <h2>授業カードライブラリ</h2>
+        </div>
+      </div>
+      <p class="chapter-lead">先生方の授業実践を検索できるほか、自分の授業も「授業カード」として登録できます。</p>
+
+      <div class="subhead">検索ライブラリ（誰でも閲覧OK）</div>
+      <ol class="steps">
+        <li><span class="step-num">1</span><div class="step-body"><b>キーワード・教科・障害種・タグで絞り込む</b></div></li>
+        <li><span class="step-num">2</span><div class="step-body"><b>カードをクリックして詳細を見る</b><span class="sub">単元名・学部学年・授業の写真・指導案などがまとまっています。</span></div></li>
+      </ol>
+
+      <div class="subhead">授業カード作成（要パスワード）</div>
+      <ol class="steps">
+        <li><span class="step-num">1</span><div class="step-body"><b>管理者パスワードを入力</b></div></li>
+        <li><span class="step-num">2</span><div class="step-body"><b>「Googleフォームを開く」から登録</b><span class="sub">作り方の参考動画も同じ画面で見られます。</span></div></li>
+        <li><span class="step-num">3</span><div class="step-body"><b>「教材・著作物の扱い 安全ライン表」で掲載基準を確認</b><span class="sub">ブラウザ表示・PDFダウンロードどちらも可能です。</span></div></li>
+        <li><span class="step-num">4</span><div class="step-body"><b>文章に迷ったら「AIフォーム回答アシスタント」を使う</b><span class="sub">授業メモを入力すると、①フォーム回答の下書きプロンプトと、②授業写真をAIに生成させるためのプロンプトの2種類が作れます。ChatGPT等に貼り付けて使ってください。</span></div></li>
+      </ol>
+
+      <div class="callout warn"><span class="c-icon">⚠️</span><div>フォームを開く前に<b>「指導案やスライドに個人情報が乗っていないか」</b>必ずもう一度確認するよう画面に案内が出ます。AIへの回答依頼には、著作権上の問題がないかを事前にチェックする仕組みもあらかじめ組み込まれています。</div></div>
+
+      <div class="chapter-foot"><span>こんな時に開く：他の先生の授業実践を探す・自分の授業を共有する</span><span>タグ：検索 / 投稿 / 著作権チェック</span></div>
+    </section>
+
+    <!-- 07 ================================================= -->
+    <section class="chapter" id="f07">
+      <div class="chapter-head">
+        <span class="chapter-num">07</span>
+        <div class="chapter-titles">
+          <span class="kicker">VIDEO GALLERY</span>
+          <h2>動画ギャラリー</h2>
+        </div>
+      </div>
+      <p class="chapter-lead">自閉症スペクトラム・ADHD・ABA（応用行動分析）など、障害特性や支援方法を解説する動画集です。</p>
+      <p>トピックを選ぶとその場でYouTube動画が再生されます。「卒業後の進路」「動作法」「最新のICT教材」「スイッチ教材」など、準備中のトピックも一覧に表示され、今後追加されていきます。</p>
+      <div class="chapter-foot"><span>こんな時に開く：障害特性の基礎知識を短時間でおさらいしたいとき</span><span>タグ：動画 / 基礎知識</span></div>
+    </section>
+
+    <!-- 08 ================================================= -->
+    <section class="chapter" id="f08">
+      <div class="chapter-head">
+        <span class="chapter-num">08</span>
+        <div class="chapter-titles">
+          <span class="kicker">ANALYSIS &amp; TOOLS</span>
+          <h2>研究・分析</h2>
+        </div>
+      </div>
+      <p class="chapter-lead">特別支援教育に関する手法の解説と、分析ツールをまとめて使えます。分析ツールはすべてMieeL内で完結し、外部サービスに依存しません。</p>
+
+      <div class="subhead">探し方は2通り</div>
+      <div class="card-grid">
+        <div class="mini-card"><span class="mc-tag">探し方 A</span><h4>分析方法の一覧から探す</h4><p>ABA（応用行動分析）／FBA・PBS／CBT（認知行動療法）／ソーシャルスキルトレーニング／感覚統合療法／PECS／動作法／TEACCH／セラピー手法／マインドフルネス／統計学的分析方法、の11項目から選べます。</p></div>
+        <div class="mini-card"><span class="mc-tag">探し方 B</span><h4>児童・生徒の実態から探す</h4><p>「言葉で気持ちを伝えるのが難しい」「対人関係が苦手」など、当てはまる困りごとを選ぶと、合いそうな手法の候補が自動で表示されます。</p></div>
+      </div>
+
+      <div class="subhead">内蔵の統計分析ツール</div>
+      <div class="tag-row"><span>相関分析</span><span>多変量回帰分析</span><span>ロジスティック回帰</span><span>アンケート分析</span></div>
+      <p>アンケート調査の結果などをそのままグラフ化・統計処理できます。研究論文や課題研究のデータ分析にも活用できます。</p>
+
+      <div class="chapter-foot"><span>こんな時に開く：支援方法で迷ったとき／実践の成果をデータで示したいとき</span><span>タグ：分析 / 統計 / 手法解説</span></div>
+    </section>
+
+    <!-- 09 ================================================= -->
+    <section class="chapter" id="f09">
+      <div class="chapter-head">
+        <span class="chapter-num">09</span>
+        <div class="chapter-titles">
+          <span class="kicker">ICT WAREHOUSE</span>
+          <h2>ICT倉庫</h2>
+        </div>
+      </div>
+      <p class="chapter-lead">MieeLの開発者が作った、AIツールなどのオフライン用ICTツールが入っています。</p>
+      <ol class="steps">
+        <li><span class="step-num">1</span><div class="step-body"><b>パスワードを入力して倉庫に入る</b><span class="sub">授業カードライブラリと共通のパスワードです。</span></div></li>
+        <li><span class="step-num">2</span><div class="step-body"><b>キーワードでツールを検索</b></div></li>
+        <li><span class="step-num">3</span><div class="step-body"><b>「詳細・使い方」で説明を見る、または「保存する」でダウンロード</b></div></li>
+      </ol>
+      <div class="callout info"><span class="c-icon">🛡️</span><div>掲載されているツールはすべて、<b>インストール不要・PC内だけで完結するオフライン動作</b>です。児童生徒の写真や成績データがインターネットに送信されることは一切なく、学校のセキュリティポリシーに沿って使えます。</div></div>
+      <div class="chapter-foot"><span>こんな時に開く：授業や校務で使えるちょっとした便利ツールを探す</span><span>タグ：ICT / オフライン / 要パスワード</span></div>
+    </section>
+
+    <!-- 10 ================================================= -->
+    <section class="chapter" id="f10">
+      <div class="chapter-head">
+        <span class="chapter-num">10</span>
+        <div class="chapter-titles">
+          <span class="kicker">INDIVIDUALIZED PLAN</span>
+          <h2>自立活動の指導計画サーチ</h2>
+        </div>
+      </div>
+      <p class="chapter-lead">「実態→課題→目標・変容→長期目標→指導内容」のつながりを図で確認できる、指導計画のデータベースです。</p>
+      <ol class="steps">
+        <li><span class="step-num">1</span><div class="step-body"><b>キーワードで事例を検索</b><span class="sub">事例名・生徒名（仮名）・本文の全域から探せます。</span></div></li>
+        <li><span class="step-num">2</span><div class="step-body"><b>事例を開いて、項目同士のつながりを確認する</b><span class="sub">実態・課題・目標・変容・長期目標・指導①②が線でつながって表示され、根拠から指導までの流れをたどれます。</span></div></li>
+        <li><span class="step-num">3</span><div class="step-body"><b>自分の事例を作るときは「AIでかんたん作成」が便利</b><span class="sub">お子さんの様子を簡単な説明文で入力するだけで、AIが実態〜長期目標までの項目とつながりをまとめて提案してくれます。</span></div></li>
+      </ol>
+      <div class="callout info"><span class="c-icon">🔗</span><div>作成後も、項目ごとに<b>つながりを手動で追加・修正</b>できます。AIが接続先を決めきれなかった場合は「暫定的に接続しました」という案内が表示されるので、内容を確認してから調整してください。</div></div>
+      <div class="chapter-foot"><span>こんな時に開く：自立活動の個別の指導計画を一から組み立てるとき</span><span>タグ：自立活動 / つながり図 / AI生成</span></div>
+    </section>
+
+    <!-- 11 ================================================= -->
+    <section class="chapter" id="f11">
+      <div class="chapter-head">
+        <span class="chapter-num">11</span>
+        <div class="chapter-titles">
+          <span class="kicker">MATERIALS</span>
+          <h2>教材ボックス</h2>
+        </div>
+      </div>
+      <p class="chapter-lead">先生方が作ったWord・Excel・PowerPoint・HTML教材を検索できる保管庫です。ブラウザ上でそのまま使えるアプリ教材もあります。</p>
+
+      <div class="subhead">教材を探す（パスワード不要・誰でも閲覧OK）</div>
+      <ol class="steps">
+        <li><span class="step-num">1</span><div class="step-body"><b>キーワードや教科カテゴリで検索</b></div></li>
+        <li><span class="step-num">2</span><div class="step-body"><b>教材をクリックして詳細を確認</b></div></li>
+        <li><span class="step-num">3</span><div class="step-body"><b>HTML教材は「新しいタブで開く」でその場で使える／それ以外は「教材をダウンロードする」</b><span class="sub">授業プリント作成アプリなどはこのHTML教材にあたります。</span></div></li>
+      </ol>
+
+      <div class="subhead">教材を送る（投稿時のみパスワード確認あり）</div>
+      <p>「みんなの教材を送ってください」フォームから、Word・PowerPoint・Excel・PDF・Webページ(HTML)の教材はもちろん、手作りカードなど手元にある教材の写真だけでも送れます。内容を確認したうえで一覧に掲載されます。</p>
+
+      <div class="callout warn"><span class="c-icon">🔒</span><div>写真や説明文に、<b>お子さんの本名・顔が分かる写真・学校名など、個人が特定される情報を含めない</b>ようにしてください。</div></div>
+
+      <div class="chapter-foot"><span>こんな時に開く：既製の教材やワークシートをすぐに使いたいとき</span><span>タグ：教材 / ダウンロード / HTML教材</span></div>
+    </section>
+
+    <!-- 12 ================================================= -->
+    <section class="chapter" id="f12">
+      <div class="chapter-head">
+        <span class="chapter-num">12</span>
+        <div class="chapter-titles">
+          <span class="kicker">CAREER GUIDE</span>
+          <h2>進路ガイド</h2>
+        </div>
+      </div>
+      <p class="chapter-lead">卒業後の進路について、「比較する」「手帳を知る」「事業所を探す」の3つの入り口から調べられます。</p>
+
+      <div class="subhead">① 進路を比較する</div>
+      <p>生活介護・就労継続支援B型・就労継続支援A型・就労移行支援・一般就労の5つを、対象条件・工賃や給与・契約形態・メリットで比較できます。一覧表も用意されています。</p>
+      <div class="tag-row"><span>生活介護</span><span>就労継続支援B型</span><span>就労継続支援A型</span><span>就労移行支援</span><span>一般就労</span></div>
+      <p style="font-size:13.5px;color:var(--ink-soft);">一般就労はさらに、障害を開示して働く「オープン就労」と、開示しない「クローズ就労」の2つのルートも解説されています。</p>
+
+      <div class="subhead">② 障害者手帳とは</div>
+      <div class="fact-table-wrap">
+      <table class="fact-table">
+        <tr><th>精神障害者保健福祉手帳</th><td>1〜3級。統合失調症・うつ病・発達障害（ASD・ADHD）等が対象。2年ごとに更新。</td></tr>
+        <tr><th>療育手帳</th><td>知的障害が対象。等級や名称は自治体により異なる（埼玉県では「みどりの手帳」）。</td></tr>
+        <tr><th>身体障害者手帳</th><td>1〜6級。視覚・聴覚・肢体不自由・内部障害等が対象。</td></tr>
+      </table>
+      </div>
+      <p style="font-size:13.5px;color:var(--ink-soft);">それぞれの対象・申請方法・更新の要不要・使える制度（税金の減免、交通機関の割引など）がまとめて解説されています。</p>
+
+      <div class="subhead">③ 事業所を探す</div>
+      <ol class="steps">
+        <li><span class="step-num">1</span><div class="step-body"><b>事業所名・市区町村・住所で検索、または「現在地を取得」</b></div></li>
+        <li><span class="step-num">2</span><div class="step-body"><b>地図のピンかリストから事業所を選ぶ</b></div></li>
+        <li><span class="step-num">3</span><div class="step-body"><b>住所・電話番号・公式サイトなど詳細を確認</b></div></li>
+      </ol>
+      <div class="callout info"><span class="c-icon">🗾</span><div>事業所データはWAM NETのオープンデータをもとにしており、<b>検索対象は全国</b>です（画面の初期表示が埼玉県になっているだけで、都道府県の絞り込みを変えれば他県も検索できます）。</div></div>
+
+      <div class="chapter-foot"><span>こんな時に開く：卒業後の進路相談・保護者への説明準備</span><span>タグ：進路 / 手帳 / 事業所検索</span></div>
+    </section>
+
+    <!-- 13 ================================================= -->
+    <section class="chapter" id="f13">
+      <div class="chapter-head">
+        <span class="chapter-num">13</span>
+        <div class="chapter-titles">
+          <span class="kicker">MieeL Coordinator ・調整中</span>
+          <h2>MieeLコーディネーター</h2>
+        </div>
+      </div>
+      <p class="chapter-lead">教育相談・巡回相談の場面で使う参照ツール集です。現在も機能を拡張している段階の機能です。</p>
+
+      <div class="fact-table-wrap">
+      <table class="fact-table">
+        <tr><th>相談の流れ</th><td>教育相談・巡回相談がどんな段取りで進むかをタイムラインで確認できます。</td></tr>
+        <tr><th>書式DL</th><td>相談で使う書式（様式）をまとめてダウンロードできます。</td></tr>
+        <tr><th>事例DB</th><td>ADHD・ASD・LDなどの相談事例を、うまくいった対応／うまくいかなかった対応のタグ付きで比較しながら読めます。</td></tr>
+        <tr><th>行動観察記録</th><td>「基本情報を選ぶ→行動をチェック→程度をスライダーで記録」の3ステップだけで、専門員に提出できるレベルの観察記録の文章を自動生成。コピーやPDF出力もできます。</td></tr>
+        <tr><th>トークスクリプト</th><td>保護者対応など、実際の場面で使える会話例のテンプレート集です。</td></tr>
+      </table>
+      </div>
+
+      <div class="chapter-foot"><span>こんな時に開く：巡回相談の準備・観察記録の作成</span><span>タグ：教育相談 / 観察記録 / トークスクリプト</span></div>
+    </section>
+
+    <!-- 14 ================================================= -->
+    <section class="chapter" id="f14">
+      <div class="chapter-head">
+        <span class="chapter-num">14</span>
+        <div class="chapter-titles">
+          <span class="kicker">GATHER PRACTICES</span>
+          <h2>集まれ指導実践</h2>
+        </div>
+      </div>
+      <p class="chapter-lead">「うまくいった支援」を声で記録し、検索して共有できるデータベースです。</p>
+
+      <div class="subhead">登録する（要パスワード・授業カードライブラリと共通）</div>
+      <ol class="steps">
+        <li><span class="step-num">1</span><div class="step-body"><b>作成者・対象学部学年を入力</b><span class="sub">必須の入力はこの2つだけです。</span></div></li>
+        <li><span class="step-num">2</span><div class="step-body"><b>マイクで録音する（最大5分）、またはスマホ・PCの音声ファイルを選ぶ（6MBまで）</b><span class="sub">録音には安全な通信（https）に対応したブラウザが必要です。マイクが使えない場合は、録音なしのまま登録することもでき、話す代わりに文章で入力するサブ機能もあります。</span></div></li>
+        <li><span class="step-num">3</span><div class="step-body"><b>関連タグを選ぶ・追加する（任意）</b><span class="sub">学部学年や場面を選ぶと、関連しそうなタグが自動でいくつか追加されます。</span></div></li>
+      </ol>
+
+      <div class="subhead">探す</div>
+      <p>キーワード・学部学年・タグで検索し、カードを開くと詳細と音声メモを確認できます。詳細画面の「PDFで保存」から、その実践だけをPDFとして保存できます。</p>
+
+      <div class="chapter-foot"><span>こんな時に開く：うまくいった支援をすぐに記録・共有したいとき</span><span>タグ：音声記録 / 検索 / PDF保存</span></div>
+    </section>
+
+    <footer class="end">
+      MieeL Project — このマニュアルはMieeL本体の画面構成にもとづいて作成しています。実際の画面のボタン配置やパスワードの有無は、アップデートにより変更される場合があります。
+    </footer>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  var toggle = document.getElementById('railToggle');
+  var nav = document.getElementById('railNav');
+  if (toggle) {
+    toggle.addEventListener('click', function(){
+      nav.classList.toggle('open');
+      toggle.textContent = nav.classList.contains('open') ? '目次 ▴' : '目次 ▾';
+    });
+  }
+
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail-nav a'));
+  var sections = links.map(function(a){ return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+
+  function setActive(id){
+    links.forEach(function(a){
+      a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+    });
+  }
+
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    }, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
+    sections.forEach(function(s){ observer.observe(s); });
+  }
+
+  links.forEach(function(a){
+    a.addEventListener('click', function(){
+      if (window.innerWidth <= 920) {
+        nav.classList.remove('open');
+        toggle.textContent = '目次 ▾';
+      }
+    });
+  });
+})();
+</script>
