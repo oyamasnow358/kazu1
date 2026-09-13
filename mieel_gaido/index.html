@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MieeLガイド</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f5f7f1;
+    --paper-raised: #ffffff;
+    --ink: #22322a;
+    --ink-soft: #4d5c53;
+    --muted: #7c8a7f;
+    --line: #dde4d7;
+    --teal: #2c6e63;
+    --teal-deep: #1f5049;
+    --teal-tint: #e4efe9;
+    --amber: #c8862f;
+    --amber-tint: #f7ecd9;
+    --radius-s: 10px;
+    --radius-m: 16px;
+    --sidebar-w: 300px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Noto Sans JP', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .app {
+    display: flex;
+    min-height: 100vh;
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  /* ---------- Sidebar ---------- */
+  .sidebar {
+    width: var(--sidebar-w);
+    flex-shrink: 0;
+    padding: 40px 22px 40px 32px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    border-right: 1px solid var(--line);
+  }
+
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .brand-mark {
+    font-family: 'Zen Maru Gothic', sans-serif;
+    font-weight: 900;
+    font-size: 26px;
+    color: var(--teal-deep);
+    letter-spacing: 0.01em;
+  }
+
+  .brand-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0 0 28px;
+    letter-spacing: 0.02em;
+  }
+
+  .search-wrap {
+    position: relative;
+    margin-bottom: 22px;
+  }
+
+  .search-wrap svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 15px;
+    height: 15px;
+    stroke: var(--muted);
+  }
+
+  #search {
+    width: 100%;
+    padding: 10px 12px 10px 34px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--paper-raised);
+    font-family: inherit;
+    font-size: 13.5px;
+    color: var(--ink);
+    outline: none;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+
+  #search:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px var(--teal-tint);
+  }
+
+  #search::placeholder { color: var(--muted); }
+
+  .nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .nav-list a {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 7px 10px;
+    border-radius: var(--radius-s);
+    text-decoration: none;
+    color: var(--ink-soft);
+    font-size: 13.5px;
+    line-height: 1.45;
+    transition: background .15s ease, color .15s ease;
+  }
+
+  .nav-list a .n {
+    font-family: 'Zen Maru Gothic', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    color: var(--muted);
+    width: 16px;
+    margin-right: 4px;
+    flex-shrink: 0;
+    text-align: right;
+    padding-top: 1px;
+  }
+
+  .nav-list a:hover { background: var(--teal-tint); color: var(--teal-deep); }
+
+  .nav-list a.active {
+    background: var(--teal-deep);
+    color: #fff;
+  }
+  .nav-list a.active .n { color: #cfe4de; }
+
+  .nav-list li.hidden { display: none; }
+
+  .no-match {
+    font-size: 12.5px;
+    color: var(--muted);
+    padding: 8px 10px;
+    display: none;
+  }
+
+  /* ---------- Main content ---------- */
+  .content {
+    flex: 1;
+    min-width: 0;
+    padding: 56px 48px 100px;
+  }
+
+  .hero {
+    position: relative;
+    padding-bottom: 36px;
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .hero-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 32px;
+  }
+
+  .hero h1 {
+    font-family: 'Zen Maru Gothic', sans-serif;
+    font-weight: 900;
+    font-size: clamp(34px, 5vw, 52px);
+    margin: 0 0 18px;
+    color: var(--teal-deep);
+    letter-spacing: 0.01em;
+  }
+
+  .hero p.intro {
+    max-width: 62ch;
+    font-size: 15.5px;
+    line-height: 1.9;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  .radar {
+    flex-shrink: 0;
+    width: 132px;
+    height: 132px;
+  }
+
+  /* ---------- Feature entries ---------- */
+  .feature {
+    display: flex;
+    gap: 22px;
+    padding: 26px 0;
+    border-bottom: 1px solid var(--line);
+    scroll-margin-top: 24px;
+  }
+
+  .feature:last-of-type { border-bottom: none; }
+
+  .badge {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: var(--teal-tint);
+    color: var(--teal-deep);
+    font-family: 'Zen Maru Gothic', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .feature-body { min-width: 0; flex: 1; }
+
+  .feature h2 {
+    font-family: 'Zen Maru Gothic', sans-serif;
+    font-weight: 700;
+    font-size: 19px;
+    margin: 4px 0 0;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  .memo {
+    display: flex;
+    gap: 7px;
+    align-items: flex-start;
+    margin: 10px 0 12px;
+    padding: 9px 12px;
+    background: var(--amber-tint);
+    border-radius: var(--radius-s);
+    border-left: 3px solid var(--amber);
+  }
+
+  .memo svg {
+    width: 14px;
+    height: 14px;
+    margin-top: 3px;
+    flex-shrink: 0;
+    stroke: var(--amber);
+  }
+
+  .memo span {
+    font-size: 13px;
+    line-height: 1.7;
+    color: #7a5a22;
+    font-style: normal;
+  }
+
+  .feature p.desc {
+    margin: 0;
+    font-size: 14.5px;
+    line-height: 1.85;
+    color: var(--ink-soft);
+    max-width: 68ch;
+  }
+
+  .feature.hidden { display: none; }
+
+  /* ---------- Footer callout ---------- */
+  .callout {
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 22px;
+    background: var(--teal-deep);
+    color: #fff;
+    border-radius: var(--radius-m);
+  }
+
+  .callout .chat-icon {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.14);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .callout .chat-icon svg { width: 17px; height: 17px; stroke: #fff; }
+
+  .callout p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 860px) {
+    .app { flex-direction: column; }
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: var(--paper);
+      padding: 16px 16px 12px;
+      border-right: none;
+      border-bottom: 1px solid var(--line);
+    }
+    .brand { display: none; }
+    .brand-sub { display: none; }
+    .nav-list {
+      flex-direction: row;
+      overflow-x: auto;
+      gap: 6px;
+      padding-bottom: 4px;
+    }
+    .nav-list a {
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+    .no-match { white-space: nowrap; }
+    .content { padding: 28px 20px 70px; }
+    .hero-top { flex-direction: column-reverse; gap: 12px; }
+    .radar { width: 96px; height: 96px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark">MieeL</span>
+    </div>
+    <p class="brand-sub">機能ガイド ・ 全14機能</p>
+
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="search" type="text" placeholder="機能をさがす" autocomplete="off">
+    </div>
+
+    <ul class="nav-list" id="navList"></ul>
+    <p class="no-match" id="noMatch">一致する機能がありません</p>
+  </aside>
+
+  <main class="content">
+    <section class="hero">
+      <div class="hero-top">
+        <div>
+          <h1>MieeLガイド</h1>
+          <p class="intro">特別支援教育をサポートするWebアプリ「MieeL」の機能一覧です（トップページ「MieeL 各機能」の並び順）。</p>
+        </div>
+        <svg class="radar" viewBox="0 0 120 120" fill="none">
+          <polygon points="60,14 100,40 86,88 34,88 20,40" stroke="#dde4d7" stroke-width="1.5" fill="none"/>
+          <polygon points="60,34 84,50 75,80 45,80 36,50" stroke="#dde4d7" stroke-width="1.5" fill="none"/>
+          <line x1="60" y1="14" x2="60" y2="88" stroke="#dde4d7" stroke-width="1.5"/>
+          <line x1="100" y1="40" x2="34" y2="88" stroke="#dde4d7" stroke-width="1.5"/>
+          <line x1="86" y1="88" x2="20" y2="40" stroke="#dde4d7" stroke-width="1.5"/>
+          <polygon points="60,24 90,44 78,82 42,74 32,46" fill="#2c6e63" fill-opacity="0.18" stroke="#2c6e63" stroke-width="2" stroke-linejoin="round"/>
+          <circle cx="60" cy="24" r="3" fill="#2c6e63"/>
+          <circle cx="90" cy="44" r="3" fill="#2c6e63"/>
+          <circle cx="78" cy="82" r="3" fill="#2c6e63"/>
+          <circle cx="42" cy="74" r="3" fill="#2c6e63"/>
+          <circle cx="32" cy="46" r="3" fill="#2c6e63"/>
+        </svg>
+      </div>
+    </section>
+
+    <div id="features"></div>
+
+    <div class="callout">
+      <span class="chat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+      </span>
+      <p>困ったときはトップページのAIアシスタント（チャット）にも質問できます。</p>
+    </div>
+  </main>
+</div>
+
+<script id="feature-data" type="application/json">[{"num": "1", "title": "自活＆日生指導ライブラリ自立活動＆日生指導ライブラリ", "note": "（こちらのデータは、まだ２４個の私が入れたデータのみ、まだまだ課題が）", "body": "自立活動・日常生活の指導の実践事例を検索できます。先生自身が実践を投稿することもできます。"}, {"num": "2", "title": "発達チャート", "note": "（根拠をより正確にしていく必要がある）", "body": "お子さんの発達段階を選択し、状態と次のステップをレーダーチャートにまとめて作成・保存できます。"}, {"num": "3", "title": "AI 授業作成", "note": "", "body": "「指導法・教材案の提案」「教材(スライド/プリント)作成」「指導案作成」「準ずる教育向け指導案作成」の4モードで、AIが授業づくりを支援します。"}, {"num": "4", "title": "AI 個別の教育支援/指導計画作成", "note": "", "body": "実態を入力すると、個別の支援計画・指導計画の全ての内容をAI用プロンプトを自動生成。ChatGPTやGeminiに貼り付けて使います。Excelに入力された状態で出力することもできます。"}, {"num": "5", "title": "早引き学習指導要領", "note": "", "body": "学部・段階（障害種別）・教科を選ぶだけで、特別支援学校学習指導要領の該当部分をピンポイントで検索できます。"}, {"num": "6", "title": "授業カードライブラリ", "note": "", "body": "先生方の授業実践事例を検索して、参考にすることや指導案や教材をダウンロードできるほか、自分の授業カードを作成・投稿することもできます。"}, {"num": "7", "title": "動画ギャラリー", "note": "（私がしゃべっているのでツッコミどころがあるかもです・・・）", "body": "自閉症スペクトラムやADHD、ABAなど、障害特性や支援法を解説する動画集です。"}, {"num": "8", "title": "研究・分析", "note": "（まだまだ便利さ・魅力が足りない〔課題多〕）", "body": "「分析方法の一覧から探す」「児童・生徒の実態から探す」の2通りで、統計学的分析や応用行動分析などのツールを見つけられます。"}, {"num": "9", "title": "ICT倉庫", "note": "（私があいている時間に作っているAIツールなどだが、容量が多く利便性に課題が残る）", "body": "インストール不要・オフラインで動くICTツール集です。閲覧にはパスワードが必要です。"}, {"num": "10", "title": "自立活動の指導計画サーチ", "note": "（先生方の自立活動の１年間の指導計画を掲載、まだまだUIが甘い部分もあるがベースは現在の形で進めていく）", "body": "実態→課題→目標・変容→長期目標→指導内容のつながりを可視化した指導計画データベース。検索のほかAIでのかんたん作成もできます。"}, {"num": "11", "title": "教材ボックス", "note": "（現在は私が作ったHTML教材が入っていてアプリとして使えたり、プリントとして印刷することが可能、今後、個人情報や著作権を含まないあらゆる教材を集めていく）", "body": "先生方が作ったWord・Excel・PowerPoint・HTML教材を検索・閲覧できる保管庫です（閲覧はパスワード不要、投稿時のみ確認あり）。"}, {"num": "12", "title": "進路ガイド", "note": "", "body": "「進路を比較する」「障害者手帳とは」「事業所を探す」の3つの入り口から、進路の選択肢を調べられます。事業所検索はWAM NETのオープンデータをもとに全国が対象です。"}, {"num": "13", "title": "MieeLコーディネーター", "note": "（現在調整中の機能、私が作った内容を現場のコーディネーターに確認してもらっていて、これから事例も入れていく予定）", "body": "教育相談・巡回相談で使う事例や書式（様式）を検索・閲覧できる参照ツール集です。"}, {"num": "14", "title": "集まれ指導実践", "note": "（２日後の研修から使用開始、検証の余地あり）", "body": "「話すだけただそれだけが実践の蓄積・共有になる」をコンセプトに「うまくいった短期の実践」を声で記録し→AIが整理して、きれいな実践として蓄積、それらを検索して共有できるデータベースです。"}]</script>
+<script>
+(function() {
+  const items = JSON.parse(document.getElementById('feature-data').textContent);
+  const navList = document.getElementById('navList');
+  const featuresEl = document.getElementById('features');
+  const noMatch = document.getElementById('noMatch');
+
+  const memoIcon = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 0 0-5 5c0 3.5 5 10 5 10s5-6.5 5-10a5 5 0 0 0-5-5z"/><circle cx="12" cy="7" r="1.6" fill="currentColor" stroke="none"/></svg>';
+
+  items.forEach(function(item) {
+    const id = 'f' + item.num;
+
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = '#' + id;
+    a.dataset.target = id;
+    a.innerHTML = '<span class="n">' + item.num + '</span><span class="t"></span>';
+    a.querySelector('.t').textContent = item.title;
+    li.appendChild(a);
+    navList.appendChild(li);
+
+    const sec = document.createElement('section');
+    sec.className = 'feature';
+    sec.id = id;
+    sec.dataset.search = (item.title + ' ' + item.note + ' ' + item.body).toLowerCase();
+
+    const badge = document.createElement('div');
+    badge.className = 'badge';
+    badge.textContent = item.num;
+    sec.appendChild(badge);
+
+    const body = document.createElement('div');
+    body.className = 'feature-body';
+
+    const h2 = document.createElement('h2');
+    h2.textContent = item.title;
+    body.appendChild(h2);
+
+    if (item.note) {
+      const memo = document.createElement('div');
+      memo.className = 'memo';
+      memo.innerHTML = memoIcon + '<span></span>';
+      memo.querySelector('span').textContent = item.note;
+      body.appendChild(memo);
+    }
+
+    const p = document.createElement('p');
+    p.className = 'desc';
+    p.textContent = item.body;
+    body.appendChild(p);
+
+    sec.appendChild(body);
+    featuresEl.appendChild(sec);
+  });
+
+  // Scrollspy
+  const navLinks = Array.from(navList.querySelectorAll('a'));
+  const sections = Array.from(featuresEl.querySelectorAll('.feature'));
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      const link = navList.querySelector('a[data-target="' + entry.target.id + '"]');
+      if (!link) return;
+      if (entry.isIntersecting) {
+        navLinks.forEach(function(l) { l.classList.remove('active'); });
+        link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
+  sections.forEach(function(s) { observer.observe(s); });
+
+  // Search filter
+  const searchInput = document.getElementById('search');
+  searchInput.addEventListener('input', function() {
+    const q = searchInput.value.trim().toLowerCase();
+    let visibleCount = 0;
+    sections.forEach(function(sec) {
+      const match = !q || sec.dataset.search.indexOf(q) !== -1;
+      sec.classList.toggle('hidden', !match);
+      const li = navList.querySelector('a[data-target="' + sec.id + '"]').parentElement;
+      li.classList.toggle('hidden', !match);
+      if (match) visibleCount++;
+    });
+    noMatch.style.display = visibleCount === 0 ? 'block' : 'none';
+  });
+})();
+</script>
+</body>
+</html>
