@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>おかいものを しよう｜MieeL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF7EF;
+    --card:#FFFFFF;
+    --ink:#2E2A25;
+    --ink-soft:#8A8072;
+    --line:#EAE1CE;
+    --shop:#3F9D8B;    --shop-soft:#DBEFEA;
+    --pay:#C98A2E;     --pay-soft:#F6E6C7;
+    --change:#C15B6B;  --change-soft:#F8E1E5;
+    --mix:#8B5FA3;     --mix-soft:#EEE3F5;
+    --success:#4F9A63; --success-soft:#E3F3E6;
+    --danger:#C4573F;  --danger-soft:#FBE4DE;
+    --radius:22px;
+    --shadow:0 6px 18px rgba(46,42,37,0.10);
+    --maxw:960px;
+    --mieel:radial-gradient(circle at 50% 0%,#1B8FE8 0%,#2BB8D6 28%,#3FCB9E 45%,#8FD24A 58%,#F4D027 72%,#F7941E 100%);
+  }
+  *{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact;color-adjust:exact;}
+  html{font-size:17px;overscroll-behavior:none;}
+  html.large-text{font-size:21px;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+    -webkit-font-smoothing:antialiased;padding-bottom:40px;overscroll-behavior:none;
+  }
+  button{font-family:inherit;}
+  button:focus-visible, [tabindex]:focus-visible{outline:3px solid var(--shop);outline-offset:2px;}
+
+  .app{max-width:var(--maxw);margin:0 auto;padding:18px 16px 8px;}
+
+  header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
+  .mieel-brand{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .mieel-brand .orb-mini{width:20px;height:20px;border-radius:50%;background:var(--mieel);flex:none;}
+  .mieel-brand strong{color:var(--ink);font-size:.85rem;}
+  .mieel-brand a{font-size:.78rem;color:var(--shop);text-decoration:none;font-weight:600;}
+  .mieel-brand a:hover{text-decoration:underline;}
+  header.top h1{font-size:1.55rem;margin:0;font-weight:800;letter-spacing:.02em;display:flex;align-items:center;gap:.35em;}
+  header.top h1 .icon{font-size:1.15em;}
+  header.top p{margin:4px 0 0;color:var(--ink-soft);font-size:.85rem;font-weight:500;}
+  .icon-btn{
+    border:2px solid var(--ink);background:var(--card);color:var(--ink);border-radius:999px;
+    padding:.5em 1em;font-weight:700;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:.4em;
+  }
+  .icon-btn:hover{background:var(--pay-soft);}
+
+  nav.modes{display:flex;gap:9px;margin-bottom:16px;flex-wrap:wrap;}
+  nav.modes button{
+    flex:1 1 150px;font-weight:800;font-size:1rem;padding:13px 8px;border-radius:var(--radius);
+    border:3px solid transparent;background:var(--card);color:var(--ink-soft);box-shadow:var(--shadow);
+    cursor:pointer;transition:transform .12s ease, border-color .12s ease, color .12s ease;min-height:44px;
+  }
+  nav.modes button .sub{display:block;font-size:.68em;font-weight:500;margin-top:2px;}
+  nav.modes button:hover{transform:translateY(-2px);}
+  nav.modes button.active{border-color:var(--ink);color:var(--ink);background:var(--mix-soft);}
+
+  section.panel{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:18px;}
+
+  .settings-box{background:#FCFAF3;border:2px solid var(--line);border-radius:18px;padding:14px 16px;margin-bottom:16px;}
+  .settings-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:10px;}
+  .settings-row:last-child{margin-bottom:0;}
+  .settings-row .set-label{font-weight:800;font-size:.85rem;color:var(--ink-soft);min-width:150px;flex:none;}
+  .settings-chip{border:2px solid var(--line);background:#fff;border-radius:999px;padding:9px 16px;font-weight:800;font-size:.9rem;cursor:pointer;color:var(--ink);min-height:44px;}
+  .settings-chip.selected{border-color:var(--shop);background:var(--shop-soft);color:#215a4f;}
+  .settings-chip.selected.pay-sel{border-color:var(--pay);background:var(--pay-soft);color:#7a5219;}
+  .settings-chip.selected.change-sel{border-color:var(--change);background:var(--change-soft);color:#7a2f3d;}
+
+  .score-pill{
+    display:inline-flex;align-items:center;gap:.5em;background:var(--success-soft);color:var(--success);
+    font-weight:800;padding:8px 16px;border-radius:999px;font-size:.95rem;margin-bottom:14px;
+  }
+
+  .stage{min-height:280px;display:flex;flex-direction:column;align-items:center;}
+  .problem-text{font-size:1.35rem;font-weight:900;color:var(--ink);text-align:center;margin-bottom:4px;}
+  .problem-sub{font-size:.88rem;color:var(--ink-soft);font-weight:700;text-align:center;margin-bottom:16px;}
+  .speak-btn{
+    border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:999px;
+    width:44px;height:44px;font-size:1.1rem;cursor:pointer;flex:none;
+  }
+  .speak-btn:hover{background:var(--pay-soft);}
+
+  /* ── shop grid (mode 1) ── */
+  .shop-list{background:#FCFAF3;border:2px solid var(--shop);border-radius:16px;padding:12px 16px;margin-bottom:16px;max-width:520px;width:100%;}
+  .shop-list-title{font-size:.8rem;font-weight:800;color:var(--shop);margin-bottom:8px;}
+  .shop-list-items{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+  .shop-list-chip{background:#fff;border:2px solid var(--line);border-radius:12px;padding:8px 12px;font-weight:800;font-size:.92rem;display:flex;align-items:center;gap:6px;}
+  .shop-list-chip.got{border-color:var(--success);background:var(--success-soft);color:#255e3c;}
+
+  .shop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:10px;max-width:640px;width:100%;margin-bottom:16px;}
+  .shop-card{
+    background:#fff;border:2.5px solid var(--line);border-radius:16px;padding:10px 6px;
+    display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;min-height:104px;
+    box-shadow:0 4px 0 var(--line);transition:.1s;position:relative;
+  }
+  .shop-card:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line);}
+  .shop-card .icon{font-size:2rem;}
+  .shop-card .name{font-size:.72rem;font-weight:800;color:var(--ink);text-align:center;line-height:1.2;}
+  .shop-card .price{font-size:.82rem;font-weight:900;color:var(--shop);}
+  .shop-card .qty-badge{position:absolute;top:-8px;right:-8px;background:var(--shop);color:#fff;border-radius:999px;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:900;padding:0 5px;}
+
+  .cart-box{background:var(--shop-soft);border:3px solid var(--shop);border-radius:18px;padding:14px 16px;max-width:640px;width:100%;margin-bottom:14px;}
+  .cart-title{font-size:.82rem;font-weight:800;color:#215a4f;margin-bottom:8px;}
+  .cart-items{display:flex;flex-wrap:wrap;gap:8px;min-height:40px;}
+  .cart-chip{background:#fff;border:2px solid var(--shop);border-radius:10px;padding:6px 10px;font-size:.85rem;font-weight:800;display:flex;align-items:center;gap:5px;}
+  .cart-total{font-size:1.3rem;font-weight:900;color:var(--ink);text-align:right;margin-top:8px;}
+
+  /* ── money tray (modes 2 & 3) ── */
+  .money-palette{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:640px;margin-bottom:14px;}
+  .coin-btn{
+    background:#fff;border:3px solid var(--pay);border-radius:50%;width:72px;height:72px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;
+    font-weight:900;color:#7a5219;box-shadow:0 4px 0 #8a6220;transition:.1s;font-size:.9rem;
+  }
+  .coin-btn.bill{border-radius:14px;width:96px;height:60px;}
+  .coin-btn:active{transform:translateY(3px);box-shadow:0 1px 0 #8a6220;}
+  .tray-box{
+    background:var(--pay-soft);border:3px solid var(--pay);border-radius:18px;padding:14px 16px;
+    max-width:640px;width:100%;margin-bottom:14px;min-height:70px;
+  }
+  .tray-title{font-size:.82rem;font-weight:800;color:#7a5219;margin-bottom:8px;}
+  .tray-items{display:flex;flex-wrap:wrap;gap:8px;}
+  .tray-chip{background:#fff;border:2px solid var(--pay);border-radius:10px;padding:6px 10px;font-size:.9rem;font-weight:800;cursor:pointer;color:#7a5219;}
+  .tray-total{font-size:1.4rem;font-weight:900;color:var(--ink);text-align:right;margin-top:8px;}
+
+  .keypad-wrap{background:#FCFAF3;border:2px solid var(--line);border-radius:18px;padding:14px;margin-top:6px;max-width:280px;width:100%;}
+  .keypad-title{font-size:.78rem;font-weight:800;color:var(--ink-soft);text-align:center;margin-bottom:8px;}
+  .keypad-display{
+    background:#fff;border:2px solid var(--ink);border-radius:12px;height:46px;
+    display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:900;color:var(--ink);
+    margin-bottom:10px;min-width:80px;
+  }
+  .keypad-display.placeholder{color:var(--ink-soft);}
+  .keypad-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .keypad-key{
+    background:#fff;border:2px solid var(--line);border-radius:10px;padding:12px 0;min-height:44px;
+    font-size:1.1rem;font-weight:800;color:var(--ink);cursor:pointer;
+  }
+  .keypad-key:active{transform:scale(.95);}
+  .keypad-key.clear{color:var(--danger);border-color:var(--danger);background:var(--danger-soft);}
+  .keypad-key.confirm{color:#fff;background:var(--pay);border-color:var(--pay);}
+  .keypad-key.confirm.change-confirm{background:var(--change);border-color:var(--change);}
+
+  .fb{margin-top:6px;font-size:1.1rem;font-weight:700;min-height:32px;display:flex;align-items:center;gap:8px;text-align:center;}
+  .fb.ok{color:#2a7a50;} .fb.ng{color:var(--danger);}
+  .action-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;justify-content:center;}
+  .btn{font-weight:800;font-size:.95rem;border-radius:14px;border:none;padding:12px 20px;cursor:pointer;color:#fff;background:var(--ink-soft);min-height:44px;}
+  .btn.primary{background:var(--shop);}
+  .btn.primary.pay-btn{background:var(--pay);}
+  .btn.primary.change-btn{background:var(--change);}
+  .btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--ink);}
+  .btn:disabled{opacity:.4;cursor:not-allowed;}
+  .btn:active{transform:scale(.97);}
+
+  .receipt-card{background:#fff;border:2.5px dashed var(--ink-soft);border-radius:12px;padding:16px 20px;max-width:320px;width:100%;margin-bottom:16px;font-family:monospace,"M PLUS Rounded 1c";}
+  .receipt-card .rtitle{text-align:center;font-weight:900;font-size:.95rem;margin-bottom:8px;color:var(--ink);}
+  .receipt-row{display:flex;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--ink);padding:3px 0;}
+  .receipt-row.paid{border-top:1.5px dashed var(--line);margin-top:6px;padding-top:8px;}
+
+  .print-controls{display:flex;flex-direction:column;gap:14px;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{border:2px solid var(--line);background:#FCFAF3;border-radius:999px;padding:9px 16px;font-weight:700;font-size:.88rem;cursor:pointer;color:var(--ink);min-height:44px;}
+  .chip.selected{border-color:var(--mix);background:var(--mix-soft);color:var(--mix);}
+  .field-label{font-size:.82rem;font-weight:800;color:var(--ink-soft);margin-bottom:6px;}
+  .toggle-row{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.92rem;}
+  .preview-note{color:var(--ink-soft);font-size:.85rem;margin-top:6px;text-align:center;}
+  #worksheet{display:none;}
+
+  .ws-header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid var(--ink);padding-bottom:10px;margin-bottom:16px;}
+  .ws-header h2{margin:2px 0 0;font-size:1.15rem;}
+  .ws-fields{display:flex;gap:10px;font-size:.9rem;font-weight:700;align-items:flex-end;}
+  .ws-fields .lbl{white-space:nowrap;}
+  .ws-fields .blank{border-bottom:1.5px solid var(--ink);padding:0 6px 4px;display:inline-block;min-width:100px;margin-right:10px;}
+  .ws-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+  .ws-cell{border:2px solid var(--line);border-radius:12px;padding:14px 16px;break-inside:avoid;}
+  .ws-cell .no{font-size:.78rem;font-weight:800;color:var(--ink-soft);margin-bottom:8px;}
+  .ws-problem{font-size:1.05rem;font-weight:900;margin-bottom:8px;text-align:center;}
+  .ws-shoplist{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:8px;}
+  .ws-shop-chip{border:1.5px solid var(--ink);border-radius:8px;padding:5px 10px;font-size:.8rem;font-weight:700;}
+  .ws-instruction{font-size:.78rem;color:var(--ink-soft);margin:4px 0 8px;text-align:center;}
+  .ws-answerline{display:flex;align-items:center;justify-content:center;gap:8px;font-weight:800;margin-top:8px;}
+  .ws-money-table{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:8px 0;}
+  .ws-money-cell{border:1.5px solid var(--ink);border-radius:8px;padding:5px 6px;font-size:.72rem;font-weight:700;text-align:center;min-width:52px;}
+  .ws-money-cell .lbl{display:block;font-size:.68rem;color:var(--ink-soft);white-space:nowrap;}
+  .ws-money-cell .blank{display:block;border-bottom:1.3px solid var(--ink);min-width:30px;height:1.3em;margin:3px auto 2px;}
+  .ws-receipt{border:2px dashed var(--ink-soft);border-radius:10px;padding:10px 14px;font-family:monospace,"M PLUS Rounded 1c";margin-bottom:8px;}
+  .ws-receipt-row{display:flex;justify-content:space-between;font-size:.85rem;font-weight:700;padding:2px 0;}
+  .ws-receipt-row.paid{border-top:1.3px dashed var(--line);margin-top:4px;padding-top:6px;}
+  .ws-equation{font-size:1rem;font-weight:800;text-align:center;margin:6px 0;color:var(--ink);}
+  .ws-answerline .box{border:2px solid var(--ink);border-radius:8px;min-width:70px;height:38px;display:inline-block;}
+  .ws-answer{color:var(--success);font-weight:800;}
+
+  .hidden{display:none !important;}
+
+  @media (prefers-reduced-motion: reduce){*{transition:none !important;animation:none !important;}}
+
+  #correctOverlay{
+    position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+    pointer-events:none;z-index:9999;opacity:0;
+  }
+  #correctOverlay.show{animation:overlayFade 1.05s ease forwards;}
+  @keyframes overlayFade{0%{opacity:0;}8%{opacity:1;}78%{opacity:1;}100%{opacity:0;}}
+  .correct-circle-wrap{position:relative;width:230px;height:230px;max-width:60vw;max-height:60vw;filter:drop-shadow(0 6px 14px rgba(0,0,0,.18));}
+  .correct-circle-wrap svg{width:100%;height:100%;transform:rotate(-90deg);}
+  .correct-circle-wrap svg circle{
+    fill:rgba(255,255,255,.9);stroke:#E2483D;stroke-width:15;stroke-linecap:round;
+    stroke-dasharray:660;stroke-dashoffset:660;
+  }
+  .correct-circle-wrap.animate svg circle{animation:circleDraw .55s cubic-bezier(.4,0,.2,1) .05s forwards;}
+  @keyframes circleDraw{to{stroke-dashoffset:0;}}
+  .correct-label{
+    position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);
+    text-align:center;font-weight:900;color:#E2483D;font-size:1.15rem;opacity:0;
+  }
+  .correct-circle-wrap.animate .correct-label{animation:labelPop .4s ease .5s forwards;}
+  @keyframes labelPop{0%{opacity:0;transform:translateY(-50%) scale(.6);}60%{opacity:1;transform:translateY(-50%) scale(1.15);}100%{opacity:1;transform:translateY(-50%) scale(1);}}
+  .correct-ping-text{
+    position:absolute;left:0;right:0;bottom:-34px;text-align:center;
+    font-weight:800;color:#E2483D;font-size:1rem;opacity:0;letter-spacing:.05em;
+  }
+  .correct-circle-wrap.animate .correct-ping-text{animation:labelPop .4s ease .62s forwards;}
+  @media (prefers-reduced-motion: reduce){
+    #correctOverlay.show{animation:none;opacity:1;}
+    .correct-circle-wrap.animate svg circle{animation:none;stroke-dashoffset:0;}
+    .correct-circle-wrap.animate .correct-label,.correct-circle-wrap.animate .correct-ping-text{animation:none;opacity:1;}
+  }
+
+  @media print{
+    body *{visibility:hidden;}
+    #worksheet, #worksheet *{visibility:visible;}
+    #worksheet{display:block !important;position:absolute;left:0;top:0;width:100%;padding:12mm;}
+  }
+  @media (max-width:640px){
+    .ws-grid{grid-template-columns:1fr;}
+  }
+
+  footer.hint{max-width:var(--maxw);margin:20px auto 0;padding:0 16px;color:var(--ink-soft);font-size:.8rem;}
+  details.teacher-note{max-width:var(--maxw);margin:0 auto 20px;padding:0 16px;}
+  details.teacher-note summary{cursor:pointer;font-weight:700;color:var(--ink-soft);font-size:.85rem;}
+  details.teacher-note .box{background:#fff;border-radius:14px;padding:14px 16px;margin-top:8px;font-size:.85rem;color:var(--ink-soft);line-height:1.7;box-shadow:var(--shadow);}
+</style>
+</head>
+<body>
+<div id="correctOverlay" aria-hidden="true">
+  <div class="correct-circle-wrap">
+    <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="84"></circle></svg>
+    <div class="correct-label">せいかい！</div>
+    <div class="correct-ping-text">🔔 ピンポーン♪</div>
+  </div>
+</div>
+<div class="app">
+  <header class="top">
+    <div>
+      <div class="mieel-brand">
+        <div class="orb-mini"></div>
+        <strong>MieeL</strong>
+        <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener">www.mieel-support-school.com</a>
+      </div>
+      <h1><span class="icon">🛒</span>おかいものを しよう</h1>
+      <p>おみせで えらぶ・ちょうどで はらう・おつりを けいさんする、じっさいの かいもの れんしゅう</p>
+    </div>
+    <button class="icon-btn" id="btnLargeText" aria-pressed="false">🔠 文字を大きく</button>
+  </header>
+
+  <nav class="modes" role="tablist" aria-label="モードをえらぶ">
+    <button data-mode="shop" class="active" role="tab" aria-selected="true">🛒 おみせで かおう<span class="sub">リストどおりに えらぶ</span></button>
+    <button data-mode="pay" role="tab" aria-selected="false">💴 ちょうどで はらおう<span class="sub">おかねを えらぶ</span></button>
+    <button data-mode="change" role="tab" aria-selected="false">🧮 おつりを けいさん<span class="sub">いくら もどる？</span></button>
+    <button data-mode="mix" role="tab" aria-selected="false">🔀 まぜて<span class="sub">3つ ぜんぶ</span></button>
+    <button data-mode="print" role="tab" aria-selected="false">🖨️ プリント<span class="sub">PDFをつくる</span></button>
+  </nav>
+
+  <!-- ===== SHOP VIEW ===== -->
+  <section class="panel view" id="view-shop">
+    <div class="settings-box">
+      <div class="settings-row">
+        <span class="set-label">かう しなの かず</span>
+        <div class="chip-row" id="shopCountChips"></div>
+      </div>
+    </div>
+    <div class="score-pill" id="scoreShop">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="problem-text">つぎの ものを かってください</div>
+      <div class="shop-list" id="shopListBox"></div>
+      <div class="shop-grid" id="shopGrid"></div>
+      <div class="cart-box">
+        <div class="cart-title">🧺 かごの なか</div>
+        <div class="cart-items" id="shopCartItems"></div>
+        <div class="cart-total" id="shopCartTotal">ごうけい：0えん</div>
+      </div>
+      <div class="fb" id="shopFb"></div>
+      <div class="action-row">
+        <button class="speak-btn" id="shopSpeak" title="よみあげ">🔊</button>
+        <button class="btn ghost" id="shopClear">🔄 やりなおす</button>
+        <button class="btn primary" id="shopCheck">✔ これで レジへ</button>
+        <button class="btn" id="shopNext" style="background:var(--shop);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PAY VIEW ===== -->
+  <section class="panel view hidden" id="view-pay">
+    <div class="settings-box">
+      <div class="settings-row">
+        <span class="set-label">ねだんは いくらまで</span>
+        <div class="chip-row" id="payMaxChips"></div>
+      </div>
+      <div class="settings-row">
+        <span class="set-label">つかえる おかね</span>
+        <div class="chip-row" id="payCoinChips"></div>
+      </div>
+    </div>
+    <div class="score-pill" id="scorePay">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="problem-text" id="payProblemText"></div>
+      <div class="problem-sub">ちょうどの きんがくに なるように、おかねを タップしよう</div>
+      <div class="money-palette" id="payPalette"></div>
+      <div class="tray-box">
+        <div class="tray-title">👛 だした おかね（タップで もどす）</div>
+        <div class="tray-items" id="payTrayItems"></div>
+        <div class="tray-total" id="payTrayTotal">ごうけい：0えん</div>
+      </div>
+      <div class="keypad-wrap">
+        <div class="keypad-title">🔢 すうじで こたえる（おかねが なくても OK）</div>
+        <div class="keypad-display placeholder" id="payKeypadDisplay">－</div>
+        <div class="keypad-grid">
+          <button type="button" class="keypad-key" data-digit="1">1</button>
+          <button type="button" class="keypad-key" data-digit="2">2</button>
+          <button type="button" class="keypad-key" data-digit="3">3</button>
+          <button type="button" class="keypad-key" data-digit="4">4</button>
+          <button type="button" class="keypad-key" data-digit="5">5</button>
+          <button type="button" class="keypad-key" data-digit="6">6</button>
+          <button type="button" class="keypad-key" data-digit="7">7</button>
+          <button type="button" class="keypad-key" data-digit="8">8</button>
+          <button type="button" class="keypad-key" data-digit="9">9</button>
+          <button type="button" class="keypad-key clear" id="payKeypadClear">⌫</button>
+          <button type="button" class="keypad-key" data-digit="0">0</button>
+          <button type="button" class="keypad-key confirm" id="payKeypadConfirm">✔</button>
+        </div>
+      </div>
+      <div class="fb" id="payFb"></div>
+      <div class="action-row">
+        <button class="speak-btn" id="paySpeak" title="よみあげ">🔊</button>
+        <button class="btn ghost" id="payClear">🔄 やりなおす</button>
+        <button class="btn primary pay-btn" id="payCheck">✔ これで はらう</button>
+        <button class="btn" id="payNext" style="background:var(--pay);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CHANGE VIEW ===== -->
+  <section class="panel view hidden" id="view-change">
+    <div class="settings-box">
+      <div class="settings-row">
+        <span class="set-label">ねだんは いくらまで</span>
+        <div class="chip-row" id="changeMaxChips"></div>
+      </div>
+    </div>
+    <div class="score-pill" id="scoreChange">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="receipt-card" id="changeReceipt"></div>
+      <div class="problem-sub">おつりは いくらかな？ すうじで こたえよう</div>
+      <div class="keypad-wrap">
+        <div class="keypad-title">🔢 おつりの きんがく</div>
+        <div class="keypad-display placeholder" id="changeKeypadDisplay">－</div>
+        <div class="keypad-grid">
+          <button type="button" class="keypad-key" data-digit="1">1</button>
+          <button type="button" class="keypad-key" data-digit="2">2</button>
+          <button type="button" class="keypad-key" data-digit="3">3</button>
+          <button type="button" class="keypad-key" data-digit="4">4</button>
+          <button type="button" class="keypad-key" data-digit="5">5</button>
+          <button type="button" class="keypad-key" data-digit="6">6</button>
+          <button type="button" class="keypad-key" data-digit="7">7</button>
+          <button type="button" class="keypad-key" data-digit="8">8</button>
+          <button type="button" class="keypad-key" data-digit="9">9</button>
+          <button type="button" class="keypad-key clear" id="changeKeypadClear">⌫</button>
+          <button type="button" class="keypad-key" data-digit="0">0</button>
+          <button type="button" class="keypad-key confirm change-confirm" id="changeKeypadConfirm">✔</button>
+        </div>
+      </div>
+      <div class="fb" id="changeFb"></div>
+      <div class="action-row">
+        <button class="speak-btn" id="changeSpeak" title="よみあげ">🔊</button>
+        <button class="btn primary change-btn" id="changeCheck">✔ こたえあわせ</button>
+        <button class="btn" id="changeNext" style="background:var(--change);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MIX VIEW ===== -->
+  <section class="panel view hidden" id="view-mix">
+    <div class="score-pill" id="scoreMix">✅ 0 / 0</div>
+    <p style="text-align:center;color:var(--ink-soft);font-size:.85rem;font-weight:700;margin-top:0;">
+      「おみせで かおう」「ちょうどで はらおう」「おつりを けいさん」の3つを、せっていのまま まぜて れんしゅうします。
+    </p>
+    <div class="stage" id="mixStage"></div>
+  </section>
+
+  <!-- ===== PRINT VIEW ===== -->
+  <section class="panel view hidden" id="view-print">
+    <div class="print-controls">
+      <div>
+        <div class="field-label">もんだいの しゅるい</div>
+        <div class="chip-row" id="printTypeChips">
+          <button class="chip selected" data-ptype="shop">🛒 かいものリスト</button>
+          <button class="chip" data-ptype="pay">💴 ちょうどで はらう</button>
+          <button class="chip" data-ptype="change">🧮 おつり</button>
+        </div>
+      </div>
+      <div>
+        <div class="field-label">もんだいすう</div>
+        <div class="chip-row" id="printCountChips">
+          <button class="chip" data-count="4">4もん</button>
+          <button class="chip selected" data-count="6">6もん</button>
+          <button class="chip" data-count="8">8もん</button>
+        </div>
+      </div>
+      <div class="toggle-row">
+        <input type="checkbox" id="printShowAnswer">
+        <label for="printShowAnswer">こたえを ひょうじする（指導者用）</label>
+      </div>
+      <div class="action-row" style="margin-top:2px;">
+        <button class="btn ghost" id="printRegenBtn">🔄 もんだいを かえる</button>
+        <button class="btn primary" id="printOpenBtn">🖨️ プリントする</button>
+      </div>
+      <div class="preview-note">「プリントする」を押すと、印刷プレビューが開きます。ブラウザの印刷設定でPDF保存もできます。</div>
+    </div>
+  </section>
+
+  <footer class="hint">
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:5px;">
+      <div style="width:18px;height:18px;border-radius:50%;background:var(--mieel);flex:none;"></div>
+      <strong style="color:var(--ink);">MieeL</strong>
+      <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener" style="color:var(--shop);">mieel-support-school.com</a>
+    </div>
+    © おかいものを しよう ツール（特別支援教育向け）
+  </footer>
+
+  <details class="teacher-note">
+    <summary>👩‍🏫 指導者の方へ</summary>
+    <div class="box">
+      このアプリは、実際の買い物場面を模した3つの練習モードと、印刷用ワークシート機能で構成されています。<br>
+      ・<strong>おみせで かおう</strong>：指定された買い物リストどおりに、12種類の商品（アイコン・名前・値段つき）の中から正しい商品を選んでかごに入れ、合計金額を確認する練習です。品物の数はレベルで調整できます<br>
+      ・<strong>ちょうどで はらおう</strong>：提示された金額を、硬貨・紙幣（1円〜1000円）をタップして「ちょうど」払えるように組み立てる練習です。お金の操作が不要な児童生徒は、数字キーパッドで直接金額を入力することもできます（入力すると、その金額に相当するお金が自動で並びます）<br>
+      ・<strong>おつりを けいさん</strong>：レシート形式で品物の値段と支払った金額を提示し、おつりを暗算・筆算で求める練習です<br>
+      ・<strong>まぜて</strong>：上記3つをランダムに織り交ぜて出題します<br>
+      「ちょうどで はらおう」の金額上限と使えるお金の範囲は細かく設定でき、小さい金額のみの練習から始められます。プリントモードでも同じ3種類の問題形式でワークシートを作成できます。
+    </div>
+  </details>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  function pickRandom(a){ return a[Math.floor(Math.random()*a.length)]; }
+  function rand(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+  function shuffleArr(a){
+    var arr=a.slice();
+    for(var i=arr.length-1;i>0;i--){
+      var j=Math.floor(Math.random()*(i+1));
+      var t=arr[i];arr[i]=arr[j];arr[j]=t;
+    }
+    return arr;
+  }
+  function speak(text){
+    if(!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang='ja-JP'; u.rate=0.85;
+    window.speechSynthesis.speak(u);
+  }
+  var PRAISE = ['やったね！','せいかい！','すごい！','ばっちり！','よくできました！'];
+  var TRY_AGAIN = ['もういちど かんがえてみよう！','おしい！','ゆっくり かんがえよう。','だいじょうぶ、もう一回！'];
+
+  var sharedAudioCtx = null;
+  function playDing(){
+    try{
+      var Ctx = window.AudioContext || window.webkitAudioContext;
+      if(!Ctx) return;
+      if(!sharedAudioCtx) sharedAudioCtx = new Ctx();
+      var ctx = sharedAudioCtx;
+      if(ctx.state==='suspended'){ ctx.resume(); }
+      function tone(freq, start, dur, peak){
+        var o = ctx.createOscillator();
+        var g = ctx.createGain();
+        o.type='sine'; o.frequency.value=freq;
+        o.connect(g); g.connect(ctx.destination);
+        var t0 = ctx.currentTime+start;
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.linearRampToValueAtTime(peak, t0+0.03);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0+dur);
+        o.start(t0);
+        o.stop(t0+dur+0.03);
+      }
+      tone(880.0, 0, 0.30, 0.30);
+      tone(1318.5, 0.24, 0.48, 0.26);
+    }catch(e){}
+  }
+  var overlayHideTimer = null;
+  function triggerCorrectFeedback(){
+    playDing();
+    var overlay = document.getElementById('correctOverlay');
+    if(!overlay) return;
+    var wrap = overlay.querySelector('.correct-circle-wrap');
+    if(overlayHideTimer){ clearTimeout(overlayHideTimer); overlayHideTimer=null; }
+    overlay.classList.remove('show');
+    wrap.classList.remove('animate');
+    void overlay.offsetWidth;
+    overlay.classList.add('show');
+    wrap.classList.add('animate');
+    overlayHideTimer = setTimeout(function(){
+      overlay.classList.remove('show');
+      wrap.classList.remove('animate');
+      overlayHideTimer = null;
+    }, 1300);
+  }
+
+  /* =========================================================
+     SHARED DATA
+  ========================================================= */
+  var SHOP_ITEMS = [
+    {id:'apple',    icon:'🍎', name:'りんご',     price:100},
+    {id:'banana',   icon:'🍌', name:'バナナ',     price:80},
+    {id:'bread',    icon:'🍞', name:'パン',       price:150},
+    {id:'milk',     icon:'🥛', name:'ぎゅうにゅう', price:120},
+    {id:'egg',      icon:'🥚', name:'たまご',     price:200},
+    {id:'carrot',   icon:'🥕', name:'にんじん',   price:50},
+    {id:'onigiri',  icon:'🍙', name:'おにぎり',   price:130},
+    {id:'juice',    icon:'🧃', name:'ジュース',   price:100},
+    {id:'cookie',   icon:'🍪', name:'おかし',     price:90},
+    {id:'icecream', icon:'🍦', name:'アイス',     price:150},
+    {id:'notebook', icon:'📓', name:'ノート',     price:110},
+    {id:'pencil',   icon:'✏️', name:'えんぴつ',   price:60}
+  ];
+  var COINS = [1,5,10,50,100,500];
+  var BILLS = [1000];
+  var ALL_MONEY = COINS.concat(BILLS);
+  var PAY_BILLS_FOR_CHANGE = [100,500,1000,5000,10000];
+
+  /* =========================================================
+     MODE 1: SHOP (shopping-list matching)
+  ========================================================= */
+  var SHOP_LEVELS = [
+    {id:1, name:'1しゅるい ×1こ', stars:'★☆☆☆☆', kinds:1, maxQty:1},
+    {id:2, name:'2しゅるい ×1こずつ', stars:'★★☆☆☆', kinds:2, maxQty:1},
+    {id:3, name:'おなじ ものを たくさん', stars:'★★★☆☆', kinds:1, maxQty:3},
+    {id:4, name:'2しゅるい（たくさんも あり）', stars:'★★★★☆', kinds:2, maxQty:3},
+    {id:5, name:'3しゅるい（たくさんも あり）', stars:'★★★★★', kinds:3, maxQty:3}
+  ];
+  var shopSettings = {level:2};
+  var shopState = {list:null, cart:null, score:0, total:0, locked:false};
+
+  function genShopList(levelId){
+    var lv = SHOP_LEVELS.filter(function(l){return l.id===levelId;})[0] || SHOP_LEVELS[0];
+    var picks = shuffleArr(SHOP_ITEMS).slice(0, lv.kinds);
+    /* 複数買うのは、たかいレベルでも「どれか1しゅるいだけ」にして、
+       いきなり ぜんぶ たくさんに ならないようにする */
+    var multiIdx = lv.maxQty>1 ? rand(0, picks.length-1) : -1;
+    return picks.map(function(item, idx){
+      var qty = (lv.maxQty>1 && idx===multiIdx) ? rand(2, lv.maxQty) : 1;
+      return {item:item, qty:qty};
+    });
+  }
+  function renderShopSettings(){
+    var container = document.getElementById('shopCountChips');
+    container.innerHTML='';
+    SHOP_LEVELS.forEach(function(lv){
+      var b=document.createElement('button');
+      b.type='button'; b.className='settings-chip'+(lv.id===shopSettings.level?' selected':'');
+      b.innerHTML = '<span style="display:block;font-size:.75em;letter-spacing:1px;">'+lv.stars+'</span>'+lv.name;
+      b.addEventListener('click', function(){
+        shopSettings.level=lv.id; renderShopSettings(); newShopProblem();
+      });
+      container.appendChild(b);
+    });
+  }
+  function newShopProblem(){
+    shopState.list = genShopList(shopSettings.level);
+    shopState.cart = [];
+    shopState.locked = false;
+    document.getElementById('shopFb').className='fb'; document.getElementById('shopFb').textContent='';
+    document.getElementById('shopNext').style.display='none';
+    document.getElementById('shopCheck').disabled=false;
+    renderShopList();
+    renderShopGrid();
+    renderShopCart();
+  }
+  function renderShopList(){
+    var box = document.getElementById('shopListBox');
+    var cartCounts = {};
+    shopState.cart.forEach(function(c){ cartCounts[c.id] = (cartCounts[c.id]||0)+1; });
+    box.innerHTML = '<div class="shop-list-title">📋 かいものリスト</div><div class="shop-list-items">'
+      + shopState.list.map(function(entry){
+          var have = cartCounts[entry.item.id] || 0;
+          var got = have === entry.qty;
+          var qtyLabel = entry.qty>1 ? ('×'+entry.qty+'こ') : '';
+          var progress = got ? ' ✓' : (have>0 ? ' （'+have+'/'+entry.qty+'）' : '');
+          return '<span class="shop-list-chip'+(got?' got':'')+'">'+entry.item.icon+' '+entry.item.name+qtyLabel+progress+'</span>';
+        }).join('') + '</div>';
+  }
+  function renderShopGrid(){
+    var grid = document.getElementById('shopGrid');
+    grid.innerHTML='';
+    SHOP_ITEMS.forEach(function(item){
+      var qty = shopState.cart.filter(function(c){return c.id===item.id;}).length;
+      var card = document.createElement('button');
+      card.type='button'; card.className='shop-card';
+      card.innerHTML = '<span class="icon">'+item.icon+'</span><span class="name">'+item.name+'</span><span class="price">'+item.price+'えん</span>'
+        + (qty>0 ? '<span class="qty-badge">'+qty+'</span>' : '');
+      card.addEventListener('click', function(){
+        if(shopState.locked) return;
+        shopState.cart.push(item);
+        renderShopList(); renderShopGrid(); renderShopCart();
+      });
+      grid.appendChild(card);
+    });
+  }
+  function renderShopCart(){
+    var box = document.getElementById('shopCartItems');
+    var total = shopState.cart.reduce(function(s,c){return s+c.price;},0);
+    box.innerHTML = shopState.cart.map(function(c,idx){
+      return '<span class="cart-chip" data-idx="'+idx+'">'+c.icon+' '+c.name+' <b>✕</b></span>';
+    }).join('') || '<span style="color:var(--ink-soft);font-size:.85rem;">（まだ なにも ありません）</span>';
+    box.querySelectorAll('.cart-chip').forEach(function(chip){
+      chip.addEventListener('click', function(){
+        if(shopState.locked) return;
+        var idx = parseInt(chip.getAttribute('data-idx'),10);
+        shopState.cart.splice(idx,1);
+        renderShopList(); renderShopGrid(); renderShopCart();
+      });
+    });
+    document.getElementById('shopCartTotal').textContent = 'ごうけい：'+total+'えん';
+  }
+  function cartMatchesList(cart, list){
+    var cartCounts = {};
+    cart.forEach(function(c){ cartCounts[c.id] = (cartCounts[c.id]||0)+1; });
+    var listCounts = {};
+    list.forEach(function(entry){ listCounts[entry.item.id] = (listCounts[entry.item.id]||0)+entry.qty; });
+    var listIds = Object.keys(listCounts);
+    var cartIds = Object.keys(cartCounts);
+    if(listIds.length !== cartIds.length) return false;
+    for(var i=0;i<listIds.length;i++){
+      var id = listIds[i];
+      if(cartCounts[id] !== listCounts[id]) return false;
+    }
+    return true;
+  }
+  document.getElementById('shopClear').addEventListener('click', function(){
+    if(shopState.locked) return;
+    shopState.cart=[]; renderShopList(); renderShopGrid(); renderShopCart();
+  });
+  document.getElementById('shopCheck').addEventListener('click', function(){
+    if(shopState.locked) return;
+    var correct = cartMatchesList(shopState.cart, shopState.list);
+    shopState.total++;
+    if(correct) shopState.score++;
+    document.getElementById('scoreShop').innerHTML = '✅ '+shopState.score+' / '+shopState.total;
+    var fbEl = document.getElementById('shopFb');
+    if(correct){
+      shopState.locked = true;
+      document.getElementById('shopCheck').disabled = true;
+      fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+      triggerCorrectFeedback();
+      document.getElementById('shopNext').style.display='inline-block';
+      speak('せいかい！リストどおりに かえましたね。');
+    } else {
+      fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN)+'（リストと みくらべてみよう）';
+    }
+  });
+  document.getElementById('shopNext').addEventListener('click', newShopProblem);
+  document.getElementById('shopSpeak').addEventListener('click', function(){
+    speak('つぎの ものを かってください。'+shopState.list.map(function(entry){return entry.item.name+(entry.qty>1?'を '+entry.qty+'こ':'');}).join('、'));
+  });
+
+  /* =========================================================
+     MODE 2: PAY EXACT (coins/bills to make an exact amount)
+  ========================================================= */
+  var PAY_MAX_OPTIONS = [50,100,300,500,1000,3000];
+  var PAY_COIN_OPTIONS = [
+    {value:'small', label:'100えんまで の おかね'},
+    {value:'all',   label:'せいげんなし（1000えんさつも）'}
+  ];
+  var paySettings = {max:100, coinSet:'small'};
+  var payState = {target:0, tray:null, score:0, total:0, locked:false};
+  var payKeypadBuffer = '';
+
+  function availableMoney(){
+    return paySettings.coinSet==='small' ? COINS.filter(function(c){return c<=100;}) : ALL_MONEY;
+  }
+  function genPayTarget(max, coinSet){
+    /* ちょうど支払える金額になるよう、使える硬貨の組み合わせから作る
+       (1円玉を含むので理論上どの金額も作れるが、大きすぎる桁だけの
+        組み合わせにならないよう複数枚を混ぜて生成する) */
+    var money = coinSet==='small' ? COINS.filter(function(c){return c<=100;}) : ALL_MONEY;
+    var target = 0, guard=0;
+    do{
+      target = rand(1, max);
+      guard++;
+    } while(guard<50 && target<=0);
+    return target;
+  }
+  function renderPaySettings(){
+    var c1 = document.getElementById('payMaxChips');
+    c1.innerHTML='';
+    PAY_MAX_OPTIONS.forEach(function(v){
+      var b=document.createElement('button');
+      b.type='button'; b.className='settings-chip pay-sel'+(v===paySettings.max?' selected':'');
+      b.textContent = v+'えんまで';
+      b.addEventListener('click', function(){ paySettings.max=v; renderPaySettings(); newPayProblem(); });
+      c1.appendChild(b);
+    });
+    var c2 = document.getElementById('payCoinChips');
+    c2.innerHTML='';
+    PAY_COIN_OPTIONS.forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button'; b.className='settings-chip pay-sel'+(opt.value===paySettings.coinSet?' selected':'');
+      b.textContent = opt.label;
+      b.addEventListener('click', function(){ paySettings.coinSet=opt.value; renderPaySettings(); newPayProblem(); });
+      c2.appendChild(b);
+    });
+  }
+  function newPayProblem(){
+    payState.target = genPayTarget(paySettings.max, paySettings.coinSet);
+    payState.tray = [];
+    payState.locked = false;
+    payKeypadBuffer='';
+    document.getElementById('payFb').className='fb'; document.getElementById('payFb').textContent='';
+    document.getElementById('payNext').style.display='none';
+    document.getElementById('payCheck').disabled=false;
+    document.getElementById('payProblemText').textContent = payState.target+'えんの もの を かいます';
+    renderPayKeypadDisplay();
+    renderPayPalette();
+    renderPayTray();
+  }
+  function renderPayPalette(){
+    var pal = document.getElementById('payPalette');
+    pal.innerHTML='';
+    availableMoney().forEach(function(v){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='coin-btn'+(v>=1000?' bill':'');
+      b.textContent=v+(v>=1000?'えんさつ':'えん');
+      b.addEventListener('click', function(){
+        if(payState.locked) return;
+        payState.tray.push(v);
+        renderPayTray();
+      });
+      pal.appendChild(b);
+    });
+  }
+  function renderPayTray(){
+    var box = document.getElementById('payTrayItems');
+    var total = payState.tray.reduce(function(s,v){return s+v;},0);
+    box.innerHTML = payState.tray.map(function(v,idx){
+      return '<span class="tray-chip" data-idx="'+idx+'">'+v+(v>=1000?'えんさつ':'えん')+' ✕</span>';
+    }).join('') || '<span style="color:var(--ink-soft);font-size:.85rem;">（まだ なにも だしていません）</span>';
+    box.querySelectorAll('.tray-chip').forEach(function(chip){
+      chip.addEventListener('click', function(){
+        if(payState.locked) return;
+        var idx = parseInt(chip.getAttribute('data-idx'),10);
+        payState.tray.splice(idx,1);
+        renderPayTray();
+      });
+    });
+    document.getElementById('payTrayTotal').textContent = 'ごうけい：'+total+'えん';
+  }
+  document.getElementById('payClear').addEventListener('click', function(){
+    if(payState.locked) return;
+    payState.tray=[]; payKeypadBuffer=''; renderPayKeypadDisplay(); renderPayTray();
+  });
+  document.getElementById('payCheck').addEventListener('click', function(){
+    if(payState.locked) return;
+    var total = payState.tray.reduce(function(s,v){return s+v;},0);
+    var correct = (total === payState.target);
+    payState.total++;
+    if(correct) payState.score++;
+    document.getElementById('scorePay').innerHTML = '✅ '+payState.score+' / '+payState.total;
+    var fbEl = document.getElementById('payFb');
+    if(correct){
+      payState.locked = true;
+      document.getElementById('payCheck').disabled = true;
+      fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+      triggerCorrectFeedback();
+      document.getElementById('payNext').style.display='inline-block';
+      speak('ちょうど '+payState.target+'えんです。せいかい！');
+    } else {
+      fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN)+'（いま '+total+'えん）';
+    }
+  });
+  document.getElementById('payNext').addEventListener('click', newPayProblem);
+  document.getElementById('paySpeak').addEventListener('click', function(){
+    speak(payState.target+'えんを ちょうどで はらってください。');
+  });
+  function renderPayKeypadDisplay(){
+    var el = document.getElementById('payKeypadDisplay');
+    if(payKeypadBuffer===''){ el.textContent='－'; el.classList.add('placeholder'); }
+    else { el.textContent=payKeypadBuffer; el.classList.remove('placeholder'); }
+  }
+  document.querySelectorAll('#view-pay .keypad-key[data-digit]').forEach(function(k){
+    k.addEventListener('click', function(){
+      if(payState.locked) return;
+      var d = k.getAttribute('data-digit');
+      var next = payKeypadBuffer + d;
+      if(next.length>5) next = d;
+      payKeypadBuffer = next;
+      renderPayKeypadDisplay();
+    });
+  });
+  document.getElementById('payKeypadClear').addEventListener('click', function(){
+    if(payState.locked) return;
+    payKeypadBuffer = payKeypadBuffer.slice(0,-1);
+    renderPayKeypadDisplay();
+  });
+  /* 金額を入力すると、その額になる硬貨の組み合わせ（大きい順の貪欲法）を自動で並べる */
+  function greedyBreakdown(amount, moneySet){
+    var sorted = moneySet.slice().sort(function(a,b){return b-a;});
+    var out=[]; var remain=amount;
+    sorted.forEach(function(v){
+      while(remain>=v){ out.push(v); remain-=v; }
+    });
+    return out;
+  }
+  document.getElementById('payKeypadConfirm').addEventListener('click', function(){
+    if(payState.locked) return;
+    if(payKeypadBuffer==='') return;
+    var val = parseInt(payKeypadBuffer,10);
+    payState.tray = greedyBreakdown(Math.max(val,0), availableMoney());
+    payKeypadBuffer='';
+    renderPayKeypadDisplay();
+    renderPayTray();
+  });
+
+  /* =========================================================
+     MODE 3: CHANGE (receipt-style: price + paid → change)
+  ========================================================= */
+  var CHANGE_MAX_OPTIONS = [100,500,1000,3000,5000];
+  var changeSettings = {max:500};
+  var changeState = {price:0, paid:0, change:0, score:0, total:0, locked:false};
+  var changeKeypadBuffer='';
+
+  function genChangeProblem(max){
+    var price = rand(10, max);
+    var candidateBills = PAY_BILLS_FOR_CHANGE.filter(function(b){ return b>=price; });
+    var paid = candidateBills.length ? Math.min.apply(null, candidateBills) : price;
+    /* まれに ちょうど支払い（おつり0円）になるのは自然な出題なのでそのまま許容 */
+    return {price:price, paid:paid, change:paid-price};
+  }
+  function renderChangeSettings(){
+    var c = document.getElementById('changeMaxChips');
+    c.innerHTML='';
+    CHANGE_MAX_OPTIONS.forEach(function(v){
+      var b=document.createElement('button');
+      b.type='button'; b.className='settings-chip change-sel'+(v===changeSettings.max?' selected':'');
+      b.textContent = v+'えんまで';
+      b.addEventListener('click', function(){ changeSettings.max=v; renderChangeSettings(); newChangeProblem(); });
+      c.appendChild(b);
+    });
+  }
+  function newChangeProblem(){
+    var p = genChangeProblem(changeSettings.max);
+    changeState.price=p.price; changeState.paid=p.paid; changeState.change=p.change;
+    changeState.locked=false;
+    changeKeypadBuffer='';
+    document.getElementById('changeFb').className='fb'; document.getElementById('changeFb').textContent='';
+    document.getElementById('changeNext').style.display='none';
+    document.getElementById('changeCheck').disabled=false;
+    renderChangeKeypadDisplay();
+    document.getElementById('changeReceipt').innerHTML =
+      '<div class="rtitle">🧾 レシート</div>'
+      + '<div class="receipt-row"><span>しょうひん</span><span>'+changeState.price+'えん</span></div>'
+      + '<div class="receipt-row paid"><span>おあずかり</span><span>'+changeState.paid+'えん</span></div>'
+      + '<div class="receipt-row"><span>おつり</span><span>？</span></div>';
+  }
+  document.getElementById('changeCheck').addEventListener('click', function(){
+    if(changeState.locked) return;
+    if(changeKeypadBuffer==='') return;
+    var val = parseInt(changeKeypadBuffer,10);
+    var correct = (val === changeState.change);
+    changeState.total++;
+    if(correct) changeState.score++;
+    document.getElementById('scoreChange').innerHTML = '✅ '+changeState.score+' / '+changeState.total;
+    var fbEl = document.getElementById('changeFb');
+    if(correct){
+      changeState.locked = true;
+      document.getElementById('changeCheck').disabled = true;
+      fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+      triggerCorrectFeedback();
+      document.getElementById('changeNext').style.display='inline-block';
+      speak('おつりは '+changeState.change+'えんです。せいかい！');
+    } else {
+      fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+    }
+  });
+  document.getElementById('changeNext').addEventListener('click', newChangeProblem);
+  document.getElementById('changeSpeak').addEventListener('click', function(){
+    speak(changeState.price+'えんの ものを かって、'+changeState.paid+'えん はらいました。おつりは いくらかな？');
+  });
+  function renderChangeKeypadDisplay(){
+    var el = document.getElementById('changeKeypadDisplay');
+    if(changeKeypadBuffer===''){ el.textContent='－'; el.classList.add('placeholder'); }
+    else { el.textContent=changeKeypadBuffer; el.classList.remove('placeholder'); }
+  }
+  document.querySelectorAll('#view-change .keypad-key[data-digit]').forEach(function(k){
+    k.addEventListener('click', function(){
+      if(changeState.locked) return;
+      var d = k.getAttribute('data-digit');
+      var next = changeKeypadBuffer + d;
+      if(next.length>5) next = d;
+      changeKeypadBuffer = next;
+      renderChangeKeypadDisplay();
+    });
+  });
+  document.getElementById('changeKeypadClear').addEventListener('click', function(){
+    if(changeState.locked) return;
+    changeKeypadBuffer = changeKeypadBuffer.slice(0,-1);
+    renderChangeKeypadDisplay();
+  });
+
+  /* =========================================================
+     MODE 4: MIX (random across the 3 above, reusing their own settings)
+  ========================================================= */
+  var mixState = {format:null, score:0, total:0, locked:false};
+  function newMixProblem(){
+    var pool = ['shop','pay','change'];
+    if(mixState.format){ pool = pool.filter(function(f){ return f!==mixState.format; }); }
+    mixState.format = pickRandom(pool);
+    mixState.locked = false;
+    renderMixStage();
+  }
+  function buildKeypadHTML(title, idPrefix, confirmExtraClass){
+    var digits = [1,2,3,4,5,6,7,8,9].map(function(d){ return '<button type="button" class="keypad-key" data-digit="'+d+'">'+d+'</button>'; }).join('');
+    return '<div class="keypad-wrap">'
+      + '<div class="keypad-title">'+title+'</div>'
+      + '<div class="keypad-display placeholder" id="'+idPrefix+'Display">－</div>'
+      + '<div class="keypad-grid">' + digits
+      + '<button type="button" class="keypad-key clear" id="'+idPrefix+'Clear">⌫</button>'
+      + '<button type="button" class="keypad-key" data-digit="0">0</button>'
+      + '<button type="button" class="keypad-key confirm'+(confirmExtraClass?(' '+confirmExtraClass):'')+'" id="'+idPrefix+'Confirm">✔</button>'
+      + '</div></div>';
+  }
+  function renderMixStage(){
+    var stage = document.getElementById('mixStage');
+    if(mixState.format==='shop'){
+      var list = genShopList(shopSettings.level);
+      var cart = [];
+      stage.innerHTML = ''
+        + '<div class="problem-text">つぎの ものを かってください</div>'
+        + '<div class="shop-list" id="mixShopListBox"></div>'
+        + '<div class="shop-grid" id="mixShopGrid"></div>'
+        + '<div class="cart-box"><div class="cart-title">🧺 かごの なか</div><div class="cart-items" id="mixShopCartItems"></div><div class="cart-total" id="mixShopCartTotal">ごうけい：0えん</div></div>'
+        + '<div class="fb" id="mixFb"></div>'
+        + '<div class="action-row">'
+        +   '<button class="btn ghost" id="mixShopClear">🔄 やりなおす</button>'
+        +   '<button class="btn primary" id="mixCheck">✔ これで レジへ</button>'
+        +   '<button class="btn" id="mixNext" style="background:var(--mix);display:none;">つぎへ ▶</button>'
+        + '</div>';
+      function renderMixShopList(){
+        var cartCounts = {};
+        cart.forEach(function(c){ cartCounts[c.id] = (cartCounts[c.id]||0)+1; });
+        document.getElementById('mixShopListBox').innerHTML = '<div class="shop-list-title">📋 かいものリスト</div><div class="shop-list-items">'
+          + list.map(function(entry){
+              var have = cartCounts[entry.item.id] || 0;
+              var got = have === entry.qty;
+              var qtyLabel = entry.qty>1 ? ('×'+entry.qty+'こ') : '';
+              var progress = got ? ' ✓' : (have>0 ? ' （'+have+'/'+entry.qty+'）' : '');
+              return '<span class="shop-list-chip'+(got?' got':'')+'">'+entry.item.icon+' '+entry.item.name+qtyLabel+progress+'</span>';
+            }).join('') + '</div>';
+      }
+      function renderMixShopGrid(){
+        var grid=document.getElementById('mixShopGrid'); grid.innerHTML='';
+        SHOP_ITEMS.forEach(function(item){
+          var qty = cart.filter(function(c){return c.id===item.id;}).length;
+          var card=document.createElement('button'); card.type='button'; card.className='shop-card';
+          card.innerHTML = '<span class="icon">'+item.icon+'</span><span class="name">'+item.name+'</span><span class="price">'+item.price+'えん</span>'+(qty>0?'<span class="qty-badge">'+qty+'</span>':'');
+          card.addEventListener('click', function(){ if(mixState.locked)return; cart.push(item); renderMixShopList(); renderMixShopGrid(); renderMixShopCart(); });
+          grid.appendChild(card);
+        });
+      }
+      function renderMixShopCart(){
+        var box=document.getElementById('mixShopCartItems');
+        var total = cart.reduce(function(s,c){return s+c.price;},0);
+        box.innerHTML = cart.map(function(c,idx){ return '<span class="cart-chip" data-idx="'+idx+'">'+c.icon+' '+c.name+' <b>✕</b></span>'; }).join('') || '<span style="color:var(--ink-soft);font-size:.85rem;">（まだ なにも ありません）</span>';
+        box.querySelectorAll('.cart-chip').forEach(function(chip){
+          chip.addEventListener('click', function(){ if(mixState.locked)return; cart.splice(parseInt(chip.getAttribute('data-idx'),10),1); renderMixShopList(); renderMixShopGrid(); renderMixShopCart(); });
+        });
+        document.getElementById('mixShopCartTotal').textContent = 'ごうけい：'+total+'えん';
+      }
+      renderMixShopList(); renderMixShopGrid(); renderMixShopCart();
+      document.getElementById('mixShopClear').addEventListener('click', function(){ if(mixState.locked)return; cart=[]; renderMixShopList(); renderMixShopGrid(); renderMixShopCart(); });
+      document.getElementById('mixCheck').addEventListener('click', function(){
+        if(mixState.locked) return;
+        finishMixAttempt(cartMatchesList(cart, list));
+      });
+    } else if(mixState.format==='pay'){
+      var target = genPayTarget(paySettings.max, paySettings.coinSet);
+      var tray = [];
+      var money = availableMoney();
+      stage.innerHTML = ''
+        + '<div class="problem-text">'+target+'えんの もの を かいます</div>'
+        + '<div class="problem-sub">ちょうどの きんがくに なるように、おかねを タップしよう</div>'
+        + '<div class="money-palette" id="mixPayPalette"></div>'
+        + '<div class="tray-box"><div class="tray-title">👛 だした おかね（タップで もどす）</div><div class="tray-items" id="mixPayTrayItems"></div><div class="tray-total" id="mixPayTrayTotal">ごうけい：0えん</div></div>'
+        + buildKeypadHTML('🔢 すうじで こたえる（おかねが なくても OK）', 'mixKeypad')
+        + '<div class="fb" id="mixFb"></div>'
+        + '<div class="action-row">'
+        +   '<button class="btn ghost" id="mixPayClear">🔄 やりなおす</button>'
+        +   '<button class="btn primary pay-btn" id="mixCheck">✔ これで はらう</button>'
+        +   '<button class="btn" id="mixNext" style="background:var(--mix);display:none;">つぎへ ▶</button>'
+        + '</div>';
+      var pal=document.getElementById('mixPayPalette');
+      money.forEach(function(v){
+        var b=document.createElement('button'); b.type='button'; b.className='coin-btn'+(v>=1000?' bill':'');
+        b.textContent=v+(v>=1000?'えんさつ':'えん');
+        b.addEventListener('click', function(){ if(mixState.locked)return; tray.push(v); renderMixPayTray(); });
+        pal.appendChild(b);
+      });
+      function renderMixPayTray(){
+        var box=document.getElementById('mixPayTrayItems');
+        var total=tray.reduce(function(s,v){return s+v;},0);
+        box.innerHTML = tray.map(function(v,idx){ return '<span class="tray-chip" data-idx="'+idx+'">'+v+(v>=1000?'えんさつ':'えん')+' ✕</span>'; }).join('') || '<span style="color:var(--ink-soft);font-size:.85rem;">（まだ なにも だしていません）</span>';
+        box.querySelectorAll('.tray-chip').forEach(function(chip){
+          chip.addEventListener('click', function(){ if(mixState.locked)return; tray.splice(parseInt(chip.getAttribute('data-idx'),10),1); renderMixPayTray(); });
+        });
+        document.getElementById('mixPayTrayTotal').textContent='ごうけい：'+total+'えん';
+      }
+      renderMixPayTray();
+      document.getElementById('mixPayClear').addEventListener('click', function(){ if(mixState.locked)return; tray=[]; renderMixPayTray(); var el=document.getElementById('mixKeypadDisplay'); if(el){el.textContent='－';el.classList.add('placeholder');} });
+      wireGenericKeypad('mixKeypad', function(){ return mixState.locked; }, function(val){
+        tray = greedyBreakdown(Math.max(val,0), money);
+        renderMixPayTray();
+      });
+      document.getElementById('mixCheck').addEventListener('click', function(){
+        if(mixState.locked) return;
+        var total = tray.reduce(function(s,v){return s+v;},0);
+        finishMixAttempt(total===target);
+      });
+    } else {
+      var p = genChangeProblem(changeSettings.max);
+      stage.innerHTML = ''
+        + '<div class="receipt-card" id="mixReceipt">'
+        +   '<div class="rtitle">🧾 レシート</div>'
+        +   '<div class="receipt-row"><span>しょうひん</span><span>'+p.price+'えん</span></div>'
+        +   '<div class="receipt-row paid"><span>おあずかり</span><span>'+p.paid+'えん</span></div>'
+        +   '<div class="receipt-row"><span>おつり</span><span>？</span></div>'
+        + '</div>'
+        + '<div class="problem-sub">おつりは いくらかな？ すうじで こたえよう</div>'
+        + buildKeypadHTML('🔢 おつりの きんがく', 'mixKeypad', 'change-confirm')
+        + '<div class="fb" id="mixFb"></div>'
+        + '<div class="action-row">'
+        +   '<button class="btn primary change-btn" id="mixCheck">✔ こたえあわせ</button>'
+        +   '<button class="btn" id="mixNext" style="background:var(--mix);display:none;">つぎへ ▶</button>'
+        + '</div>';
+      var mixChangeBuffer='';
+      wireGenericKeypad('mixKeypad', function(){ return mixState.locked; }, null, function(buf){ mixChangeBuffer=buf; });
+      document.getElementById('mixCheck').addEventListener('click', function(){
+        if(mixState.locked) return;
+        if(mixChangeBuffer==='') return;
+        finishMixAttempt(parseInt(mixChangeBuffer,10)===p.change);
+      });
+    }
+    document.getElementById('mixNext').addEventListener('click', newMixProblem);
+  }
+  /* generic keypad wiring used by mix mode's 2 numeric sub-flows.
+     onConfirmValue(val): called with the parsed integer on ✔ (pay-style auto-fill).
+     onBufferChange(buf): optional, called on every keystroke so the caller can read the raw buffer (change-style). */
+  function wireGenericKeypad(idPrefix, isLocked, onConfirmValue, onBufferChange){
+    var buf='';
+    var disp=document.getElementById(idPrefix+'Display');
+    function render(){
+      if(buf===''){ disp.textContent='－'; disp.classList.add('placeholder'); }
+      else { disp.textContent=buf; disp.classList.remove('placeholder'); }
+      if(onBufferChange) onBufferChange(buf);
+    }
+    document.querySelectorAll('#mixStage .keypad-key[data-digit]').forEach(function(k){
+      k.addEventListener('click', function(){
+        if(isLocked()) return;
+        var d=k.getAttribute('data-digit');
+        var next=buf+d; if(next.length>5) next=d;
+        buf=next; render();
+      });
+    });
+    var clearBtn=document.getElementById(idPrefix+'Clear');
+    if(clearBtn) clearBtn.addEventListener('click', function(){ if(isLocked())return; buf=buf.slice(0,-1); render(); });
+    var confirmBtn=document.getElementById(idPrefix+'Confirm');
+    if(confirmBtn && onConfirmValue) confirmBtn.addEventListener('click', function(){
+      if(isLocked()) return;
+      if(buf==='') return;
+      onConfirmValue(parseInt(buf,10));
+      buf=''; render();
+    });
+  }
+  function finishMixAttempt(correct){
+    mixState.total++;
+    if(correct) mixState.score++;
+    document.getElementById('scoreMix').innerHTML = '✅ '+mixState.score+' / '+mixState.total;
+    var fbEl = document.getElementById('mixFb');
+    if(correct){
+      mixState.locked = true;
+      var checkBtn=document.getElementById('mixCheck'); if(checkBtn) checkBtn.disabled=true;
+      fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+      triggerCorrectFeedback();
+      document.getElementById('mixNext').style.display='inline-block';
+    } else {
+      fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+    }
+  }
+
+  /* =========================================================
+     PRINT MODE
+  ========================================================= */
+  var printState = {type:'shop', count:6, showAnswer:false, problems:[]};
+  document.querySelectorAll('#printTypeChips .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#printTypeChips .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      printState.type = c.getAttribute('data-ptype');
+      regenerateProblems(); renderWorksheet();
+    });
+  });
+  document.querySelectorAll('#printCountChips .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#printCountChips .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      printState.count = parseInt(c.getAttribute('data-count'),10);
+      regenerateProblems(); renderWorksheet();
+    });
+  });
+  document.getElementById('printShowAnswer').addEventListener('change', function(e){
+    printState.showAnswer = e.target.checked;
+    renderWorksheet();
+  });
+  document.getElementById('printRegenBtn').addEventListener('click', function(){
+    regenerateProblems(); renderWorksheet();
+  });
+  document.getElementById('printOpenBtn').addEventListener('click', function(){
+    renderWorksheet();
+    setTimeout(function(){ window.print(); }, 60);
+  });
+  function regenerateProblems(){
+    var list=[];
+    for(var i=0;i<printState.count;i++){
+      if(printState.type==='shop'){
+        list.push({shopList: genShopList(shopSettings.level)});
+      } else if(printState.type==='pay'){
+        list.push({target: genPayTarget(paySettings.max, paySettings.coinSet)});
+      } else {
+        list.push(genChangeProblem(changeSettings.max));
+      }
+    }
+    printState.problems = list;
+  }
+  regenerateProblems();
+  function renderWorksheet(){
+    var typeLabel = printState.type==='shop' ? '🛒 かいものリスト' : (printState.type==='pay' ? '💴 ちょうどで はらう' : '🧮 おつり');
+    var instruction = printState.type==='shop'
+      ? 'リストの ものを ぜんぶ かうと、いくらに なるか けいさんしよう'
+      : printState.type==='pay'
+      ? 'きんがくに あう おかねの くみあわせを かこう（れい：100えん玉 1まい など）'
+      : 'おつりは いくらに なるか けいさんしよう';
+
+    var html = '';
+    html += '<div class="ws-header"><div style="display:flex;align-items:center;gap:8px;">'
+      + '<div style="width:20px;height:20px;border-radius:50%;background:var(--mieel);border:1px solid #ccc;flex:none;"></div>'
+      + '<div><div style="font-size:11px;color:#333;font-weight:700;">MieeL おかいものを しよう</div>'
+      + '<h2>'+typeLabel+'</h2>'
+      + '<div style="font-size:11px;color:#666;margin-top:2px;">'+instruction+'</div></div></div>'
+      + '<div class="ws-fields" style="flex-direction:column;align-items:flex-end;gap:2px;">'
+      + '<div style="font-size:.75rem;color:#3A9A8C;font-weight:700;">mieel-support-school.com</div>'
+      + '<div><span class="lbl">なまえ：</span><span class="blank">&nbsp;</span><span class="lbl">ひづけ：</span><span class="blank">&nbsp;</span></div></div></div>';
+
+    html += '<div class="ws-grid">';
+    printState.problems.forEach(function(p, idx){
+      html += '<div class="ws-cell"><div class="no">もんだい '+(idx+1)+'</div>';
+      if(printState.type==='shop'){
+        var total = p.shopList.reduce(function(s,entry){return s+entry.item.price*entry.qty;},0);
+        html += '<div class="ws-shoplist">'+p.shopList.map(function(entry){
+          var qtyLabel = entry.qty>1 ? ('×'+entry.qty+'こ') : '';
+          return '<span class="ws-shop-chip">'+entry.item.icon+' '+entry.item.name+qtyLabel+'（'+entry.item.price+'えん）</span>';
+        }).join('')+'</div>';
+        html += '<div class="ws-answerline">ごうけい：<span class="box"></span>えん</div>';
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;text-align:center;">こたえ：'+total+'えん</div>';
+        }
+      } else if(printState.type==='pay'){
+        var money = availableMoney();
+        html += '<div class="ws-problem">'+p.target+' えん</div>';
+        html += '<div class="ws-instruction">↓ つかう おかねの まいすうを かこう</div>';
+        html += '<div class="ws-money-table">' + money.map(function(v){
+          var label = v>=1000 ? (v+'えんさつ') : (v+'えんだま');
+          return '<div class="ws-money-cell"><span class="lbl">'+label+'</span><span class="blank"></span><span class="lbl">まい</span></div>';
+        }).join('') + '</div>';
+        if(printState.showAnswer){
+          var bd = greedyBreakdown(p.target, money);
+          var tally = {};
+          bd.forEach(function(v){ tally[v]=(tally[v]||0)+1; });
+          var rei = Object.keys(tally).sort(function(a,b){return b-a;}).map(function(v){ return v+'えん×'+tally[v]+'まい'; }).join('、');
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;text-align:center;">れい：'+rei+'</div>';
+        }
+      } else {
+        html += '<div class="ws-receipt">'
+          + '<div class="ws-receipt-row"><span>🛍️ しょうひん</span><span>'+p.price+'えん</span></div>'
+          + '<div class="ws-receipt-row paid"><span>💴 おあずかり</span><span>'+p.paid+'えん</span></div>'
+          + '</div>';
+        html += '<div class="ws-equation">'+p.paid+' － '+p.price+' = ？</div>';
+        html += '<div class="ws-answerline">おつり：<span class="box"></span>えん</div>';
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;text-align:center;">こたえ：'+p.change+'えん</div>';
+        }
+      }
+      html += '</div>';
+    });
+    html += '</div>';
+    var ws = document.getElementById('worksheet');
+    if(!ws){ ws=document.createElement('div'); ws.id='worksheet'; document.body.appendChild(ws); }
+    ws.innerHTML = html;
+  }
+  renderWorksheet();
+
+  /* =========================================================
+     MODE SWITCHING / GLOBAL UI
+  ========================================================= */
+  document.querySelectorAll('nav.modes button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('nav.modes button').forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+      btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+      var mode = btn.getAttribute('data-mode');
+      document.querySelectorAll('.view').forEach(function(v){ v.classList.add('hidden'); });
+      document.getElementById('view-'+mode).classList.remove('hidden');
+      if(mode==='print'){ renderWorksheet(); }
+      if(mode==='mix'){ newMixProblem(); }
+    });
+  });
+  var largeToggle = document.getElementById('btnLargeText');
+  largeToggle.addEventListener('click', function(){
+    var on = document.documentElement.classList.toggle('large-text');
+    largeToggle.setAttribute('aria-pressed', on ? 'true':'false');
+  });
+
+  /* =========================================================
+     INIT
+  ========================================================= */
+  renderShopSettings(); newShopProblem();
+  renderPaySettings(); newPayProblem();
+  renderChangeSettings(); newChangeProblem();
+
+})();
+</script>
+</body>
+</html>

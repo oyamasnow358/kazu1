@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>ぶんしょうだい（たしざん・ひきざん）｜MieeL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF7EF;
+    --card:#FFFFFF;
+    --ink:#2E2A25;
+    --ink-soft:#8A8072;
+    --line:#EAE1CE;
+    --solve:#3F9D8B;   --solve-soft:#DBEFEA;
+    --shiki:#C98A2E;   --shiki-soft:#F6E6C7;
+    --mix:#8B5FA3;     --mix-soft:#EEE3F5;
+    --success:#4F9A63; --success-soft:#E3F3E6;
+    --danger:#C4573F;  --danger-soft:#FBE4DE;
+    --radius:22px;
+    --shadow:0 6px 18px rgba(46,42,37,0.10);
+    --maxw:960px;
+    --mieel:radial-gradient(circle at 50% 0%,#1B8FE8 0%,#2BB8D6 28%,#3FCB9E 45%,#8FD24A 58%,#F4D027 72%,#F7941E 100%);
+  }
+  *{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact;color-adjust:exact;}
+  html{font-size:17px;overscroll-behavior:none;}
+  html.large-text{font-size:21px;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+    -webkit-font-smoothing:antialiased;padding-bottom:40px;overscroll-behavior:none;
+  }
+  button{font-family:inherit;}
+  button:focus-visible, [tabindex]:focus-visible{outline:3px solid var(--solve);outline-offset:2px;}
+
+  .app{max-width:var(--maxw);margin:0 auto;padding:18px 16px 8px;}
+
+  header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
+  .mieel-brand{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .mieel-brand .orb-mini{width:20px;height:20px;border-radius:50%;background:var(--mieel);flex:none;}
+  .mieel-brand strong{color:var(--ink);font-size:.85rem;}
+  .mieel-brand a{font-size:.78rem;color:var(--solve);text-decoration:none;font-weight:600;}
+  .mieel-brand a:hover{text-decoration:underline;}
+  header.top h1{font-size:1.45rem;margin:0;font-weight:800;letter-spacing:.02em;display:flex;align-items:center;gap:.35em;}
+  header.top h1 .icon{font-size:1.15em;}
+  header.top p{margin:4px 0 0;color:var(--ink-soft);font-size:.85rem;font-weight:500;}
+  .icon-btn{
+    border:2px solid var(--ink);background:var(--card);color:var(--ink);border-radius:999px;
+    padding:.5em 1em;font-weight:700;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:.4em;min-height:44px;
+  }
+  .icon-btn:hover{background:var(--shiki-soft);}
+
+  nav.modes{display:flex;gap:9px;margin-bottom:16px;flex-wrap:wrap;}
+  nav.modes button{
+    flex:1 1 150px;font-weight:800;font-size:1rem;padding:13px 8px;border-radius:var(--radius);
+    border:3px solid transparent;background:var(--card);color:var(--ink-soft);box-shadow:var(--shadow);
+    cursor:pointer;transition:transform .12s ease, border-color .12s ease, color .12s ease;min-height:44px;
+  }
+  nav.modes button .sub{display:block;font-size:.68em;font-weight:500;margin-top:2px;}
+  nav.modes button:hover{transform:translateY(-2px);}
+  nav.modes button.active{border-color:var(--ink);color:var(--ink);background:var(--mix-soft);}
+
+  section.panel{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:18px;}
+
+  .settings-box{background:#FCFAF3;border:2px solid var(--line);border-radius:18px;padding:14px 16px;margin-bottom:16px;}
+  .settings-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:10px;}
+  .settings-row:last-child{margin-bottom:0;}
+  .settings-row .set-label{font-weight:800;font-size:.85rem;color:var(--ink-soft);min-width:150px;flex:none;}
+  .settings-chip{border:2px solid var(--line);background:#fff;border-radius:999px;padding:9px 15px;font-weight:800;font-size:.86rem;cursor:pointer;color:var(--ink);min-height:44px;}
+  .settings-chip.selected{border-color:var(--solve);background:var(--solve-soft);color:#215a4f;}
+
+  .score-pill{
+    display:inline-flex;align-items:center;gap:.5em;background:var(--success-soft);color:var(--success);
+    font-weight:800;padding:8px 16px;border-radius:999px;font-size:.95rem;margin-bottom:14px;
+  }
+
+  .stage{min-height:280px;display:flex;flex-direction:column;align-items:center;}
+  .problem-card{
+    background:#FCFAF3;border:3px solid var(--line);border-radius:20px;padding:20px 24px;
+    max-width:600px;width:100%;margin-bottom:16px;
+  }
+  .problem-text{font-size:1.15rem;font-weight:800;color:var(--ink);line-height:1.9;text-align:left;}
+  ruby{ruby-align:center;}
+  rt{font-size:.5em;font-weight:700;color:var(--ink-soft);user-select:none;}
+  .problem-text .num{color:var(--solve);font-size:1.3em;font-weight:900;}
+  .pattern-tag{display:inline-block;font-size:.7rem;font-weight:800;color:var(--mix);background:var(--mix-soft);border-radius:999px;padding:3px 10px;margin-bottom:8px;}
+
+  /* ── visual support: item icon groups ── */
+  .visual-box{background:#fff;border:2.5px dashed var(--solve);border-radius:16px;padding:14px 16px;margin-top:10px;}
+  .visual-two-groups{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;align-items:flex-start;}
+  .visual-group{display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .visual-group .glabel{font-size:.72rem;font-weight:800;color:var(--ink-soft);}
+  .visual-icons{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;max-width:170px;}
+  .visual-icons .ic{font-size:1.5rem;text-align:center;line-height:1;}
+  .visual-icons .ic.crossed{position:relative;opacity:.35;}
+  .visual-icons .ic.crossed::after{content:'✕';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--danger);font-weight:900;font-size:1.1rem;opacity:1;}
+  .visual-plus{font-size:1.6rem;font-weight:900;color:var(--ink-soft);align-self:center;}
+
+  .keypad-wrap{background:#FCFAF3;border:2px solid var(--line);border-radius:18px;padding:14px;margin-top:14px;max-width:280px;width:100%;}
+  .keypad-title{font-size:.78rem;font-weight:800;color:var(--ink-soft);text-align:center;margin-bottom:8px;}
+  .keypad-display{
+    background:#fff;border:2px solid var(--ink);border-radius:12px;height:46px;
+    display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:900;color:var(--ink);
+    margin-bottom:10px;min-width:80px;
+  }
+  .keypad-display.placeholder{color:var(--ink-soft);}
+  .keypad-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .keypad-key{
+    background:#fff;border:2px solid var(--line);border-radius:10px;padding:12px 0;min-height:44px;
+    font-size:1.1rem;font-weight:800;color:var(--ink);cursor:pointer;
+  }
+  .keypad-key:active{transform:scale(.95);}
+  .keypad-key.clear{color:var(--danger);border-color:var(--danger);background:var(--danger-soft);}
+  .keypad-key.confirm{color:#fff;background:var(--solve);border-color:var(--solve);}
+
+  /* ── operator picker ── */
+  .op-picker{display:flex;gap:14px;justify-content:center;margin:14px 0;}
+  .op-key-row{display:flex;gap:8px;margin-bottom:8px;}
+  .op-key-row .keypad-key{flex:1;font-size:1.3rem;}
+  .op-key{color:#fff;background:var(--solve);border-color:var(--solve);}
+  .eq-key{color:#fff;background:var(--shiki);border-color:var(--shiki);font-size:1.2rem;}
+  .eq-strip{display:flex;align-items:center;gap:10px;justify-content:center;flex-wrap:wrap;margin:16px 0;}
+  .eq-slot{
+    min-width:64px;height:64px;border-radius:16px;border:3px solid var(--line);background:#fff;
+    font-size:1.6rem;font-weight:900;color:var(--ink-soft);cursor:pointer;padding:0 10px;
+  }
+  .eq-slot.active{border-color:var(--solve);background:var(--solve-soft);color:#215a4f;box-shadow:0 0 0 4px rgba(63,157,139,.18);}
+  .eq-slot.filled{border-color:var(--ink);color:var(--ink);background:#fff;}
+  .eq-op-slot{font-size:1.9rem;}
+  .eq-eq-sign{font-size:1.7rem;font-weight:900;color:var(--ink-soft);}
+  .answer-follow-icons{
+    display:grid;grid-template-columns:repeat(6,1fr);gap:4px;max-width:220px;margin:0 auto 10px;
+    min-height:0;
+  }
+  .answer-follow-icons .fic{font-size:1.15rem;text-align:center;line-height:1;}
+  .answer-follow-icons.hidden{display:none;}
+  .op-btn{
+    width:76px;height:76px;border-radius:20px;border:3px solid var(--line);background:#fff;
+    font-size:2rem;font-weight:900;color:var(--ink-soft);cursor:pointer;box-shadow:0 4px 0 var(--line);transition:.1s;
+  }
+  .op-btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line);}
+  .op-btn.chosen{border-color:var(--solve);background:var(--solve-soft);color:#215a4f;box-shadow:0 4px 0 #2c6b5d;}
+
+  .eq-opt-grid{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;max-width:600px;margin:14px 0;}
+  .eq-opt-btn{
+    padding:18px 26px;border:3px solid var(--shiki);background:var(--shiki-soft);color:#7a5219;
+    font-size:1.4rem;font-weight:900;border-radius:18px;cursor:pointer;box-shadow:0 5px 0 #8a6220;transition:.1s;min-height:44px;
+  }
+  .eq-opt-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #8a6220;}
+  .eq-opt-btn.correct-flash{background:var(--success-soft);border-color:var(--success);box-shadow:0 5px 0 #2a6040;color:#255e3c;}
+  .eq-opt-btn.wrong-flash{background:var(--danger-soft);border-color:var(--danger);box-shadow:0 5px 0 #8a3020;color:#7a2a18;}
+  .eq-opt-btn:disabled{opacity:.35;cursor:not-allowed;}
+
+  .fb{margin-top:10px;font-size:1.1rem;font-weight:700;min-height:32px;display:flex;align-items:center;gap:8px;text-align:center;}
+  .fb.ok{color:#2a7a50;} .fb.ng{color:var(--danger);}
+  .action-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;justify-content:center;}
+  .btn{font-weight:800;font-size:.95rem;border-radius:14px;border:none;padding:12px 20px;cursor:pointer;color:#fff;background:var(--ink-soft);min-height:44px;}
+  .btn.primary{background:var(--solve);}
+  .btn.primary.shiki-btn{background:var(--shiki);}
+  .btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--ink);}
+  .btn:disabled{opacity:.4;cursor:not-allowed;}
+  .btn:active{transform:scale(.97);}
+  .speak-btn{
+    border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:999px;
+    width:44px;height:44px;font-size:1.1rem;cursor:pointer;flex:none;
+  }
+  .speak-btn:hover{background:var(--shiki-soft);}
+
+  .print-controls{display:flex;flex-direction:column;gap:14px;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{border:2px solid var(--line);background:#FCFAF3;border-radius:999px;padding:9px 16px;font-weight:700;font-size:.88rem;cursor:pointer;color:var(--ink);min-height:44px;}
+  .chip.selected{border-color:var(--mix);background:var(--mix-soft);color:var(--mix);}
+  .field-label{font-size:.82rem;font-weight:800;color:var(--ink-soft);margin-bottom:6px;}
+  .toggle-row{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.92rem;}
+  .preview-note{color:var(--ink-soft);font-size:.85rem;margin-top:6px;text-align:center;}
+  #worksheet{display:none;}
+
+  .ws-header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid var(--ink);padding-bottom:10px;margin-bottom:16px;}
+  .ws-header h2{margin:2px 0 0;font-size:1.15rem;}
+  .ws-fields{display:flex;gap:10px;font-size:.9rem;font-weight:700;align-items:flex-end;}
+  .ws-fields .lbl{white-space:nowrap;}
+  .ws-fields .blank{border-bottom:1.5px solid var(--ink);padding:0 6px 4px;display:inline-block;min-width:100px;margin-right:10px;}
+  .ws-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+  .ws-cell{border:2px solid var(--line);border-radius:12px;padding:14px 16px;break-inside:avoid;}
+  .ws-cell .no{font-size:.78rem;font-weight:800;color:var(--ink-soft);margin-bottom:8px;}
+  .ws-problem{font-size:.95rem;font-weight:700;line-height:1.7;margin-bottom:10px;}
+  .ws-visual-two-groups{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;align-items:flex-start;margin:6px 0 10px;}
+  .ws-visual-group{display:flex;flex-direction:column;align-items:center;gap:2px;}
+  .ws-visual-group .glabel{font-size:.6rem;font-weight:700;color:var(--ink-soft);}
+  .ws-visual-icons{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;max-width:110px;}
+  .ws-visual-icons .ic{font-size:.85rem;text-align:center;line-height:1;}
+  .ws-visual-icons .ic.crossed{opacity:.4;}
+  .ws-visual-plus{font-size:.95rem;font-weight:900;color:var(--ink-soft);align-self:center;}
+  .ws-instruction{font-size:.78rem;color:var(--ink-soft);margin:4px 0 8px;text-align:center;}
+  .ws-answerline{display:flex;align-items:center;justify-content:center;gap:8px;font-weight:800;margin-top:8px;}
+  .ws-answerline .box{border:2px solid var(--ink);border-radius:8px;min-width:70px;height:38px;display:inline-block;}
+  .ws-eqline{display:flex;align-items:center;justify-content:center;gap:6px;font-weight:800;margin-top:8px;font-size:1.05rem;}
+  .ws-opbox{border:2px solid var(--ink);border-radius:8px;width:44px;height:38px;display:inline-block;}
+  .ws-numbox{border:2px solid var(--ink);border-radius:8px;min-width:44px;height:38px;display:inline-block;}
+  .ws-answer{color:var(--success);font-weight:800;}
+
+  .hidden{display:none !important;}
+
+  @media (prefers-reduced-motion: reduce){*{transition:none !important;animation:none !important;}}
+
+  #correctOverlay{
+    position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+    pointer-events:none;z-index:9999;opacity:0;
+  }
+  #correctOverlay.show{animation:overlayFade 1.05s ease forwards;}
+  @keyframes overlayFade{0%{opacity:0;}8%{opacity:1;}78%{opacity:1;}100%{opacity:0;}}
+  .correct-circle-wrap{position:relative;width:230px;height:230px;max-width:60vw;max-height:60vw;filter:drop-shadow(0 6px 14px rgba(0,0,0,.18));}
+  .correct-circle-wrap svg{width:100%;height:100%;transform:rotate(-90deg);}
+  .correct-circle-wrap svg circle{
+    fill:rgba(255,255,255,.9);stroke:#E2483D;stroke-width:15;stroke-linecap:round;
+    stroke-dasharray:660;stroke-dashoffset:660;
+  }
+  .correct-circle-wrap.animate svg circle{animation:circleDraw .55s cubic-bezier(.4,0,.2,1) .05s forwards;}
+  @keyframes circleDraw{to{stroke-dashoffset:0;}}
+  .correct-label{
+    position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);
+    text-align:center;font-weight:900;color:#E2483D;font-size:1.15rem;opacity:0;
+  }
+  .correct-circle-wrap.animate .correct-label{animation:labelPop .4s ease .5s forwards;}
+  @keyframes labelPop{0%{opacity:0;transform:translateY(-50%) scale(.6);}60%{opacity:1;transform:translateY(-50%) scale(1.15);}100%{opacity:1;transform:translateY(-50%) scale(1);}}
+  .correct-ping-text{
+    position:absolute;left:0;right:0;bottom:-34px;text-align:center;
+    font-weight:800;color:#E2483D;font-size:1rem;opacity:0;letter-spacing:.05em;
+  }
+  .correct-circle-wrap.animate .correct-ping-text{animation:labelPop .4s ease .62s forwards;}
+  @media (prefers-reduced-motion: reduce){
+    #correctOverlay.show{animation:none;opacity:1;}
+    .correct-circle-wrap.animate svg circle{animation:none;stroke-dashoffset:0;}
+    .correct-circle-wrap.animate .correct-label,.correct-circle-wrap.animate .correct-ping-text{animation:none;opacity:1;}
+  }
+
+  @media print{
+    body *{visibility:hidden;}
+    #worksheet, #worksheet *{visibility:visible;}
+    #worksheet{display:block !important;position:absolute;left:0;top:0;width:100%;padding:12mm;}
+  }
+  @media (max-width:640px){
+    .ws-grid{grid-template-columns:1fr;}
+  }
+
+  footer.hint{max-width:var(--maxw);margin:20px auto 0;padding:0 16px;color:var(--ink-soft);font-size:.8rem;}
+  details.teacher-note{max-width:var(--maxw);margin:0 auto 20px;padding:0 16px;}
+  details.teacher-note summary{cursor:pointer;font-weight:700;color:var(--ink-soft);font-size:.85rem;}
+  details.teacher-note .box{background:#fff;border-radius:14px;padding:14px 16px;margin-top:8px;font-size:.85rem;color:var(--ink-soft);line-height:1.7;box-shadow:var(--shadow);}
+</style>
+</head>
+<body>
+<div id="correctOverlay" aria-hidden="true">
+  <div class="correct-circle-wrap">
+    <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="84"></circle></svg>
+    <div class="correct-label">せいかい！</div>
+    <div class="correct-ping-text">🔔 ピンポーン♪</div>
+  </div>
+</div>
+<div class="app">
+  <header class="top">
+    <div>
+      <div class="mieel-brand">
+        <div class="orb-mini"></div>
+        <strong>MieeL</strong>
+        <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener">www.mieel-support-school.com</a>
+      </div>
+      <h1><span class="icon">📖</span>ぶんしょうだい（たしざん・ひきざん）</h1>
+      <p>「あわせて」「のこりは」「ちがいは」など、いろいろな もんだいの パターンで、しきを つくって こたえる れんしゅう</p>
+    </div>
+    <button class="icon-btn" id="btnLargeText" aria-pressed="false">🔠 文字を大きく</button>
+  </header>
+
+  <nav class="modes" role="tablist" aria-label="モードをえらぶ">
+    <button data-mode="solve" class="active" role="tab" aria-selected="true">📖 もんだいを とこう<span class="sub">しき＋こたえ</span></button>
+    <button data-mode="shiki" role="tab" aria-selected="false">🎯 たす？ ひく？<span class="sub">しきだけ すばやく</span></button>
+    <button data-mode="print" role="tab" aria-selected="false">🖨️ プリント<span class="sub">PDFをつくる</span></button>
+  </nav>
+
+  <!-- ===== SOLVE VIEW ===== -->
+  <section class="panel view" id="view-solve">
+    <div class="settings-box">
+      <div class="settings-row">
+        <span class="set-label">もんだいの パターン</span>
+        <div class="chip-row" id="solvePatternChips"></div>
+      </div>
+      <div class="settings-row">
+        <span class="set-label">かずの おおきさ</span>
+        <div class="chip-row" id="solveMaxChips"></div>
+      </div>
+      <div class="settings-row">
+        <span class="set-label">えでの サポート</span>
+        <div class="chip-row" id="solveVisChips"></div>
+      </div>
+      <div class="settings-row">
+        <span class="set-label">きごう（＋－）</span>
+        <div class="chip-row" id="solveOpShownChips"></div>
+      </div>
+      <div class="settings-row">
+        <span class="set-label">もじの ひょうじ</span>
+        <div class="chip-row" id="solveKanjiChips"></div>
+      </div>
+    </div>
+    <div class="score-pill" id="scoreSolve">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="problem-card">
+        <div class="pattern-tag" id="solvePatternTag"></div>
+        <div class="problem-text" id="solveProblemText"></div>
+        <div class="visual-box" id="solveVisualBox"></div>
+      </div>
+      <div class="problem-sub" style="font-size:.85rem;color:var(--ink-soft);font-weight:700;">しきを ぜんぶ かいて、こたえを だそう</div>
+
+      <div class="eq-strip" id="solveEqStrip">
+        <button type="button" class="eq-slot" id="slotA" data-slot="a">？</button>
+        <button type="button" class="eq-slot eq-op-slot" id="slotOp" data-slot="op">？</button>
+        <button type="button" class="eq-slot" id="slotB" data-slot="b">？</button>
+        <span class="eq-eq-sign">＝</span>
+        <button type="button" class="eq-slot" id="slotAns" data-slot="ans">？</button>
+      </div>
+      <div class="problem-sub" style="font-size:.8rem;color:var(--ink-soft);font-weight:700;" id="solveStepHint">①さいしょの かずを おしてね</div>
+
+      <div class="keypad-wrap" id="solveKeypadWrap">
+        <div class="answer-follow-icons hidden" id="solveAnswerFollow"></div>
+        <div class="op-key-row" id="solveOpKeyRow">
+          <button type="button" class="keypad-key op-key" id="solveOpPlus">＋</button>
+          <button type="button" class="keypad-key op-key" id="solveOpMinus">－</button>
+        </div>
+        <div class="keypad-grid">
+          <button type="button" class="keypad-key" data-digit="7">7</button>
+          <button type="button" class="keypad-key" data-digit="8">8</button>
+          <button type="button" class="keypad-key" data-digit="9">9</button>
+          <button type="button" class="keypad-key" data-digit="4">4</button>
+          <button type="button" class="keypad-key" data-digit="5">5</button>
+          <button type="button" class="keypad-key" data-digit="6">6</button>
+          <button type="button" class="keypad-key" data-digit="1">1</button>
+          <button type="button" class="keypad-key" data-digit="2">2</button>
+          <button type="button" class="keypad-key" data-digit="3">3</button>
+          <button type="button" class="keypad-key clear" id="solveKeypadClear">⌫</button>
+          <button type="button" class="keypad-key" data-digit="0">0</button>
+          <button type="button" class="keypad-key eq-key" id="solveEqKey">＝</button>
+        </div>
+      </div>
+
+      <div class="fb" id="solveFb"></div>
+      <div class="action-row">
+        <button class="speak-btn" id="solveSpeak" title="よみあげ">🔊</button>
+        <button class="btn ghost" id="solveClear">🔄 さいしょから</button>
+        <button class="btn primary" id="solveCheck">✔ こたえあわせ</button>
+        <button class="btn" id="solveNext" style="background:var(--solve);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SHIKI (quick op-id) VIEW ===== -->
+  <section class="panel view hidden" id="view-shiki">
+    <div class="settings-box">
+      <div class="settings-row">
+        <span class="set-label">もんだいの パターン</span>
+        <div class="chip-row" id="shikiPatternChips"></div>
+      </div>
+      <div class="settings-row">
+        <span class="set-label">かずの おおきさ</span>
+        <div class="chip-row" id="shikiMaxChips"></div>
+      </div>
+      <div class="settings-row">
+        <span class="set-label">もじの ひょうじ</span>
+        <div class="chip-row" id="shikiKanjiChips"></div>
+      </div>
+    </div>
+    <div class="score-pill" id="scoreShiki">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="problem-card">
+        <div class="pattern-tag" id="shikiPatternTag"></div>
+        <div class="problem-text" id="shikiProblemText"></div>
+      </div>
+      <div class="problem-sub" style="font-size:.85rem;color:var(--ink-soft);font-weight:700;">ただしい しきは どっち？</div>
+      <div class="eq-opt-grid" id="shikiOpts"></div>
+      <div class="fb" id="shikiFb"></div>
+      <div class="action-row">
+        <button class="speak-btn" id="shikiSpeak" title="よみあげ">🔊</button>
+        <button class="btn" id="shikiNext" style="background:var(--shiki);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PRINT VIEW ===== -->
+  <section class="panel view hidden" id="view-print">
+    <div class="print-controls">
+      <div>
+        <div class="field-label">もんだいの しゅるい</div>
+        <div class="chip-row" id="printTypeChips">
+          <button class="chip selected" data-ptype="solve">📖 もんだいと しき</button>
+          <button class="chip" data-ptype="shiki">🎯 しきの せんたく</button>
+        </div>
+      </div>
+      <div>
+        <div class="field-label">もんだいの パターン</div>
+        <div class="chip-row" id="printPatternChips"></div>
+      </div>
+      <div>
+        <div class="field-label">かずの おおきさ</div>
+        <div class="chip-row" id="printMaxChips"></div>
+      </div>
+      <div>
+        <div class="field-label">きごう（＋－）</div>
+        <div class="chip-row" id="printOpShownChips"></div>
+      </div>
+      <div>
+        <div class="field-label">もじの ひょうじ</div>
+        <div class="chip-row" id="printKanjiChips"></div>
+      </div>
+      <div>
+        <div class="field-label">もんだいすう</div>
+        <div class="chip-row" id="printCountChips">
+          <button class="chip" data-count="4">4もん</button>
+          <button class="chip selected" data-count="6">6もん</button>
+          <button class="chip" data-count="8">8もん</button>
+          <button class="chip" data-count="10">10もん</button>
+          <button class="chip" data-count="12">12もん</button>
+        </div>
+      </div>
+      <div class="toggle-row">
+        <input type="checkbox" id="printShowVisual" checked>
+        <label for="printShowVisual">🖼️ えを ひょうじする</label>
+      </div>
+      <div class="toggle-row">
+        <input type="checkbox" id="printShowAnswer">
+        <label for="printShowAnswer">こたえを ひょうじする（指導者用）</label>
+      </div>
+      <div class="action-row" style="margin-top:2px;">
+        <button class="btn ghost" id="printRegenBtn">🔄 もんだいを かえる</button>
+        <button class="btn primary" id="printOpenBtn">🖨️ プリントする</button>
+      </div>
+      <div class="preview-note">「プリントする」を押すと、印刷プレビューが開きます。ブラウザの印刷設定でPDF保存もできます。</div>
+    </div>
+  </section>
+
+  <footer class="hint">
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:5px;">
+      <div style="width:18px;height:18px;border-radius:50%;background:var(--mieel);flex:none;"></div>
+      <strong style="color:var(--ink);">MieeL</strong>
+      <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener" style="color:var(--solve);">mieel-support-school.com</a>
+    </div>
+    © ぶんしょうだい（たしざん・ひきざん） ツール（特別支援教育向け）
+  </footer>
+
+  <details class="teacher-note">
+    <summary>👩‍🏫 指導者の方へ</summary>
+    <div class="box">
+      このアプリは、たし算・ひき算の文章題を5つの代表的なパターンで練習できます。単なる計算練習ではなく「文章からどちらの演算を使うかを読み取る力」に焦点を当てています。<br>
+      ・<strong>あわせて（合併）</strong>：2つの数量を合わせる（例：赤い花3本、白い花2本、あわせて何本）<br>
+      ・<strong>ふえると（増加）</strong>：ある数量が後から増える（例：3羽いて、2羽増えた）<br>
+      ・<strong>のこりは（求残）</strong>：ある数量から取り去った残り（例：5個から2個使った）<br>
+      ・<strong>ちがいは（求差）</strong>：2つの数量を比べた差（例：犬5匹、猫3匹、どちらが何匹多い）<br>
+      ・<strong>のこりの なかま（求補）</strong>：全体から一部を除いた残り（例：8個のうち3個は赤、残りは何色）<br>
+      「りんご」などの品物が出てくる問題には、絵文字での視覚サポートを表示できます（設定でON/OFF可能）。「もんだいを とこう」モードでは演算記号の選択と数値の入力の両方を行い、「たす？ひく？」モードでは演算の判断だけを素早く練習できます。プリントモードでも同じ内容でワークシートを作成できます。
+    </div>
+  </details>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  function pickRandom(a){ return a[Math.floor(Math.random()*a.length)]; }
+  function rand(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+  function shuffleArr(a){
+    var arr=a.slice();
+    for(var i=arr.length-1;i>0;i--){
+      var j=Math.floor(Math.random()*(i+1));
+      var t=arr[i];arr[i]=arr[j];arr[j]=t;
+    }
+    return arr;
+  }
+  function speak(text){
+    if(!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang='ja-JP'; u.rate=0.85;
+    window.speechSynthesis.speak(u);
+  }
+  var PRAISE = ['やったね！','せいかい！','すごい！','ばっちり！','よくできました！'];
+  var TRY_AGAIN = ['もういちど かんがえてみよう！','おしい！','ゆっくり かんがえよう。','だいじょうぶ、もう一回！'];
+
+  var sharedAudioCtx = null;
+  function playDing(){
+    try{
+      var Ctx = window.AudioContext || window.webkitAudioContext;
+      if(!Ctx) return;
+      if(!sharedAudioCtx) sharedAudioCtx = new Ctx();
+      var ctx = sharedAudioCtx;
+      if(ctx.state==='suspended'){ ctx.resume(); }
+      function tone(freq, start, dur, peak){
+        var o = ctx.createOscillator();
+        var g = ctx.createGain();
+        o.type='sine'; o.frequency.value=freq;
+        o.connect(g); g.connect(ctx.destination);
+        var t0 = ctx.currentTime+start;
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.linearRampToValueAtTime(peak, t0+0.03);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0+dur);
+        o.start(t0);
+        o.stop(t0+dur+0.03);
+      }
+      tone(880.0, 0, 0.30, 0.30);
+      tone(1318.5, 0.24, 0.48, 0.26);
+    }catch(e){}
+  }
+  var overlayHideTimer = null;
+  function triggerCorrectFeedback(){
+    playDing();
+    var overlay = document.getElementById('correctOverlay');
+    if(!overlay) return;
+    var wrap = overlay.querySelector('.correct-circle-wrap');
+    if(overlayHideTimer){ clearTimeout(overlayHideTimer); overlayHideTimer=null; }
+    overlay.classList.remove('show');
+    wrap.classList.remove('animate');
+    void overlay.offsetWidth;
+    overlay.classList.add('show');
+    wrap.classList.add('animate');
+    overlayHideTimer = setTimeout(function(){
+      overlay.classList.remove('show');
+      wrap.classList.remove('animate');
+      overlayHideTimer = null;
+    }, 1300);
+  }
+
+  /* =========================================================
+     SHARED DATA: items with emoji + correct Japanese counter word
+  ========================================================= */
+  var ITEMS = [
+    {id:'apple',  icon:'🍎', name:'りんご',   counter:'こ',   animate:false},
+    {id:'orange', icon:'🍊', name:'みかん',   counter:'こ',   animate:false},
+    {id:'banana', icon:'🍌', name:'バナナ',   counter:'ほん', animate:false},
+    {id:'dog',    icon:'🐶', name:'いぬ',     counter:'ひき', animate:true},
+    {id:'cat',    icon:'🐱', name:'ねこ',     counter:'ひき', animate:true},
+    {id:'bird',   icon:'🐦', name:'とり',     counter:'わ',   animate:true},
+    {id:'flower', icon:'🌸', name:'はな',     counter:'ほん', animate:false},
+    {id:'pencil', icon:'✏️', name:'えんぴつ', counter:'ほん', animate:false},
+    {id:'car',    icon:'🚗', name:'くるま',   counter:'だい', animate:false},
+    {id:'balloon',icon:'🎈', name:'ふうせん', counter:'こ',   animate:false},
+    {id:'fish',   icon:'🐟', name:'さかな',   counter:'ひき', animate:true},
+    {id:'book',   icon:'📕', name:'ほん',     counter:'さつ', animate:false},
+    {id:'candy',  icon:'🍬', name:'あめ',     counter:'こ',   animate:false},
+    {id:'origami',icon:'📄', name:'おりがみ', counter:'まい', animate:false},
+    {id:'kid',    icon:'🧑', name:'こども',   counter:'にん', animate:true},
+    {id:'cookie', icon:'🍪', name:'クッキー', counter:'まい', animate:false},
+    {id:'star',   icon:'⭐', name:'ほし',     counter:'こ',   animate:false},
+    {id:'shell',  icon:'🐚', name:'かい',     counter:'こ',   animate:false},
+    {id:'bug',    icon:'🐛', name:'むし',     counter:'ひき', animate:true},
+    {id:'stone',  icon:'🪨', name:'いし',     counter:'こ',   animate:false}
+  ];
+  var COLORS = ['あかい','あおい','きいろい','しろい','くろい'];
+  /* かんじ ひょうじ（小学1・2年生の かんじの みを つかう）。
+     じてんは、じっさいに つかう たんご（ひんもく・いろ）だけに かぎり、
+     どうしや じょし（あります・ふえました 等）は へんかんしない。
+     どうぶつなどの こしょうめい（キャラクター名）が いっさい ないため、
+     dokkai.html のような めいしょう しょうとつの リスクは ない。 */
+  var KANJI_DICT = [
+    ['いぬ','犬'], ['ねこ','ねこ'], /* ねこ は 教育漢字に なく、そのまま */
+    ['はな','花'], ['くるま','車'], ['ふうせん','風船'], ['さかな','魚'], ['ほん','本'],
+    ['こども','子ども'], ['とり','鳥'], ['ほし','星'], ['かい','貝'], ['むし','虫'], ['いし','石'],
+    ['あかい','赤い'], ['あおい','青い'], ['きいろい','黄色い'], ['しろい','白い'], ['くろい','黒い']
+  ].filter(function(p){ return p[0]!==p[1]; }); /* ねこ の ダミーを のぞく */
+  function applyKanjiMode(text, on){
+    if(!on) return text;
+    var matches = [];
+    KANJI_DICT.forEach(function(pair){
+      var hira = pair[0], kanji = pair[1];
+      var idx = 0;
+      while(true){
+        var found = text.indexOf(hira, idx);
+        if(found===-1) break;
+        matches.push({start:found, end:found+hira.length, kanji:kanji, hira:hira});
+        idx = found + hira.length;
+      }
+    });
+    matches.sort(function(a,b){ return (b.end-b.start) - (a.end-a.start); });
+    var accepted = [];
+    matches.forEach(function(m){
+      var overlaps = accepted.some(function(c){ return m.start < c.end && m.end > c.start; });
+      if(!overlaps) accepted.push(m);
+    });
+    accepted.sort(function(a,b){ return a.start - b.start; });
+    var result = '', pos = 0;
+    accepted.forEach(function(m){
+      result += text.slice(pos, m.start);
+      result += '<ruby>'+m.kanji+'<rt>'+m.hira+'</rt></ruby>';
+      pos = m.end;
+    });
+    result += text.slice(pos);
+    return result;
+  }
+  /* 生き物かどうかで「あります／います」を正しく使い分ける */
+  function existVerb(item, past){
+    if(item.animate) return past ? 'いました' : 'います';
+    return past ? 'ありました' : 'あります';
+  }
+
+  /* =========================================================
+     WORD-PROBLEM PATTERN GENERATORS
+     5つの代表的な文章題パターン（合併・増加・求残・求差・求補）
+  ========================================================= */
+  var PATTERNS = [
+    {id:'gappei',  label:'あわせて（がっぺい）', op:'add'},
+    {id:'zouka',   label:'ふえると（ぞうか）',   op:'add'},
+    {id:'kyuuzan', label:'のこりは（きゅうざん）', op:'sub'},
+    {id:'kyuusa',  label:'ちがいは（きゅうさ）',  op:'sub'},
+    {id:'kyuuho',  label:'のこりの なかま（きゅうほ）', op:'sub'}
+  ];
+
+  function genGappei(maxNum){
+    var item = pickRandom(ITEMS);
+    var cols = shuffleArr(COLORS).slice(0,2);
+    var a = rand(1, maxNum-1);
+    var b = rand(1, maxNum-a);
+    var text = cols[0]+item.name+'が '+a+item.counter+'、'+cols[1]+item.name+'が '+b+item.counter+' '+existVerb(item,false)+'。あわせて なん'+item.counter+'ですか？';
+    return {pattern:'gappei', op:'add', a:a, b:b, answer:a+b, text:text, item:item, unit:item.counter,
+      visual:{type:'two', icon1:item.icon, n1:a, label1:cols[0]+item.name, icon2:item.icon, n2:b, label2:cols[1]+item.name}};
+  }
+  function genZouka(maxNum){
+    var item = pickRandom(ITEMS);
+    var a = rand(1, maxNum-1);
+    var b = rand(1, maxNum-a);
+    var text = 'はじめに '+item.name+'が '+a+item.counter+' '+existVerb(item,true)+'。あとから '+b+item.counter+' ふえました。ぜんぶで なん'+item.counter+'に なりましたか？';
+    return {pattern:'zouka', op:'add', a:a, b:b, answer:a+b, text:text, item:item, unit:item.counter,
+      visual:{type:'two', icon1:item.icon, n1:a, label1:'はじめ', icon2:item.icon, n2:b, label2:'ふえた ぶん'}};
+  }
+  function genKyuuzan(maxNum){
+    var item = pickRandom(ITEMS);
+    var a = rand(2, maxNum);
+    var b = rand(1, a);
+    var text = item.name+'が '+a+item.counter+' '+existVerb(item,true)+'。'+b+item.counter+' なくなりました。のこりは なん'+item.counter+'ですか？';
+    return {pattern:'kyuuzan', op:'sub', a:a, b:b, answer:a-b, text:text, item:item, unit:item.counter,
+      visual:{type:'cross', icon:item.icon, total:a, crossN:b}};
+  }
+  function genKyuusa(maxNum){
+    var item1 = pickRandom(ITEMS);
+    var item2 = pickRandom(ITEMS.filter(function(i){return i.id!==item1.id;}));
+    var a = rand(2, maxNum);
+    var b = rand(1, a-1);
+    var text = item1.name+'が '+a+item1.counter+' '+existVerb(item1,false)+'。'+item2.name+'が '+b+item2.counter+' '+existVerb(item2,false)+'。'+item1.name+'は '+item2.name+'より なんこ おおいですか？';
+    return {pattern:'kyuusa', op:'sub', a:a, b:b, answer:a-b, text:text, item:item1, unit:'こ',
+      visual:{type:'two', icon1:item1.icon, n1:a, label1:item1.name, icon2:item2.icon, n2:b, label2:item2.name}};
+  }
+  function genKyuuho(maxNum){
+    var item = pickRandom(ITEMS);
+    var total = rand(2, maxNum);
+    var a = rand(1, total-1);
+    var cols = shuffleArr(COLORS).slice(0,2);
+    var text = item.name+'が ぜんぶで '+total+item.counter+' '+existVerb(item,false)+'。そのうち '+a+item.counter+'は '+cols[0]+'いろです。'+cols[1]+'いろは なん'+item.counter+'ですか？';
+    return {pattern:'kyuuho', op:'sub', a:total, b:a, answer:total-a, text:text, item:item, unit:item.counter,
+      visual:{type:'cross', icon:item.icon, total:total, crossN:a}};
+  }
+  var PATTERN_GEN = {gappei:genGappei, zouka:genZouka, kyuuzan:genKyuuzan, kyuusa:genKyuusa, kyuuho:genKyuuho};
+
+  function genWordProblem(patternIds, maxNum){
+    var pid = pickRandom(patternIds.length ? patternIds : ['gappei']);
+    return PATTERN_GEN[pid](maxNum);
+  }
+
+  /* boxed number rendering inside problem text, for readability */
+  function highlightNums(text){
+    return text.replace(/(\d+)/g, '<span class="num">$1</span>');
+  }
+
+  /* =========================================================
+     VISUAL SUPPORT RENDERING
+  ========================================================= */
+  function buildIconGrid(icon, count, crossFrom){
+    var html = '<div class="visual-icons">';
+    for(var i=0;i<count;i++){
+      var crossed = (typeof crossFrom==='number') && i<crossFrom;
+      html += '<span class="ic'+(crossed?' crossed':'')+'">'+icon+'</span>';
+    }
+    html += '</div>';
+    return html;
+  }
+  function buildVisualHTML(visual){
+    if(visual.type==='two'){
+      return '<div class="visual-two-groups">'
+        + '<div class="visual-group"><span class="glabel">'+visual.label1+'（'+visual.n1+'）</span>'+buildIconGrid(visual.icon1, visual.n1)+'</div>'
+        + '<div class="visual-plus">＋</div>'
+        + '<div class="visual-group"><span class="glabel">'+visual.label2+'（'+visual.n2+'）</span>'+buildIconGrid(visual.icon2, visual.n2)+'</div>'
+        + '</div>';
+    } else {
+      return '<div class="visual-group" style="margin:0 auto;"><span class="glabel">ぜんぶで '+visual.total+'　（×は なくなった/べつの ぶん '+visual.crossN+'）</span>'
+        + buildIconGrid(visual.icon, visual.total, visual.crossN) + '</div>';
+    }
+  }
+
+  /* =========================================================
+     SHARED SETTINGS (patterns + number range), used by both modes + print
+  ========================================================= */
+  var MAX_NUM_OPTIONS = [5,10,15,20,30];
+  var selectedPatterns = {gappei:true, zouka:true, kyuuzan:true, kyuusa:true, kyuuho:true};
+  function getActivePatterns(){
+    var arr = PATTERNS.filter(function(p){ return selectedPatterns[p.id]; }).map(function(p){return p.id;});
+    return arr.length ? arr : ['gappei'];
+  }
+  function renderPatternChips(containerId, onChange){
+    var container = document.getElementById(containerId);
+    container.innerHTML='';
+    PATTERNS.forEach(function(p){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='settings-chip'+(selectedPatterns[p.id]?' selected':'');
+      b.textContent = p.label;
+      b.addEventListener('click', function(){
+        var active = getActivePatterns();
+        if(selectedPatterns[p.id] && active.length===1){ return; }
+        selectedPatterns[p.id] = !selectedPatterns[p.id];
+        renderAllPatternChips();
+        if(onChange) onChange();
+      });
+      container.appendChild(b);
+    });
+  }
+  function renderAllPatternChips(){
+    renderPatternChips('solvePatternChips', function(){ newSolveProblem(); });
+    renderPatternChips('shikiPatternChips', function(){ newShikiProblem(); });
+    renderPatternChips('printPatternChips', function(){ regenerateProblems(); renderWorksheet(); });
+  }
+  var maxNumSettings = {solve:15, shiki:15, print:15};
+  function renderMaxChips(containerId, key, onChange){
+    var container = document.getElementById(containerId);
+    container.innerHTML='';
+    MAX_NUM_OPTIONS.forEach(function(v){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='settings-chip'+(v===maxNumSettings[key]?' selected':'');
+      b.textContent = v+'まで';
+      b.addEventListener('click', function(){
+        maxNumSettings[key]=v;
+        renderMaxChips(containerId, key, onChange);
+        if(onChange) onChange();
+      });
+      container.appendChild(b);
+    });
+  }
+  /* きごう（＋－）を さいしょから みせるか、じぶんで きめさせるか */
+  var OP_SHOWN_OPTIONS = [
+    {value:false, label:'じぶんで きめる'},
+    {value:true, label:'さいしょから みえる'}
+  ];
+  var opShownSettings = {solve:false, print:false};
+  function renderOpShownChips(containerId, key, onChange){
+    var container = document.getElementById(containerId);
+    container.innerHTML='';
+    OP_SHOWN_OPTIONS.forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='settings-chip'+(opt.value===opShownSettings[key]?' selected':'');
+      b.textContent = opt.label;
+      b.addEventListener('click', function(){
+        opShownSettings[key] = opt.value;
+        renderOpShownChips(containerId, key, onChange);
+        if(onChange) onChange();
+      });
+      container.appendChild(b);
+    });
+  }
+  /* もじの ひょうじ（ひらがな／かんじ）を read/full/print で それぞれ せっていできる */
+  var KANJI_MODE_OPTIONS = [
+    {value:false, label:'ひらがな'},
+    {value:true, label:'🈶 かんじ（ふりがな つき）'}
+  ];
+  var kanjiModeSettings = {solve:false, shiki:false, print:false};
+  function renderKanjiModeChips(containerId, key, onChange){
+    var container = document.getElementById(containerId);
+    container.innerHTML='';
+    KANJI_MODE_OPTIONS.forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='settings-chip'+(opt.value===kanjiModeSettings[key]?' selected':'');
+      b.textContent = opt.label;
+      b.addEventListener('click', function(){
+        kanjiModeSettings[key] = opt.value;
+        renderKanjiModeChips(containerId, key, onChange);
+        if(onChange) onChange();
+      });
+      container.appendChild(b);
+    });
+  }
+
+  /* =========================================================
+     MODE 1: SOLVE (write the whole equation like a real calculator:
+     digits go straight into the active slot live; the ＋－＝ keys
+     themselves commit the previous slot and move forward — no
+     separate "confirm" tap needed for each piece)
+  ========================================================= */
+  var showVisual = true;
+  var STEP_HINTS_SELF = {
+    a:'①さいしょの かずを おしてね',
+    b:'③つぎの かずを おしてね（きごうは もう えらべるよ）',
+    ans:'④こたえを おしてね'
+  };
+  var STEP_HINTS_SHOWN = {
+    a:'①さいしょの かずを おしてね（きごうは もう きまっているよ）',
+    b:'②つぎの かずを おしてね',
+    ans:'③こたえを おしてね'
+  };
+  var solveState = {current:null, slots:{a:null,op:null,b:null,ans:null}, activeSlot:'a', score:0, total:0, locked:false};
+  var solveBuffer = '';
+
+  function renderSolveVisChips(){
+    var container = document.getElementById('solveVisChips');
+    container.innerHTML='';
+    [{v:true,label:'👁️ ひょうじする'},{v:false,label:'🙈 ひょうじしない'}].forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='settings-chip'+(opt.v===showVisual?' selected':'');
+      b.textContent = opt.label;
+      b.addEventListener('click', function(){
+        showVisual = opt.v;
+        renderSolveVisChips();
+        renderSolveVisual();
+        renderAnswerFollow();
+      });
+      container.appendChild(b);
+    });
+  }
+  function renderSolveVisual(){
+    var box = document.getElementById('solveVisualBox');
+    if(!showVisual || !solveState.current){ box.innerHTML=''; box.style.display='none'; return; }
+    box.style.display='';
+    box.innerHTML = buildVisualHTML(solveState.current.visual);
+  }
+  function newSolveProblem(){
+    solveState.current = genWordProblem(getActivePatterns(), maxNumSettings.solve);
+    var preOp = opShownSettings.solve ? solveState.current.op : null;
+    solveState.slots = {a:null, op:preOp, b:null, ans:null};
+    solveState.activeSlot = 'a';
+    solveState.locked = false;
+    solveBuffer = '';
+    document.getElementById('solveFb').className='fb'; document.getElementById('solveFb').textContent='';
+    document.getElementById('solveNext').style.display='none';
+    document.getElementById('solveCheck').disabled=false;
+    var pTag = PATTERNS.filter(function(p){return p.id===solveState.current.pattern;})[0];
+    document.getElementById('solvePatternTag').textContent = pTag.label;
+    document.getElementById('solveProblemText').innerHTML = highlightNums(applyKanjiMode(solveState.current.text, kanjiModeSettings.solve));
+    document.getElementById('solveOpKeyRow').classList.toggle('hidden', opShownSettings.solve);
+    renderSolveVisual();
+    renderEqStrip();
+    renderAnswerFollow();
+  }
+  function rerenderSolveKanji(){
+    if(!solveState.current) return;
+    document.getElementById('solveProblemText').innerHTML = highlightNums(applyKanjiMode(solveState.current.text, kanjiModeSettings.solve));
+  }
+  function slotLabel(slot, val){
+    if(val===null || val===undefined) return '？';
+    if(slot==='op') return val==='add' ? '＋' : '－';
+    return String(val);
+  }
+  function renderEqStrip(){
+    document.getElementById('solveStepHint').textContent = (opShownSettings.solve ? STEP_HINTS_SHOWN : STEP_HINTS_SELF)[solveState.activeSlot] || '';
+    ['a','op','b','ans'].forEach(function(slot){
+      var elId = slot==='a'?'slotA':(slot==='op'?'slotOp':(slot==='b'?'slotB':'slotAns'));
+      var el = document.getElementById(elId);
+      var isActive = (solveState.activeSlot===slot && !solveState.locked);
+      var displayVal = (isActive && slot!=='op' && solveBuffer!=='') ? solveBuffer : slotLabel(slot, solveState.slots[slot]);
+      el.textContent = displayVal;
+      el.classList.toggle('active', isActive);
+      el.classList.toggle('filled', solveState.slots[slot]!==null && solveState.slots[slot]!==undefined);
+    });
+  }
+  function renderAnswerFollow(){
+    var el = document.getElementById('solveAnswerFollow');
+    if(solveState.activeSlot!=='ans' || !showVisual || solveBuffer===''){
+      el.classList.add('hidden'); el.innerHTML=''; return;
+    }
+    var n = parseInt(solveBuffer,10);
+    if(isNaN(n) || n<0){ el.classList.add('hidden'); el.innerHTML=''; return; }
+    var cap = Math.min(n, 30); /* ごちゃごちゃしないよう上限をもうける */
+    var icon = solveState.current.item.icon;
+    var html='';
+    for(var i=0;i<cap;i++){ html += '<span class="fic">'+icon+'</span>'; }
+    el.innerHTML = html;
+    el.classList.remove('hidden');
+  }
+  function commitBuffer(slot){
+    if(solveBuffer==='') return false;
+    solveState.slots[slot] = parseInt(solveBuffer,10);
+    solveBuffer = '';
+    return true;
+  }
+  document.querySelectorAll('#solveEqStrip .eq-slot').forEach(function(el){
+    el.addEventListener('click', function(){
+      if(solveState.locked) return;
+      var slot = el.getAttribute('data-slot');
+      if(slot==='op') return; /* きごうは＋－キーで直接きめる */
+      /* いま入力中の すうじが のこっていれば、うしなわれないよう さきに かくてい させる */
+      if(solveBuffer!=='' && (solveState.activeSlot==='a'||solveState.activeSlot==='b'||solveState.activeSlot==='ans')){
+        commitBuffer(solveState.activeSlot);
+      }
+      solveState.activeSlot = slot;
+      solveBuffer = '';
+      renderEqStrip();
+      renderAnswerFollow();
+    });
+  });
+  document.querySelectorAll('#view-solve .keypad-key[data-digit]').forEach(function(k){
+    k.addEventListener('click', function(){
+      if(solveState.locked) return;
+      var d = k.getAttribute('data-digit');
+      var next = solveBuffer + d;
+      if(next.length>3) next = d;
+      solveBuffer = next;
+      renderEqStrip();
+      renderAnswerFollow();
+    });
+  });
+  document.getElementById('solveKeypadClear').addEventListener('click', function(){
+    if(solveState.locked) return;
+    solveBuffer = solveBuffer.slice(0,-1);
+    renderEqStrip();
+    renderAnswerFollow();
+  });
+  function chooseOp(op){
+    if(solveState.locked) return;
+    var committed = false;
+    if(solveState.activeSlot==='a'){ committed = commitBuffer('a'); }
+    solveState.slots.op = op;
+    if(committed){ solveState.activeSlot = 'b'; solveBuffer=''; }
+    renderEqStrip();
+    renderAnswerFollow();
+  }
+  document.getElementById('solveOpPlus').addEventListener('click', function(){ chooseOp('add'); });
+  document.getElementById('solveOpMinus').addEventListener('click', function(){ chooseOp('sub'); });
+  document.getElementById('solveEqKey').addEventListener('click', function(){
+    if(solveState.locked) return;
+    if(solveState.activeSlot==='b'){
+      if(commitBuffer('b')){ solveState.activeSlot='ans'; solveBuffer=''; }
+    } else if(solveState.activeSlot==='ans'){
+      commitBuffer('ans'); /* 上書き確定。ここに とどまる */
+    }
+    renderEqStrip();
+    renderAnswerFollow();
+  });
+  document.getElementById('solveClear').addEventListener('click', function(){
+    if(solveState.locked) return;
+    var preOp = opShownSettings.solve ? solveState.current.op : null;
+    solveState.slots = {a:null, op:preOp, b:null, ans:null};
+    solveState.activeSlot = 'a';
+    solveBuffer = '';
+    renderEqStrip();
+    renderAnswerFollow();
+  });
+  document.getElementById('solveCheck').addEventListener('click', function(){
+    if(solveState.locked) return;
+    /* いま入力中の すうじが のこっていれば、さきに かくてい させる */
+    if(solveBuffer!=='' && (solveState.activeSlot==='a'||solveState.activeSlot==='b'||solveState.activeSlot==='ans')){
+      commitBuffer(solveState.activeSlot);
+      renderEqStrip();
+    }
+    var cur = solveState.current;
+    var s = solveState.slots;
+    var allFilled = (s.a!==null && s.op!==null && s.b!==null && s.ans!==null);
+    var correct = allFilled && s.a===cur.a && s.op===cur.op && s.b===cur.b && s.ans===cur.answer;
+    solveState.total++;
+    if(correct) solveState.score++;
+    document.getElementById('scoreSolve').innerHTML = '✅ '+solveState.score+' / '+solveState.total;
+    var fbEl = document.getElementById('solveFb');
+    if(correct){
+      solveState.locked = true;
+      document.getElementById('solveCheck').disabled = true;
+      fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE)+'（しき：'+cur.a+(cur.op==='add'?'＋':'－')+cur.b+'＝'+cur.answer+'）';
+      triggerCorrectFeedback();
+      document.getElementById('solveNext').style.display='inline-block';
+      speak(cur.a+(cur.op==='add'?'たす':'ひく')+cur.b+'は'+cur.answer+'です。せいかい！');
+      renderEqStrip();
+    } else {
+      var hint = !allFilled ? 'ぜんぶの □を うめてね。' : (s.a!==cur.a || s.b!==cur.b) ? 'もんだいの かずを みなおしてみよう。' : (s.op!==cur.op) ? 'しきが ちがうかも。もういちど もんだいを よんでみよう。' : 'こたえの かずを みなおしてみよう。';
+      fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN)+'（'+hint+'）';
+    }
+  });
+  document.getElementById('solveNext').addEventListener('click', newSolveProblem);
+  document.getElementById('solveSpeak').addEventListener('click', function(){
+    speak(solveState.current.text);
+  });
+
+  /* =========================================================
+     MODE 2: SHIKI (quick operator-identification drill)
+  ========================================================= */
+  var shikiState = {current:null, score:0, total:0, locked:false};
+  function newShikiProblem(){
+    shikiState.current = genWordProblem(getActivePatterns(), maxNumSettings.shiki);
+    shikiState.locked = false;
+    document.getElementById('shikiFb').className='fb'; document.getElementById('shikiFb').textContent='';
+    document.getElementById('shikiNext').style.display='none';
+    var cur = shikiState.current;
+    var pTag = PATTERNS.filter(function(p){return p.id===cur.pattern;})[0];
+    document.getElementById('shikiPatternTag').textContent = pTag.label;
+    document.getElementById('shikiProblemText').innerHTML = highlightNums(applyKanjiMode(cur.text, kanjiModeSettings.shiki));
+    var correctEq = cur.a+(cur.op==='add'?' + ':' － ')+cur.b;
+    var wrongEq = cur.a+(cur.op==='add'?' － ':' + ')+cur.b;
+    var opts = shuffleArr([{eq:correctEq, ok:true},{eq:wrongEq, ok:false}]);
+    var grid = document.getElementById('shikiOpts');
+    grid.innerHTML='';
+    opts.forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button'; b.className='eq-opt-btn'; b.textContent=opt.eq;
+      b.addEventListener('click', function(){
+        if(shikiState.locked) return;
+        shikiState.total++;
+        if(opt.ok) shikiState.score++;
+        document.getElementById('scoreShiki').innerHTML = '✅ '+shikiState.score+' / '+shikiState.total;
+        var fbEl = document.getElementById('shikiFb');
+        if(opt.ok){
+          shikiState.locked=true;
+          b.classList.add('correct-flash');
+          grid.querySelectorAll('.eq-opt-btn').forEach(function(o){ if(o!==b) o.disabled=true; });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+          document.getElementById('shikiNext').style.display='inline-block';
+          speak('せいかいです。');
+        } else {
+          b.classList.add('wrong-flash');
+          setTimeout(function(){ b.classList.remove('wrong-flash'); }, 500);
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+      });
+      grid.appendChild(b);
+    });
+  }
+  function rerenderShikiKanji(){
+    if(!shikiState.current) return;
+    document.getElementById('shikiProblemText').innerHTML = highlightNums(applyKanjiMode(shikiState.current.text, kanjiModeSettings.shiki));
+  }
+  document.getElementById('shikiNext').addEventListener('click', newShikiProblem);
+  document.getElementById('shikiSpeak').addEventListener('click', function(){
+    speak(shikiState.current.text);
+  });
+
+  /* =========================================================
+     PRINT MODE
+  ========================================================= */
+  var printState = {type:'solve', count:6, showAnswer:false, showVisual:true, problems:[]};
+  document.querySelectorAll('#printTypeChips .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#printTypeChips .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      printState.type = c.getAttribute('data-ptype');
+      regenerateProblems(); renderWorksheet();
+    });
+  });
+  document.querySelectorAll('#printCountChips .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#printCountChips .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      printState.count = parseInt(c.getAttribute('data-count'),10);
+      regenerateProblems(); renderWorksheet();
+    });
+  });
+  document.getElementById('printShowAnswer').addEventListener('change', function(e){
+    printState.showAnswer = e.target.checked;
+    renderWorksheet();
+  });
+  document.getElementById('printShowVisual').addEventListener('change', function(e){
+    printState.showVisual = e.target.checked;
+    renderWorksheet();
+  });
+  document.getElementById('printRegenBtn').addEventListener('click', function(){
+    regenerateProblems(); renderWorksheet();
+  });
+  document.getElementById('printOpenBtn').addEventListener('click', function(){
+    renderWorksheet();
+    setTimeout(function(){ window.print(); }, 60);
+  });
+  function regenerateProblems(){
+    var list=[];
+    for(var i=0;i<printState.count;i++){
+      list.push(genWordProblem(getActivePatterns(), maxNumSettings.print));
+    }
+    printState.problems = list;
+  }
+  regenerateProblems();
+  function buildPrintVisualIconGrid(icon, count, crossFrom){
+    var html = '<div class="ws-visual-icons">';
+    for(var i=0;i<count;i++){
+      var crossed = (typeof crossFrom==='number') && i<crossFrom;
+      html += '<span class="ic'+(crossed?' crossed':'')+'">'+icon+'</span>';
+    }
+    html += '</div>';
+    return html;
+  }
+  function buildPrintVisualHTML(visual){
+    if(visual.type==='two'){
+      return '<div class="ws-visual-two-groups">'
+        + '<div class="ws-visual-group"><span class="glabel">'+visual.label1+'（'+visual.n1+'）</span>'+buildPrintVisualIconGrid(visual.icon1, visual.n1)+'</div>'
+        + '<div class="ws-visual-plus">＋</div>'
+        + '<div class="ws-visual-group"><span class="glabel">'+visual.label2+'（'+visual.n2+'）</span>'+buildPrintVisualIconGrid(visual.icon2, visual.n2)+'</div>'
+        + '</div>';
+    } else {
+      return '<div class="ws-visual-group" style="margin:0 auto 10px;"><span class="glabel">ぜんぶで '+visual.total+'</span>'+buildPrintVisualIconGrid(visual.icon, visual.total, visual.crossN)+'</div>';
+    }
+  }
+  function renderWorksheet(){
+    var typeLabel = printState.type==='solve' ? '📖 もんだいと しき' : '🎯 しきの せんたく';
+    var instruction = printState.type==='solve'
+      ? 'しきを かいて、こたえを もとめよう'
+      : 'ただしい しきに 〇を つけよう';
+
+    var html = '';
+    html += '<div class="ws-header"><div style="display:flex;align-items:center;gap:8px;">'
+      + '<div style="width:20px;height:20px;border-radius:50%;background:var(--mieel);border:1px solid #ccc;flex:none;"></div>'
+      + '<div><div style="font-size:11px;color:#333;font-weight:700;">MieeL ぶんしょうだい</div>'
+      + '<h2>'+typeLabel+'</h2>'
+      + '<div style="font-size:11px;color:#666;margin-top:2px;">'+instruction+'</div></div></div>'
+      + '<div class="ws-fields" style="flex-direction:column;align-items:flex-end;gap:2px;">'
+      + '<div style="font-size:.75rem;color:#3A9A8C;font-weight:700;">mieel-support-school.com</div>'
+      + '<div><span class="lbl">なまえ：</span><span class="blank">&nbsp;</span><span class="lbl">ひづけ：</span><span class="blank">&nbsp;</span></div></div></div>';
+
+    html += '<div class="ws-grid">';
+    printState.problems.forEach(function(p, idx){
+      html += '<div class="ws-cell"><div class="no">もんだい '+(idx+1)+'</div>';
+      html += '<div class="ws-problem">'+applyKanjiMode(p.text, kanjiModeSettings.print)+'</div>';
+      if(printState.showVisual){
+        html += buildPrintVisualHTML(p.visual);
+      }
+      if(printState.type==='solve'){
+        var opCell = opShownSettings.print ? '<span class="ws-opbox" style="display:flex;align-items:center;justify-content:center;">'+(p.op==='add'?'＋':'－')+'</span>' : '<span class="ws-opbox"></span>';
+        html += '<div class="ws-eqline">しき：<span class="ws-numbox"></span>'+opCell+'<span class="ws-numbox"></span>＝<span class="ws-numbox"></span></div>';
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;text-align:center;">こたえ：'+p.a+(p.op==='add'?'＋':'－')+p.b+'＝'+p.answer+'</div>';
+        }
+      } else {
+        var correctEq = p.a+(p.op==='add'?' + ':' － ')+p.b;
+        var wrongEq = p.a+(p.op==='add'?' － ':' + ')+p.b;
+        var opts = shuffleArr([correctEq, wrongEq]);
+        html += '<div class="ws-eqline">'
+          + '<span style="border:2px solid var(--ink);border-radius:10px;padding:6px 14px;">'+opts[0]+'</span>'
+          + '<span style="border:2px solid var(--ink);border-radius:10px;padding:6px 14px;">'+opts[1]+'</span>'
+          + '</div>';
+        if(printState.showAnswer){
+          html += '<div class="ws-answer" style="margin-top:6px;font-size:.85rem;text-align:center;">こたえ：'+correctEq+'</div>';
+        }
+      }
+      html += '</div>';
+    });
+    html += '</div>';
+    var ws = document.getElementById('worksheet');
+    if(!ws){ ws=document.createElement('div'); ws.id='worksheet'; document.body.appendChild(ws); }
+    ws.innerHTML = html;
+  }
+  renderWorksheet();
+
+  /* =========================================================
+     MODE SWITCHING / GLOBAL UI
+  ========================================================= */
+  document.querySelectorAll('nav.modes button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('nav.modes button').forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+      btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+      var mode = btn.getAttribute('data-mode');
+      document.querySelectorAll('.view').forEach(function(v){ v.classList.add('hidden'); });
+      document.getElementById('view-'+mode).classList.remove('hidden');
+      if(mode==='print'){ renderWorksheet(); }
+    });
+  });
+  var largeToggle = document.getElementById('btnLargeText');
+  largeToggle.addEventListener('click', function(){
+    var on = document.documentElement.classList.toggle('large-text');
+    largeToggle.setAttribute('aria-pressed', on ? 'true':'false');
+  });
+
+  /* =========================================================
+     INIT
+  ========================================================= */
+  renderAllPatternChips();
+  renderMaxChips('solveMaxChips','solve', function(){ newSolveProblem(); });
+  renderMaxChips('shikiMaxChips','shiki', function(){ newShikiProblem(); });
+  renderMaxChips('printMaxChips','print', function(){ regenerateProblems(); renderWorksheet(); });
+  renderSolveVisChips();
+  renderOpShownChips('solveOpShownChips','solve', function(){ newSolveProblem(); });
+  renderOpShownChips('printOpShownChips','print', function(){ renderWorksheet(); });
+  renderKanjiModeChips('solveKanjiChips','solve', function(){ rerenderSolveKanji(); });
+  renderKanjiModeChips('shikiKanjiChips','shiki', function(){ rerenderShikiKanji(); });
+  renderKanjiModeChips('printKanjiChips','print', function(){ renderWorksheet(); });
+  newSolveProblem();
+  newShikiProblem();
+
+})();
+</script>
+</body>
+</html>

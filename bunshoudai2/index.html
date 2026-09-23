@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>ものがたりを よみとろう｜MieeL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF7EF;
+    --card:#FFFFFF;
+    --ink:#2E2A25;
+    --ink-soft:#8A8072;
+    --line:#EAE1CE;
+    --read:#3F6FA8;   --read-soft:#DCE7F5;
+    --full:#8A5FA3;   --full-soft:#EEE3F5;
+    --mix:#C15B6B;    --mix-soft:#F8E1E5;
+    --success:#4F9A63; --success-soft:#E3F3E6;
+    --danger:#C4573F;  --danger-soft:#FBE4DE;
+    --radius:22px;
+    --shadow:0 6px 18px rgba(46,42,37,0.10);
+    --maxw:960px;
+    --mieel:radial-gradient(circle at 50% 0%,#1B8FE8 0%,#2BB8D6 28%,#3FCB9E 45%,#8FD24A 58%,#F4D027 72%,#F7941E 100%);
+  }
+  *{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact;color-adjust:exact;}
+  html{font-size:17px;overscroll-behavior:none;}
+  html.large-text{font-size:21px;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+    -webkit-font-smoothing:antialiased;padding-bottom:40px;overscroll-behavior:none;
+  }
+  button{font-family:inherit;}
+  button:focus-visible, [tabindex]:focus-visible{outline:3px solid var(--read);outline-offset:2px;}
+
+  .app{max-width:var(--maxw);margin:0 auto;padding:18px 16px 8px;}
+
+  header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
+  .mieel-brand{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .mieel-brand .orb-mini{width:20px;height:20px;border-radius:50%;background:var(--mieel);flex:none;}
+  .mieel-brand strong{color:var(--ink);font-size:.85rem;}
+  .mieel-brand a{font-size:.78rem;color:var(--read);text-decoration:none;font-weight:600;}
+  .mieel-brand a:hover{text-decoration:underline;}
+  header.top h1{font-size:1.45rem;margin:0;font-weight:800;letter-spacing:.02em;display:flex;align-items:center;gap:.35em;}
+  header.top h1 .icon{font-size:1.15em;}
+  header.top p{margin:4px 0 0;color:var(--ink-soft);font-size:.85rem;font-weight:500;}
+  .icon-btn{
+    border:2px solid var(--ink);background:var(--card);color:var(--ink);border-radius:999px;
+    padding:.5em 1em;font-weight:700;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:.4em;min-height:44px;
+  }
+  .icon-btn:hover{background:var(--read-soft);}
+
+  nav.modes{display:flex;gap:9px;margin-bottom:16px;flex-wrap:wrap;}
+  nav.modes button{
+    flex:1 1 150px;font-weight:800;font-size:1rem;padding:13px 8px;border-radius:var(--radius);
+    border:3px solid transparent;background:var(--card);color:var(--ink-soft);box-shadow:var(--shadow);
+    cursor:pointer;transition:transform .12s ease, border-color .12s ease, color .12s ease;min-height:44px;
+  }
+  nav.modes button .sub{display:block;font-size:.68em;font-weight:500;margin-top:2px;}
+  nav.modes button:hover{transform:translateY(-2px);}
+  nav.modes button.active{border-color:var(--ink);color:var(--ink);background:var(--mix-soft);}
+
+  section.panel{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:18px;}
+
+  .settings-box{background:#FCFAF3;border:2px solid var(--line);border-radius:18px;padding:14px 16px;margin-bottom:16px;}
+  .settings-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:10px;}
+  .settings-row:last-child{margin-bottom:0;}
+  .settings-row .set-label{font-weight:800;font-size:.85rem;color:var(--ink-soft);min-width:150px;flex:none;}
+  .settings-chip{border:2px solid var(--line);background:#fff;border-radius:999px;padding:9px 15px;font-weight:800;font-size:.86rem;cursor:pointer;color:var(--ink);min-height:44px;}
+  .settings-chip.selected{border-color:var(--read);background:var(--read-soft);color:#1f4a75;}
+
+  .score-pill{
+    display:inline-flex;align-items:center;gap:.5em;background:var(--success-soft);color:var(--success);
+    font-weight:800;padding:8px 16px;border-radius:999px;font-size:.95rem;margin-bottom:14px;
+  }
+
+  .stage{min-height:280px;display:flex;flex-direction:column;align-items:center;}
+  .story-card{
+    background:#FCFAF3;border:3px solid var(--line);border-radius:20px;padding:22px 26px;
+    max-width:640px;width:100%;margin-bottom:16px;
+  }
+  .story-title{font-size:.78rem;font-weight:800;color:var(--read);margin-bottom:8px;}
+  .story-text{font-size:1.12rem;font-weight:600;color:var(--ink);line-height:2.1;text-align:left;}
+  ruby{ruby-align:center;}
+  rt{font-size:.5em;font-weight:700;color:var(--ink-soft);user-select:none;}
+
+  .q-box{background:var(--read-soft);border:3px solid var(--read);border-radius:18px;padding:16px 20px;max-width:640px;width:100%;margin-bottom:14px;text-align:center;}
+  .q-type-tag{display:inline-block;font-size:.7rem;font-weight:900;color:#fff;background:var(--read);border-radius:999px;padding:3px 12px;margin-bottom:8px;letter-spacing:.05em;}
+  .q-text{font-size:1.15rem;font-weight:800;color:#1f4a75;}
+
+  .opt-grid{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-width:640px;margin-top:4px;}
+  .opt-btn{
+    padding:14px 20px;border:3px solid var(--read);background:#fff;color:#1f4a75;
+    font-size:1.05rem;font-weight:800;border-radius:16px;cursor:pointer;box-shadow:0 5px 0 #2c5580;transition:.1s;min-height:44px;
+    min-width:120px;
+  }
+  .opt-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #2c5580;}
+  .opt-btn.correct-flash{background:var(--success-soft);border-color:var(--success);box-shadow:0 5px 0 #2a6040;color:#255e3c;}
+  .opt-btn.wrong-flash{background:var(--danger-soft);border-color:var(--danger);box-shadow:0 5px 0 #8a3020;color:#7a2a18;}
+  .opt-btn:disabled{opacity:.35;cursor:not-allowed;}
+
+  /* ── full-comprehension mode: multiple question rows answered together ── */
+  .full-q-list{display:flex;flex-direction:column;gap:14px;max-width:640px;width:100%;}
+  .full-q-row{background:#FCFAF3;border:3px solid var(--line);border-radius:16px;padding:14px 18px;}
+  .full-q-row.correct{border-color:var(--success);background:var(--success-soft);}
+  .full-q-row.wrong{border-color:var(--danger);background:var(--danger-soft);}
+  .full-q-row .q-type-tag{margin-bottom:6px;}
+  .full-q-row .q-text{font-size:1rem;font-weight:800;color:var(--ink);margin-bottom:10px;text-align:left;}
+  .full-opt-grid{display:flex;flex-wrap:wrap;gap:8px;}
+  .full-opt-btn{
+    padding:10px 16px;border:2px solid var(--line);background:#fff;color:var(--ink);
+    font-size:.92rem;font-weight:700;border-radius:12px;cursor:pointer;min-height:44px;
+  }
+  .full-opt-btn.chosen{border-color:var(--full);background:var(--full-soft);color:#5a3d7a;}
+  .full-opt-btn.reveal-correct{border-color:var(--success);background:var(--success-soft);color:#255e3c;}
+  .full-opt-btn.reveal-wrong{border-color:var(--danger);background:var(--danger-soft);color:#7a2a18;}
+  .full-opt-btn:disabled{cursor:not-allowed;}
+
+  .fb{margin-top:10px;font-size:1.1rem;font-weight:700;min-height:32px;display:flex;align-items:center;gap:8px;text-align:center;}
+  .fb.ok{color:#2a7a50;} .fb.ng{color:var(--danger);}
+  .action-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;justify-content:center;}
+  .btn{font-weight:800;font-size:.95rem;border-radius:14px;border:none;padding:12px 20px;cursor:pointer;color:#fff;background:var(--ink-soft);min-height:44px;}
+  .btn.primary{background:var(--read);}
+  .btn.primary.full-btn{background:var(--full);}
+  .btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--ink);}
+  .btn:disabled{opacity:.4;cursor:not-allowed;}
+  .btn:active{transform:scale(.97);}
+  .speak-btn{
+    border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:999px;
+    width:44px;height:44px;font-size:1.1rem;cursor:pointer;flex:none;
+  }
+  .speak-btn:hover{background:var(--read-soft);}
+
+  .print-controls{display:flex;flex-direction:column;gap:14px;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{border:2px solid var(--line);background:#FCFAF3;border-radius:999px;padding:9px 16px;font-weight:700;font-size:.88rem;cursor:pointer;color:var(--ink);min-height:44px;}
+  .chip.selected{border-color:var(--mix);background:var(--mix-soft);color:var(--mix);}
+  .field-label{font-size:.82rem;font-weight:800;color:var(--ink-soft);margin-bottom:6px;}
+  .toggle-row{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.92rem;}
+  .preview-note{color:var(--ink-soft);font-size:.85rem;margin-top:6px;text-align:center;}
+  #worksheet{display:none;}
+
+  .ws-header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid var(--ink);padding-bottom:10px;margin-bottom:16px;}
+  .ws-header h2{margin:2px 0 0;font-size:1.15rem;}
+  .ws-fields{display:flex;gap:10px;font-size:.9rem;font-weight:700;align-items:flex-end;}
+  .ws-fields .lbl{white-space:nowrap;}
+  .ws-fields .blank{border-bottom:1.5px solid var(--ink);padding:0 6px 4px;display:inline-block;min-width:100px;margin-right:10px;}
+  .ws-story{border:2px solid var(--line);border-radius:12px;padding:14px 18px;margin-bottom:16px;font-size:1rem;line-height:1.9;}
+  .ws-story .ws-qlist{break-inside:auto;}
+  .ws-qrow{break-inside:avoid;}
+  .ws-story .no{font-size:.78rem;font-weight:800;color:var(--ink-soft);margin-bottom:8px;}
+  .ws-qlist{display:flex;flex-direction:column;gap:10px;margin-top:12px;}
+  .ws-qrow{font-size:.92rem;font-weight:700;}
+  .ws-qrow .qtag{display:inline-block;font-size:.68rem;font-weight:900;color:#fff;background:var(--read);border-radius:999px;padding:2px 10px;margin-right:6px;}
+  .ws-opt-row{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 0 0;}
+  .ws-opt-chip{border:1.5px solid var(--ink);border-radius:10px;padding:5px 12px;font-size:.85rem;font-weight:700;}
+  .ws-write-line{display:flex;align-items:center;gap:6px;margin:8px 0 0 0;font-weight:700;font-size:.9rem;}
+  .write-blank{flex:1;min-width:180px;border-bottom:1.5px solid var(--ink);height:1.6em;display:inline-block;}
+  .ws-answer{color:var(--success);font-weight:800;font-size:.85rem;margin-top:4px;}
+
+  .hidden{display:none !important;}
+
+  @media (prefers-reduced-motion: reduce){*{transition:none !important;animation:none !important;}}
+
+  #correctOverlay{
+    position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+    pointer-events:none;z-index:9999;opacity:0;
+  }
+  #correctOverlay.show{animation:overlayFade 1.05s ease forwards;}
+  @keyframes overlayFade{0%{opacity:0;}8%{opacity:1;}78%{opacity:1;}100%{opacity:0;}}
+  .correct-circle-wrap{position:relative;width:230px;height:230px;max-width:60vw;max-height:60vw;filter:drop-shadow(0 6px 14px rgba(0,0,0,.18));}
+  .correct-circle-wrap svg{width:100%;height:100%;transform:rotate(-90deg);}
+  .correct-circle-wrap svg circle{
+    fill:rgba(255,255,255,.9);stroke:#E2483D;stroke-width:15;stroke-linecap:round;
+    stroke-dasharray:660;stroke-dashoffset:660;
+  }
+  .correct-circle-wrap.animate svg circle{animation:circleDraw .55s cubic-bezier(.4,0,.2,1) .05s forwards;}
+  @keyframes circleDraw{to{stroke-dashoffset:0;}}
+  .correct-label{
+    position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);
+    text-align:center;font-weight:900;color:#E2483D;font-size:1.15rem;opacity:0;
+  }
+  .correct-circle-wrap.animate .correct-label{animation:labelPop .4s ease .5s forwards;}
+  @keyframes labelPop{0%{opacity:0;transform:translateY(-50%) scale(.6);}60%{opacity:1;transform:translateY(-50%) scale(1.15);}100%{opacity:1;transform:translateY(-50%) scale(1);}}
+  .correct-ping-text{
+    position:absolute;left:0;right:0;bottom:-34px;text-align:center;
+    font-weight:800;color:#E2483D;font-size:1rem;opacity:0;letter-spacing:.05em;
+  }
+  .correct-circle-wrap.animate .correct-ping-text{animation:labelPop .4s ease .62s forwards;}
+  @media (prefers-reduced-motion: reduce){
+    #correctOverlay.show{animation:none;opacity:1;}
+    .correct-circle-wrap.animate svg circle{animation:none;stroke-dashoffset:0;}
+    .correct-circle-wrap.animate .correct-label,.correct-circle-wrap.animate .correct-ping-text{animation:none;opacity:1;}
+  }
+
+  @media print{
+    body *{visibility:hidden;}
+    #worksheet, #worksheet *{visibility:visible;}
+    #worksheet{display:block !important;position:absolute;left:0;top:0;width:100%;padding:12mm;}
+  }
+
+  footer.hint{max-width:var(--maxw);margin:20px auto 0;padding:0 16px;color:var(--ink-soft);font-size:.8rem;}
+  details.teacher-note{max-width:var(--maxw);margin:0 auto 20px;padding:0 16px;}
+  details.teacher-note summary{cursor:pointer;font-weight:700;color:var(--ink-soft);font-size:.85rem;}
+  details.teacher-note .box{background:#fff;border-radius:14px;padding:14px 16px;margin-top:8px;font-size:.85rem;color:var(--ink-soft);line-height:1.7;box-shadow:var(--shadow);}
+</style>
+</head>
+<body>
+<div id="correctOverlay" aria-hidden="true">
+  <div class="correct-circle-wrap">
+    <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="84"></circle></svg>
+    <div class="correct-label">せいかい！</div>
+    <div class="correct-ping-text">🔔 ピンポーン♪</div>
+  </div>
+</div>
+<div class="app">
+  <header class="top">
+    <div>
+      <div class="mieel-brand">
+        <div class="orb-mini"></div>
+        <strong>MieeL</strong>
+        <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener">www.mieel-support-school.com</a>
+      </div>
+      <h1><span class="icon">🔎</span>ものがたりを よみとろう</h1>
+      <p>「いつ・だれが・どこで・なにを・なぜ」を、すこし ながめの おはなしから よみとる れんしゅう</p>
+    </div>
+    <button class="icon-btn" id="btnLargeText" aria-pressed="false">🔠 文字を大きく</button>
+  </header>
+
+  <nav class="modes" role="tablist" aria-label="モードをえらぶ">
+    <button data-mode="read" class="active" role="tab" aria-selected="true">📖 ひとつずつ こたえる<span class="sub">1もんずつ</span></button>
+    <button data-mode="full" role="tab" aria-selected="false">🗂️ ぜんぶ こたえる<span class="sub">まとめて りかい</span></button>
+    <button data-mode="print" role="tab" aria-selected="false">🖨️ プリント<span class="sub">PDFをつくる</span></button>
+  </nav>
+
+  <!-- ===== READ (one question at a time) VIEW ===== -->
+  <section class="panel view" id="view-read">
+    <div class="settings-box">
+      <div class="settings-row">
+        <span class="set-label">きく ないよう</span>
+        <div class="chip-row" id="readQTypeChips"></div>
+      </div>
+      <div class="settings-row">
+        <span class="set-label">もじの ひょうじ</span>
+        <div class="chip-row" id="readKanjiChips"></div>
+      </div>
+    </div>
+    <div class="score-pill" id="scoreRead">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="story-card">
+        <div class="story-title" id="readStoryTitle"></div>
+        <div class="story-text" id="readStoryText"></div>
+      </div>
+      <div class="q-box">
+        <div class="q-type-tag" id="readQTag"></div>
+        <div class="q-text" id="readQText"></div>
+      </div>
+      <div class="opt-grid" id="readOpts"></div>
+      <div class="fb" id="readFb"></div>
+      <div class="action-row">
+        <button class="speak-btn" id="readSpeak" title="よみあげ">🔊</button>
+        <button class="btn" id="readNext" style="background:var(--read);display:none;">つぎへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FULL (whole passage, all questions) VIEW ===== -->
+  <section class="panel view hidden" id="view-full">
+    <div class="settings-box">
+      <div class="settings-row">
+        <span class="set-label">もじの ひょうじ</span>
+        <div class="chip-row" id="fullKanjiChips"></div>
+      </div>
+    </div>
+    <div class="score-pill" id="scoreFull">✅ 0 / 0</div>
+    <div class="stage">
+      <div class="story-card">
+        <div class="story-title" id="fullStoryTitle"></div>
+        <div class="story-text" id="fullStoryText"></div>
+      </div>
+      <div class="full-q-list" id="fullQList"></div>
+      <div class="fb" id="fullFb"></div>
+      <div class="action-row">
+        <button class="speak-btn" id="fullSpeak" title="よみあげ">🔊</button>
+        <button class="btn primary full-btn" id="fullCheck">✔ ぜんぶ こたえあわせ</button>
+        <button class="btn" id="fullNext" style="background:var(--full);display:none;">つぎの おはなしへ ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PRINT VIEW ===== -->
+  <section class="panel view hidden" id="view-print">
+    <div class="print-controls">
+      <div>
+        <div class="field-label">きく ないよう</div>
+        <div class="chip-row" id="printQTypeChips"></div>
+      </div>
+      <div>
+        <div class="field-label">もじの ひょうじ</div>
+        <div class="chip-row" id="printKanjiChips"></div>
+      </div>
+      <div>
+        <div class="field-label">おはなしの かず</div>
+        <div class="chip-row" id="printCountChips">
+          <button class="chip" data-count="1">1つ</button>
+          <button class="chip selected" data-count="2">2つ</button>
+          <button class="chip" data-count="4">4つ</button>
+          <button class="chip" data-count="6">6つ</button>
+          <button class="chip" data-count="8">8つ</button>
+        </div>
+      </div>
+      <div class="toggle-row">
+        <input type="checkbox" id="printShowOptions" checked>
+        <label for="printShowOptions">せんたくしを ひょうじする（OFFで じぶんで かいて こたえる けいしきに）</label>
+      </div>
+      <div class="toggle-row">
+        <input type="checkbox" id="printShowAnswer">
+        <label for="printShowAnswer">こたえを ひょうじする（指導者用）</label>
+      </div>
+      <div class="action-row" style="margin-top:2px;">
+        <button class="btn ghost" id="printRegenBtn">🔄 おはなしを かえる</button>
+        <button class="btn primary" id="printOpenBtn">🖨️ プリントする</button>
+      </div>
+      <div class="preview-note">「プリントする」を押すと、印刷プレビューが開きます。ブラウザの印刷設定でPDF保存もできます。</div>
+    </div>
+  </section>
+
+  <footer class="hint">
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:5px;">
+      <div style="width:18px;height:18px;border-radius:50%;background:var(--mieel);flex:none;"></div>
+      <strong style="color:var(--ink);">MieeL</strong>
+      <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener" style="color:var(--read);">mieel-support-school.com</a>
+    </div>
+    © ものがたりを よみとろう ツール（特別支援教育向け）
+  </footer>
+
+  <details class="teacher-note">
+    <summary>👩‍🏫 指導者の方へ</summary>
+    <div class="box">
+      このアプリは、複数の出来事をふくむ、やや長めの物語文（4〜6文）を読んで、「いつ・だれが・どこで・なにを・なぜ」を読み取る力を育てます。文章構成練習を目的とした従来の国語アプリより、実際の読解（複数情報の中から必要な情報を特定する力）に重点を置いています。<br>
+      ・<strong>ひとつずつ こたえる</strong>：1つの物語につき、ランダムに選ばれた1つの設問（いつ／だれが／どこで／なにを／なぜ）に4択で答えます<br>
+      ・<strong>ぜんぶ こたえる</strong>：1つの物語について、あてはまる設問すべてに同時に答えます。複数の情報を同時に保持しながら答える、より高度な読解課題です<br>
+      ・「なぜ」の設問は、単純な事実確認より高度な因果関係の理解を必要とするため、設定でON/OFFできます<br>
+      物語は15種類収録されており、学校・家庭・自然・季節の行事など幅広い題材を扱っています。プリントモードでも同じ物語と設問でワークシートを作成できます。
+    </div>
+  </details>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  function pickRandom(a){ return a[Math.floor(Math.random()*a.length)]; }
+  function shuffleArr(a){
+    var arr=a.slice();
+    for(var i=arr.length-1;i>0;i--){
+      var j=Math.floor(Math.random()*(i+1));
+      var t=arr[i];arr[i]=arr[j];arr[j]=t;
+    }
+    return arr;
+  }
+  function speak(text){
+    if(!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang='ja-JP'; u.rate=0.82;
+    window.speechSynthesis.speak(u);
+  }
+  var PRAISE = ['やったね！','せいかい！','すごい！','ばっちり！','よくできました！'];
+  var TRY_AGAIN = ['もういちど よみなおしてみよう！','おしい！','ゆっくり もんだいを よもう。','だいじょうぶ、もう一回！'];
+
+  var sharedAudioCtx = null;
+  function playDing(){
+    try{
+      var Ctx = window.AudioContext || window.webkitAudioContext;
+      if(!Ctx) return;
+      if(!sharedAudioCtx) sharedAudioCtx = new Ctx();
+      var ctx = sharedAudioCtx;
+      if(ctx.state==='suspended'){ ctx.resume(); }
+      function tone(freq, start, dur, peak){
+        var o = ctx.createOscillator();
+        var g = ctx.createGain();
+        o.type='sine'; o.frequency.value=freq;
+        o.connect(g); g.connect(ctx.destination);
+        var t0 = ctx.currentTime+start;
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.linearRampToValueAtTime(peak, t0+0.03);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0+dur);
+        o.start(t0);
+        o.stop(t0+dur+0.03);
+      }
+      tone(880.0, 0, 0.30, 0.30);
+      tone(1318.5, 0.24, 0.48, 0.26);
+    }catch(e){}
+  }
+  var overlayHideTimer = null;
+  function triggerCorrectFeedback(){
+    playDing();
+    var overlay = document.getElementById('correctOverlay');
+    if(!overlay) return;
+    var wrap = overlay.querySelector('.correct-circle-wrap');
+    if(overlayHideTimer){ clearTimeout(overlayHideTimer); overlayHideTimer=null; }
+    overlay.classList.remove('show');
+    wrap.classList.remove('animate');
+    void overlay.offsetWidth;
+    overlay.classList.add('show');
+    wrap.classList.add('animate');
+    overlayHideTimer = setTimeout(function(){
+      overlay.classList.remove('show');
+      wrap.classList.remove('animate');
+      overlayHideTimer = null;
+    }, 1300);
+  }
+
+  var QTYPE_LABELS = {
+    who:'だれが', when:'いつ', where:'どこで', what:'なにを', why:'なぜ'
+  };
+  var QTYPE_TAGS = {
+    who:'👤 だれが', when:'⏰ いつ', where:'📍 どこで', what:'🎬 なにを', why:'❓ なぜ'
+  };
+
+  /* =========================================================
+     STORY DATABASE — 4〜6文の、ふくすうの できごとを ふくむ おはなし。
+     各設問には「正解」と、文中の他要素からとった「まぎらわしい」誤答を用意。
+  ========================================================= */
+  /* =========================================================
+     かんじ ひょうじ モード（小学1・2年生で ならう かんじの みを つかう）
+     文部科学省「学年別漢字配当表」の1・2年生配当漢字のみを対象に、
+     あいまいさが なく、たしかに その いみで つかわれている ことばだけを
+     えらんで じてんに いれている（例：「あめ」は候補から除外し、必要に
+     応じて文ごとに個別対応する等、誤変換を避けることを最優先している）。
+     ふりがなは <ruby> タグで つねに ひょうじし、かんじが よめなくても
+     こまらないようにする。
+  ========================================================= */
+  var KANJI_DICT = [
+    ['せんせい','先生'], ['がっこう','学校'], ['ともだち','友だち'],
+    ['おとうさん','お父さん'], ['おかあさん','お母さん'],
+    ['きょうしつ','教室'], ['こうてい','校庭'], ['としょかん','図書館'],
+    ['ひろば','広場'], ['こうえん','公園'],
+    ['おおきな','大きな'], ['ちいさな','小さな'], ['おおきい','大きい'], ['ちいさい','小さい'],
+    ['からだ','体'], ['おとうと','弟'], ['いもうと','妹'], ['おにいちゃん','お兄ちゃん'], ['おねえちゃん','お姉ちゃん'],
+    ['あかい','赤い'], ['しろい','白い'], ['くろい','黒い'], ['きいろい','黄色い'],
+    ['さかな','魚'], ['いぬ','犬'], ['くるま','車'], ['ゆき','雪'], ['あめが','雨が'], ['あめの','雨の'], ['つよいあめ','つよい雨'],
+    ['あさ','朝'], ['ひるやすみ','昼休み'], ['よる','夜'], ['ゆうがた','夕方'],
+    ['げつようび','月曜日'], ['かようび','火曜日'], ['すいようび','水曜日'], ['もくようび','木曜日'], ['きんようび','金曜日'], ['どようび','土曜日'], ['にちようび','日曜日'],
+    ['なつやすみ','夏休み'], ['ふゆやすみ','冬休み'], ['はるやすみ','春休み'],
+    ['おんな','女'], ['おとこ','男'], ['こども','子ども'],
+    ['がくねん','学年'], ['ねんせい','年生']
+  ];
+  /* 長い ことばから さきに マッチさせる（「あめが」を「あめ」より先に試す等）ため、長さ順に並べる */
+  KANJI_DICT.sort(function(a,b){ return b[0].length - a[0].length; });
+  function applyKanjiMode(text, on){
+    if(!on) return text;
+    /* もとの テキストに たいしてだけ マッチを さがす（へんかん ごの ルビぶぶんを
+       ふたたび マッチしてしまう「にじゅう ちかん」バグを ふせぐため、いちど
+       すべての マッチいちを あつめてから、さいごに いっかいだけ くみたてる） */
+    var matches = [];
+    KANJI_DICT.forEach(function(pair){
+      var hira = pair[0], kanji = pair[1];
+      var idx = 0;
+      while(true){
+        var found = text.indexOf(hira, idx);
+        if(found===-1) break;
+        matches.push({start:found, end:found+hira.length, kanji:kanji, hira:hira});
+        idx = found + hira.length;
+      }
+    });
+    /* ながい マッチを ゆうせんし、かさなる マッチは のぞく */
+    matches.sort(function(a,b){ return (b.end-b.start) - (a.end-a.start); });
+    var accepted = [];
+    matches.forEach(function(m){
+      var overlaps = accepted.some(function(c){ return m.start < c.end && m.end > c.start; });
+      if(!overlaps) accepted.push(m);
+    });
+    accepted.sort(function(a,b){ return a.start - b.start; });
+    var result = '', pos = 0;
+    accepted.forEach(function(m){
+      result += text.slice(pos, m.start);
+      result += '<ruby>'+m.kanji+'<rt>'+m.hira+'</rt></ruby>';
+      pos = m.end;
+    });
+    result += text.slice(pos);
+    return result;
+  }
+
+  var STORIES = [
+    {
+      id:'s1', title:'うんどうかいの あさ',
+      text:'あきの すみきった あさ、ひろとくんは がっこうの うんどうじょうに いました。きょうは たいせつな うんどうかいの ひです。ひろとくんは、あしが はやい ともだちの けんたくんに おいつこうと、いっしょうけんめい はしる れんしゅうを しました。れんしゅうが おわると、あせを ふきながら「ぜったい かつぞ」と こえに だしました。',
+      questions:[
+        {type:'when', q:'これは いつの できごとですか？', correct:'あきの あさ', options:['あきの あさ','ふゆの よる','なつの ひる','はるの ゆうがた']},
+        {type:'who', q:'だれが はしる れんしゅうを しましたか？', correct:'ひろとくん', options:['ひろとくん','けんたくん','せんせい','おとうさん']},
+        {type:'where', q:'どこで できごとが おきましたか？', correct:'がっこうの うんどうじょう', options:['がっこうの うんどうじょう','こうえん','たいいくかん','じぶんの いえ']},
+        {type:'what', q:'ひろとくんは なにを しましたか？', correct:'はしる れんしゅうを した', options:['はしる れんしゅうを した','なわとびを した','たいそうを した','おべんとうを たべた']},
+        {type:'why', q:'なぜ ひろとくんは れんしゅうを しましたか？', correct:'けんたくんに おいつきたかったから', options:['けんたくんに おいつきたかったから','せんせいに いわれたから','あめが ふっていたから','おなかが すいていたから']}
+      ]
+    },
+    {
+      id:'s2', title:'としょかんの ひみつ',
+      text:'ひるやすみ、さくらさんは がっこうの としょかんに いきました。としょかんは いつも しずかですが、きょうは すこし にぎやかでした。しんにゅうせいの ために、としょいいんの たなかせんせいが「としょかんの つかいかた」の せつめいかいを ひらいていたのです。さくらさんは、すきな どうわの ほんを 1さつ かりて、じぶんの せきに もどりました。',
+      questions:[
+        {type:'when', q:'これは いつの できごとですか？', correct:'ひるやすみ', options:['ひるやすみ','あさのかい','ほうかご','ちょうれい']},
+        {type:'who', q:'せつめいかいを ひらいたのは だれですか？', correct:'たなかせんせい', options:['たなかせんせい','さくらさん','としょいいんの こども','こうちょうせんせい']},
+        {type:'where', q:'できごとが おきたのは どこですか？', correct:'がっこうの としょかん', options:['がっこうの としょかん','まちの としょかん','きょうしつ','たいいくかん']},
+        {type:'what', q:'さくらさんは なにを しましたか？', correct:'どうわの ほんを かりた', options:['どうわの ほんを かりた','ほんを かえした','せつめいかいを ひらいた','ともだちと あそんだ']},
+        {type:'why', q:'なぜ としょかんは にぎやかでしたか？', correct:'しんにゅうせいむけの せつめいかいが あったから', options:['しんにゅうせいむけの せつめいかいが あったから','おまつりが あったから','ほんが たくさん とどいたから','せんせいが おこっていたから']}
+      ]
+    },
+    {
+      id:'s3', title:'こうえんの ねこ',
+      text:'ゆうがた、りんさんは いぬの ぽちと こうえんを さんぽして いました。ベンチの したから、ちいさな こねこの なきごえが きこえました。りんさんが のぞいて みると、こねこは あしを けがして いました。りんさんは すぐに おかあさんに でんわを して、こねこを どうぶつびょういんに つれて いきました。',
+      questions:[
+        {type:'when', q:'これは いつの できごとですか？', correct:'ゆうがた', options:['ゆうがた','あさ','よふけ','おひるすぎ']},
+        {type:'who', q:'こねこを みつけたのは だれですか？', correct:'りんさん', options:['りんさん','おかあさん','じゅういさん','ぽち']},
+        {type:'where', q:'こねこは どこで みつかりましたか？', correct:'こうえんの ベンチの した', options:['こうえんの ベンチの した','じぶんの いえの にわ','がっこうの うら','こうえんの といれの よこ']},
+        {type:'what', q:'りんさんは こねこを みつけて なにを しましたか？', correct:'どうぶつびょういんに つれていった', options:['どうぶつびょういんに つれていった','こうえんに おいてきた','じぶんの いえに つれてかえった','なにも しなかった']},
+        {type:'why', q:'なぜ りんさんは おかあさんに でんわを しましたか？', correct:'こねこが けがを していたから', options:['こねこが けがを していたから','いえに かぎを わすれたから','ぽちが いなくなったから','あめが ふってきたから']}
+      ]
+    },
+    {
+      id:'s4', title:'たなばたの ねがいごと',
+      text:'なつの ゆうべ、みなとくんの かぞくは いえの にわに ささを かざりました。みなとくんは いもうとの ゆいちゃんと いっしょに、いろがみで たんざくを つくりました。みなとくんは「サッカーせんしゅに なりたい」と かき、ゆいちゃんは「おおきな けーきを たべたい」と かきました。ふたりは たんざくを ささの えだに むすびつけ、よぞらを みあげました。',
+      questions:[
+        {type:'when', q:'これは いつの できごとですか？', correct:'なつの ゆうべ（たなばた）', options:['なつの ゆうべ（たなばた）','ふゆの あさ','あきの よる','はるの ひるすぎ']},
+        {type:'who', q:'「サッカーせんしゅに なりたい」と かいたのは だれですか？', correct:'みなとくん', options:['みなとくん','ゆいちゃん','おとうさん','おかあさん']},
+        {type:'where', q:'たんざくを かざったのは どこですか？', correct:'いえの にわの ささ', options:['いえの にわの ささ','がっこうの こうてい','こうえんの き','しょうてんがいの ささ']},
+        {type:'what', q:'みなとくんと ゆいちゃんは なにを つくりましたか？', correct:'たんざく', options:['たんざく','けーき','ふくろ','とうろう']},
+        {type:'why', q:null, options:null}
+      ]
+    },
+    {
+      id:'s5', title:'あめの ひの きゅうしょく',
+      text:'つゆの あるひ、そとは つよい あめが ふっていました。きゅうしょくの じかん、5ねん2くみでは とうばんの あおきさんと はやしさんが きゅうしょくを くばって いました。きょうの こんだては みんなの だいすきな カレーライスです。あおきさんは、いつもより おおきな こえで「おかわり ある ひとー」と よびかけました。',
+      questions:[
+        {type:'when', q:'これは いつの できごとですか？', correct:'つゆ（きゅうしょくの じかん）', options:['つゆ（きゅうしょくの じかん）','なつやすみ','うんどうかいの あと','そつぎょうしきの ひ']},
+        {type:'who', q:'きゅうしょくの とうばんは だれと だれですか？', correct:'あおきさんと はやしさん', options:['あおきさんと はやしさん','たなかさんと さとうさん','せんせいと こうちょうせんせい','5ねん1くみの ひとたち']},
+        {type:'where', q:'できごとが おきたのは どこですか？', correct:'5ねん2くみの きょうしつ', options:['5ねん2くみの きょうしつ','しょくいんしつ','たいいくかん','こうてい']},
+        {type:'what', q:'きょうの きゅうしょくは なんでしたか？', correct:'カレーライス', options:['カレーライス','ラーメン','やきそば','おにぎり']},
+        {type:'why', q:'なぜ あおきさんは おおきな こえで よびかけましたか？', correct:'おかわりを ほしい ひとを さがすため', options:['おかわりを ほしい ひとを さがすため','せんせいに おこられたから','あめの おとが うるさかったから','ともだちと けんかしたから']}
+      ]
+    },
+    {
+      id:'s6', title:'かぶとむしの けんきゅう',
+      text:'なつやすみの あさ、りょうくんは おじいちゃんの いえの ちかくの ぞうきばやしに でかけました。りょうくんは じゆうけんきゅうの ために、かぶとむしを つかまえて かんさつする けいかくを たてて いました。くぬぎの きの みきに、おおきな おすの かぶとむしを 1ぴき みつけました。りょうくんは そっと あみで つかまえ、かんさつケースに いれて いえに もちかえりました。',
+      questions:[
+        {type:'when', q:'これは いつの できごとですか？', correct:'なつやすみの あさ', options:['なつやすみの あさ','ふゆやすみの ひる','はるの えんそく','あきの うんどうかい']},
+        {type:'who', q:'かぶとむしを つかまえたのは だれですか？', correct:'りょうくん', options:['りょうくん','おじいちゃん','おとうさん','たんにんの せんせい']},
+        {type:'where', q:'かぶとむしを みつけたのは どこですか？', correct:'くぬぎの きの みき', options:['くぬぎの きの みき','いえの にわ','がっこうの はなだん','こうえんの すなば']},
+        {type:'what', q:'りょうくんは かぶとむしを つかまえて なにを しましたか？', correct:'かんさつケースに いれて もちかえった', options:['かんさつケースに いれて もちかえった','もりに にがした','ともだちに あげた','しゃしんだけ とった']},
+        {type:'why', q:'なぜ りょうくんは ぞうきばやしに でかけましたか？', correct:'じゆうけんきゅうの ために かぶとむしを つかまえたかったから', options:['じゆうけんきゅうの ために かぶとむしを つかまえたかったから','おじいちゃんに よばれたから','がっこうの しゅくだいで もりの ちずを かくため','ともだちを さがしていたから']}
+      ]
+    },
+    {
+      id:'s7', title:'ゆきの ひの とうこう',
+      text:'ふゆの あさ、まちには はじめての ゆきが つもって いました。みおさんは、いつもより 15ふん はやく いえを でました。ゆきみちは すべりやすく、そろそろと あるかなければ ならなかったからです。とちゅう、おなじ クラスの だいちくんに あい、ふたりで てを つなぎながら がっこうまで あるきました。きょうしつに つくと、ふたりの くつは ゆきで まっしろに なって いました。',
+      questions:[
+        {type:'when', q:'これは いつの できごとですか？', correct:'ふゆの あさ（はじめての ゆきの ひ）', options:['ふゆの あさ（はじめての ゆきの ひ）','あきの ゆうがた','なつの あさ','はるやすみ']},
+        {type:'who', q:'とちゅうで であった ともだちは だれですか？', correct:'だいちくん', options:['だいちくん','けんたくん','ひろとくん','たなかさん']},
+        {type:'where', q:'ふたりは どこに むかって あるいていましたか？', correct:'がっこう', options:['がっこう','こうえん','えき','おみせ']},
+        {type:'what', q:'みおさんと だいちくんは なにを しながら あるきましたか？', correct:'てを つないだ', options:['てを つないだ','ゆきだるまを つくった','はしった','じてんしゃに のった']},
+        {type:'why', q:'なぜ みおさんは いつもより はやく いえを でましたか？', correct:'ゆきみちは すべりやすく、ゆっくり あるく ひつようが あったから', options:['ゆきみちは すべりやすく、ゆっくり あるく ひつようが あったから','ねぼうを して あわてていたから','わすれものを とりに もどったから','バスが うんきゅうしていたから']}
+      ]
+    },
+    {
+      id:'s8', title:'おばあちゃんの おこのみやき',
+      text:'にちようびの おひるまえ、ゆうたくんの かぞくは でんしゃに のって おばあちゃんの いえに あそびに いきました。おばあちゃんは キッチンで、おおきな てつばんを つかって おこのみやきを やいて いました。ゆうたくんが てつだいたいと いうと、おばあちゃんは ちいさな へらを わたして、やきかたを おしえて くれました。すこし こげてしまいましたが、みんなで たべると とても おいしかったです。',
+      questions:[
+        {type:'when', q:'これは いつの できごとですか？', correct:'にちようびの おひるまえ', options:['にちようびの おひるまえ','どようびの よる','げつようびの あさ','なつやすみの さいごの ひ']},
+        {type:'who', q:'おこのみやきの やきかたを おしえて くれたのは だれですか？', correct:'おばあちゃん', options:['おばあちゃん','おかあさん','おじいちゃん','おねえちゃん']},
+        {type:'where', q:'おこのみやきを やいたのは どこですか？', correct:'おばあちゃんの いえの キッチン', options:['おばあちゃんの いえの キッチン','ゆうたくんの いえ','おこのみやきやさん','こうえん']},
+        {type:'what', q:'ゆうたくんは なにを つかって てつだいましたか？', correct:'ちいさな へら', options:['ちいさな へら','おおきな おたま','ほうちょう','フライパン']},
+        {type:'why', q:null, options:null}
+      ]
+    },
+    {
+      id:'s9', title:'ピアノの はっぴょうかい',
+      text:'あきの おわり、なつめさんは まちの ホールで ひらかれる ピアノの はっぴょうかいに でることに なって いました。3かげつまえから、まいにち がっこうから かえると 1じかん れんしゅうを つづけて いました。とうじつ、なつめさんは ぶたいの うえで すこし てが ふるえましたが、さいごまで まちがえずに ひきおえました。えんそうが おわると、かいじょうから おおきな はくしゅが おこりました。',
+      questions:[
+        {type:'when', q:'はっぴょうかいは いつ ひらかれましたか？', correct:'あきの おわり', options:['あきの おわり','はるさき','なつのはじめ','ふゆの まんなか']},
+        {type:'who', q:'ピアノの はっぴょうかいに でたのは だれですか？', correct:'なつめさん', options:['なつめさん','せんせい','おかあさん','ともだち']},
+        {type:'where', q:'はっぴょうかいが ひらかれたのは どこですか？', correct:'まちの ホール', options:['まちの ホール','がっこうの たいいくかん','じぶんの いえ','おんがくきょうしつ']},
+        {type:'what', q:'なつめさんは ぶたいの うえで なにを しましたか？', correct:'さいごまで まちがえずに ひいた', options:['さいごまで まちがえずに ひいた','とちゅうで やめてしまった','うたを うたった','ダンスを おどった']},
+        {type:'why', q:'なぜ なつめさんは てが ふるえましたか？', correct:'（本文には理由が明確に書かれていません）', options:null}
+      ]
+    },
+    {
+      id:'s10', title:'えきまえの まいごねこ',
+      text:'あさの ラッシュアワー、けんとくんは おかあさんと えきに むかって あるいて いました。えきの かいさつぐちの ちかくで、こえを あげて ないている ちいさな おんなのこを みつけました。おかあさんが こえを かけると、その こは「おかあさんと はぐれちゃった」と こたえました。けんとくんの おかあさんは、えきいんさんに いっしょに はなしを きいて もらう ことに しました。',
+      questions:[
+        {type:'when', q:'これは いつの できごとですか？', correct:'あさの ラッシュアワー', options:['あさの ラッシュアワー','よるの おそい じかん','おひるやすみ','がっこうの かえりみち']},
+        {type:'who', q:'ないていた おんなのこに はなしかけたのは だれですか？', correct:'けんとくんの おかあさん', options:['けんとくんの おかあさん','けんとくん','えきいんさん','とおりすがりの ひと']},
+        {type:'where', q:'おんなのこを みつけたのは どこですか？', correct:'えきの かいさつぐちの ちかく', options:['えきの かいさつぐちの ちかく','がっこうの もんの まえ','こうえんの いりぐち','おみせの なか']},
+        {type:'what', q:'けんとくんの おかあさんは さいごに なにを しましたか？', correct:'えきいんさんに はなしを きいて もらう ことに した', options:['えきいんさんに はなしを きいて もらう ことに した','じぶんたちだけで さがした','けいさつに でんわした','その まま でんしゃに のった']},
+        {type:'why', q:'なぜ おんなのこは ないていましたか？', correct:'おかあさんと はぐれてしまったから', options:['おかあさんと はぐれてしまったから','けがを したから','でんしゃに のりおくれたから','おもちゃを なくしたから']}
+      ]
+    },
+    {
+      id:'s11', title:'はたけの にんじん',
+      text:'はるさき、みずきさんの クラスは がっこうの はたけで にんじんの たねを まいて いました。みずきさんは、なつやすみが おわった あと、じぶんの うえた にんじんが ちゃんと そだっているか しんぱいで、まいあさ みずやりに かよって いました。あるひ、はたけに いくと、りっぱな オレンジいろの にんじんが たくさん できて いました。みずきさんは クラスの みんなと いっしょに しゅうかくし、きゅうしょくで たべました。',
+      questions:[
+        {type:'when', q:'にんじんの たねを まいたのは いつですか？', correct:'はるさき', options:['はるさき','なつやすみちゅう','あきのおわり','ふゆやすみ']},
+        {type:'who', q:'まいあさ みずやりに かよっていたのは だれですか？', correct:'みずきさん', options:['みずきさん','せんせい','ようむいんさん','おとうさん']},
+        {type:'where', q:'にんじんを そだてていたのは どこですか？', correct:'がっこうの はたけ', options:['がっこうの はたけ','じぶんの いえの にわ','しみんのうえん','こうえんの かだん']},
+        {type:'what', q:'しゅうかくした にんじんを どうしましたか？', correct:'きゅうしょくで たべた', options:['きゅうしょくで たべた','いえに もちかえった','うって おこづかいに した','ひりょうに した']},
+        {type:'why', q:'なぜ みずきさんは まいあさ みずやりに かよいましたか？', correct:'にんじんが ちゃんと そだっているか しんぱいだったから', options:['にんじんが ちゃんと そだっているか しんぱいだったから','せんせいに めいれいされたから','ともだちと やくそくしたから','にんじんが きらいで かんしして いたから']}
+      ]
+    },
+    {
+      id:'s12', title:'ぼうさいくんれんの ひ',
+      text:'あきの ある ひ、がっこうで じしんを そうていした ぼうさいくんれんが おこなわれました。「じしんです」の ほうそうが ながれると、そうたくんの クラスは つくえの したに もぐって あたまを まもりました。そのあと、たんにんの おかださんせんせいの ゆうどうで、みんな しずかに こうていに ひなんしました。そうたくんは、さいごまで おさない はやい あるかない しゃべらないを まもって こうどうしました。',
+      questions:[
+        {type:'when', q:'これは いつの できごとですか？', correct:'あきの ある ひ（ぼうさいくんれん）', options:['あきの ある ひ（ぼうさいくんれん）','なつやすみの あさ','にゅうがくしきの ひ','うんどうかいの ちょくご']},
+        {type:'who', q:'ひなんを ゆうどうしたのは だれですか？', correct:'たんにんの おかださんせんせい', options:['たんにんの おかださんせんせい','こうちょうせんせい','そうたくん','ぼうさいがかりの こども']},
+        {type:'where', q:'さいしゅうてきに ひなんした ばしょは どこですか？', correct:'こうてい', options:['こうてい','たいいくかん','きょうしつの なか','がっこうの ちかにある たいひなんじょ']},
+        {type:'what', q:'ほうそうが ながれた とき、そうたくんの クラスは まず なにを しましたか？', correct:'つくえの したに もぐった', options:['つくえの したに もぐった','すぐに そとに でた','せんせいを さがしに いった','なにも せず たっていた']},
+        {type:'why', q:'なぜ つくえの したに もぐりましたか？', correct:'あたまを まもるため', options:['あたまを まもるため','あつかったから','かくれんぼの れんしゅうだったから','せんせいに しかられたから']}
+      ]
+    },
+    {
+      id:'s13', title:'としょいいんの とうばん',
+      text:'つゆの ひるやすみ、そらさんは としょいいんの とうばんで がっこうの としょかんに いました。かえす ほんを うけとって、たなに もどす しごとです。ぐるっと たなを まわっていると、めずらしい きょうりゅうの ずかんを みつけました。そらさんは その ばで たちどまり、じかんを わすれて ゆっくり ページを めくりました。きが つくと、つぎの じゅぎょうの チャイムが なる 5ふんまえでした。',
+      questions:[
+        {type:'when', q:'これは いつの できごとですか？', correct:'つゆの ひるやすみ', options:['つゆの ひるやすみ','あきの ちょうれい','なつやすみの ある ひ','そつぎょうしきの あさ']},
+        {type:'who', q:'としょいいんの とうばんだったのは だれですか？', correct:'そらさん', options:['そらさん','たなかせんせい','クラスの みんな','こうちょうせんせい']},
+        {type:'where', q:'できごとが おきたのは どこですか？', correct:'がっこうの としょかん', options:['がっこうの としょかん','きょうしつ','こうてい','しょくいんしつ']},
+        {type:'what', q:'そらさんの しごとは なんでしたか？', correct:'かえす ほんを たなに もどす こと', options:['かえす ほんを たなに もどす こと','ほんを よみきかせる こと','しんかんを ちゅうもんする こと','ほんに カバーを かける こと']},
+        {type:'why', q:'なぜ そらさんは じかんを わすれてしまいましたか？', correct:'めずらしい きょうりゅうの ずかんに むちゅうに なったから', options:['めずらしい きょうりゅうの ずかんに むちゅうに なったから','ねむくなって うたたねを したから','ともだちと おしゃべりしていたから','せんせいに よびとめられたから']}
+      ]
+    },
+    {
+      id:'s14', title:'おもちつきたいかい',
+      text:'ふゆの はじめ、しょうてんがいの ひろばで まいとし おこなわれる おもちつきたいかいが ありました。ゆづきさんは おじいちゃんに つれられて はじめて さんかしました。おおきな きねを もつと おもったより ずっと おもく、さいしょは うまく もちを つけませんでした。でも、となりに いた しょうてんがいの おじさんが コツを おしえて くれると、だんだん じょうずに つけるように なりました。つきたての おもちを あんこで たべると、ほっぺが おちそうな くらい おいしかったです。',
+      questions:[
+        {type:'when', q:'これは いつの できごとですか？', correct:'ふゆの はじめ', options:['ふゆの はじめ','あきの おわり','はるやすみ','なつまつりの ひ']},
+        {type:'who', q:'ゆづきさんに もちつきの コツを おしえて くれたのは だれですか？', correct:'しょうてんがいの おじさん', options:['しょうてんがいの おじさん','おじいちゃん','せんせい','おかあさん']},
+        {type:'where', q:'おもちつきたいかいが あったのは どこですか？', correct:'しょうてんがいの ひろば', options:['しょうてんがいの ひろば','がっこうの こうてい','おじいちゃんの いえ','じんじゃ']},
+        {type:'what', q:'ゆづきさんは なにを しましたか？', correct:'はじめて もちつきに さんかした', options:['はじめて もちつきに さんかした','もちを うる おみせを ひらいた','しょうてんがいで かいものを した','おじいちゃんの いえで りょうりを した']},
+        {type:'why', q:'なぜ さいしょ、ゆづきさんは うまく もちを つけませんでしたか？', correct:'きねが おもったより おもかったから', options:['きねが おもったより おもかったから','おもちが かたすぎたから','てが すべって しまったから','きねの もちかたが ぎゃくだったから']}
+      ]
+    },
+    {
+      id:'s15', title:'えのぐの じっけん',
+      text:'あめの ふる ほうかご、あおいさんと ゆうまくんは ずこうしつで えのぐを つかった じっけんを して いました。あおと きいろを まぜると みどりに なる ことは しって いましたが、あかと あおを まぜたら どんな いろに なるか ためしたかったのです。ふでで すこしずつ まぜて いくと、むらさきいろが できました。ふたりは かんどうして、できた いろで おおきな にじの えを かきました。',
+      questions:[
+        {type:'when', q:'これは いつの できごとですか？', correct:'あめの ふる ほうかご', options:['あめの ふる ほうかご','はれた あさの じゅぎょうちゅう','なつやすみの ある ひ','うんどうかいの まえ']},
+        {type:'who', q:'じっけんを していたのは だれと だれですか？', correct:'あおいさんと ゆうまくん', options:['あおいさんと ゆうまくん','せんせいと あおいさん','ゆうまくんと おとうと','クラスの みんな']},
+        {type:'where', q:'じっけんを していたのは どこですか？', correct:'ずこうしつ', options:['ずこうしつ','きょうしつ','じぶんの いえ','こうてい']},
+        {type:'what', q:'あかと あおを まぜて できた いろは なにいろでしたか？', correct:'むらさきいろ', options:['むらさきいろ','みどりいろ','ちゃいろ','きいろ']},
+        {type:'why', q:'なぜ ふたりは あかと あおを まぜて みましたか？', correct:'どんな いろに なるか ためしたかったから', options:['どんな いろに なるか ためしたかったから','せんせいに めいれいされたから','えのぐが あまっていたから','むらさきいろが つかいたかったから']}
+      ]
+    },
+    {
+      id:'s16', title:'えんそくの ちずしらべ',
+      text:'あきばれの ひ、ひなたくんの クラスは やまの ちゅうふくに ある しぜんこうえんまで えんそくに でかけました。バスを おりると、ひなたくんは グループの リーダーとして、ちずを みながら みんなを あんないする やくめでした。とちゅう、じゅんろが えだみちに わかれる ばしょで まよいそうに なりましたが、ちずの めじるしの おおきな いわを みつけて、ただしい みちに すすむ ことが できました。てんぼうだいに つくと、ひなたくんは ほっとした かおで「みんな、おつかれさま」と こえを かけました。',
+      questions:[
+        {type:'when', q:'これは いつの できごとですか？', correct:'あきばれの ひ（えんそく）', options:['あきばれの ひ（えんそく）','つゆの あめの ひ','ふゆやすみの さいご','にゅうがくしきの あさ']},
+        {type:'who', q:'グループの リーダーだったのは だれですか？', correct:'ひなたくん', options:['ひなたくん','せんせい','バスの うんてんしゅ','ほかの グループの こ']},
+        {type:'where', q:'えんそくで いった さきは どこですか？', correct:'やまの ちゅうふくの しぜんこうえん', options:['やまの ちゅうふくの しぜんこうえん','うみべの こうえん','がっこうの こうてい','どうぶつえん']},
+        {type:'what', q:'ひなたくんは まよいそうな とき なにを みつけましたか？', correct:'ちずの めじるしの おおきな いわ', options:['ちずの めじるしの おおきな いわ','おちている ちず','ほかの クラスの あと','あたらしい かんばん']},
+        {type:'why', q:'なぜ みちに まよいそうに なりましたか？', correct:'じゅんろが えだみちに わかれていたから', options:['じゅんろが えだみちに わかれていたから','ちずを わすれてきたから','あめで みちが みえにくかったから','はぐれてしまったから']}
+      ]
+    },
+    {
+      id:'s17', title:'パンやさんの しごとたいけん',
+      text:'なつやすみの ある あさ、さきさんは しょうてんがいの パンやさんで しごとたいけんに さんかしました。てんちょうの もりさんに、こむぎこと イーストを まぜて パンの きじを こねる やりかたを おそわりました。さきさんは さいしょ、きじが てに べったり くっついて うまく こねられませんでしたが、なんども れんしゅうすると、だんだん なめらかに なりました。やきあがった パンは すこし かたちが いびつでしたが、じぶんで やいた パンの あじは とくべつに おいしく かんじました。',
+      questions:[
+        {type:'when', q:'これは いつの できごとですか？', correct:'なつやすみの ある あさ', options:['なつやすみの ある あさ','ふゆやすみの ゆうがた','がっこうの ちょうれいご','しゅうまつの よる']},
+        {type:'who', q:'パンの こねかたを おしえて くれたのは だれですか？', correct:'てんちょうの もりさん', options:['てんちょうの もりさん','さきさんの おかあさん','クラスの ともだち','パンやの おきゃくさん']},
+        {type:'where', q:'しごとたいけんを したのは どこですか？', correct:'しょうてんがいの パンやさん', options:['しょうてんがいの パンやさん','がっこうの ちょうりしつ','じぶんの いえの キッチン','しょくひんこうじょう']},
+        {type:'what', q:'さきさんは さいしょ、なにに くろうしましたか？', correct:'きじが てに くっついて うまく こねられなかった', options:['きじが てに くっついて うまく こねられなかった','オーブンの つかいかたが わからなかった','こむぎこの りょうを まちがえた','やくじかんを わすれた']},
+        {type:'why', q:null, options:null}
+      ]
+    },
+    {
+      id:'s18', title:'すいえい きろくかいの まえ',
+      text:'なつの ゆうがた、たいがくんは スイミングスクールの プールで、こんどの きろくかいに むけた れんしゅうを して いました。コーチの やまぐちさんから「けのびの しせいを もっと まっすぐに」と アドバイスを もらい、なんども かべを けって れんしゅうしました。たいがくんは 25メートルを およぎきった あと、いきを きらしながらも タイムを こうしんできて うれしそうな かおを しました。れんしゅうの あと、コーチは「きろくかいでも この ちょうしで がんばろう」と こえを かけました。',
+      questions:[
+        {type:'when', q:'これは いつの できごとですか？', correct:'なつの ゆうがた', options:['なつの ゆうがた','ふゆの あさ','はるやすみの ひるすぎ','あきの よる']},
+        {type:'who', q:'アドバイスを くれたのは だれですか？', correct:'コーチの やまぐちさん', options:['コーチの やまぐちさん','たいがくんの おとうと','おなじ クラスの こ','プールの かんしいん']},
+        {type:'where', q:'れんしゅうを していたのは どこですか？', correct:'スイミングスクールの プール', options:['スイミングスクールの プール','がっこうの プール','うみ','こうえんの じゃぶじゃぶいけ']},
+        {type:'what', q:'たいがくんは れんしゅうで なにを こうしんしましたか？', correct:'25メートルの タイム', options:['25メートルの タイム','けのびの きろく','きろくかいの じゅんい','コーチへの あいさつ']},
+        {type:'why', q:'なぜ たいがくんは れんしゅうを して いましたか？', correct:'きろくかいに むけて じゅんびする ため', options:['きろくかいに むけて じゅんびする ため','なつやすみの しゅくだいだったから','ともだちに さそわれたから','あつくて およぎたかったから']}
+      ]
+    },
+    {
+      id:'s19', title:'おばあちゃんとの かいもの',
+      text:'あきの ある どようび、あやのさんは おばあちゃんと しょうてんがいへ かいものに でかけました。おばあちゃんは、あやのさんの たんじょうびに つくる りょうりの ざいりょうを えらぶのを てつだって ほしいと たのみました。やおやで にんじんと たまねぎを、おにくやさんで ひきにくを かいました。さいごに、あやのさんは じぶんの おこづかいで、おばあちゃんに カーネーションの はなを 1ぽん プレゼントしました。おばあちゃんは とても おどろいて、うれしそうに わらいました。',
+      questions:[
+        {type:'when', q:'これは いつの できごとですか？', correct:'あきの ある どようび', options:['あきの ある どようび','なつやすみの さいご','ふゆの クリスマスの ひ','はるの にゅうがくしき']},
+        {type:'who', q:'あやのさんと いっしょに かいものに いったのは だれですか？', correct:'おばあちゃん', options:['おばあちゃん','おかあさん','がっこうの ともだち','おじいちゃん']},
+        {type:'where', q:'かいものを したのは どこですか？', correct:'しょうてんがい', options:['しょうてんがい','デパート','スーパーマーケット','のうえん']},
+        {type:'what', q:'あやのさんは さいごに なにを しましたか？', correct:'おばあちゃんに はなを プレゼントした', options:['おばあちゃんに はなを プレゼントした','じぶんの ふくを かった','おかしを たべた','いえに はやく かえった']},
+        {type:'why', q:'なぜ おばあちゃんは かいものに でかけましたか？', correct:'たんじょうびの りょうりの ざいりょうを えらぶ ため', options:['たんじょうびの りょうりの ざいりょうを えらぶ ため','いえの ものが なくなったから','あやのさんに たのまれたから','しょうてんがいの おまつりが あったから']}
+      ]
+    },
+    {
+      id:'s20', title:'ありの ぎょうれつ',
+      text:'なつの あつい ひるさがり、しょうたくんは にわの すみで、ありが いっぽん の せんに なって あるいている ぎょうれつを みつけました。しょうたくんは しゃがみこんで、ありたちが どこから どこへ はこんで いるのか、しばらく じっと かんさつしました。すると、ありたちは にわの すみに おちていた おかしの かけらを、じぶんたちの すの ほうへ すこしずつ はこんで いる ことに きが つきました。しょうたくんは、その ちいさな ちからもちぶりに かんしんし、じゆうちょうに きろくを とりました。',
+      questions:[
+        {type:'when', q:'これは いつの できごとですか？', correct:'なつの あつい ひるさがり', options:['なつの あつい ひるさがり','ふゆの さむい あさ','はるさきの ゆうがた','あきの よふけ']},
+        {type:'who', q:'ありの ぎょうれつを みつけたのは だれですか？', correct:'しょうたくん', options:['しょうたくん','せんせい','しょうたくんの いもうと','となりの こ']},
+        {type:'where', q:'ありの ぎょうれつが あったのは どこですか？', correct:'にわの すみ', options:['にわの すみ','こうえんの すなば','がっこうの はなだん','のはら']},
+        {type:'what', q:'ありたちは なにを はこんで いましたか？', correct:'おかしの かけら', options:['おかしの かけら','はっぱ','こいし','じぶんたちの たまご']},
+        {type:'why', q:null, options:null}
+      ]
+    },
+    {
+      id:'s21', title:'がっきの はっぴょうかい',
+      text:'あきの おわり、みうさんは おんがくしつで、おんがくの じかんに リコーダーの はっぴょうかいを ひかえて いました。みうさんは まだ たかい おとが うまく だせず、ふきかたに なやんで いました。おんがくの せんせいが、いきの つかいかたを ゆっくり おしえて くれると、すこしずつ きれいな おとが でるように なりました。はっぴょうとうじつ、みうさんは きんちょうしながらも、さいごまで きれいな おとで ふきとおす ことが できました。',
+      questions:[
+        {type:'when', q:'これは いつの できごとですか？', correct:'あきの おわり', options:['あきの おわり','はるの はじめ','なつの まんなか','ふゆやすみの まえ']},
+        {type:'who', q:'いきの つかいかたを おしえて くれたのは だれですか？', correct:'おんがくの せんせい', options:['おんがくの せんせい','クラスの ともだち','たんにんの せんせい','おかあさん']},
+        {type:'where', q:'みうさんが れんしゅうを していたのは どこですか？', correct:'おんがくしつ', options:['おんがくしつ','たいいくかん','じぶんの いえ','こうてい']},
+        {type:'what', q:'みうさんは はっぴょうとうじつ、なにが できましたか？', correct:'さいごまで きれいな おとで ふきとおす こと', options:['さいごまで きれいな おとで ふきとおす こと','とちゅうで やめてしまう こと','いちばん おおきな おとを だす こと','あたらしい きょくを つくる こと']},
+        {type:'why', q:'なぜ みうさんは ふきかたに なやんで いましたか？', correct:'たかい おとが うまく だせなかったから', options:['たかい おとが うまく だせなかったから','リコーダーを わすれたから','きょくを おぼえられなかったから','ともだちと けんかしたから']}
+      ]
+    },
+    {
+      id:'s22', title:'たこあげたいかい',
+      text:'ふゆの かぜの つよい ひ、れんくんは かぞくと どてに たこあげたいかいに でかけました。れんくんの たこは、じぶんで えを かいて つくった オリジナルの たこです。さいしょは うまく かぜに のらず、なんども じめんに おちて しまいました。れんくんの おとうとが「はしりながら あげてみたら？」と アドバイスを くれると、たこは ぐんぐん たかく あがりはじめました。ふたりは たかく あがった たこを みあげて、おおごえで よろこびました。',
+      questions:[
+        {type:'when', q:'これは いつの できごとですか？', correct:'ふゆの かぜの つよい ひ', options:['ふゆの かぜの つよい ひ','なつの あつい ひ','はるの あめの ひ','あきの よく はれた ひ']},
+        {type:'who', q:'アドバイスを くれたのは だれですか？', correct:'れんくんの おとうと', options:['れんくんの おとうと','れんくんの おとうさん','たこあげたいかいの かかりの ひと','しらない こども']},
+        {type:'where', q:'たこあげたいかいが あったのは どこですか？', correct:'どて', options:['どて','がっこうの こうてい','こうえんの ひろば','うみべ']},
+        {type:'what', q:'れんくんの たこは どんな たこでしたか？', correct:'じぶんで えを かいて つくった オリジナルの たこ', options:['じぶんで えを かいて つくった オリジナルの たこ','おみせで かった たこ','おとうさんが つくった たこ','がっこうで もらった たこ']},
+        {type:'why', q:'なぜ さいしょ、たこは うまく あがりませんでしたか？', correct:'うまく かぜに のらなかったから', options:['うまく かぜに のらなかったから','いとが きれて しまったから','たこが おもすぎたから','かぜが ふいていなかったから']}
+      ]
+    }
+  ];
+
+  /* いくつかの物語には「なぜ」の設問が用意されていない（本文の性質上むりに作らなかった）
+     ので、事前にフィルタして有効な設問だけを使う */
+  STORIES.forEach(function(s){
+    s.questions = s.questions.filter(function(q){ return q && q.type && q.q && q.correct && q.options; });
+  });
+
+  var QTYPE_ORDER = ['who','when','where','what','why'];
+  var activeQTypes = {who:true, when:true, where:true, what:true, why:true};
+  function getActiveQTypes(){
+    var arr = QTYPE_ORDER.filter(function(t){ return activeQTypes[t]; });
+    return arr.length ? arr : ['who'];
+  }
+  function renderQTypeChips(containerId, onChange){
+    var container = document.getElementById(containerId);
+    container.innerHTML='';
+    QTYPE_ORDER.forEach(function(t){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='settings-chip'+(activeQTypes[t]?' selected':'');
+      b.textContent = QTYPE_LABELS[t];
+      b.addEventListener('click', function(){
+        var active = getActiveQTypes();
+        if(activeQTypes[t] && active.length===1){ return; }
+        activeQTypes[t] = !activeQTypes[t];
+        renderAllQTypeChips();
+        if(onChange) onChange();
+      });
+      container.appendChild(b);
+    });
+  }
+  function renderAllQTypeChips(){
+    renderQTypeChips('readQTypeChips', function(){ newReadProblem(); });
+    renderQTypeChips('printQTypeChips', function(){ regenerateProblems(); renderWorksheet(); });
+  }
+
+  /* かんじ ひょうじ の ON/OFF（read/full/print で それぞれ せっていできる） */
+  var kanjiSettings = {read:false, full:false, print:false};
+  var KANJI_OPTIONS = [
+    {value:false, label:'ひらがな'},
+    {value:true, label:'🈶 かんじ（ふりがな つき）'}
+  ];
+  function renderKanjiChips(containerId, key, onChange){
+    var container = document.getElementById(containerId);
+    container.innerHTML='';
+    KANJI_OPTIONS.forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='settings-chip'+(opt.value===kanjiSettings[key]?' selected':'');
+      b.textContent = opt.label;
+      b.addEventListener('click', function(){
+        kanjiSettings[key] = opt.value;
+        renderKanjiChips(containerId, key, onChange);
+        if(onChange) onChange();
+      });
+      container.appendChild(b);
+    });
+  }
+
+  function storyQuestionsForTypes(story, types){
+    return story.questions.filter(function(q){ return types.indexOf(q.type)!==-1; });
+  }
+
+  /* =========================================================
+     MODE 1: READ (one story, one random question at a time)
+  ========================================================= */
+  var readState = {story:null, question:null, score:0, total:0, locked:false};
+  function newReadProblem(){
+    var types = getActiveQTypes();
+    var candidates = STORIES.filter(function(s){ return storyQuestionsForTypes(s, types).length>0; });
+    var pool = candidates.length ? candidates : STORIES;
+    var story = pickRandom(pool);
+    var qs = storyQuestionsForTypes(story, types);
+    if(qs.length===0) qs = story.questions;
+    var question = pickRandom(qs);
+    readState.story = story;
+    readState.question = question;
+    readState.locked = false;
+    document.getElementById('readFb').className='fb'; document.getElementById('readFb').textContent='';
+    document.getElementById('readNext').style.display='none';
+    document.getElementById('readStoryTitle').textContent = '📘 '+story.title;
+    document.getElementById('readStoryText').innerHTML = applyKanjiMode(story.text, kanjiSettings.read);
+    document.getElementById('readQTag').textContent = QTYPE_TAGS[question.type];
+    document.getElementById('readQText').innerHTML = applyKanjiMode(question.q, kanjiSettings.read);
+    var grid = document.getElementById('readOpts');
+    grid.innerHTML='';
+    shuffleArr(question.options).forEach(function(opt){
+      var b=document.createElement('button');
+      b.type='button'; b.className='opt-btn'; b.innerHTML=applyKanjiMode(opt, kanjiSettings.read);
+      b.setAttribute('data-raw', opt);
+      b.addEventListener('click', function(){
+        if(readState.locked) return;
+        var correct = (opt===question.correct);
+        readState.total++;
+        if(correct) readState.score++;
+        document.getElementById('scoreRead').innerHTML = '✅ '+readState.score+' / '+readState.total;
+        var fbEl = document.getElementById('readFb');
+        if(correct){
+          readState.locked=true;
+          b.classList.add('correct-flash');
+          grid.querySelectorAll('.opt-btn').forEach(function(o){ if(o!==b) o.disabled=true; });
+          fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE);
+          triggerCorrectFeedback();
+          document.getElementById('readNext').style.display='inline-block';
+        } else {
+          b.classList.add('wrong-flash');
+          setTimeout(function(){ b.classList.remove('wrong-flash'); }, 500);
+          fbEl.className='fb ng'; fbEl.textContent=pickRandom(TRY_AGAIN);
+        }
+      });
+      grid.appendChild(b);
+    });
+  }
+  /* かんじの ON/OFF だけを きりかえる とき、もんだいを えらびなおさず、
+     いまの ないようを そのまま ひょうじし なおす */
+  function rerenderReadKanji(){
+    if(!readState.story) return;
+    document.getElementById('readStoryText').innerHTML = applyKanjiMode(readState.story.text, kanjiSettings.read);
+    document.getElementById('readQText').innerHTML = applyKanjiMode(readState.question.q, kanjiSettings.read);
+    document.querySelectorAll('#readOpts .opt-btn').forEach(function(b){
+      b.innerHTML = applyKanjiMode(b.getAttribute('data-raw'), kanjiSettings.read);
+    });
+  }
+  document.getElementById('readNext').addEventListener('click', newReadProblem);
+  document.getElementById('readSpeak').addEventListener('click', function(){
+    speak(readState.story.text);
+  });
+
+  /* =========================================================
+     MODE 2: FULL (one story, ALL its questions answered together)
+  ========================================================= */
+  var fullState = {story:null, rows:null, score:0, total:0, locked:false};
+  function newFullProblem(){
+    var story = pickRandom(STORIES);
+    var qs = story.questions; /* すべての もんだいを つかう（このモードは しゅるい せってい なし） */
+    fullState.story = story;
+    fullState.rows = qs.map(function(q){ return {q:q, chosen:null}; });
+    fullState.locked = false;
+    document.getElementById('fullFb').className='fb'; document.getElementById('fullFb').textContent='';
+    document.getElementById('fullNext').style.display='none';
+    document.getElementById('fullCheck').disabled=false;
+    document.getElementById('fullStoryTitle').textContent = '📘 '+story.title;
+    document.getElementById('fullStoryText').innerHTML = applyKanjiMode(story.text, kanjiSettings.full);
+    var list = document.getElementById('fullQList');
+    list.innerHTML='';
+    fullState.rows.forEach(function(row, idx){
+      var rowEl = document.createElement('div');
+      rowEl.className='full-q-row';
+      rowEl.setAttribute('data-idx', idx);
+      var tag = document.createElement('div');
+      tag.className='q-type-tag';
+      tag.textContent = QTYPE_TAGS[row.q.type];
+      var qt = document.createElement('div');
+      qt.className='q-text';
+      qt.innerHTML = applyKanjiMode(row.q.q, kanjiSettings.full);
+      var optGrid = document.createElement('div');
+      optGrid.className='full-opt-grid';
+      shuffleArr(row.q.options).forEach(function(opt){
+        var b=document.createElement('button');
+        b.type='button'; b.className='full-opt-btn'; b.innerHTML=applyKanjiMode(opt, kanjiSettings.full);
+        b.setAttribute('data-raw', opt);
+        b.addEventListener('click', function(){
+          if(fullState.locked) return;
+          row.chosen = opt;
+          optGrid.querySelectorAll('.full-opt-btn').forEach(function(o){ o.classList.remove('chosen'); });
+          b.classList.add('chosen');
+        });
+        optGrid.appendChild(b);
+      });
+      rowEl.appendChild(tag); rowEl.appendChild(qt); rowEl.appendChild(optGrid);
+      list.appendChild(rowEl);
+    });
+  }
+  function rerenderFullKanji(){
+    if(!fullState.story) return;
+    document.getElementById('fullStoryText').innerHTML = applyKanjiMode(fullState.story.text, kanjiSettings.full);
+    document.querySelectorAll('#fullQList .full-q-row').forEach(function(rowEl, idx){
+      rowEl.querySelector('.q-text').innerHTML = applyKanjiMode(fullState.rows[idx].q.q, kanjiSettings.full);
+      rowEl.querySelectorAll('.full-opt-btn').forEach(function(b){
+        b.innerHTML = applyKanjiMode(b.getAttribute('data-raw'), kanjiSettings.full);
+      });
+    });
+  }
+  document.getElementById('fullCheck').addEventListener('click', function(){
+    if(fullState.locked) return;
+    var list = document.getElementById('fullQList');
+    var allChosen = fullState.rows.every(function(r){ return r.chosen!==null; });
+    var allCorrect = allChosen && fullState.rows.every(function(r){ return r.chosen===r.q.correct; });
+    fullState.total++;
+    if(allCorrect) fullState.score++;
+    document.getElementById('scoreFull').innerHTML = '✅ '+fullState.score+' / '+fullState.total;
+    var fbEl = document.getElementById('fullFb');
+    if(allCorrect){
+      fullState.locked = true;
+      document.getElementById('fullCheck').disabled = true;
+      list.querySelectorAll('.full-q-row').forEach(function(rowEl){ rowEl.classList.add('correct'); });
+      list.querySelectorAll('.full-opt-btn').forEach(function(o){ o.disabled=true; });
+      fbEl.className='fb ok'; fbEl.textContent='🎉 '+pickRandom(PRAISE)+'（ぜんぶ せいかい！）';
+      triggerCorrectFeedback();
+      document.getElementById('fullNext').style.display='inline-block';
+    } else {
+      fullState.rows.forEach(function(r, idx){
+        var rowEl = list.querySelector('.full-q-row[data-idx="'+idx+'"]');
+        var isRowCorrect = (r.chosen===r.q.correct);
+        rowEl.classList.remove('correct','wrong');
+        rowEl.classList.add(isRowCorrect ? 'correct' : 'wrong');
+      });
+      fbEl.className='fb ng'; fbEl.textContent = !allChosen ? 'ぜんぶの もんだいに こたえてね。' : pickRandom(TRY_AGAIN)+'（あかい わくを みなおしてみよう）';
+    }
+  });
+  document.getElementById('fullNext').addEventListener('click', newFullProblem);
+  document.getElementById('fullSpeak').addEventListener('click', function(){
+    speak(fullState.story.text);
+  });
+
+  /* =========================================================
+     PRINT MODE
+  ========================================================= */
+  var printState = {count:2, showOptions:true, showAnswer:false, stories:[]};
+  document.querySelectorAll('#printCountChips .chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      document.querySelectorAll('#printCountChips .chip').forEach(function(x){x.classList.remove('selected');});
+      c.classList.add('selected');
+      printState.count = parseInt(c.getAttribute('data-count'),10);
+      regenerateProblems(); renderWorksheet();
+    });
+  });
+  document.getElementById('printShowOptions').addEventListener('change', function(e){
+    printState.showOptions = e.target.checked;
+    renderWorksheet();
+  });
+  document.getElementById('printShowAnswer').addEventListener('change', function(e){
+    printState.showAnswer = e.target.checked;
+    renderWorksheet();
+  });
+  document.getElementById('printRegenBtn').addEventListener('click', function(){
+    regenerateProblems(); renderWorksheet();
+  });
+  document.getElementById('printOpenBtn').addEventListener('click', function(){
+    renderWorksheet();
+    setTimeout(function(){ window.print(); }, 60);
+  });
+  function regenerateProblems(){
+    var types = getActiveQTypes();
+    var candidates = STORIES.filter(function(s){ return storyQuestionsForTypes(s, types).length>0; });
+    var pool = shuffleArr(candidates.length ? candidates : STORIES);
+    var chosen = pool.slice(0, Math.min(printState.count, pool.length));
+    printState.stories = chosen.map(function(s){
+      return {story:s, questions: storyQuestionsForTypes(s, types)};
+    });
+  }
+  regenerateProblems();
+  function renderWorksheet(){
+    var html = '';
+    html += '<div class="ws-header"><div style="display:flex;align-items:center;gap:8px;">'
+      + '<div style="width:20px;height:20px;border-radius:50%;background:var(--mieel);border:1px solid #ccc;flex:none;"></div>'
+      + '<div><div style="font-size:11px;color:#333;font-weight:700;">MieeL ものがたりを よみとろう</div>'
+      + '<h2>📖 いつ・だれが・どこで・なにを</h2>'
+      + '<div style="font-size:11px;color:#666;margin-top:2px;">おはなしを よんで、もんだいに こたえよう</div></div></div>'
+      + '<div class="ws-fields" style="flex-direction:column;align-items:flex-end;gap:2px;">'
+      + '<div style="font-size:.75rem;color:#3A9A8C;font-weight:700;">mieel-support-school.com</div>'
+      + '<div><span class="lbl">なまえ：</span><span class="blank">&nbsp;</span><span class="lbl">ひづけ：</span><span class="blank">&nbsp;</span></div></div></div>';
+
+    printState.stories.forEach(function(item, idx){
+      html += '<div class="ws-story"><div class="no">おはなし '+(idx+1)+'　「'+item.story.title+'」</div>';
+      html += '<div>'+applyKanjiMode(item.story.text, kanjiSettings.print)+'</div>';
+      html += '<div class="ws-qlist">';
+      item.questions.forEach(function(q, qidx){
+        html += '<div class="ws-qrow"><span class="qtag">'+QTYPE_TAGS[q.type]+'</span>'+applyKanjiMode(q.q, kanjiSettings.print)+'</div>';
+        if(printState.showOptions){
+          html += '<div class="ws-opt-row">'+shuffleArr(q.options).map(function(o){ return '<span class="ws-opt-chip">'+applyKanjiMode(o, kanjiSettings.print)+'</span>'; }).join('')+'</div>';
+        } else {
+          html += '<div class="ws-write-line">こたえ：<span class="write-blank"></span></div>';
+        }
+        if(printState.showAnswer){
+          html += '<div class="ws-answer">こたえ：'+applyKanjiMode(q.correct, kanjiSettings.print)+'</div>';
+        }
+      });
+      html += '</div></div>';
+    });
+    var ws = document.getElementById('worksheet');
+    if(!ws){ ws=document.createElement('div'); ws.id='worksheet'; document.body.appendChild(ws); }
+    ws.innerHTML = html;
+  }
+  renderWorksheet();
+
+  /* =========================================================
+     MODE SWITCHING / GLOBAL UI
+  ========================================================= */
+  document.querySelectorAll('nav.modes button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('nav.modes button').forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+      btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+      var mode = btn.getAttribute('data-mode');
+      document.querySelectorAll('.view').forEach(function(v){ v.classList.add('hidden'); });
+      document.getElementById('view-'+mode).classList.remove('hidden');
+      if(mode==='print'){ renderWorksheet(); }
+      if(mode==='full' && !fullState.story){ newFullProblem(); }
+    });
+  });
+  var largeToggle = document.getElementById('btnLargeText');
+  largeToggle.addEventListener('click', function(){
+    var on = document.documentElement.classList.toggle('large-text');
+    largeToggle.setAttribute('aria-pressed', on ? 'true':'false');
+  });
+
+  /* =========================================================
+     INIT
+  ========================================================= */
+  renderAllQTypeChips();
+  renderKanjiChips('readKanjiChips','read', function(){ rerenderReadKanji(); });
+  renderKanjiChips('fullKanjiChips','full', function(){ rerenderFullKanji(); });
+  renderKanjiChips('printKanjiChips','print', function(){ renderWorksheet(); });
+  newReadProblem();
+
+})();
+</script>
+</body>
+</html>
