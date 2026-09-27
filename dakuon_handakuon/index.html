@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1,user-scalable=no">
+<title>MieeL｜ひらがな・だくおん・はんだくおん なぞりがき</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FFFBF4; --ink:#2D4A5A; --ink-soft:#5A7A8A;
+  --violet:#7B5EA7; --violet-soft:#EDE6F8; --violet-dark:#5a3d8a;
+  --teal:#3A9A8C;   --teal-soft:#D8F2EE;
+  --rose:#D96B6B;   --rose-soft:#FAEAEA;
+  --amber:#E8A838;  --amber-soft:#FDF3DB;
+  --green:#3A8A5C;  --green-soft:#D8F0E0;
+  --pink:#E278A0;   --pink-soft:#FBE6EF;
+  --card:#fff; --line:#E4DDD0;
+  --radius:26px;
+  --mieel:radial-gradient(circle at 50% 0%,#1B8FE8 0%,#2BB8D6 28%,#3FCB9E 45%,#8FD24A 58%,#F4D027 72%,#F7941E 100%);
+  /* きょうかしょたい優先のフォントスタック：iPad/Mac の「遊教科書体」、Windowsの「UDデジタル教科書体」があれば
+     最優先で使用。一画ずつ独立して認識できる教科書体を必ず優先し、連続化された筆記体風フォントは使わない。 */
+  --font-write:'YuKyo_Yoko-Medium','YuKyokasho Yoko','UD Digital Kyokasho NP-R','UD デジタル 教科書体 NP-R','UD デジタル 教科書体 N-R','Klee One','Zen Maru Gothic',sans-serif;
+}
+*{box-sizing:border-box;}html,body{margin:0;padding:0;overscroll-behavior:none;}
+body.no-scroll{overflow:hidden;touch-action:none;}
+body{font-family:var(--font-write);background:var(--cream);color:var(--ink);min-height:100vh;-webkit-tap-highlight-color:transparent;}
+button{font-family:inherit;}
+button:focus-visible{outline:4px solid #1F6FEB;outline-offset:3px;}
+
+/* ===== せいかい えんしゅつ（〇アニメーション＋チャイム音） ===== */
+#correctOverlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:9999;opacity:0;}
+#correctOverlay.show{animation:overlayFade 1.3s ease forwards;}
+@keyframes overlayFade{0%{opacity:0;}6%{opacity:1;}82%{opacity:1;}100%{opacity:0;}}
+.correct-circle-wrap{position:relative;width:230px;height:230px;max-width:62vw;max-height:62vw;filter:drop-shadow(0 6px 14px rgba(0,0,0,.18));}
+.correct-circle-wrap svg{width:100%;height:100%;transform:rotate(-90deg);}
+.correct-circle-wrap svg circle{fill:rgba(255,255,255,.92);stroke:#E2483D;stroke-width:15;stroke-linecap:round;stroke-dasharray:660;stroke-dashoffset:660;}
+.correct-circle-wrap.animate svg circle{animation:circleDraw .55s cubic-bezier(.4,0,.2,1) .05s forwards;}
+@keyframes circleDraw{to{stroke-dashoffset:0;}}
+.correct-label{position:absolute;left:0;right:0;top:44%;transform:translateY(-50%);text-align:center;font-weight:900;color:#E2483D;font-size:1.05rem;opacity:0;padding:0 12px;line-height:1.3;}
+.correct-circle-wrap.animate .correct-label{animation:labelPop .4s ease .5s forwards;}
+@keyframes labelPop{0%{opacity:0;transform:translateY(-50%) scale(.6);}60%{opacity:1;transform:translateY(-50%) scale(1.15);}100%{opacity:1;transform:translateY(-50%) scale(1);}}
+.correct-ping-text{position:absolute;left:0;right:0;bottom:-30px;text-align:center;font-weight:800;color:#E2483D;font-size:.95rem;opacity:0;letter-spacing:.05em;}
+.correct-circle-wrap.animate .correct-ping-text{animation:labelPop .4s ease .62s forwards;}
+.spark{position:absolute;font-size:1.6rem;opacity:0;pointer-events:none;}
+.correct-circle-wrap.animate .spark{animation:sparkFly .9s ease .1s forwards;}
+@keyframes sparkFly{0%{opacity:0;transform:translate(0,0) scale(.4) rotate(0deg);}25%{opacity:1;}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1.1) rotate(90deg);}}
+@media (prefers-reduced-motion: reduce){
+  #correctOverlay.show{animation:none;opacity:1;}
+  .correct-circle-wrap.animate svg circle{animation:none;stroke-dashoffset:0;}
+  .correct-circle-wrap.animate .correct-label,.correct-circle-wrap.animate .correct-ping-text,.correct-circle-wrap.animate .spark{animation:none;opacity:1;}
+}
+
+.app{max-width:1040px;margin:0 auto;padding:16px 16px 60px;}
+
+/* ── Header ── */
+header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px;}
+.brand{display:flex;align-items:center;gap:14px;}
+.orb{width:48px;height:48px;border-radius:50%;background:var(--mieel);flex:none;}
+.btext h1{font-size:1.25rem;margin:0;line-height:1.2;color:#111;font-weight:900;}
+.btext p{margin:2px 0 0;font-size:.75rem;color:var(--ink-soft);}
+.btext a{font-size:.68rem;color:var(--teal);text-decoration:none;}
+.btext a:hover{text-decoration:underline;}
+.hdr-btns{display:flex;gap:10px;flex-wrap:wrap;}
+.zukanbtn{background:var(--amber);color:#fff;border:none;border-radius:999px;padding:13px 20px;font-size:.92rem;font-weight:700;cursor:pointer;box-shadow:0 5px 0 #a5730f;display:flex;align-items:center;gap:8px;white-space:nowrap;min-height:44px;}
+.zukanbtn:active{transform:translateY(3px);box-shadow:0 2px 0 #a5730f;}
+.zukanbtn .cnt{background:rgba(255,255,255,.35);border-radius:999px;padding:2px 10px;font-size:.8rem;}
+.printbtn{background:var(--ink);color:#fff;border:none;border-radius:999px;padding:13px 20px;font-size:.92rem;font-weight:700;cursor:pointer;box-shadow:0 5px 0 #1c3040;display:flex;align-items:center;gap:8px;white-space:nowrap;min-height:44px;}
+.printbtn:active{transform:translateY(3px);box-shadow:0 2px 0 #1c3040;}
+
+/* ── Panel / タブ ── */
+.panel{background:var(--card);border-radius:var(--radius);padding:16px 18px;margin-bottom:14px;border:2px solid var(--line);}
+.panel h2{font-size:.8rem;letter-spacing:.05em;color:var(--ink-soft);margin:0 0 10px;font-weight:700;}
+.seg{display:flex;gap:8px;flex-wrap:wrap;}
+.seg button{border:2px solid var(--line);background:#fff;color:var(--ink);border-radius:14px;padding:13px 16px;font-size:.92rem;font-weight:700;cursor:pointer;transition:.15s;min-height:44px;}
+.seg button[aria-pressed="true"]{background:var(--violet);border-color:var(--violet);color:#fff;box-shadow:0 4px 0 var(--violet-dark);}
+.seg button:not([aria-pressed="true"]):hover{background:var(--violet-soft);}
+.seg.small button{padding:11px 14px;font-size:.85rem;min-height:40px;}
+.seg-sub{margin-top:12px;padding-top:12px;border-top:2px dashed var(--line);}
+
+/* ── もじグリッド ── */
+.chargrid{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-start;}
+.chbtn{position:relative;min-width:56px;min-height:56px;padding:4px;border:3px solid var(--teal);background:var(--teal-soft);color:var(--ink);
+  font-size:1.5rem;font-weight:900;border-radius:16px;cursor:pointer;box-shadow:0 4px 0 #2a7068;transition:.1s;font-family:var(--font-write);}
+.chbtn:active{transform:translateY(3px);box-shadow:0 1px 0 #2a7068;}
+.chbtn[aria-pressed="true"]{background:var(--violet);border-color:var(--violet-dark);color:#fff;box-shadow:0 4px 0 var(--violet-dark);}
+.chbtn .stamp{position:absolute;top:-8px;right:-8px;background:var(--amber);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.85rem;box-shadow:0 2px 4px rgba(0,0,0,.25);}
+.chbtn.wordbtn{min-width:auto;padding:10px 16px;font-size:1.15rem;}
+
+/* ── Stage ── */
+.stage{background:var(--card);border-radius:var(--radius);border:2px solid var(--line);padding:22px 16px 26px;display:flex;flex-direction:column;align-items:center;}
+.prompt{font-size:1.15rem;font-weight:700;margin:0 0 4px;text-align:center;line-height:1.5;}
+.prompt .em{color:var(--violet);font-size:1.3em;}
+.subhint{font-size:.85rem;color:var(--ink-soft);font-weight:700;margin-bottom:14px;text-align:center;}
+
+.canvas-stack{position:relative;width:min(92vw,78vmin);height:min(92vw,78vmin);max-width:600px;max-height:600px;margin:0 auto;}
+.canvas-stack canvas{position:absolute;left:0;top:0;width:100%;height:100%;border-radius:22px;}
+#guideCanvas{border:3px dashed var(--violet);background:#fff;}
+#drawCanvas{touch-action:none;background:transparent;}
+
+.canvas-stack.zoomed{width:min(96vw,90vmin);height:min(96vw,90vmin);max-width:820px;max-height:820px;}
+.canvas-stack.word-stack,.canvas-stack.word-stack.zoomed{max-width:100%;}
+
+.trace-tools{display:flex;gap:9px;margin-top:16px;flex-wrap:wrap;justify-content:center;}
+.tbtn{background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 16px;font-weight:700;cursor:pointer;font-size:.88rem;min-height:44px;display:flex;align-items:center;gap:6px;}
+.tbtn:hover{background:var(--violet-soft);border-color:var(--violet);}
+.tbtn[aria-pressed="true"]{background:var(--rose);border-color:var(--rose);color:#fff;}
+.tbtn.done{background:var(--teal-soft);border-color:var(--teal);}
+.tbtn.next{background:var(--violet);color:#fff;border-color:var(--violet-dark);}
+.tbtn.zoom{background:var(--amber-soft);border-color:var(--amber);}
+
+.fb{margin-top:14px;font-size:1.05rem;font-weight:700;min-height:30px;display:flex;align-items:center;gap:8px;text-align:center;color:#2a7a50;}
+
+/* ── もじずかん Modal ── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center;padding:14px;}
+.overlay.open{display:flex;}
+.zukan-card{background:#fff;border-radius:28px;padding:22px;width:min(96vw,680px);max-height:88vh;overflow-y:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.zukan-card h2{margin:0 0 4px;font-size:1.2rem;}
+.zukan-sub{color:var(--ink-soft);font-size:.85rem;margin:0 0 16px;}
+.zukan-close{position:absolute;top:14px;right:14px;width:46px;height:46px;min-width:46px;border-radius:50%;border:2px solid var(--line);background:#fff;font-size:1.2rem;font-weight:700;color:var(--ink-soft);cursor:pointer;}
+.zukan-close:hover{background:var(--rose-soft);border-color:var(--rose);color:var(--rose);}
+.zukan-group h3{font-size:.82rem;color:var(--violet-dark);margin:16px 0 8px;font-weight:800;}
+.zukan-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.zcell{position:relative;width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:900;font-family:var(--font-write);border:2px solid var(--line);background:#f7f4ec;color:#d0c8b4;}
+.zcell.got{background:var(--amber-soft);border-color:var(--amber);color:var(--ink);}
+.zcell.got::after{content:"⭐";position:absolute;bottom:-7px;right:-6px;font-size:.75rem;}
+.zcell.wide{width:auto;min-width:64px;padding:0 12px;font-size:1rem;}
+.zukan-foot{display:flex;justify-content:space-between;align-items:center;margin-top:18px;flex-wrap:wrap;gap:10px;}
+.progress-pill{background:var(--teal-soft);border:2px solid var(--teal);color:#1c5a50;border-radius:999px;padding:9px 16px;font-weight:800;font-size:.9rem;}
+.resetbtn{background:#fff;border:2px solid var(--line);border-radius:12px;padding:10px 16px;font-size:.82rem;font-weight:700;cursor:pointer;color:var(--ink-soft);}
+
+/* ── ズーム Modal ── */
+.zoom-overlay{z-index:300;}
+.zoom-card{background:#fff;border-radius:28px;padding:20px;width:min(96vw,660px);max-width:96vw;max-height:96vh;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;align-items:center;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.zoom-close{position:absolute;top:12px;right:12px;width:46px;height:46px;min-width:46px;border-radius:50%;border:2px solid var(--line);background:#fff;font-size:1.3rem;font-weight:700;color:var(--ink-soft);cursor:pointer;}
+.zoom-close:hover{background:var(--rose-soft);border-color:var(--rose);color:var(--rose);}
+#zoomSlot{display:flex;flex-direction:column;align-items:center;width:100%;}
+
+/* ── プリント Modal ── */
+.modal{background:#fff;border-radius:var(--radius);padding:26px;max-width:460px;width:calc(100% - 32px);box-shadow:0 20px 60px rgba(0,0,0,.25);}
+.modal h2{margin:0 0 6px;font-size:1.2rem;}
+.modal .subtxt{margin:0 0 14px;font-size:.85rem;color:var(--ink-soft);}
+.modal label{display:flex;align-items:center;gap:10px;font-weight:700;font-size:.92rem;padding:8px 0;}
+.modal input[type=checkbox]{width:20px;height:20px;accent-color:var(--violet);flex:none;}
+.pcount-row{margin-top:14px;padding-top:14px;border-top:2px dashed var(--line);}
+.pcount-row > span{display:block;font-size:.82rem;color:var(--ink-soft);font-weight:700;margin-bottom:8px;}
+.mfoot{display:flex;gap:10px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap;}
+.mcancel{background:#fff;border:2px solid var(--line);border-radius:12px;padding:12px 18px;font-size:.95rem;font-weight:700;cursor:pointer;}
+.mgo{background:var(--ink);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:.95rem;font-weight:700;cursor:pointer;}
+
+/* ── PRINT ワークシート ── */
+#PA{display:none;}
+@media print{
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+  body *{visibility:hidden;}
+  #PA,#PA *{visibility:visible;}
+  #PA{display:block!important;position:absolute;top:0;left:0;width:100%;}
+  .pp{padding:10mm 12mm;font-family:var(--font-write);color:#000;}
+}
+.pp-header{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #333;padding-bottom:5mm;margin-bottom:6mm;flex-wrap:wrap;gap:4mm;}
+.pp-brand{display:flex;align-items:center;gap:8px;}
+.pp-orb{width:9mm;height:9mm;border-radius:50%;background:var(--mieel);flex:none;}
+.pp-header h2{margin:0;font-size:5mm;}
+.pp-header .pp-url{font-size:2.8mm;color:#666;}
+.pp-fields{display:flex;gap:8mm;font-size:3.4mm;color:#333;}
+.pp-fields span{border-bottom:1px solid #999;padding:0 8mm 1mm 1mm;}
+.ws-sec-title{font-size:4.2mm;font-weight:900;margin:7mm 0 3.5mm;color:#333;border-left:4mm solid var(--violet);padding-left:2.5mm;}
+.ws-row{display:flex;align-items:center;gap:4mm;margin-bottom:3.2mm;break-inside:avoid;}
+.ws-label{width:32mm;flex:none;text-align:center;font-size:3.4mm;color:#555;line-height:1.3;}
+.ws-label .lb-main{display:block;font-size:7.5mm;font-weight:900;color:#333;}
+.ws-label .lb-emoji{display:block;font-size:11mm;line-height:1.4;margin-top:1mm;}
+.ws-cells{display:flex;gap:3.5mm;flex-wrap:wrap;flex:1;}
+.ws-cell{width:40mm;height:40mm;border:.5mm dashed #c9bfe0;border-radius:4mm;display:flex;align-items:center;justify-content:center;flex:none;overflow:hidden;}
+.ws-cell .hol{font-size:29mm;color:#fff;-webkit-text-stroke:1.4pt #b9a8d8;line-height:1;}
+.ws-tencell{position:relative;width:40mm;height:40mm;border:.5mm dashed #c9bfe0;border-radius:4mm;display:flex;align-items:center;justify-content:center;flex:none;overflow:hidden;}
+.ws-tencell .base{font-size:26mm;color:#fff;-webkit-text-stroke:1.4pt #b9a8d8;line-height:1;}
+.ws-tencell .mark{position:absolute;top:2.4mm;right:2.4mm;font-size:11mm;color:#fff;-webkit-text-stroke:1.1pt #e8a838;line-height:1;}
+.ws-word-row{display:flex;flex-wrap:wrap;gap:4.5mm;flex:1;align-items:center;}
+.ws-word-cell{border:.5mm dashed #c9bfe0;border-radius:4mm;padding:4mm 6mm;display:flex;align-items:center;justify-content:center;color:#fff;-webkit-text-stroke:1.5pt #b9a8d8;font-weight:900;white-space:nowrap;line-height:1;overflow:hidden;}
+.pp-foot{margin-top:8mm;padding-top:4mm;border-top:1px solid #ccc;font-size:2.9mm;color:#777;text-align:center;}
+
+footer.note{text-align:center;color:var(--ink-soft);font-size:.75rem;margin-top:22px;}
+@media(max-width:520px){.chbtn{min-width:48px;min-height:48px;font-size:1.25rem;}}
+@media(prefers-reduced-motion:reduce){.tbtn,.chbtn{transition:none;}}
+</style>
+</head>
+<body>
+<div id="correctOverlay" aria-hidden="true">
+  <div class="correct-circle-wrap">
+    <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="84"></circle></svg>
+    <div class="correct-label" id="fbLabel">よくできました！</div>
+    <div class="correct-ping-text">🔔 ピンポーン♪</div>
+    <span class="spark" style="left:10%;top:15%;--dx:-30px;--dy:-40px;">✨</span>
+    <span class="spark" style="left:85%;top:20%;--dx:30px;--dy:-35px;">🌟</span>
+    <span class="spark" style="left:15%;top:80%;--dx:-25px;--dy:30px;">✨</span>
+    <span class="spark" style="left:82%;top:78%;--dx:28px;--dy:32px;">🌟</span>
+  </div>
+</div>
+
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <div class="orb"></div>
+      <div class="btext">
+        <h1>MieeL なぞりがき れんしゅう</h1>
+        <p>ひらがな・だくおん・はんだくおんの なぞりがき トレーニング</p>
+        <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener">www.mieel-support-school.com</a>
+      </div>
+    </div>
+    <div class="hdr-btns">
+      <button class="printbtn" id="btnPrint">🖨️ プリントを つくる</button>
+      <button class="zukanbtn" id="btnZukan">📖 もじずかん <span class="cnt" id="zukanCnt">0/93</span></button>
+    </div>
+  </header>
+
+  <section class="panel">
+    <h2>れんしゅうする もじの しゅるい</h2>
+    <div class="seg" id="modeSeg" role="group">
+      <button data-mode="sei"    aria-pressed="true">あ せいおん（46）</button>
+      <button data-mode="daku"   aria-pressed="false">が だくおん（20）</button>
+      <button data-mode="handaku" aria-pressed="false">ぱ はんだくおん（5）</button>
+      <button data-mode="ten"    aria-pressed="false">゛゜ てん だけ</button>
+      <button data-mode="word"   aria-pressed="false">📝 ことば（たんご）</button>
+    </div>
+    <div class="seg-sub" id="tenSub" style="display:none;">
+      <div class="seg small" id="tenModeSeg" role="group" style="margin-bottom:10px;">
+        <button data-tenmode="solo"   aria-pressed="true">⚪ てんだけ たんどくで</button>
+        <button data-tenmode="attach" aria-pressed="false">🔤 もじに つけてみる</button>
+      </div>
+      <div class="seg small" id="tenKindSeg" role="group">
+        <button data-tenkind="daku"    aria-pressed="true">゛ だくてん</button>
+        <button data-tenkind="handaku" aria-pressed="false">゜ はんだくてん</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="gridPanel">
+    <h2 id="gridTitle">れんしゅうする もじを えらぼう</h2>
+    <div class="chargrid" id="charGrid"></div>
+  </section>
+
+  <main class="stage" id="stage"></main>
+
+  <footer class="note">
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:5px;">
+      <div style="width:16px;height:16px;border-radius:50%;background:var(--mieel);flex:none;"></div>
+      <strong style="color:#111;">MieeL</strong>
+      <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener" style="color:var(--teal);">mieel-support-school.com</a>
+    </div>
+    がんばったぶんだけ「もじずかん」に ⭐ が たまっていきます。まちがいはありません、じぶんの ペースで すすめましょう。
+  </footer>
+</div>
+
+<!-- もじずかん Modal -->
+<div class="overlay" id="zukanModal" role="dialog" aria-modal="true">
+  <div class="zukan-card">
+    <button class="zukan-close" id="zukanClose" aria-label="とじる">✕</button>
+    <h2>📖 もじずかん</h2>
+    <p class="zukan-sub">なぞって「できた！」を おすと ⭐ スタンプが たまります。</p>
+    <div id="zukanBody"></div>
+    <div class="zukan-foot">
+      <div class="progress-pill" id="zukanProgress">0 / 93 コンプリート</div>
+      <button class="resetbtn" id="zukanReset">スタンプを ぜんぶ リセット</button>
+    </div>
+  </div>
+</div>
+
+<!-- ズーム Modal -->
+<div class="overlay zoom-overlay" id="zoomModal" role="dialog" aria-modal="true">
+  <div class="zoom-card">
+    <button class="zoom-close" id="zoomClose" aria-label="とじる">✕</button>
+    <p class="prompt" id="zoomPrompt"></p>
+    <p class="subhint" id="zoomHint"></p>
+    <div id="zoomSlot"></div>
+    <div class="fb" id="zoomFb" style="min-height:26px;"></div>
+  </div>
+</div>
+
+<!-- プリント Modal -->
+<div class="overlay" id="pModal" role="dialog" aria-modal="true">
+  <div class="modal">
+    <h2>🖨️ プリントの せってい</h2>
+    <p class="subtxt">いんさつしたい ないようを えらんでください</p>
+    <label><input type="checkbox" id="pkSei" checked> あ せいおん（ぜんぶ46もじ）</label>
+    <label><input type="checkbox" id="pkDaku" checked> が だくおん（ぜんぶ20もじ）</label>
+    <label><input type="checkbox" id="pkHandaku" checked> ぱ はんだくおん（ぜんぶ5もじ）</label>
+    <label><input type="checkbox" id="pkTen"> ゛゜ てん・もじに つける（ぜんぶ25もじ）</label>
+    <label><input type="checkbox" id="pkWord"> 📝 ことば（ぜんぶ20ことば）</label>
+    <div class="pcount-row">
+      <span>1しゅるいあたり さいだい なんもじ／なんことば？</span>
+      <div class="seg small" id="limitSeg" role="group">
+        <button data-limit="0"  aria-pressed="true">ぜんぶ</button>
+        <button data-limit="10" aria-pressed="false">10まで</button>
+        <button data-limit="20" aria-pressed="false">20まで</button>
+      </div>
+    </div>
+    <div class="pcount-row">
+      <span>1れつに なんかい れんしゅうする？</span>
+      <div class="seg small" id="repsSeg" role="group">
+        <button data-reps="2" aria-pressed="true">2かい（大きく）</button>
+        <button data-reps="3" aria-pressed="false">3かい</button>
+        <button data-reps="4" aria-pressed="false">4かい</button>
+      </div>
+    </div>
+    <div class="mfoot">
+      <button class="mcancel" id="pCancel">キャンセル</button>
+      <button class="mgo" id="pGo">🖨️ プリントを つくる</button>
+    </div>
+  </div>
+</div>
+
+<div id="PA"></div>
+
+<script>
+(function(){"use strict";
+
+/* ===== せいかい えんしゅつ（〇アニメーション＋チャイム音） ===== */
+var sharedAudioCtx=null;
+function playDing(){
+  try{
+    var Ctx=window.AudioContext||window.webkitAudioContext;
+    if(!Ctx)return;
+    if(!sharedAudioCtx)sharedAudioCtx=new Ctx();
+    var ctx=sharedAudioCtx;
+    if(ctx.state==="suspended"){ctx.resume();}
+    function tone(freq,start,dur,peak){
+      var o=ctx.createOscillator();var g=ctx.createGain();
+      o.type="sine";o.frequency.value=freq;
+      o.connect(g);g.connect(ctx.destination);
+      var t0=ctx.currentTime+start;
+      g.gain.setValueAtTime(0.0001,t0);
+      g.gain.linearRampToValueAtTime(peak,t0+0.03);
+      g.gain.exponentialRampToValueAtTime(0.0001,t0+dur);
+      o.start(t0);o.stop(t0+dur+0.03);
+    }
+    tone(880.0,0,0.30,0.30);
+    tone(1318.5,0.24,0.48,0.26);
+  }catch(e){}
+}
+var overlayHideTimer=null;
+var PRAISE=["よくできました！","じょうずに かけたね！","すごい！ そのとおり！","とっても きれい！","ばっちりだね！","そのペースで だいじょうぶ！","ナイス トライ！","かんぺき！"];
+function triggerCorrectFeedback(){
+  playDing();
+  var overlay=document.getElementById("correctOverlay");
+  if(!overlay)return;
+  var wrap=overlay.querySelector(".correct-circle-wrap");
+  var label=document.getElementById("fbLabel");
+  if(label)label.textContent=PRAISE[Math.floor(Math.random()*PRAISE.length)];
+  if(overlayHideTimer){clearTimeout(overlayHideTimer);overlayHideTimer=null;}
+  overlay.classList.remove("show");wrap.classList.remove("animate");
+  void overlay.offsetWidth;
+  overlay.classList.add("show");wrap.classList.add("animate");
+  overlayHideTimer=setTimeout(function(){
+    overlay.classList.remove("show");wrap.classList.remove("animate");overlayHideTimer=null;
+  },1550);
+}
+
+/* きょうかしょたい優先のフォントスタック（CSSの --font-write と同じ並び）。
+   canvas の ctx.font はCSSカスタムプロパティを直接使えないため、JS定数として保持する。 */
+const FONT_WRITE="'YuKyo_Yoko-Medium','YuKyokasho Yoko','UD Digital Kyokasho NP-R','UD デジタル 教科書体 NP-R','UD デジタル 教科書体 N-R','Klee One','Zen Maru Gothic',sans-serif";
+
+/* ===== DATA ===== */
+const SEION=[
+  {c:"あ",r:"a",e:"🐜",w:"あり"},{c:"い",r:"i",e:"🐕",w:"いぬ"},{c:"う",r:"u",e:"🐇",w:"うさぎ"},
+  {c:"え",r:"e",e:"✏️",w:"えんぴつ"},{c:"お",r:"o",e:"👹",w:"おに"},
+  {c:"か",r:"ka",e:"☂️",w:"かさ"},{c:"き",r:"ki",e:"🦒",w:"きりん"},{c:"く",r:"ku",e:"☁️",w:"くも"},
+  {c:"け",r:"ke",e:"🍰",w:"けーき"},{c:"こ",r:"ko",e:"🐨",w:"こあら"},
+  {c:"さ",r:"sa",e:"🐒",w:"さる"},{c:"し",r:"shi",e:"🦌",w:"しか"},{c:"す",r:"su",e:"🍉",w:"すいか"},
+  {c:"せ",r:"se",e:"🧼",w:"せっけん"},{c:"そ",r:"so",e:"🌈",w:"そら"},
+  {c:"た",r:"ta",e:"🥁",w:"たいこ"},{c:"ち",r:"chi",e:"🦋",w:"ちょう"},{c:"つ",r:"tsu",e:"🌙",w:"つき"},
+  {c:"て",r:"te",e:"✉️",w:"てがみ"},{c:"と",r:"to",e:"🐯",w:"とら"},
+  {c:"な",r:"na",e:"🍆",w:"なす"},{c:"に",r:"ni",e:"🌈",w:"にじ"},{c:"ぬ",r:"nu",e:"🧸",w:"ぬいぐるみ"},
+  {c:"ね",r:"ne",e:"🐱",w:"ねこ"},{c:"の",r:"no",e:"🚂",w:"のりもの"},
+  {c:"は",r:"ha",e:"🌸",w:"はな"},{c:"ひ",r:"hi",e:"🐣",w:"ひよこ"},{c:"ふ",r:"fu",e:"⛵",w:"ふね"},
+  {c:"へ",r:"he",e:"🐍",w:"へび"},{c:"ほ",r:"ho",e:"⭐",w:"ほし"},
+  {c:"ま",r:"ma",e:"⭕",w:"まる"},{c:"み",r:"mi",e:"🍊",w:"みかん"},{c:"む",r:"mu",e:"🐛",w:"むし"},
+  {c:"め",r:"me",e:"👓",w:"めがね"},{c:"も",r:"mo",e:"🍑",w:"もも"},
+  {c:"や",r:"ya",e:"🏔️",w:"やま"},{c:"ゆ",r:"yu",e:"❄️",w:"ゆき"},{c:"よ",r:"yo",e:"🌙",w:"よる"},
+  {c:"ら",r:"ra",e:"🦁",w:"らいおん"},{c:"り",r:"ri",e:"🍎",w:"りんご"},{c:"る",r:"ru",e:"🔵",w:"るすばん"},
+  {c:"れ",r:"re",e:"🍋",w:"れもん"},{c:"ろ",r:"ro",e:"🕯️",w:"ろうそく"},
+  {c:"わ",r:"wa",e:"🐊",w:"わに"},{c:"を",r:"wo",e:"📖",w:"ことばを つなぐ もじ"},{c:"ん",r:"n",e:"🎵",w:"おんがく"},
+];
+const DAKUON=[
+  {c:"が",r:"ga",e:"🦢",w:"がちょう"},{c:"ぎ",r:"gi",e:"🎸",w:"ぎたー"},{c:"ぐ",r:"gu",e:"🍬",w:"ぐみ"},
+  {c:"げ",r:"ge",e:"👡",w:"げた"},{c:"ご",r:"go",e:"🦍",w:"ごりら"},
+  {c:"ざ",r:"za",e:"🦞",w:"ざりがに"},{c:"じ",r:"ji",e:"🚲",w:"じてんしゃ"},{c:"ず",r:"zu",e:"👖",w:"ずぼん"},
+  {c:"ぜ",r:"ze",e:"🍮",w:"ぜりー"},{c:"ぞ",r:"zo",e:"🐘",w:"ぞう"},
+  {c:"だ",r:"da",e:"🪆",w:"だるま"},{c:"ぢ",r:"ji",e:"👃",w:"はなぢ"},{c:"づ",r:"zu",e:"➡️",w:"つづく"},
+  {c:"で",r:"de",e:"🚃",w:"でんしゃ"},{c:"ど",r:"do",e:"🌰",w:"どんぐり"},
+  {c:"ば",r:"ba",e:"🍌",w:"ばなな"},{c:"び",r:"bi",e:"😲",w:"びっくり"},{c:"ぶ",r:"bu",e:"🐷",w:"ぶた"},
+  {c:"べ",r:"be",e:"🍱",w:"べんとう"},{c:"ぼ",r:"bo",e:"🎩",w:"ぼうし"},
+];
+const HANDAKUON=[
+  {c:"ぱ",r:"pa",e:"🐼",w:"ぱんだ"},{c:"ぴ",r:"pi",e:"🎹",w:"ぴあの"},{c:"ぷ",r:"pu",e:"🍮",w:"ぷりん"},
+  {c:"ぺ",r:"pe",e:"🐧",w:"ぺんぎん"},{c:"ぽ",r:"po",e:"📮",w:"ぽすと"},
+];
+/* もじに つける（濁点・半濁点を後付けする）用の 対応表。表示上は べーすの もじ→ できあがる もじ。 */
+const DAKUTEN_PAIRS=[["か","が"],["き","ぎ"],["く","ぐ"],["け","げ"],["こ","ご"],
+  ["さ","ざ"],["し","じ"],["す","ず"],["せ","ぜ"],["そ","ぞ"],
+  ["た","だ"],["ち","ぢ"],["つ","づ"],["て","で"],["と","ど"],
+  ["は","ば"],["ひ","び"],["ふ","ぶ"],["へ","べ"],["ほ","ぼ"]];
+const HANDAKUTEN_PAIRS=[["は","ぱ"],["ひ","ぴ"],["ふ","ぷ"],["へ","ぺ"],["ほ","ぽ"]];
+
+/* ===== ことば（たんご）レベルの なぞりがき。だくおん・はんだくおんを ふくむ かんたんな たんご を中心に、
+   せいおんだけの たんごも まぜて バランスよく れんしゅうできるようにしている。 */
+const WORDS=[
+  {w:"ねこ",e:"🐱"},{w:"いぬ",e:"🐶"},{w:"さかな",e:"🐟"},{w:"たまご",e:"🥚"},
+  {w:"りんご",e:"🍎"},{w:"くつした",e:"🧦"},{w:"ほん",e:"📖"},{w:"すいか",e:"🍉"},
+  {w:"がっこう",e:"🏫"},{w:"ぼうし",e:"🎩"},{w:"かばん",e:"🎒"},{w:"じてんしゃ",e:"🚲"},
+  {w:"でんしゃ",e:"🚃"},{w:"ぞう",e:"🐘"},{w:"だんご",e:"🍡"},{w:"どんぐり",e:"🌰"},
+  {w:"ばなな",e:"🍌"},{w:"べんとう",e:"🍱"},{w:"ぱんだ",e:"🐼"},{w:"ぺんぎん",e:"🐧"},
+];
+
+const ALL_ITEMS={sei:SEION,daku:DAKUON,handaku:HANDAKUON};
+
+/* ===== STAMP（もじずかん）永続化 ===== */
+const STAMP_KEY="mieel_nazori_stamps_v1";
+function loadStamps(){
+  try{ var raw=localStorage.getItem(STAMP_KEY); return raw?JSON.parse(raw):{}; }catch(e){ return {}; }
+}
+function saveStamps(obj){
+  try{ localStorage.setItem(STAMP_KEY,JSON.stringify(obj)); }catch(e){}
+}
+let STAMPS=loadStamps();
+function stampKey(mode,val){ return mode+":"+val; }
+function markStamp(mode,val){
+  const k=stampKey(mode,val);
+  if(!STAMPS[k]){ STAMPS[k]=true; saveStamps(STAMPS); }
+  updateZukanCount();
+}
+function hasStamp(mode,val){ return !!STAMPS[stampKey(mode,val)]; }
+const TOTAL_STAMPS = SEION.length + DAKUON.length + HANDAKUON.length + 2 + WORDS.length; /* +2: だくてん単独・はんだくてん単独 */
+function countStamps(){ return Object.keys(STAMPS).length; }
+function updateZukanCount(){
+  const n=Math.min(countStamps(),TOTAL_STAMPS);
+  document.getElementById("zukanCnt").textContent=n+"/"+TOTAL_STAMPS;
+  const pg=document.getElementById("zukanProgress");
+  if(pg)pg.textContent=n+" / "+TOTAL_STAMPS+" コンプリート";
+}
+
+/* ===== STATE ===== */
+const S={
+  mode:"sei",          /* sei | daku | handaku | ten */
+  tenMode:"solo",       /* solo | attach */
+  tenKind:"daku",       /* daku | handaku */
+  curChar:null,          /* sei/daku/handaku で選択中の文字オブジェクト */
+  curPair:null,          /* attach で選択中の [base,result] */
+  curWord:null,          /* word で選択中の たんごオブジェクト */
+  eraseMode:false,
+};
+let zoomOpen=false;
+
+function rand(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+
+/* ===== UI: モードタブ ===== */
+function setSeg(id,attr,val){
+  const seg=document.getElementById(id);
+  if(!seg)return;
+  [...seg.children].forEach(b=>b.setAttribute("aria-pressed",b.dataset[attr]===val));
+}
+document.getElementById("modeSeg").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-mode]");if(!b)return;
+  closeZoom();
+  S.mode=b.dataset.mode;
+  setSeg("modeSeg","mode",S.mode);
+  document.getElementById("tenSub").style.display = S.mode==="ten" ? "" : "none";
+  refreshGridAndStage();
+});
+document.getElementById("tenModeSeg").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-tenmode]");if(!b)return;
+  closeZoom();
+  S.tenMode=b.dataset.tenmode;
+  setSeg("tenModeSeg","tenmode",S.tenMode);
+  refreshGridAndStage();
+});
+document.getElementById("tenKindSeg").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-tenkind]");if(!b)return;
+  closeZoom();
+  S.tenKind=b.dataset.tenkind;
+  setSeg("tenKindSeg","tenkind",S.tenKind);
+  refreshGridAndStage();
+});
+
+/* ===== もじグリッド ===== */
+const gridPanel=document.getElementById("gridPanel");
+const charGrid=document.getElementById("charGrid");
+const gridTitle=document.getElementById("gridTitle");
+
+function refreshGridAndStage(){
+  if(S.mode==="ten"){
+    if(S.tenMode==="solo"){
+      gridPanel.style.display="none";
+      renderSolo();
+    } else {
+      gridPanel.style.display="";
+      const pairs = S.tenKind==="daku" ? DAKUTEN_PAIRS : HANDAKUTEN_PAIRS;
+      gridTitle.textContent = "もじを えらぼう（" + (S.tenKind==="daku"?"だくてん":"はんだくてん") + " を つけます）";
+      buildPairGrid(pairs);
+      if(!S.curPair || !pairs.some(p=>p[0]===S.curPair[0])){ S.curPair=pairs[0]; }
+      selectPairInGrid(S.curPair);
+      renderAttach();
+    }
+  } else if(S.mode==="word"){
+    gridPanel.style.display="";
+    gridTitle.textContent = "れんしゅうする ことばを えらぼう";
+    buildWordGrid(WORDS);
+    if(!S.curWord){ S.curWord=WORDS[0]; }
+    selectWordInGrid(S.curWord);
+    renderWord();
+  } else {
+    gridPanel.style.display="";
+    const items = ALL_ITEMS[S.mode];
+    gridTitle.textContent = "れんしゅうする もじを えらぼう";
+    buildCharGrid(items);
+    if(!S.curChar || !items.some(it=>it.c===S.curChar.c)){ S.curChar=items[0]; }
+    selectCharInGrid(S.curChar);
+    renderChar();
+  }
+}
+
+function buildCharGrid(items){
+  charGrid.innerHTML="";
+  items.forEach(it=>{
+    const b=document.createElement("button");
+    b.className="chbtn";b.type="button";b.dataset.c=it.c;b.textContent=it.c;
+    b.setAttribute("aria-pressed","false");
+    if(hasStamp(S.mode,it.c)){ const st=document.createElement("span");st.className="stamp";st.textContent="⭐";b.appendChild(st); }
+    b.onclick=()=>{ closeZoom(); S.curChar=it; selectCharInGrid(it); renderChar(); };
+    charGrid.appendChild(b);
+  });
+}
+function selectCharInGrid(it){
+  [...charGrid.children].forEach(b=>b.setAttribute("aria-pressed", b.dataset.c===it.c ? "true":"false"));
+}
+function buildPairGrid(pairs){
+  charGrid.innerHTML="";
+  pairs.forEach(p=>{
+    const b=document.createElement("button");
+    b.className="chbtn";b.type="button";b.dataset.c=p[0];b.textContent=p[0]+"→"+p[1];
+    b.style.fontSize="1.05rem";
+    b.setAttribute("aria-pressed","false");
+    if(hasStamp(S.mode,p[1])){ const st=document.createElement("span");st.className="stamp";st.textContent="⭐";b.appendChild(st); }
+    b.onclick=()=>{ closeZoom(); S.curPair=p; selectPairInGrid(p); renderAttach(); };
+    charGrid.appendChild(b);
+  });
+}
+function selectPairInGrid(p){
+  [...charGrid.children].forEach(b=>b.setAttribute("aria-pressed", b.dataset.c===p[0] ? "true":"false"));
+}
+function buildWordGrid(words){
+  charGrid.innerHTML="";
+  words.forEach(it=>{
+    const b=document.createElement("button");
+    b.className="chbtn wordbtn";b.type="button";b.dataset.w=it.w;b.textContent=it.w;
+    b.setAttribute("aria-pressed","false");
+    if(hasStamp("word",it.w)){ const st=document.createElement("span");st.className="stamp";st.textContent="⭐";b.appendChild(st); }
+    b.onclick=()=>{ closeZoom(); S.curWord=it; selectWordInGrid(it); renderWord(); };
+    charGrid.appendChild(b);
+  });
+}
+function selectWordInGrid(it){
+  [...charGrid.children].forEach(b=>b.setAttribute("aria-pressed", b.dataset.w===it.w ? "true":"false"));
+}
+
+/* ===== STAGE 共通部品 ===== */
+const stage=document.getElementById("stage");
+function mk(t,c){const e=document.createElement(t);if(c)e.className=c;return e;}
+function addEl(t,c,h){const e=mk(t,c);if(h)e.innerHTML=h;stage.appendChild(e);return e;}
+
+function buildCanvasStack(){
+  const wrap=mk("div","canvas-stack");wrap.id="canvasStack";
+  const gc=document.createElement("canvas");gc.id="guideCanvas";gc.width=340;gc.height=340;
+  const dc=document.createElement("canvas");dc.id="drawCanvas";dc.width=340;dc.height=340;
+  wrap.appendChild(gc);wrap.appendChild(dc);
+  return wrap;
+}
+/* ことば（複数文字）用の キャンバス。1マスを とにかく 大きく たもつことを優先し、
+   もじ数が多い たんごは よこ1れつに つめこまず、すくない列数で たて方向に
+   おり返して（複数れつに して）1マスの大きさを ぎせいにしない。 */
+/* 実際に キャンバスが 置かれる コンテナの「なかみの はば」を 測る。
+   ズーム中は zoom-card（モーダル）、通常は stage が コンテナ。
+   window.innerWidth からの 目算ではなく 実測にすることで、
+   モーダルの はば より キャンバスが 大きくなって「はみ出す」ことを ふせぐ。 */
+function getWordAvailWidth(zoomed){
+  const el = zoomed ? document.querySelector(".zoom-card") : document.getElementById("stage");
+  if(el && el.clientWidth>0){
+    const cs=getComputedStyle(el);
+    const padX=parseFloat(cs.paddingLeft||0)+parseFloat(cs.paddingRight||0);
+    const inner=el.clientWidth-padX;
+    if(inner>60) return Math.floor(inner)-8; /* 安全マージン */
+  }
+  /* コンテナが まだ測れない場合（モーダルが開く前 など）の 目算フォールバック */
+  return zoomed ? Math.min(window.innerWidth*0.96,660)-48 : Math.min(window.innerWidth*0.94,900);
+}
+function computeWordLayout(word,zoomed){
+  const len=Math.max(1,word.length);
+  const desiredCell = zoomed ? 280 : 220;   /* めやすとなる 1マスの大きさ（できるだけ これに近づける） */
+  const cellCap      = zoomed ? 420 : 300;   /* 短い たんごで マスが 大きくなりすぎないための上限 */
+  const cellMin       = zoomed ? 190 : 150;   /* これより 小さくは しない（最低限のおおきさを保証） */
+  const avail = getWordAvailWidth(zoomed);
+  const maxCols = Math.max(1, Math.floor(avail/desiredCell));
+  const cols = Math.max(1, Math.min(len, maxCols, 2)); /* 1れつは 最大2もじまでにして、マスをできるだけ大きく保つ */
+  const rows = Math.ceil(len/cols);
+  let cellPx = Math.floor(avail/cols);
+  cellPx = Math.max(cellMin, Math.min(cellCap, cellPx));
+  return {len,cols,rows,cellPx};
+}
+function buildWordCanvasStack(word,zoomed){
+  const L=computeWordLayout(word,zoomed);
+  const dispW = L.cellPx*L.cols;
+  const dispH = Math.round(L.cellPx*1.16*L.rows);
+  const wrap=mk("div","canvas-stack word-stack"+(zoomed?" zoomed":""));wrap.id="canvasStack";
+  wrap.style.width=dispW+"px";wrap.style.height=dispH+"px";
+  const res=2; /* 表示pxの2倍の解像度でくっきり描画する */
+  const gc=document.createElement("canvas");gc.id="guideCanvas";gc.width=dispW*res;gc.height=dispH*res;
+  const dc=document.createElement("canvas");dc.id="drawCanvas";dc.width=dispW*res;dc.height=dispH*res;
+  wrap.appendChild(gc);wrap.appendChild(dc);
+  return wrap;
+}
+function buildToolbar(onClear,onDone,onZoom){
+  const tools=mk("div","trace-tools");
+  const eraseBtn=mk("button","tbtn");eraseBtn.type="button";eraseBtn.innerHTML="🧽 けしごむ";
+  eraseBtn.setAttribute("aria-pressed", S.eraseMode?"true":"false");
+  eraseBtn.onclick=()=>{ S.eraseMode=!S.eraseMode; eraseBtn.setAttribute("aria-pressed",S.eraseMode?"true":"false"); applyEraseMode(); };
+  const undoBtn=mk("button","tbtn");undoBtn.type="button";undoBtn.innerHTML="↩️ やりなおし";
+  undoBtn.onclick=()=>undoStroke();
+  const clrBtn=mk("button","tbtn");clrBtn.type="button";clrBtn.innerHTML="🧹 ぜんぶ けす";
+  clrBtn.onclick=()=>{ onClear(); };
+  const zoomBtn=mk("button","tbtn zoom");zoomBtn.type="button";zoomBtn.innerHTML="🔍 おおきく する";
+  zoomBtn.onclick=onZoom;
+  const doneBtn=mk("button","tbtn done");doneBtn.type="button";doneBtn.innerHTML="✅ できた！";
+  doneBtn.onclick=onDone;
+  tools.appendChild(eraseBtn);tools.appendChild(undoBtn);tools.appendChild(clrBtn);tools.appendChild(zoomBtn);tools.appendChild(doneBtn);
+  return tools;
+}
+function buildNextRow(onNext){
+  const row=mk("div","trace-tools");
+  const nb=mk("button","tbtn next");nb.type="button";nb.innerHTML="つぎへ →";
+  nb.onclick=onNext;
+  row.appendChild(nb);
+  return row;
+}
+
+/* ===== ガイド描画 ===== */
+/* もじの ぬりつぶし／なぞり線が、じっさいの端末のフォントの形しだいで
+   マスの そとに はみだしてしまうことがあるため（フォントによって字形の
+   よゆう分が ちがう）、かならず していの はこの中だけに クリップしてから
+   もじを描く。これで どんなフォントが使われても わくを こえて描画されない。 */
+function clipBox(ctx,x,y,w,h,fn){
+  ctx.save();
+  ctx.beginPath();ctx.rect(x,y,w,h);ctx.clip();
+  fn();
+  ctx.restore();
+}
+function drawFullCharGuide(cv,c){
+  const ctx=cv.getContext("2d");
+  const k=cv.width/340;
+  ctx.clearRect(0,0,cv.width,cv.height);
+  ctx.strokeStyle="#C8B8E8";ctx.lineWidth=2.5*k;ctx.setLineDash([8*k,5*k]);
+  ctx.beginPath();ctx.moveTo(cv.width/2,10*k);ctx.lineTo(cv.width/2,cv.height-10*k);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(10*k,cv.height/2);ctx.lineTo(cv.width-10*k,cv.height/2);ctx.stroke();
+  ctx.setLineDash([]);
+  [[14*k,14*k],[cv.width-14*k,14*k],[14*k,cv.height-14*k],[cv.width-14*k,cv.height-14*k]].forEach(([x,y])=>{
+    ctx.beginPath();ctx.arc(x,y,4*k,0,Math.PI*2);ctx.fillStyle="#B0A0D8";ctx.fill();
+  });
+  /* クリップの わくは、目に見える コーナーマーカー（14*k）と 同じか、それより
+     内側に する。これより ひろい クリップにすると、フォントの じけいの よゆう分
+     しだいで「見た目のわく」を こえて描画されてしまうことがある。 */
+  clipBox(ctx,18*k,18*k,cv.width-36*k,cv.height-36*k,()=>{
+    ctx.font=`900 ${220*k}px ${FONT_WRITE}`;
+    ctx.textAlign="center";ctx.textBaseline="middle";
+    ctx.fillStyle="#ECE5F8";ctx.fillText(c,cv.width/2,cv.height/2+14*k);
+    ctx.strokeStyle="#A888D0";ctx.lineWidth=2.4*k;ctx.setLineDash([4.5*k,8*k]);
+    ctx.strokeText(c,cv.width/2,cv.height/2+14*k);ctx.setLineDash([]);
+  });
+}
+/* もじの ます（げんこう風の わく）と、右上に てん（濁点/半濁点）の ガイドを描く。
+   base が null のときは たんどく練習（わく＋てん だけ）。base があるときは もじに つける練習。 */
+function drawTenGuide(cv,kind,base){
+  const ctx=cv.getContext("2d");
+  const k=cv.width/340;
+  ctx.clearRect(0,0,cv.width,cv.height);
+  // げんこうマスの わく（もじ1文字分の大きさの目安）
+  const m=18*k;
+  ctx.strokeStyle="#D8CDEC";ctx.lineWidth=3*k;ctx.setLineDash([9*k,6*k]);
+  ctx.strokeRect(m,m,cv.width-2*m,cv.height-2*m);
+  ctx.setLineDash([]);
+  ctx.strokeStyle="#E8E0F5";ctx.lineWidth=1.6*k;ctx.setLineDash([4*k,5*k]);
+  ctx.beginPath();ctx.moveTo(cv.width/2,m);ctx.lineTo(cv.width/2,cv.height-m);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(m,cv.height/2);ctx.lineTo(cv.width-m,cv.height/2);ctx.stroke();
+  ctx.setLineDash([]);
+
+  if(base){
+    /* クリップは 見える わく（m）より さらに内側に して、あんぜんマージンを もたせる */
+    const cm=m+6*k;
+    clipBox(ctx,cm,cm,cv.width-2*cm,cv.height-2*cm,()=>{
+      ctx.font=`900 ${206*k}px ${FONT_WRITE}`;
+      ctx.textAlign="center";ctx.textBaseline="middle";
+      ctx.fillStyle="#ECE5F8";
+      ctx.fillText(base,cv.width/2-6*k,cv.height/2+16*k);
+    });
+  }
+
+  // てんガイド：もじの右上に、正しい いち・おおきさ で薄く表示する
+  const mark = kind==="daku" ? "゛" : "゜";
+  const tx = cv.width*0.685, ty = cv.height*0.255;
+  // てんの大きさを意識させる 補助まる
+  ctx.beginPath();ctx.arc(tx,ty,48*k,0,Math.PI*2);
+  ctx.strokeStyle="#F0C77A";ctx.lineWidth=2.3*k;ctx.setLineDash([5*k,5*k]);ctx.stroke();ctx.setLineDash([]);
+  clipBox(ctx,tx-50*k,ty-50*k,100*k,100*k,()=>{
+    ctx.font=`900 ${100*k}px ${FONT_WRITE}`;
+    ctx.textAlign="center";ctx.textBaseline="middle";
+    ctx.fillStyle="#FBEBC8";
+    ctx.fillText(mark,tx,ty+4*k);
+    ctx.strokeStyle="#E8A838";ctx.lineWidth=2.4*k;ctx.setLineDash([3.5*k,6*k]);
+    ctx.strokeText(mark,tx,ty+4*k);ctx.setLineDash([]);
+  });
+}
+/* ことば（複数もじ）ガイド：1もじぶんずつ マスに区切って ガイド文字を表示する。
+   k は「1マスぶんの高さ」を基準にした縮尺（drawFullCharGuideの340基準と同じ考え方）。
+   cols を指定すると、その れつ数で おり返して 複数行に なる（1マスを大きく保つため）。 */
+function drawWordGuideCellK(cv,word,cols){
+  const len=Math.max(1,(word||"").length);
+  cols=cols||len;
+  const rows=Math.ceil(len/cols);
+  return Math.min(cv.width/cols, cv.height/rows)/220;
+}
+function drawWordGuide(cv,word,cols){
+  const ctx=cv.getContext("2d");
+  const len=Math.max(1,word.length);
+  cols=cols||len;
+  const rows=Math.ceil(len/cols);
+  const cellW=cv.width/cols, cellH=cv.height/rows;
+  const k=Math.min(cellW,cellH)/220;
+  ctx.clearRect(0,0,cv.width,cv.height);
+  for(let i=0;i<len;i++){
+    const col=i%cols, row=Math.floor(i/cols);
+    const x0=cellW*col, y0=cellH*row;
+    const cx=x0+cellW/2, cy=y0+cellH/2;
+    ctx.strokeStyle="#D8CDEC";ctx.lineWidth=2.6*k;ctx.setLineDash([7*k,5*k]);
+    ctx.strokeRect(x0+6*k,y0+6*k,cellW-12*k,cellH-12*k);
+    ctx.setLineDash([]);
+    ctx.strokeStyle="#ECE5F8";ctx.lineWidth=1.4*k;ctx.setLineDash([3*k,4*k]);
+    ctx.beginPath();ctx.moveTo(cx,y0+6*k);ctx.lineTo(cx,y0+cellH-6*k);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(x0+6*k,cy);ctx.lineTo(x0+cellW-6*k,cy);ctx.stroke();
+    ctx.setLineDash([]);
+    const fsize=Math.min(cellW*0.6,cellH*0.56);
+    /* クリップの わくは、見える てんせんの わく（x0+6*k,y0+6*k,cellW-12*k,cellH-12*k）
+       より さらに内側に する。これまでは クリップの ほうが てんせんの わくより
+       ひろかったため、フォントによっては てんせんを こえて描画されることがあった。 */
+    const cx0=x0+14*k, cy0=y0+14*k, cw=cellW-28*k, ch=cellH-28*k;
+    clipBox(ctx,cx0,cy0,cw,ch,()=>{
+      ctx.font=`900 ${fsize}px ${FONT_WRITE}`;
+      ctx.textAlign="center";ctx.textBaseline="middle";
+      ctx.fillStyle="#ECE5F8";
+      ctx.fillText(word[i],cx,cy+fsize*0.06);
+      ctx.strokeStyle="#A888D0";ctx.lineWidth=2*k;ctx.setLineDash([3.5*k,6.5*k]);
+      ctx.strokeText(word[i],cx,cy+fsize*0.06);ctx.setLineDash([]);
+    });
+  }
+}
+
+/* ===== トレース入力（ペン／けしごむ／やりなおし） ===== */
+let curDrawCv=null, curDrawCtx=null, curK=1;
+let strokeHistory=[]; /* ImageData のスナップショット（undo用） */
+const HISTORY_LIMIT=18;
+
+function pushHistory(){
+  if(!curDrawCtx)return;
+  try{
+    strokeHistory.push(curDrawCtx.getImageData(0,0,curDrawCv.width,curDrawCv.height));
+    if(strokeHistory.length>HISTORY_LIMIT) strokeHistory.shift();
+  }catch(e){}
+}
+function undoStroke(){
+  if(!curDrawCtx||!strokeHistory.length)return;
+  const img=strokeHistory.pop();
+  curDrawCtx.putImageData(img,0,0);
+}
+function clearDraw(){
+  if(!curDrawCtx)return;
+  pushHistory();
+  curDrawCtx.clearRect(0,0,curDrawCv.width,curDrawCv.height);
+}
+function applyEraseMode(){
+  if(!curDrawCtx)return;
+  if(S.eraseMode){ curDrawCtx.globalCompositeOperation="destination-out"; curDrawCtx.lineWidth=30*curK; }
+  else { curDrawCtx.globalCompositeOperation="source-over"; curDrawCtx.lineWidth=13*curK; curDrawCtx.strokeStyle="#3A9A8C"; }
+}
+function setupTrace(dc,kOverride){
+  curDrawCv=dc; curDrawCtx=dc.getContext("2d");
+  curK = (typeof kOverride==="number") ? kOverride : dc.width/340;
+  curDrawCtx.lineCap="round";curDrawCtx.lineJoin="round";
+  applyEraseMode();
+  let dg=false;
+  const pt=e=>{const r=dc.getBoundingClientRect(),s=e.touches?e.touches[0]:e;return{x:(s.clientX-r.left)*(dc.width/r.width),y:(s.clientY-r.top)*(dc.height/r.height)};};
+  /* なぞっている間だけページぜんたいのスクロールを完全にロックする。
+     canvas 自体の touch-action:none / preventDefault だけでは、iPad で
+     指をはやく動かしたときに画面がバウンス／スクロールしてしまうことがあるため、
+     ストロークの開始〜終了のあいだ、確実に body 側もロックする。
+     ズームモーダルが開いているときは、そちらがロックを管理するので
+     ストローク終了時にかってに解除しない。 */
+  const s=e=>{ dg=true; document.body.classList.add("no-scroll"); pushHistory(); const p=pt(e); curDrawCtx.beginPath(); curDrawCtx.moveTo(p.x,p.y); e.preventDefault(); };
+  const m=e=>{ if(!dg)return; const p=pt(e); curDrawCtx.lineTo(p.x,p.y); curDrawCtx.stroke(); e.preventDefault(); };
+  const en=()=>{ dg=false; if(!zoomOpen) document.body.classList.remove("no-scroll"); };
+  dc.addEventListener("pointerdown",s);dc.addEventListener("pointermove",m);
+  window.addEventListener("pointerup",en);window.addEventListener("pointercancel",en);
+  dc.addEventListener("touchstart",s,{passive:false});dc.addEventListener("touchmove",m,{passive:false});
+  dc.addEventListener("touchend",en);dc.addEventListener("touchcancel",en);
+}
+
+/* ===== レンダリング：清音・濁音・半濁音（1文字トレース） ===== */
+function renderChar(){
+  strokeHistory=[];
+  const ch=S.curChar;
+  stage.innerHTML="";
+  addEl("p","prompt",`<span class="em">${ch.c}</span> を ゆっくり なぞってみよう`);
+  const hint=addEl("p","subhint");
+  if(ch.c==="を"){ hint.textContent="「"+ch.r+"」— "+ch.w; }
+  else { hint.textContent="「"+ch.r+"」— "+ch.w+" "+(ch.e||""); }
+  const stack=buildCanvasStack();stage.appendChild(stack);
+  const dc=stack.querySelector("#drawCanvas");
+  drawFullCharGuide(stack.querySelector("#guideCanvas"),ch.c);
+  setupTrace(dc);
+  const tools=buildToolbar(
+    ()=>clearDraw(),
+    ()=>{ markStamp(S.mode,ch.c); rebuildStamp(ch.c); showFB(); },
+    ()=>openZoomChar(ch)
+  );
+  stage.appendChild(tools);
+  const fb=addEl("div","fb");fb.id="fb";
+  const nextRow=buildNextRow(()=>{ advanceChar(); });
+  stage.appendChild(nextRow);
+}
+function rebuildStamp(){
+  buildCharGrid(ALL_ITEMS[S.mode]);
+  selectCharInGrid(S.curChar);
+}
+function advanceChar(){
+  const items=ALL_ITEMS[S.mode];
+  const idx=items.findIndex(it=>it.c===S.curChar.c);
+  const next=items[(idx+1)%items.length];
+  S.curChar=next; selectCharInGrid(next);
+  if(zoomOpen){ openZoomChar(next); } else { renderChar(); }
+}
+
+/* ===== レンダリング：もじに つける（濁点/半濁点をあとから付ける） ===== */
+function renderAttach(){
+  strokeHistory=[];
+  const p=S.curPair; // [base, result]
+  stage.innerHTML="";
+  const kindLabel = S.tenKind==="daku" ? "だくてん（゛）" : "はんだくてん（゜）";
+  addEl("p","prompt",`<span class="em">${p[0]}</span> に ${kindLabel} を つけて <span class="em">${p[1]}</span> に しよう`);
+  addEl("p","subhint","みぎうえの てんの いちと おおきさに きを つけて なぞってみよう");
+  const stack=buildCanvasStack();stage.appendChild(stack);
+  const dc=stack.querySelector("#drawCanvas");
+  drawTenGuide(stack.querySelector("#guideCanvas"),S.tenKind,p[0]);
+  setupTrace(dc);
+  const tools=buildToolbar(
+    ()=>clearDraw(),
+    ()=>{ markStamp(S.tenKind==="daku"?"daku":"handaku", p[1]); buildPairGrid(S.tenKind==="daku"?DAKUTEN_PAIRS:HANDAKUTEN_PAIRS); selectPairInGrid(p); showFB(); },
+    ()=>openZoomAttach(p)
+  );
+  stage.appendChild(tools);
+  const fb=addEl("div","fb");fb.id="fb";
+  const nextRow=buildNextRow(()=>{ advancePair(); });
+  stage.appendChild(nextRow);
+}
+function advancePair(){
+  const pairs = S.tenKind==="daku" ? DAKUTEN_PAIRS : HANDAKUTEN_PAIRS;
+  const idx=pairs.findIndex(x=>x[0]===S.curPair[0]);
+  const next=pairs[(idx+1)%pairs.length];
+  S.curPair=next; selectPairInGrid(next);
+  if(zoomOpen){ openZoomAttach(next); } else { renderAttach(); }
+}
+
+/* ===== レンダリング：てん だけ たんどく ===== */
+function renderSolo(){
+  strokeHistory=[];
+  stage.innerHTML="";
+  const kindLabel = S.tenKind==="daku" ? "だくてん（゛）" : "はんだくてん（゜）";
+  addEl("p","prompt",`<span class="em">${kindLabel}</span> だけを なぞってみよう`);
+  addEl("p","subhint","もじの ますの みぎうえに つく、いちと おおきさを おぼえよう");
+  const stack=buildCanvasStack();stage.appendChild(stack);
+  const dc=stack.querySelector("#drawCanvas");
+  drawTenGuide(stack.querySelector("#guideCanvas"),S.tenKind,null);
+  setupTrace(dc);
+  const tools=buildToolbar(
+    ()=>clearDraw(),
+    ()=>{ markStamp("tensolo",S.tenKind); showFB(); },
+    ()=>openZoomSolo()
+  );
+  stage.appendChild(tools);
+  const fb=addEl("div","fb");fb.id="fb";
+}
+
+/* ===== レンダリング：ことば（たんご）なぞりがき ===== */
+function renderWord(){
+  strokeHistory=[];
+  const item=S.curWord;
+  stage.innerHTML="";
+  addEl("p","prompt",`<span class="em">${item.w}</span> を ゆっくり なぞってみよう`);
+  addEl("p","subhint","1もじずつ ていねいに つなげよう　"+(item.e||""));
+  const stack=buildWordCanvasStack(item.w,false);stage.appendChild(stack);
+  const dc=stack.querySelector("#drawCanvas");
+  const gc=stack.querySelector("#guideCanvas");
+  const wCols=computeWordLayout(item.w,false).cols;
+  drawWordGuide(gc,item.w,wCols);
+  setupTrace(dc,drawWordGuideCellK(gc,item.w,wCols));
+  const tools=buildToolbar(
+    ()=>clearDraw(),
+    ()=>{ markStamp("word",item.w); rebuildWordStamp(); showFB(); },
+    ()=>openZoomWord(item)
+  );
+  stage.appendChild(tools);
+  const fb=addEl("div","fb");fb.id="fb";
+  const nextRow=buildNextRow(()=>{ advanceWord(); });
+  stage.appendChild(nextRow);
+}
+function rebuildWordStamp(){
+  buildWordGrid(WORDS);
+  selectWordInGrid(S.curWord);
+}
+function advanceWord(){
+  const idx=WORDS.findIndex(it=>it.w===S.curWord.w);
+  const next=WORDS[(idx+1)%WORDS.length];
+  S.curWord=next; selectWordInGrid(next);
+  if(zoomOpen){ openZoomWord(next); } else { renderWord(); }
+}
+
+function showFB(){
+  const fb=document.getElementById("fb");
+  if(fb){ fb.textContent="◎ "+PRAISE[Math.floor(Math.random()*PRAISE.length)]; }
+  triggerCorrectFeedback();
+  updateZukanCount();
+}
+
+/* ===== おおきく する（ズーム） ===== */
+function openZoomGeneric(promptHtml,hintText,drawFn,doneFn,showNext,nextFn,stackFn){
+  zoomOpen=true;
+  document.body.classList.add("no-scroll");
+  document.getElementById("zoomPrompt").innerHTML=promptHtml;
+  document.getElementById("zoomHint").textContent=hintText;
+  const slot=document.getElementById("zoomSlot");
+  slot.innerHTML="";
+  /* モーダルを 先に「開いた状態」にしてから 中身を組み立てる。
+     こうすることで zoom-card の 実際の はば が 測れるようになり、
+     キャンバスの おおきさを モーダルの はば に あわせて 正しく 計算できる。 */
+  document.getElementById("zoomModal").classList.add("open");
+  const stack = stackFn ? stackFn() : buildCanvasStack();
+  stack.classList.add("zoomed");
+  slot.appendChild(stack);
+  const dc=stack.querySelector("#drawCanvas");
+  const gc=stack.querySelector("#guideCanvas");
+  const kOverride=drawFn(gc);
+  strokeHistory=[];
+  setupTrace(dc, typeof kOverride==="number" ? kOverride : undefined);
+  const tools=buildToolbar(()=>clearDraw(), ()=>{ doneFn(); zoomFb(); }, ()=>{});
+  // ズーム内は「おおきくする」ボタン自体は不要なので取り除く
+  const zbtn=tools.querySelector(".tbtn.zoom"); if(zbtn) zbtn.remove();
+  slot.appendChild(tools);
+  if(showNext){
+    const nr=buildNextRow(()=>{ nextFn(); });
+    slot.appendChild(nr);
+  }
+}
+function zoomFb(){
+  const fb=document.getElementById("zoomFb");
+  if(fb) fb.textContent="◎ "+PRAISE[Math.floor(Math.random()*PRAISE.length)];
+  triggerCorrectFeedback();
+  updateZukanCount();
+}
+function openZoomChar(ch){
+  openZoomGeneric(
+    `<span class="em">${ch.c}</span> を ゆっくり なぞってみよう`,
+    "「"+ch.r+"」— "+ch.w,
+    cv=>drawFullCharGuide(cv,ch.c),
+    ()=>{ markStamp(S.mode,ch.c); rebuildStamp(); },
+    true, ()=>advanceChar()
+  );
+}
+function openZoomAttach(p){
+  const kindLabel = S.tenKind==="daku" ? "だくてん（゛）" : "はんだくてん（゜）";
+  openZoomGeneric(
+    `<span class="em">${p[0]}</span> に ${kindLabel} を つけて <span class="em">${p[1]}</span> に しよう`,
+    "みぎうえの てんの いちと おおきさに きを つけて",
+    cv=>drawTenGuide(cv,S.tenKind,p[0]),
+    ()=>{ markStamp(S.tenKind==="daku"?"daku":"handaku",p[1]); buildPairGrid(S.tenKind==="daku"?DAKUTEN_PAIRS:HANDAKUTEN_PAIRS); selectPairInGrid(p); },
+    true, ()=>advancePair()
+  );
+}
+function openZoomSolo(){
+  const kindLabel = S.tenKind==="daku" ? "だくてん（゛）" : "はんだくてん（゜）";
+  openZoomGeneric(
+    `<span class="em">${kindLabel}</span> だけを なぞってみよう`,
+    "もじの ますの みぎうえに つく、いちと おおきさを おぼえよう",
+    cv=>drawTenGuide(cv,S.tenKind,null),
+    ()=>{ markStamp("tensolo",S.tenKind); },
+    false, null
+  );
+}
+function openZoomWord(item){
+  openZoomGeneric(
+    `<span class="em">${item.w}</span> を ゆっくり なぞってみよう`,
+    "1もじずつ ていねいに つなげよう　"+(item.e||""),
+    cv=>{ const wCols=computeWordLayout(item.w,true).cols; drawWordGuide(cv,item.w,wCols); return drawWordGuideCellK(cv,item.w,wCols); },
+    ()=>{ markStamp("word",item.w); rebuildWordStamp(); },
+    true, ()=>advanceWord(),
+    ()=>buildWordCanvasStack(item.w,true)
+  );
+}
+function closeZoom(){
+  zoomOpen=false;
+  document.body.classList.remove("no-scroll");
+  document.getElementById("zoomModal").classList.remove("open");
+  document.getElementById("zoomSlot").innerHTML="";
+}
+document.getElementById("zoomClose").onclick=closeZoom;
+document.getElementById("zoomModal").addEventListener("click",e=>{ if(e.target.id==="zoomModal") closeZoom(); });
+
+/* ===== もじずかん Modal ===== */
+const zukanModal=document.getElementById("zukanModal");
+const zukanBody=document.getElementById("zukanBody");
+function buildZukanGroup(title,items,keyFn,labelFn){
+  const g=mk("div","zukan-group");
+  g.appendChild(Object.assign(document.createElement("h3"),{textContent:title}));
+  const grid=mk("div","zukan-grid");
+  items.forEach(it=>{
+    const k=keyFn(it);
+    const lb=labelFn(it);
+    const cell=mk("div","zcell"+(hasStamp.apply(null,k)?" got":"")+(lb.length>1?" wide":""));
+    cell.textContent=lb;
+    grid.appendChild(cell);
+  });
+  g.appendChild(grid);
+  return g;
+}
+function renderZukan(){
+  zukanBody.innerHTML="";
+  zukanBody.appendChild(buildZukanGroup("あ せいおん（46）",SEION,it=>["sei",it.c],it=>it.c));
+  zukanBody.appendChild(buildZukanGroup("が だくおん（20）",DAKUON,it=>["daku",it.c],it=>it.c));
+  zukanBody.appendChild(buildZukanGroup("ぱ はんだくおん（5）",HANDAKUON,it=>["handaku",it.c],it=>it.c));
+  zukanBody.appendChild(buildZukanGroup("゛゜ てん たんどく",[{c:"daku",l:"゛"},{c:"handaku",l:"゜"}],it=>["tensolo",it.c],it=>it.l));
+  zukanBody.appendChild(buildZukanGroup("📝 ことば（"+WORDS.length+"）",WORDS,it=>["word",it.w],it=>it.w));
+  updateZukanCount();
+}
+document.getElementById("btnZukan").onclick=()=>{ renderZukan(); zukanModal.classList.add("open"); };
+document.getElementById("zukanClose").onclick=()=>zukanModal.classList.remove("open");
+zukanModal.addEventListener("click",e=>{ if(e.target===zukanModal) zukanModal.classList.remove("open"); });
+document.getElementById("zukanReset").onclick=()=>{
+  if(window.confirm("もじずかんの ⭐ スタンプを ぜんぶ けしますか？（この操作は取り消せません）")){
+    STAMPS={}; saveStamps(STAMPS); renderZukan(); refreshGridAndStage();
+  }
+};
+
+/* ===== プリント（ワークシート） ===== */
+const pModal=document.getElementById("pModal");
+document.getElementById("limitSeg").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-limit]");if(!b)return;
+  setSeg("limitSeg","limit",b.dataset.limit);
+});
+document.getElementById("repsSeg").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-reps]");if(!b)return;
+  setSeg("repsSeg","reps",b.dataset.reps);
+});
+document.getElementById("btnPrint").onclick=()=>pModal.classList.add("open");
+document.getElementById("pCancel").onclick=()=>pModal.classList.remove("open");
+pModal.addEventListener("click",e=>{ if(e.target===pModal) pModal.classList.remove("open"); });
+document.getElementById("pGo").onclick=()=>{ pModal.classList.remove("open"); buildPrint(); };
+
+function buildPrintHeader(){
+  const h=mk("div","pp-header");
+  h.innerHTML=
+    '<div class="pp-brand">'+
+      '<div class="pp-orb"></div>'+
+      '<div><h2>MieeL なぞりがき ワークシート</h2><div class="pp-url">mieel-support-school.com</div></div>'+
+    '</div>'+
+    '<div class="pp-fields"><span>なまえ：</span><span>ひづけ：</span></div>';
+  return h;
+}
+function applyLimit(items,limit){
+  if(!limit || limit<=0 || limit>=items.length) return items;
+  return items.slice(0,limit);
+}
+function buildPrintSection(sec,reps){
+  const wrap=mk("div","");
+  const h3=mk("div","ws-sec-title");h3.textContent=sec.title;wrap.appendChild(h3);
+  sec.items.forEach(it=>{
+    const row=mk("div","ws-row");
+    if(sec.type==="word"){
+      const lbl=mk("div","ws-label");
+      lbl.innerHTML='<span class="lb-main" style="font-size:4.5mm;">'+it.w+'</span><span class="lb-emoji">'+(it.e||"")+'</span>';
+      row.appendChild(lbl);
+      const cellsWrap=mk("div","ws-word-row");
+      const fsz=Math.max(20,Math.min(40,150/it.w.length));
+      for(let i=0;i<reps;i++){
+        const c=mk("span","ws-word-cell");c.textContent=it.w;c.style.fontSize=fsz+"mm";
+        cellsWrap.appendChild(c);
+      }
+      row.appendChild(cellsWrap);
+    } else if(sec.type==="ten"){
+      const lbl=mk("div","ws-label");
+      lbl.innerHTML='<span class="lb-main">'+it.base+'→'+it.result+'</span>';
+      row.appendChild(lbl);
+      const cellsWrap=mk("div","ws-cells");
+      for(let i=0;i<reps;i++){
+        const c=mk("div","ws-tencell");
+        c.innerHTML='<span class="base">'+it.base+'</span><span class="mark">'+it.mark+'</span>';
+        cellsWrap.appendChild(c);
+      }
+      row.appendChild(cellsWrap);
+    } else {
+      const lbl=mk("div","ws-label");
+      lbl.innerHTML='<span class="lb-main">'+it.c+'</span><span>'+it.r+'</span>';
+      row.appendChild(lbl);
+      const cellsWrap=mk("div","ws-cells");
+      for(let i=0;i<reps;i++){
+        const c=mk("div","ws-cell");
+        c.innerHTML='<span class="hol">'+it.c+'</span>';
+        cellsWrap.appendChild(c);
+      }
+      row.appendChild(cellsWrap);
+    }
+    wrap.appendChild(row);
+  });
+  return wrap;
+}
+function buildPrint(){
+  const reps=parseInt((document.querySelector('#repsSeg button[aria-pressed="true"]')||{}).dataset&&document.querySelector('#repsSeg button[aria-pressed="true"]').dataset.reps,10)||2;
+  const limit=parseInt((document.querySelector('#limitSeg button[aria-pressed="true"]')||{}).dataset&&document.querySelector('#limitSeg button[aria-pressed="true"]').dataset.limit,10)||0;
+
+  const sections=[];
+  if(document.getElementById("pkSei").checked) sections.push({title:"あ せいおん（清音）",type:"char",items:applyLimit(SEION,limit)});
+  if(document.getElementById("pkDaku").checked) sections.push({title:"が だくおん（濁音）",type:"char",items:applyLimit(DAKUON,limit)});
+  if(document.getElementById("pkHandaku").checked) sections.push({title:"ぱ はんだくおん（半濁音）",type:"char",items:applyLimit(HANDAKUON,limit)});
+  if(document.getElementById("pkTen").checked){
+    const tenItems=[
+      ...DAKUTEN_PAIRS.map(p=>({base:p[0],result:p[1],mark:"゛"})),
+      ...HANDAKUTEN_PAIRS.map(p=>({base:p[0],result:p[1],mark:"゜"})),
+    ];
+    sections.push({title:"゛゜ てん・もじに つける",type:"ten",items:applyLimit(tenItems,limit)});
+  }
+  if(document.getElementById("pkWord").checked) sections.push({title:"📝 ことば",type:"word",items:applyLimit(WORDS,limit)});
+
+  if(!sections.length){ window.alert("いんさつする ないようを 1つ いじょう えらんでください"); return; }
+
+  const PA=document.getElementById("PA");
+  PA.innerHTML="";
+  const page=mk("div","pp");
+  page.appendChild(buildPrintHeader());
+  sections.forEach(sec=>{ page.appendChild(buildPrintSection(sec,reps)); });
+  const foot=mk("div","pp-foot");
+  foot.textContent="MieeL（ミエル）｜ www.mieel-support-school.com ｜ まちがいはありません。じぶんの ペースで すすめましょう。";
+  page.appendChild(foot);
+  PA.appendChild(page);
+
+  window.print();
+}
+
+/* ===== INIT ===== */
+updateZukanCount();
+refreshGridAndStage();
+
+/* テスト・検証用フック（本番動作には影響しません） */
+if(window.__ENABLE_TEST_HOOK__){
+  window.__TEST__={
+    S, SEION, DAKUON, HANDAKUON, DAKUTEN_PAIRS, HANDAKUTEN_PAIRS, WORDS,
+    STAMPS, TOTAL_STAMPS, markStamp, hasStamp, countStamps,
+    renderChar, renderAttach, renderSolo, renderWord, advanceChar, advancePair, advanceWord,
+    openZoomChar, openZoomAttach, openZoomSolo, openZoomWord, closeZoom,
+    undoStroke, clearDraw, pushHistory, getStrokeHistoryLen:()=>strokeHistory.length,
+    buildPrint,
+  };
+}
+})();
+</script>
+</body>
+</html>
