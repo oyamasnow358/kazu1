@@ -1,10 +1,27 @@
-
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>先生方の動き（年間スケジュール）｜MieeL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
+  :root{
+    --font-sans:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","BIZ UDPGothic","Yu Gothic UI",sans-serif;
+    --color-text-primary:#2E2A25; --color-text-secondary:#6B6457;
+    --color-border-tertiary:#E3DCCB; --color-border-secondary:#D6CDB8;
+    --color-background-secondary:#FFFFFF; --border-radius-md:12px;
+  }
+  html,body{background:#FAF7EF;color:var(--color-text-primary);}
+  body{-webkit-text-size-adjust:100%;}
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: var(--font-sans); }
-  .container { padding: 1.5rem 1rem; max-width: 680px; }
+  .container { padding: 1.5rem 16px 3rem; max-width: 760px; margin: 0 auto; }
   .header { margin-bottom: 1.5rem; }
-  .header h1 { font-size: 18px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+  .header h1 { font-size: 22px; font-weight: 800; color: var(--color-text-primary); margin-bottom: 4px; }
   .header p { font-size: 13px; color: var(--color-text-secondary); }
   .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 1.25rem; }
   .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--color-text-secondary); }
@@ -17,8 +34,8 @@
   .tasks { display: flex; flex-direction: column; gap: 6px; padding-left: 8px; border-left: 2px solid var(--color-border-tertiary); margin-left: 20px; }
   .task { border-radius: var(--border-radius-md); padding: 10px 12px; border: 0.5px solid; cursor: pointer; transition: opacity 0.15s; }
   .task:hover { opacity: 0.85; }
-  .task-title { font-size: 13px; font-weight: 500; margin-bottom: 3px; }
-  .task-body { font-size: 12px; line-height: 1.5; }
+  .task-title { font-size: 15px; font-weight: 500; margin-bottom: 3px; }
+  .task-body { font-size: 14px; line-height: 1.5; }
   .deadline { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 7px; border-radius: 20px; margin-bottom: 5px; }
   /* colors - all group */
   .all { background: #E6F1FB; border-color: #85B7EB; }
@@ -41,16 +58,30 @@
   .admin .task-body { color: #444441; }
   /* filter area */
   .filter-area { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.25rem; }
-  .filter-btn { font-size: 12px; padding: 5px 12px; border-radius: 20px; border: 0.5px solid var(--color-border-secondary); background: var(--color-background-secondary); color: var(--color-text-secondary); cursor: pointer; transition: all 0.15s; }
+  .filter-btn { font-size: 14px; padding: 9px 16px; min-height:40px; border-radius: 20px; border: 0.5px solid var(--color-border-secondary); background: var(--color-background-secondary); color: var(--color-text-secondary); cursor: pointer; transition: all 0.15s; }
   .filter-btn.active { border-color: #378ADD; background: #E6F1FB; color: #185FA5; font-weight: 500; }
   .hidden { display: none; }
   .dot-line { width: 2px; height: 12px; background: var(--color-border-tertiary); margin: 0 auto 0 19px; }
   .important-box { background: #FAECE7; border: 0.5px solid #F0997B; border-radius: var(--border-radius-md); padding: 10px 14px; margin-bottom: 1rem; }
   .important-box p { font-size: 13px; color: #4A1B0C; line-height: 1.6; }
   .important-box strong { color: #993C1D; }
-</style>
 
+  .brand{display:flex;align-items:center;gap:8px;margin-bottom:14px;font-size:14px;}
+  .brand .orb{width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 50% 0%,#1B8FE8 0%,#2BB8D6 28%,#3FCB9E 45%,#8FD24A 58%,#F4D027 72%,#F7941E 100%);}
+  .brand a{color:#1C7ED6;text-decoration:none;font-weight:700;}
+  .next{background:#fff;border:3px solid #1C7ED6;border-radius:16px;padding:12px 16px;margin-bottom:1rem;}
+  .next .lb{font-size:13px;color:#1C7ED6;font-weight:800;margin-bottom:4px;}
+  .next .tt{font-size:17px;font-weight:800;}
+  .next .dd{font-size:14px;color:#6B6457;}
+  .task.past{opacity:.55;}
+  .task.soon{box-shadow:0 0 0 3px #1C7ED6;}
+  .month-block.now .month-tag{color:#fff;background:#1C7ED6;border-radius:999px;padding:2px 10px;}
+  @media print{.filter-area,.next{display:none}.task.past{opacity:1}}
+</style>
+</head>
+<body>
 <div class="container">
+  <div class="brand"><span class="orb"></span><strong>MieeL</strong><a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener">mieel-support-school.com</a></div>
   <div class="header">
     <h1>先生方の動き — 年間スケジュール</h1>
     <p>自分が次に何をするか、いつまでにやるかが一目でわかるガイドです</p>
@@ -64,11 +95,13 @@
     </p>
   </div>
 
+  <div class="next" id="next" hidden></div>
+
   <div class="filter-area">
-    <button class="filter-btn active" onclick="filterTasks('all-filter')">全員表示</button>
-    <button class="filter-btn" onclick="filterTasks('all')">全先生共通</button>
-    <button class="filter-btn" onclick="filterTasks('rep')">学部代表者のみ</button>
-    <button class="filter-btn" onclick="filterTasks('nonrep')">代表者以外</button>
+    <button class="filter-btn active" onclick="filterTasks(this, 'all-filter')">全員表示</button>
+    <button class="filter-btn" onclick="filterTasks(this, 'all')">全先生共通</button>
+    <button class="filter-btn" onclick="filterTasks(this, 'rep')">学部代表者のみ</button>
+    <button class="filter-btn" onclick="filterTasks(this, 'nonrep')">代表者以外</button>
   </div>
 
   <div class="legend">
@@ -274,22 +307,35 @@
 </div>
 
 <script>
-function filterTasks(group) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
-  
-  const tasks = document.querySelectorAll('.task');
-  tasks.forEach(t => {
-    const g = t.getAttribute('data-group');
-    if (group === 'all-filter') {
-      t.classList.remove('hidden');
-    } else if (group === 'all') {
-      t.classList.toggle('hidden', g !== 'all' && g !== 'admin');
-    } else if (group === 'rep') {
-      t.classList.toggle('hidden', g !== 'all' && g !== 'rep');
-    } else if (group === 'nonrep') {
-      t.classList.toggle('hidden', g !== 'all' && g !== 'nonrep');
-    }
+function filterTasks(btn, group) {
+  document.querySelectorAll('.filter-btn').forEach(function (b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  document.querySelectorAll('.task').forEach(function (t) {
+    var g = t.getAttribute('data-group');
+    if (group === 'all-filter') t.classList.remove('hidden');
+    else if (group === 'all') t.classList.toggle('hidden', g !== 'all' && g !== 'admin');
+    else t.classList.toggle('hidden', g !== 'all' && g !== group);
   });
 }
+// きょうの ひづけから「つぎの よてい」を だす（年度：4月〜3月）
+(function () {
+  var now = new Date(), fy = now.getMonth() >= 3 ? now.getFullYear() : now.getFullYear() - 1, today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  var next = null;
+  document.querySelectorAll('.task').forEach(function (t) {
+    var dl = t.querySelector('.deadline'); if (!dl) return;
+    var m = dl.textContent.match(/(\d+)月(\d+)日/); if (!m) return;
+    var mo = +m[1], d = new Date(mo >= 4 ? fy : fy + 1, mo - 1, +m[2]);
+    if (d < today) t.classList.add('past');
+    else if (!next || d < next.d) next = { d: d, t: t };
+  });
+  document.querySelectorAll('.month-block').forEach(function (b) { var tg = b.querySelector('.month-tag'); if (tg && +tg.textContent.replace(/\D/g, '') === now.getMonth() + 1) b.classList.add('now'); });
+  if (next) {
+    next.t.classList.add('soon');
+    var box = document.getElementById('next'); box.hidden = false;
+    var days = Math.round((next.d - today) / 86400000);
+    box.innerHTML = '<div class="lb">📌 つぎの 予定' + (days === 0 ? '（きょう）' : '（あと ' + days + '日）') + '</div><div class="tt">' + next.t.querySelector('.task-title').innerHTML + '</div><div class="dd">' + next.t.querySelector('.deadline').textContent + '</div>';
+  }
+})();
 </script>
+</body>
+</html>

@@ -2,1539 +2,1353 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<title>とけいのがくしゅう</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="とけい">
+<meta name="theme-color" content="#FAF7EF">
+<title>とけいの がくしゅう｜MieeL</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800&family=Klee+One:wght@600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#FAF6EC;
-    --card:#FFFFFF;
-    --ink:#2C3A4A;
-    --ink-soft:#6C7A89;
-    --hour:#D9583F;
-    --hour-soft:#F6D9D2;
-    --minute:#2E7D8C;
-    --minute-soft:#D7EBEE;
-    --accent:#F0B94A;
-    --accent-soft:#FBECC9;
-    --success:#4F9A63;
-    --success-soft:#E3F3E6;
-    --gentle:#C96A3F;
-    --gentle-soft:#FBE9DE;
-    --radius:22px;
-    --shadow:0 6px 18px rgba(44,58,74,0.10);
-    --maxw:920px;
-  }
-  *{box-sizing:border-box;}
-  html{font-size:17px;}
-  html.large-text{font-size:21px;}
-  body{
-    margin:0;
-    background:var(--bg);
-    color:var(--ink);
-    font-family:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
-    -webkit-font-smoothing:antialiased;
-    padding-bottom:40px;
-  }
-  .app{max-width:var(--maxw);margin:0 auto;padding:18px 16px 8px;}
-  header.top{
-    display:flex;align-items:center;justify-content:space-between;gap:12px;
-    flex-wrap:wrap;margin-bottom:14px;
-  }
-  .mieel-brand{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
-  .mieel-brand .orb-mini{width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 50% 0%,#1B8FE8 0%,#2BB8D6 28%,#3FCB9E 45%,#8FD24A 58%,#F4D027 72%,#F7941E 100%);flex:none;}
-  .mieel-brand strong{color:var(--ink);font-size:.85rem;}
-  .mieel-brand a{font-size:.78rem;color:var(--minute);text-decoration:none;font-weight:600;}
-  .mieel-brand a:hover{text-decoration:underline;}
-  header.top h1{
-    font-size:1.7rem;margin:0;font-weight:800;letter-spacing:.02em;
-    display:flex;align-items:center;gap:.4em;
-  }
-  header.top h1 .clockmoji{font-size:1.3em;}
-  header.top p{margin:2px 0 0;color:var(--ink-soft);font-size:.85rem;font-weight:500;}
-  .icon-btn{
-    border:2px solid var(--ink);background:var(--card);color:var(--ink);
-    border-radius:999px;padding:.5em 1em;font-weight:700;font-size:.85rem;
-    cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:.4em;
-  }
-  .icon-btn:hover{background:var(--accent-soft);}
-  .icon-btn:focus-visible, button:focus-visible, [tabindex]:focus-visible{
-    outline:3px solid var(--minute);outline-offset:2px;
-  }
+/*MZ-SHELL-CSS*/
+/* ==========================================================================
+   MieeL アプリ共通シェル（iPad 向け・全画面アプリ型）  shell.css
+   ※ このファイルは _shell/build.py で各アプリの index.html に埋め込まれます
+   ========================================================================== */
+:root{
+  --mz-main:#3F9D8B; --mz-main-d:#2C6B5D; --mz-soft:#DBEFEA;
+  --mz-bg:#FAF7EF; --mz-card:#FFFFFF; --mz-ink:#2E2A25; --mz-sub:#7D7466; --mz-line:#EAE1CE;
+  --mz-ok:#2F9E44; --mz-ok-d:#237A34; --mz-ok-soft:#E3F3E6;
+  --mz-ng:#E03131; --mz-ng-soft:#FFE3E3;
+  --mz-gold:#FAB005; --mz-blue:#1C7ED6; --mz-blue-d:#1864AB;
+  --mieel:radial-gradient(circle at 50% 0%,#1B8FE8 0%,#2BB8D6 28%,#3FCB9E 45%,#8FD24A 58%,#F4D027 72%,#F7941E 100%);
+  --mz-font:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","BIZ UDPGothic","Yu Gothic UI",sans-serif;
+  --mz-emoji:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;
+  --mz-scale:1;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;height:100%;}
+body.mz{
+  background:var(--mz-bg);color:var(--mz-ink);font-family:var(--mz-font);font-weight:700;
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation;overscroll-behavior:none;
+  display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;
+  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  word-break:keep-all;overflow-wrap:anywhere;
+}
+:where(body.mz) button{font-family:inherit;font-weight:inherit;color:inherit;cursor:pointer;touch-action:manipulation;}
+body.mz.big-text{--mz-scale:1.18;}
+.mz-emoji{font-family:var(--mz-emoji);font-weight:400;line-height:1;}
 
-  nav.modes{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
-  nav.modes button{
-    flex:1 1 140px;
-    font-family:inherit;font-weight:800;font-size:1.05rem;
-    padding:14px 10px;border-radius:var(--radius);border:3px solid transparent;
-    background:var(--card);color:var(--ink-soft);box-shadow:var(--shadow);
-    cursor:pointer;transition:transform .12s ease, border-color .12s ease, color .12s ease;
-  }
-  nav.modes button .sub{display:block;font-size:.72em;font-weight:500;margin-top:2px;}
-  nav.modes button:hover{transform:translateY(-2px);}
-  nav.modes button.active{border-color:var(--ink);color:var(--ink);background:var(--accent-soft);}
+/* ---------- 上のバー ---------- */
+.mz-top{flex:none;display:flex;align-items:center;gap:12px;padding:8px 16px;min-height:66px;}
+.mz-brand{display:flex;align-items:center;gap:7px;white-space:nowrap;flex:none;}
+.mz-orb{width:22px;height:22px;border-radius:50%;background:var(--mieel);flex:none;}
+.mz-brand strong{font-size:16px;}
+.mz-brand .url{font-size:12px;color:var(--mz-sub);font-weight:500;}
+.mz-apptitle{flex:1;min-width:0;display:flex;align-items:center;justify-content:center;gap:8px;font-size:clamp(18px,2.3vw,24px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mz-apptitle .mz-emoji{font-size:1.3em;}
+.mz-topbtn{flex:none;height:48px;padding:0 16px;border-radius:999px;border:3px solid var(--mz-line);background:#fff;font-size:16px;display:flex;align-items:center;gap:6px;box-shadow:0 3px 0 var(--mz-line);}
+.mz-topbtn[hidden]{display:none;}
+.mz-gear{position:relative;flex:none;width:50px;height:50px;border-radius:50%;border:none;background:transparent;opacity:.35;font-size:25px;display:grid;place-items:center;}
+.mz-gear::after{content:"";position:absolute;inset:2px;border-radius:50%;border:4px solid transparent;}
+.mz-gear.pressing{opacity:1;}
+.mz-gear.pressing::after{border-color:var(--mz-blue);animation:mzRing 1.5s linear forwards;}
+@keyframes mzRing{from{clip-path:inset(0 100% 0 0);}to{clip-path:inset(0 0 0 0);}}
 
-  section.panel{
-    background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);
-    padding:20px;margin-bottom:18px;
-  }
+main#mzView{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 18px 16px;}
+.mz-screen{flex:1;min-height:0;display:flex;flex-direction:column;animation:mzIn .25s ease-out;}
+@keyframes mzIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+@keyframes mzPop{from{transform:scale(.7);opacity:0;}to{transform:none;opacity:1;}}
+@keyframes mzShake{20%,60%{transform:translateX(-10px);}40%,80%{transform:translateX(10px);}}
+.mz-h1{margin:2px 0 12px;text-align:center;font-size:calc(clamp(26px,3.8vw,42px)*var(--mz-scale));}
 
-  .level-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px;}
-  .level-bar .level-btn{
-    font-family:inherit;flex:1 1 150px;text-align:left;
-    border:2px solid #E4DFD2;background:#FEFCF6;border-radius:16px;
-    padding:10px 12px;cursor:pointer;font-weight:700;color:var(--ink);
-  }
-  .level-bar .level-btn .stars{color:var(--accent);letter-spacing:1px;display:block;font-size:.9em;}
-  .level-bar .level-btn .name{display:block;font-size:1rem;}
-  .level-bar .level-btn.active{border-color:var(--hour);background:var(--hour-soft);}
-  .level-bar .level-btn:hover{border-color:var(--minute);}
+/* ---------- ホーム：モードカード ---------- */
+.mz-home{overflow-y:auto;padding-bottom:8px;}
+.mz-modes{flex:1;display:grid;grid-template-columns:repeat(var(--mcols,2),minmax(0,1fr));grid-auto-rows:minmax(150px,1fr);gap:clamp(12px,2vw,20px);max-width:1100px;width:100%;margin:0 auto;}
+@media (orientation:portrait){.mz-modes{--mcols:2!important;}}
+.mz-mode{
+  --c:var(--mz-main);position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  min-height:190px;padding:16px 12px;border-radius:30px;background:#fff;border:6px solid var(--c);
+  box-shadow:0 7px 0 rgba(0,0,0,.12);text-align:center;
+}
+.mz-mode:active{transform:translateY(5px);box-shadow:0 2px 0 rgba(0,0,0,.12);}
+.mz-mode .mz-emoji{font-size:calc(clamp(52px,6.5vw,72px)*var(--mz-scale));}
+.mz-mode .nm{font-size:calc(clamp(22px,2.6vw,30px)*var(--mz-scale));}
+.mz-mode .sb{font-size:calc(15px*var(--mz-scale));color:var(--mz-sub);font-weight:500;}
+.mz-mode .best{position:absolute;top:8px;right:12px;color:var(--mz-gold);font-size:18px;letter-spacing:1px;}
 
-  .clock-area{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start;justify-content:center;margin-top:14px;}
-  .clock-wrap{flex:0 0 auto;width:min(380px,90vw);}
-  svg.clockface{width:100%;height:auto;display:block;user-select:none;touch-action:none;}
-  .hand{transition:transform .22s ease;}
-  .hand.dragging{transition:none;}
-  .hand .hit{cursor:grab;}
-  .hand.dragging .hit{cursor:grabbing;}
+/* ---------- レベル ---------- */
+.mz-bar{flex:none;display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.mz-back{flex:none;height:60px;padding:0 22px;border-radius:999px;border:4px solid #ADB5BD;background:#fff;color:#495057;font-size:22px;box-shadow:0 4px 0 #DEE2E6;}
+.mz-back:active{transform:translateY(3px);box-shadow:0 1px 0 #DEE2E6;}
+.mz-bar .mz-label{flex:1;min-width:0;text-align:center;font-size:calc(clamp(20px,2.4vw,28px)*var(--mz-scale));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mz-levels{flex:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));grid-auto-rows:minmax(200px,min(52vh,340px));gap:18px;align-content:center;max-width:1060px;width:100%;margin:0 auto;}
+.mz-level{
+  --c:var(--mz-main);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:200px;
+  border-radius:30px;border:6px solid var(--c);background:#fff;box-shadow:0 7px 0 rgba(0,0,0,.12);padding:16px;text-align:center;
+}
+.mz-level:active{transform:translateY(5px);box-shadow:0 2px 0 rgba(0,0,0,.12);}
+.mz-level .stars{font-size:34px;color:var(--mz-gold);letter-spacing:4px;}
+.mz-level .nm{font-size:calc(clamp(22px,2.6vw,30px)*var(--mz-scale));}
+.mz-level .best{font-size:15px;color:var(--mz-sub);font-weight:500;}
 
-  .side-controls{flex:1 1 240px;min-width:230px;display:flex;flex-direction:column;gap:14px;}
-  .digital{
-    background:var(--ink);color:#fff;border-radius:16px;padding:16px;text-align:center;
-    font-size:2.1rem;font-weight:800;letter-spacing:.03em;display:flex;align-items:center;justify-content:center;gap:.3em;
-  }
-  .digital .h{color:#FFD9CC;}
-  .digital .m{color:#CDEFF4;}
-  .digital.hidden-value{font-size:1.4rem;color:#B8C2CC;font-weight:700;}
+/* ---------- あそぶ画面 ---------- */
+.mz-dots{display:flex;gap:6px;flex:none;}
+.mz-dots i{width:18px;height:18px;border-radius:50%;background:#E9E2D2;display:block;}
+.mz-dots i.ok{background:var(--mz-gold);}
+.mz-dots i.miss{background:#CFC6B4;}
+.mz-dots i.now{background:#fff;border:4px solid var(--c,var(--mz-main));}
+.mz-say{flex:none;width:64px;height:64px;border-radius:50%;border:4px solid var(--mz-line);background:#fff;font-size:30px;display:grid;place-items:center;box-shadow:0 4px 0 var(--mz-line);}
+.mz-say:active{transform:translateY(3px);box-shadow:0 1px 0 var(--mz-line);}
+.mz-stage{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:safe center;gap:clamp(12px,2.2vh,24px);overflow-y:auto;padding-bottom:6px;}
+.mz-stage.answered{padding-bottom:110px;}
+.mz-q.compact{flex-direction:row;justify-content:center;gap:14px;padding:10px 24px;}
+.mz-q.compact .qi{font-size:calc(44px*var(--mz-scale));}
+.mz-q.compact .qt{font-size:calc(clamp(22px,2.8vw,32px)*var(--mz-scale));}
+.mz-ow{width:min(100%,1100px);display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start;}
+.mz-ow .mz-slots,.mz-ow .mz-pool{width:100%;}
+.mz-ow .mz-pool{flex-direction:column;align-items:stretch;}
+.mz-ow .mz-tile{text-align:left;}
+@media (orientation:portrait){.mz-ow{grid-template-columns:1fr;}.mz-ow .mz-pool{flex-direction:row;align-items:center;}}
+.mz-q{
+  --c:var(--mz-main);width:min(100%,900px);background:#fff;border:6px solid var(--c);border-radius:32px;
+  padding:clamp(14px,2.4vh,26px) clamp(16px,3vw,34px);text-align:center;box-shadow:0 7px 0 rgba(0,0,0,.08);
+  display:flex;flex-direction:column;align-items:center;gap:8px;animation:mzPop .35s cubic-bezier(.2,1.4,.4,1);
+}
+.mz-q .qi{font-size:calc(clamp(46px,7vh,76px)*var(--mz-scale));}
+.mz-q .qi.big{font-size:calc(clamp(90px,17vh,150px)*var(--mz-scale));}
+.mz-q .qt{font-size:calc(clamp(24px,3.4vw,38px)*var(--mz-scale));line-height:1.45;}
+.mz-q .qs{font-size:calc(clamp(16px,1.9vw,20px)*var(--mz-scale));color:var(--mz-sub);font-weight:500;}
+.mz-q .qv{display:flex;justify-content:center;align-items:center;max-width:100%;}
+.mz-q .qv svg{max-width:100%;height:auto;}
+.mz-opts{width:min(100%,960px);display:grid;gap:clamp(10px,1.6vw,18px);grid-template-columns:repeat(var(--cols,2),minmax(0,1fr));}
+.mz-opt{
+  --c:var(--mz-main);min-height:calc(clamp(84px,13vh,112px)*var(--mz-scale));padding:12px 18px;border-radius:26px;border:5px solid var(--c);background:#fff;
+  font-size:calc(clamp(22px,2.9vw,34px)*var(--mz-scale));line-height:1.35;box-shadow:0 6px 0 var(--c);text-align:center;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.mz-opt:active{transform:translateY(5px);box-shadow:0 1px 0 var(--c);}
+.mz-opt .mz-emoji{font-size:1.4em;}
+.mz-opt.stack{flex-direction:column;gap:4px;padding:10px 8px;}
+.mz-opt.stack .mz-emoji{font-size:1.6em;}
+.mz-opt.ok{background:var(--mz-ok-soft);border-color:var(--mz-ok);box-shadow:0 6px 0 var(--mz-ok-d);color:#1F6A34;}
+.mz-opt.ng{animation:mzShake .45s;border-color:var(--mz-ng);background:var(--mz-ng-soft);box-shadow:0 6px 0 #B02525;}
+.mz-opt.gone{opacity:.28;pointer-events:none;box-shadow:none;transform:none;}
+.mz-opt.dim{opacity:.35;}
+.mz-explain{width:min(100%,860px);background:var(--mz-ok-soft);border-radius:18px;padding:10px 18px;font-size:calc(18px*var(--mz-scale));font-weight:500;text-align:center;line-height:1.6;animation:mzPop .3s ease-out;}
+.mz-next{
+  position:fixed;right:max(20px,env(safe-area-inset-right));bottom:max(20px,env(safe-area-inset-bottom));z-index:60;
+  height:84px;padding:0 44px;border:none;border-radius:999px;background:var(--mz-ok);color:#fff;
+  font-size:calc(clamp(26px,3.2vw,36px)*var(--mz-scale));box-shadow:0 7px 0 var(--mz-ok-d);animation:mzPop .35s ease-out, mzNudge 1.4s ease-in-out .6s infinite;
+}
+.mz-next:active{transform:translateY(5px);box-shadow:0 2px 0 var(--mz-ok-d);}
+@keyframes mzNudge{50%{transform:scale(1.05);}}
+.mz-hint{color:var(--mz-sub);font-weight:500;font-size:calc(17px*var(--mz-scale));text-align:center;}
 
-  .stepper-row{display:flex;align-items:center;justify-content:space-between;background:#FEFCF6;border:2px solid #E4DFD2;border-radius:16px;padding:10px 12px;}
-  .stepper-row .label{font-weight:800;}
-  .stepper-row.hour .label{color:var(--hour);}
-  .stepper-row.minute .label{color:var(--minute);}
-  .stepper-btns{display:flex;gap:8px;}
-  .stepper-btns button{
-    width:44px;height:44px;border-radius:12px;border:none;font-size:1.2rem;font-weight:800;
-    cursor:pointer;font-family:inherit;color:#fff;
-  }
-  .stepper-row.hour .stepper-btns button{background:var(--hour);}
-  .stepper-row.minute .stepper-btns button{background:var(--minute);}
-  .stepper-btns button:active{transform:scale(.94);}
+/* ならべる */
+.mz-slots{width:min(100%,960px);display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:14px;border-radius:24px;border:4px dashed var(--mz-line);background:#FCFAF3;min-height:96px;}
+.mz-slots.col{flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:8px;padding:10px 14px;}
+.mz-slots.col .mz-slot{justify-content:flex-start;min-height:58px;}
+.mz-slot{min-width:110px;min-height:72px;border-radius:18px;border:4px dashed #D9CFBB;background:#fff;display:flex;align-items:center;justify-content:center;gap:8px;padding:6px 14px;font-size:calc(clamp(18px,2.2vw,26px)*var(--mz-scale));}
+.mz-slot .no{width:30px;height:30px;border-radius:50%;background:var(--c,var(--mz-main));color:#fff;display:grid;place-items:center;font-size:16px;flex:none;}
+.mz-slot.filled{border-style:solid;border-color:var(--c,var(--mz-main));}
+.mz-slot.ok{border-color:var(--mz-ok);background:var(--mz-ok-soft);}
+.mz-slot.ng{border-color:var(--mz-ng);background:var(--mz-ng-soft);animation:mzShake .45s;}
+.mz-pool{width:min(100%,960px);display:flex;flex-wrap:wrap;gap:12px;justify-content:center;}
+.mz-tile{
+  --c:var(--mz-main);min-height:72px;padding:8px 20px;border-radius:18px;border:5px solid var(--c);background:#fff;
+  font-size:calc(clamp(18px,2.2vw,26px)*var(--mz-scale));box-shadow:0 5px 0 var(--c);
+}
+.mz-tile:active{transform:translateY(4px);box-shadow:0 1px 0 var(--c);}
 
-  .action-row{display:flex;gap:10px;flex-wrap:wrap;}
-  .btn{
-    font-family:inherit;font-weight:800;font-size:.95rem;border-radius:14px;border:none;
-    padding:12px 16px;cursor:pointer;color:#fff;background:var(--ink-soft);flex:1 1 auto;
-  }
-  .btn.primary{background:var(--minute);}
-  .btn.warm{background:var(--hour);}
-  .btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--ink);}
-  .btn:active{transform:scale(.97);}
-  .btn:disabled{opacity:.45;cursor:not-allowed;}
+/* よこならび（ながい ぶんしょう＋こたえ） */
+.mz-side{width:min(100%,1180px);flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;align-items:stretch;}
+.mz-side>.mz-q{width:100%;overflow-y:auto;justify-content:safe center;}
+.mz-sidep{display:flex;flex-direction:column;justify-content:safe center;gap:12px;min-height:0;overflow-y:auto;padding:4px 4px 10px;}
+.mz-sidep .mz-opts{width:100%;}
+.mz-sidep .mz-opt{min-height:calc(clamp(64px,9.5vh,92px)*var(--mz-scale));font-size:calc(clamp(19px,2.2vw,26px)*var(--mz-scale));padding:8px 14px;}
+.mz-ask{width:min(100%,900px);text-align:center;font-size:calc(clamp(22px,2.7vw,30px)*var(--mz-scale));line-height:1.5;}
+.mz-ask .tag{display:inline-block;font-size:.7em;padding:2px 12px;border-radius:999px;background:var(--mz-soft);color:var(--mz-main-d);margin-right:8px;vertical-align:middle;}
+.mz-stage.answered .mz-sidep{padding-bottom:100px;}
 
-  /* Quiz */
-  .quiz-type-tabs{display:flex;gap:8px;margin-bottom:16px;}
-  .quiz-type-tabs button{
-    flex:1;font-family:inherit;font-weight:800;padding:12px;border-radius:14px;
-    border:2px solid #E4DFD2;background:#FEFCF6;cursor:pointer;color:var(--ink-soft);
-  }
-  .quiz-type-tabs button.active{border-color:var(--ink);background:var(--accent-soft);color:var(--ink);}
+/* なぞり */
+.tmsg{font-size:calc(19px*var(--mz-scale));color:var(--mz-sub);text-align:center;}
+.trace{position:relative;height:min(50vh,420px);aspect-ratio:var(--ar,1);max-width:100%;background:#fff;border-radius:28px;border:5px solid var(--mz-line);box-shadow:0 6px 0 rgba(0,0,0,.06);}
+.trace canvas{position:absolute;inset:0;width:100%;height:100%;border-radius:24px;}
+.trace .ti{touch-action:none;}
+.trace .gridl{position:absolute;inset:0;border-radius:24px;pointer-events:none;background:linear-gradient(90deg,transparent calc(50% - 1px),#EADFC8 calc(50% - 1px),#EADFC8 calc(50% + 1px),transparent calc(50% + 1px)),linear-gradient(0deg,transparent calc(50% - 1px),#EADFC8 calc(50% - 1px),#EADFC8 calc(50% + 1px),transparent calc(50% + 1px));opacity:.8;}
+.tbar{display:flex;gap:16px;}
+.tbtn{height:64px;padding:0 26px;border-radius:999px;border:4px solid var(--mz-line);background:#fff;font-size:22px;box-shadow:0 4px 0 var(--mz-line);}
+.tbtn.ok{background:var(--mz-ok);border-color:var(--mz-ok-d);color:#fff;box-shadow:0 5px 0 var(--mz-ok-d);}
 
-  .score-pill{
-    display:inline-flex;align-items:center;gap:.5em;background:var(--success-soft);color:var(--success);
-    font-weight:800;padding:8px 16px;border-radius:999px;font-size:.95rem;margin-bottom:10px;
-  }
+/* すうじキー */
+.mz-pad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(8px,1.2vh,12px);width:min(100%,330px);}
+.mz-pad button{height:calc(clamp(54px,8.4vh,80px)*var(--mz-scale));border-radius:20px;border:4px solid #D9CFBB;background:#fff;font-size:calc(clamp(28px,4vh,40px)*var(--mz-scale));box-shadow:0 5px 0 #D9CFBB;}
+.mz-pad button.fn{background:#F4EFE3;}
+.mz-pad button.ok{background:var(--mz-ok);border-color:var(--mz-ok-d);color:#fff;box-shadow:0 5px 0 var(--mz-ok-d);}
+.mz-pad button:active{transform:translateY(4px);box-shadow:0 1px 0 #D9CFBB;}
 
-  .picker-hour{position:relative;width:min(300px,80vw);height:min(300px,80vw);margin:0 auto;}
-  .picker-hour .pk-btn{
-    position:absolute;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;
-    border:2px solid var(--hour);background:#fff;color:var(--hour);font-weight:800;font-size:1.05rem;
-    cursor:pointer;font-family:inherit;
-  }
-  .picker-hour .pk-btn.selected{background:var(--hour);color:#fff;}
-  .picker-hour .pk-center{
-    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-    font-weight:700;color:var(--ink-soft);font-size:.85rem;text-align:center;width:80px;
-  }
+/* ---------- けっか ---------- */
+.mz-result{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(10px,2vh,22px);text-align:center;}
+.mz-result h2{margin:0;font-size:calc(clamp(44px,7vw,84px)*var(--mz-scale));color:#F76707;-webkit-text-stroke:3px #fff;paint-order:stroke fill;}
+.mz-result .big-stars{font-size:clamp(46px,7vw,76px);letter-spacing:6px;}
+.mz-result .big-stars .off{filter:grayscale(1);opacity:.25;}
+.mz-result .msg{font-size:calc(clamp(20px,2.6vw,28px)*var(--mz-scale));}
+.mz-actions{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;}
+.mz-big{height:84px;min-width:220px;padding:0 30px;border:none;border-radius:999px;color:#fff;font-size:calc(clamp(22px,2.8vw,30px)*var(--mz-scale));display:flex;align-items:center;justify-content:center;gap:10px;}
+.mz-big.go{background:var(--mz-ok);box-shadow:0 7px 0 var(--mz-ok-d);}
+.mz-big.blue{background:var(--mz-blue);box-shadow:0 7px 0 var(--mz-blue-d);}
+.mz-big.gray{background:#868E96;box-shadow:0 7px 0 #5C636A;}
+.mz-big:active{transform:translateY(5px);box-shadow:0 2px 0 rgba(0,0,0,.25);}
 
-  .minute-row-choice{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
-  .minute-row-choice button{
-    font-family:inherit;font-weight:800;font-size:1rem;padding:14px 18px;border-radius:14px;
-    border:2px solid var(--minute);background:#fff;color:var(--minute);cursor:pointer;
-  }
-  .minute-row-choice button.selected{background:var(--minute);color:#fff;}
+/* 正解の ○ */
+#mzCorrect{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:70;opacity:0;}
+#mzCorrect.show{animation:mzFade 1.05s ease forwards;}
+@keyframes mzFade{0%{opacity:0;}8%{opacity:1;}78%{opacity:1;}100%{opacity:0;}}
+#mzCorrect .wrap{position:relative;width:min(260px,55vmin);height:min(260px,55vmin);filter:drop-shadow(0 6px 14px rgba(0,0,0,.18));}
+#mzCorrect svg{width:100%;height:100%;transform:rotate(-90deg);}
+#mzCorrect circle{fill:rgba(255,255,255,.92);stroke:#E2483D;stroke-width:15;stroke-linecap:round;stroke-dasharray:530;stroke-dashoffset:530;}
+#mzCorrect.show circle{animation:mzDraw .5s cubic-bezier(.4,0,.2,1) forwards;}
+@keyframes mzDraw{to{stroke-dashoffset:0;}}
+#mzCorrect .lb{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:900;color:#E2483D;}
+.mz-confetti{position:fixed;top:-50px;pointer-events:none;z-index:65;font-family:var(--mz-emoji);animation:mzFall linear forwards;}
+@keyframes mzFall{to{transform:translateY(115vh) rotate(var(--r));}}
 
-  .picker-circle-minute{position:relative;width:min(300px,80vw);height:min(300px,80vw);margin:0 auto;}
-  .picker-circle-minute .pk-btn{
-    position:absolute;width:48px;height:48px;margin:-24px 0 0 -24px;border-radius:12px;
-    border:2px solid var(--minute);background:#fff;color:var(--minute);font-weight:800;font-size:.95rem;
-    cursor:pointer;font-family:inherit;
-  }
-  .picker-circle-minute .pk-btn.selected{background:var(--minute);color:#fff;}
+/* ---------- シート・設定・トースト ---------- */
+.mz-modal{position:fixed;inset:0;z-index:80;background:rgba(17,24,39,.55);display:none;align-items:flex-start;justify-content:center;padding:24px 12px;overflow-y:auto;-webkit-user-select:text;user-select:text;}
+.mz-modal.open{display:flex;}
+.mz-panel{width:min(100%,780px);background:#fff;border-radius:24px;padding:20px clamp(16px,4vw,30px) 26px;font-weight:500;font-size:17px;box-shadow:0 20px 60px rgba(0,0,0,.3);word-break:normal;}
+.mz-panel .hd{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.mz-panel h2{margin:0;font-size:23px;font-weight:800;}
+.mz-panel h3{margin:24px 0 8px;font-size:18px;font-weight:800;padding-left:10px;border-left:6px solid var(--mz-blue);}
+.mz-note{color:var(--mz-sub);font-size:14px;line-height:1.7;margin:6px 0;}
+.mz-panel label.row{display:flex;align-items:center;gap:12px;min-height:52px;padding:6px 0;border-bottom:1px solid #F1F3F5;}
+.mz-panel label.row>span:first-child{flex:1;}
+.mz-panel input[type=checkbox]{width:30px;height:30px;accent-color:var(--mz-ok);}
+.mz-panel input[type=range]{width:200px;accent-color:var(--mz-blue);}
+.mz-seg{display:flex;gap:8px;flex-wrap:wrap;}
+.mz-seg button{flex:1;min-width:110px;padding:11px 8px;font-size:15px;font-weight:800;border-radius:12px;border:2px solid #CED4DA;background:#fff;}
+.mz-seg button.on{background:#2E2A25;border-color:#2E2A25;color:#fff;}
+.mz-seglabel{margin:12px 0 6px;font-weight:800;font-size:15px;}
+.mz-btn{border:none;border-radius:12px;padding:11px 18px;font-size:16px;font-weight:800;background:#E9ECEF;color:var(--mz-ink);}
+.mz-btn.ok{background:var(--mz-ok);color:#fff;}
+.mz-btn.warn{background:#FFF0F0;color:#C92A2A;}
+.mz-teacher{background:#F8F9FA;border-radius:14px;padding:12px 16px;font-size:14px;line-height:1.8;color:#495057;}
+.mz-foot{margin-top:26px;padding-top:14px;border-top:1px solid #E9ECEF;text-align:center;color:var(--mz-sub);font-size:13px;line-height:1.8;}
+.mz-foot .mz-brand{justify-content:center;}
+.mz-foot a{color:var(--mz-blue);font-weight:800;text-decoration:none;font-size:14px;}
+.mz-toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:rgba(17,24,39,.9);color:#fff;padding:14px 22px;border-radius:14px;font-size:18px;z-index:90;display:none;max-width:90vw;text-align:center;}
+.mz-toast.show{display:block;}
 
-  .choose-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:10px 0;}
-  .choose-opt{
-    border:3px solid #E4DFD2;border-radius:16px;background:#fff;padding:6px;
-    cursor:pointer;transition:transform .1s ease, border-color .15s ease, background .15s ease;
-  }
-  .choose-opt svg{width:100%;display:block;}
-  .choose-opt:hover:not(:disabled){border-color:var(--minute);transform:translateY(-2px);}
-  .choose-opt.correct{border-color:var(--success);background:var(--success-soft);}
-  .choose-opt.wrong-flash{border-color:var(--gentle);background:var(--gentle-soft);}
-  .choose-opt:disabled{opacity:.55;cursor:not-allowed;}
+/* ---------- プリント作成（先生用） ---------- */
+.mz-print{flex:1;min-height:0;display:grid;grid-template-columns:minmax(290px,370px) 1fr;gap:14px;}
+.mz-pctrl{overflow-y:auto;background:#fff;border-radius:24px;border:4px solid var(--mz-line);padding:8px 16px 18px;font-weight:500;}
+.mz-pctrl .lab{font-weight:800;font-size:15px;color:#5F574A;margin:14px 0 6px;}
+.mz-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.mz-chip{border:2px solid var(--mz-line);background:#FCFAF3;border-radius:999px;padding:9px 14px;font-weight:800;font-size:15px;}
+.mz-chip.on{border-color:var(--mz-main);background:var(--mz-soft);color:var(--mz-main-d);}
+.mz-pgo{margin-top:18px;width:100%;height:64px;border:none;border-radius:999px;background:var(--mz-ok);color:#fff;font-size:22px;box-shadow:0 5px 0 var(--mz-ok-d);}
+.mz-pgo.sub{background:#fff;color:var(--mz-ink);border:3px solid var(--mz-line);box-shadow:0 4px 0 var(--mz-line);height:54px;font-size:18px;margin-top:10px;}
+.mz-preview{overflow:auto;background:#E6E1D6;border-radius:24px;padding:16px;min-height:0;}
+.mz-preview .ws-page{margin:0 auto 16px;box-shadow:0 4px 18px rgba(0,0,0,.18);}
+@media (orientation:portrait) and (max-width:900px){.mz-print{grid-template-columns:1fr;grid-template-rows:auto 1fr;}.mz-pctrl{max-height:44vh;}}
 
-  .match-progress{
-    text-align:center;font-weight:800;color:var(--ink-soft);margin-bottom:14px;font-size:1.02rem;
-  }
-  .match-wrap{
-    display:grid;grid-template-columns:1fr 56px 1fr;align-items:start;
-    max-width:600px;margin:0 auto;position:relative;
-  }
-  .match-col{display:flex;flex-direction:column;gap:12px;}
-  .match-lines{width:100%;height:100%;display:block;pointer-events:none;}
-  .match-card{
-    border:3px solid #E4DFD2;border-radius:14px;padding:10px;background:#fff;
-    font-family:inherit;font-weight:800;font-size:1.05rem;cursor:pointer;color:var(--ink);
-    transition:border-color .15s ease, background .15s ease, transform .1s ease, opacity .15s ease;
-  }
-  .match-card.right-card{padding:6px;}
-  .match-card.right-card svg{width:88px;display:block;margin:0 auto;}
-  .match-card:hover:not(.matched){transform:translateY(-2px);border-color:var(--minute);}
-  .match-card.selected{border-color:var(--minute);background:var(--minute-soft);}
-  .match-card.matched{cursor:default;opacity:.92;}
-  .match-card.matched:hover{transform:none;}
-  .match-card.wrong-flash{border-color:var(--gentle);background:var(--gentle-soft);}
+/* A4 プリント本体 */
+.ws-page{width:210mm;height:297mm;padding:12mm;background:#fff;color:#222;box-sizing:border-box;overflow:hidden;font-family:var(--mz-font);font-weight:700;display:flex;flex-direction:column;-webkit-print-color-adjust:exact;print-color-adjust:exact;word-break:keep-all;overflow-wrap:anywhere;}
+.ws-head{flex:none;display:flex;justify-content:space-between;align-items:flex-end;gap:6mm;border-bottom:.8mm solid #222;padding-bottom:3mm;margin-bottom:5mm;}
+.ws-brand{display:flex;align-items:center;gap:2mm;font-size:3.2mm;}
+.ws-orb{width:5mm;height:5mm;border-radius:50%;background:var(--mieel);flex:none;}
+.ws-head h2{margin:1mm 0 0;font-size:6mm;line-height:1.25;}
+.ws-inst{font-size:3.4mm;color:#555;font-weight:500;margin-top:.8mm;}
+.ws-fields{flex:none;text-align:right;font-size:3.8mm;line-height:1.75;white-space:nowrap;}
+.ws-url{font-size:3mm;color:#1C7ED6;}
+.ws-blank{display:inline-block;border-bottom:.4mm solid #222;min-width:36mm;margin-left:1.5mm;}
+.ws-no{font-size:3mm;color:#888;margin-left:2mm;}
+.ws-body{flex:1;min-height:0;overflow:hidden;display:grid;grid-template-columns:repeat(var(--wcols,2),minmax(0,1fr));gap:4mm;align-content:start;}
+.ws-cell{border:.45mm solid #CFC6B4;border-radius:3mm;padding:3mm 4mm;break-inside:avoid;font-size:4.2mm;line-height:1.5;}
+.ws-cell .n{font-size:3.2mm;color:#8A8072;margin-bottom:1mm;}
+.ws-cell .q{font-size:4.6mm;text-align:center;margin-bottom:2mm;}
+.ws-cell .q .mz-emoji{font-size:1.5em;vertical-align:middle;margin-right:1mm;}
+.ws-cell .v{display:flex;justify-content:center;margin:1mm 0 2mm;}
+.ws-cell .v svg{max-height:38mm;width:auto;max-width:100%;}
+.ws-opts{display:flex;flex-wrap:wrap;gap:2mm;justify-content:center;}
+.ws-opt{border:.35mm solid #444;border-radius:2mm;padding:1.2mm 3mm;font-size:4mm;background:#fff;}
+.ws-ans{margin-top:2mm;text-align:center;color:#C92A2A;font-size:3.6mm;}
+.ws-line{border-bottom:.35mm solid #333;height:9mm;flex:1;}
+.ws-lines .r{display:flex;align-items:flex-end;gap:2mm;margin-top:1mm;}
+.ws-lines .r b{color:#8A8072;width:5mm;}
+.ws-tiles{display:flex;flex-wrap:wrap;gap:2mm;justify-content:center;margin-bottom:1mm;}
+.ws-tiles span{border:.35mm solid #999;background:#F8F4EA;border-radius:2mm;padding:1mm 3mm;font-size:4mm;}
+.ws-box{display:inline-block;min-width:14mm;height:9mm;border:.4mm solid #333;border-radius:1.5mm;vertical-align:middle;}
+.ws-ord{display:flex;flex-direction:column;gap:1.8mm;align-items:flex-start;margin:1mm auto 0;width:fit-content;max-width:100%;}
+.ws-ord .r{display:flex;align-items:center;gap:3mm;font-size:4.3mm;}
+.ws-ord .bx{flex:none;width:10mm;height:10mm;border:.45mm solid #333;border-radius:1.5mm;display:grid;place-items:center;color:#C92A2A;font-size:5mm;}
+.ws-page.big .ws-cell{font-size:5.4mm;padding:4mm 5mm;}
+.ws-page.big .ws-cell .q{font-size:6.2mm;}
+.ws-page.big .ws-opt{font-size:5.4mm;padding:2mm 4mm;}
+.ws-page.big .ws-ord .r{font-size:5.6mm;}
+.ws-page.big .ws-ord .bx{width:12mm;height:12mm;}
+.ws-page.big .ws-cell .v svg{max-height:52mm;}
+#mzWorksheet{display:none;}
+@page{size:A4 portrait;margin:0;}
+@media print{
+  html,body{height:auto!important;overflow:visible!important;display:block!important;background:#fff!important;padding:0!important;}
+  body>*:not(#mzWorksheet){display:none!important;}
+  #mzWorksheet{display:block!important;}
+  #mzWorksheet .ws-page{break-after:page;page-break-after:always;box-shadow:none;margin:0;zoom:1!important;}
+  #mzWorksheet .ws-page:last-child{break-after:auto;page-break-after:auto;}
+}
 
-  .feedback{
-    margin-top:14px;border-radius:16px;padding:16px;font-weight:800;font-size:1.15rem;
-    display:flex;align-items:center;gap:.5em;
-  }
-  .feedback.correct{background:var(--success-soft);color:var(--success);}
-  .feedback.wrong{background:var(--gentle-soft);color:var(--gentle);}
-
-  .big-mark{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:999;opacity:0;}
-  .big-mark.show{animation:bigMarkPop 1.1s ease forwards;}
-  .big-mark-circle{
-    width:min(58vw,300px);height:min(58vw,300px);border-radius:50%;
-    border:16px solid var(--hour);box-shadow:0 0 46px rgba(217,88,63,0.55), 0 0 0 9999px rgba(44,58,74,0.12);
-  }
-  @keyframes bigMarkPop{
-    0%{opacity:0;transform:scale(0.35);}
-    18%{opacity:1;transform:scale(1.18);}
-    32%{transform:scale(1);}
-    75%{opacity:1;transform:scale(1);}
-    100%{opacity:0;transform:scale(1.04);}
-  }
-
-  /* Print controls */
-  .print-controls{display:flex;flex-direction:column;gap:16px;}
-  .field-group label.title{display:block;font-weight:800;margin-bottom:8px;}
-  .chip-row{display:flex;gap:8px;flex-wrap:wrap;}
-  .chip{
-    font-family:inherit;font-weight:700;padding:10px 16px;border-radius:999px;
-    border:2px solid #E4DFD2;background:#FEFCF6;cursor:pointer;color:var(--ink);
-  }
-  .chip.selected{border-color:var(--ink);background:var(--accent-soft);}
-  .checkline{display:flex;align-items:center;gap:8px;font-weight:700;}
-  .checkline input{width:20px;height:20px;}
-
-  #worksheet{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;overflow-x:auto;}
-  .ws-header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid var(--ink);padding-bottom:10px;margin-bottom:18px;}
-  .ws-header h2{margin:0;font-size:1.3rem;}
-  .ws-fields{display:flex;gap:10px;font-size:.95rem;font-weight:700;align-items:flex-end;}
-  .ws-fields .lbl{white-space:nowrap;}
-  .ws-fields .blank{border-bottom:1.5px solid var(--ink);padding:0 6px 4px;display:inline-block;min-width:110px;margin-right:14px;}
-  .ws-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
-  .ws-grid.choose-mode{grid-template-columns:repeat(2,1fr);}
-  .ws-cell{border:2px solid #E4DFD2;border-radius:14px;padding:12px;text-align:center;break-inside:avoid;page-break-inside:avoid;}
-  .ws-cell .no{font-weight:800;color:var(--ink-soft);text-align:left;margin-bottom:4px;font-size:.8rem;}
-  .ws-answerline{margin-top:8px;font-weight:800;font-size:1.05rem;}
-  .ws-answerline .blank{display:inline-block;min-width:34px;border-bottom:2px solid var(--ink);}
-  .ws-answerline .filled{color:#9AA6B2;}
-  .ws-digital-prompt{font-size:1.5rem;font-weight:800;margin-bottom:8px;}
-  .ws-choose-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:8px 0;}
-  .ws-choose-item{border:1.5px solid #E4DFD2;border-radius:10px;padding:4px;position:relative;}
-  .ws-choose-item .letter{position:absolute;top:2px;left:4px;font-weight:800;font-size:.75rem;color:var(--ink-soft);}
-  .ws-choose-item.correct-answer{border-color:var(--success);background:var(--success-soft);}
-  .ws-match-grid{display:grid;grid-template-columns:1fr 120px 1fr;align-items:start;page-break-inside:avoid;break-inside:avoid;}
-  .ws-match-col{display:flex;flex-direction:column;gap:16px;}
-  .ws-match-item{
-    height:92px;box-sizing:border-box;border:2px solid #E4DFD2;border-radius:10px;
-    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.15rem;padding:4px;overflow:hidden;
-  }
-  .ws-match-item svg{width:80px;height:80px;}
-  .ws-match-lines{display:block;width:100%;}
-  .ws-print-btn-wrap{display:flex;justify-content:center;margin-top:6px;}
-
-  .preview-note{color:var(--ink-soft);font-size:.85rem;margin-top:10px;text-align:center;}
-
-  footer.hint{max-width:var(--maxw);margin:20px auto 0;padding:0 16px;color:var(--ink-soft);font-size:.8rem;}
-  details.teacher-note{max-width:var(--maxw);margin:0 auto 20px;padding:0 16px;}
-  details.teacher-note summary{cursor:pointer;font-weight:700;color:var(--ink-soft);font-size:.85rem;}
-  details.teacher-note .box{background:#fff;border-radius:14px;padding:14px 16px;margin-top:8px;font-size:.85rem;color:var(--ink-soft);line-height:1.7;box-shadow:var(--shadow);}
-
-  .hidden{display:none !important;}
-
-  @media (prefers-reduced-motion: reduce){
-    *{transition:none !important;animation:none !important;}
-    .big-mark.show{opacity:1;}
-  }
-
-  @media print{
-    body *{visibility:hidden;}
-    #worksheet, #worksheet *{visibility:visible;}
-    #worksheet{
-      display:block !important;position:absolute;left:0;top:0;width:100%;
-      padding:12mm;
-    }
-    .ws-print-btn-wrap{display:none !important;}
-    .ws-grid{grid-template-columns:repeat(3,1fr);}
-  }
-
-  @media (max-width:640px){
-    .ws-grid{grid-template-columns:repeat(2,1fr);}
-  }
+/* 刺激ひかえめ */
+body.mz.calm *,body.mz.calm *::before,body.mz.calm *::after{animation:none!important;transition:none!important;}
+@media (prefers-reduced-motion:reduce){body.mz *,body.mz *::before,body.mz *::after{animation:none!important;transition:none!important;}}
+@media (max-width:760px){.mz-brand .url{display:none;}.mz-top .mz-topbtn span.t{display:none;}}
+/*/MZ-SHELL-CSS*/
+/* とけいの がくしゅう（アプリ専用） */
+.clk{display:block;width:100%;height:auto;}
+.clkq{width:min(52vh,420px);}
+.mz-side .clkq{width:min(58vh,440px);}
+.clko{display:block;width:min(19vw,24vh,210px);}
+.mz-opt:has(.clko){padding:8px;}
+.clkw{width:min(62vh,520px);touch-action:none;}
+.clkw .hand .hit{cursor:grab;}
+.clkw .hand.drag line:first-child{filter:drop-shadow(0 0 6px rgba(0,0,0,.35));}
+.setbox{width:min(100%,1120px);flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:center;}
+.setl{display:flex;flex-direction:column;align-items:center;gap:16px;}
+.tgt{width:auto;padding:14px 34px;}
+.tgt .tt{font-size:calc(clamp(44px,7vh,64px)*var(--mz-scale));color:var(--mz-main-d);}
+.tread{font-size:calc(24px*var(--mz-scale));min-height:1.5em;}
+.hint{font-size:calc(16px*var(--mz-scale));color:var(--mz-sub);font-weight:500;text-align:center;}
+.chk{height:78px;min-width:260px;border:none;border-radius:999px;background:var(--mz-ok);color:#fff;font-size:calc(28px*var(--mz-scale));box-shadow:0 6px 0 var(--mz-ok-d);}
+.chk:active{transform:translateY(4px);}
+.setbox.done .chk{visibility:hidden;}
+.mwrap{width:min(100%,1060px);display:flex;flex-direction:column;gap:clamp(26px,6vh,60px);}
+.mcol{display:flex;gap:14px;justify-content:center;}
+.mcol .mcard{flex:1;max-width:250px;}
+.mcard{border:5px solid var(--mz-line);background:#fff;border-radius:22px;box-shadow:0 5px 0 var(--mz-line);}
+.mcard.tx{min-height:84px;font-size:calc(clamp(26px,3.4vw,36px)*var(--mz-scale));}
+.mcard.ck{padding:6px;display:grid;place-items:center;}
+.mcard.ck .clk{width:min(26vh,190px);}
+.mcard.sel{border-color:var(--mz-main);background:var(--mz-soft);}
+.mcard.ok{border-color:var(--mz-ok);background:var(--mz-ok-soft);opacity:.75;box-shadow:none;}
+.mcard.ng{animation:mzShake .45s;border-color:var(--mz-ng);}
+@media (orientation:portrait){.setbox{grid-template-columns:1fr;justify-items:center;}.clkw{width:min(80vw,520px);}}
+/* プリント */
+.pc{display:block;width:44mm;margin:0 auto;}
+.pc.s{width:34mm;display:inline-block;margin:0 2mm;border-radius:50%;}
+.pc.s.ok{outline:.8mm solid #C92A2A;outline-offset:1mm;}
+.pl{text-align:center;font-size:5mm;margin-top:1.5mm;}
+.pl b{color:#C92A2A;}
+.pbl{display:inline-block;width:12mm;border-bottom:.4mm solid #333;height:7mm;margin:0 1mm;}
+.pt{text-align:center;font-size:6mm;margin-bottom:1mm;}
+.pch{display:flex;align-items:center;gap:4mm;}
+.pch .pt{width:40mm;flex:none;}
+.pco{display:flex;flex-wrap:wrap;justify-content:center;}
+.pm{display:grid;grid-template-columns:1fr 1fr;gap:30mm;}
+.pmc{display:flex;flex-direction:column;justify-content:space-around;gap:3mm;}
+.pmt{font-size:6mm;text-align:right;}
+.pmk{display:flex;align-items:center;gap:2mm;}
+.pmk i{color:#C92A2A;font-style:normal;font-size:4mm;}
 </style>
 </head>
-<body>
-<div class="big-mark" id="bigMark" aria-hidden="true"><div class="big-mark-circle"></div></div>
-<div class="app">
-  <header class="top">
-    <div>
-      <div class="mieel-brand">
-        <div class="orb-mini"></div>
-        <strong>MieeL</strong>
-        <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener">www.mieel-support-school.com</a>
-      </div>
-      <h1><span class="clockmoji">🕰️</span>とけいのがくしゅう</h1>
-      <p>じぶんのペースで、とけいをよむれんしゅうをしよう</p>
-    </div>
-    <button class="icon-btn" id="btnLargeText" aria-pressed="false">🔠 文字を大きく</button>
-  </header>
-
-  <nav class="modes" role="tablist" aria-label="モードをえらぶ">
-    <button data-mode="learn" class="active" role="tab" aria-selected="true">🧭 まなぶ<span class="sub">とけいであそぶ</span></button>
-    <button data-mode="quiz" role="tab" aria-selected="false">✏️ クイズ<span class="sub">もんだいにちょうせん</span></button>
-    <button data-mode="print" role="tab" aria-selected="false">🖨️ プリント<span class="sub">PDFをつくる</span></button>
-  </nav>
-
-  <!-- ===== LEARN VIEW ===== -->
-  <section class="panel view" id="view-learn">
-    <div class="level-bar" id="levelBarLearn"></div>
-    <div class="clock-area">
-      <div class="clock-wrap" id="learnClockHolder"></div>
-      <div class="side-controls">
-        <div class="digital" id="learnDigital"></div>
-        <div class="stepper-row hour">
-          <span class="label">🔴 じ (時)</span>
-          <div class="stepper-btns">
-            <button data-act="h-" aria-label="時をへらす">−</button>
-            <button data-act="h+" aria-label="時をふやす">＋</button>
-          </div>
-        </div>
-        <div class="stepper-row minute">
-          <span class="label">🔵 ふん (分)</span>
-          <div class="stepper-btns">
-            <button data-act="m-" aria-label="分をへらす">−</button>
-            <button data-act="m+" aria-label="分をふやす">＋</button>
-          </div>
-        </div>
-        <div class="action-row">
-          <button class="btn primary" id="learnSpeak">🔊 よみあげ</button>
-          <button class="btn warm" id="learnRandom">🎲 ランダム</button>
-          <button class="btn ghost" id="learnReset">↺ リセット</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== QUIZ VIEW ===== -->
-  <section class="panel view hidden" id="view-quiz">
-    <div class="level-bar" id="levelBarQuiz"></div>
-    <div class="quiz-type-tabs">
-      <button data-qtype="read" class="active">👀 とけいをよむ</button>
-      <button data-qtype="choose">🔍 とけいをえらぶ</button>
-      <button data-qtype="set">🤚 はりをあわせる</button>
-      <button data-qtype="match">🔗 むすぶ</button>
-    </div>
-    <div class="score-pill" id="scorePill">せいかい 0 / 0</div>
-
-    <!-- read type -->
-    <div id="quizReadArea">
-      <div class="clock-area">
-        <div class="clock-wrap" id="quizClockHolder"></div>
-        <div class="side-controls">
-          <p style="font-weight:800;margin:0 0 4px;">なんじなんぷん？ こたえをえらぼう</p>
-          <div id="quizHourPicker"></div>
-          <div id="quizMinutePicker"></div>
-          <div class="action-row">
-            <button class="btn primary" id="quizCheckBtn">✅ こたえあわせ</button>
-            <button class="btn ghost hidden" id="quizNextBtn">つぎのもんだい ▶</button>
-          </div>
-          <div id="quizFeedback"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- choose type: 出題された時刻に一致するアナログ時計を選択肢から選ぶ -->
-    <div id="quizChooseArea" class="hidden">
-      <div class="clock-area" style="justify-content:center;">
-        <div class="side-controls" style="max-width:440px;">
-          <div class="digital" id="quizChooseTarget"></div>
-          <button class="btn primary" id="quizChooseSpeak">🔊 よみあげ</button>
-          <p style="font-weight:800;margin:10px 0 4px;text-align:center;">おなじ じかんの とけいは どれ？</p>
-          <div class="choose-grid" id="quizChooseGrid"></div>
-          <div id="quizChooseFeedback"></div>
-          <div class="action-row">
-            <button class="btn ghost hidden" id="quizChooseNextBtn">つぎのもんだい ▶</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- set-hands type -->
-    <div id="quizSetArea" class="hidden">
-      <div class="clock-area">
-        <div class="clock-wrap" id="quizSetClockHolder"></div>
-        <div class="side-controls">
-          <div class="digital" id="quizSetTarget"></div>
-          <button class="btn primary" id="quizSetSpeak">🔊 よみあげ</button>
-          <div class="stepper-row hour">
-            <span class="label">🔴 じ (時)</span>
-            <div class="stepper-btns">
-              <button data-act="h-">−</button><button data-act="h+">＋</button>
-            </div>
-          </div>
-          <div class="stepper-row minute">
-            <span class="label">🔵 ふん (分)</span>
-            <div class="stepper-btns">
-              <button data-act="m-">−</button><button data-act="m+">＋</button>
-            </div>
-          </div>
-          <div class="action-row">
-            <button class="btn primary" id="quizSetCheckBtn">✅ こたえあわせ</button>
-            <button class="btn ghost hidden" id="quizSetNextBtn">つぎのもんだい ▶</button>
-          </div>
-          <div id="quizSetFeedback"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- matching type: 時刻カードと時計カードをタップして むすぶ -->
-    <div id="quizMatchArea" class="hidden">
-      <div class="chip-row" id="matchCountChips" style="justify-content:center;margin-bottom:10px;">
-        <button class="chip" data-mcount="4">4くみ</button>
-        <button class="chip selected" data-mcount="6">6くみ</button>
-        <button class="chip" data-mcount="8">8くみ</button>
-      </div>
-      <p style="font-weight:800;text-align:center;margin:0 0 6px;">じかんと とけいを タップして むすぼう</p>
-      <div class="match-progress" id="matchProgress">そろった数：0 / 6 くみ</div>
-      <div class="match-wrap">
-        <div class="match-col" id="matchColLeft"></div>
-        <svg class="match-lines" id="matchLinesSvg"></svg>
-        <div class="match-col" id="matchColRight"></div>
-      </div>
-      <div id="matchFeedback"></div>
-      <div class="action-row" style="justify-content:center;margin-top:14px;">
-        <button class="btn ghost hidden" id="matchNextSetBtn">🔄 つぎのセット</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== PRINT VIEW ===== -->
-  <section class="panel view hidden" id="view-print">
-    <div class="print-controls">
-      <div class="field-group">
-        <label class="title">① むずかしさ</label>
-        <div class="level-bar" id="levelBarPrint"></div>
-      </div>
-      <div class="field-group">
-        <label class="title">② もんだいのしゅるい</label>
-        <div class="chip-row" id="printTypeChips">
-          <button class="chip selected" data-ptype="read">とけい → じかんをかく</button>
-          <button class="chip" data-ptype="choose">じかん → とけいをえらぶ</button>
-          <button class="chip" data-ptype="set">じかん → はりをかく</button>
-          <button class="chip" data-ptype="match">とけいと じかんを むすぶ</button>
-        </div>
-      </div>
-      <div class="field-group">
-        <label class="title">③ もんだいのかず</label>
-        <div class="chip-row" id="printCountChips">
-          <button class="chip" data-count="6">6もん</button>
-          <button class="chip selected" data-count="9">9もん</button>
-          <button class="chip" data-count="12">12もん</button>
-        </div>
-      </div>
-      <div class="field-group">
-        <label class="checkline"><input type="checkbox" id="printShowAnswer"> こたえ を のせる（先生用）</label>
-      </div>
-      <div class="action-row">
-        <button class="btn warm" id="printRegenBtn">🔄 もんだいをつくりなおす</button>
-        <button class="btn primary" id="printOpenBtn">🖨️ いんさつ / PDFをつくる</button>
-      </div>
-      <p class="preview-note">下にプレビューが表示されます。「いんさつ / PDFをつくる」を押すと印刷ダイアログが開きます。PDFとして保存する場合は送信先で「PDFに保存」を選んでください。</p>
-    </div>
-  </section>
-
-  <div id="worksheet" class="hidden"></div>
-
-  <details class="teacher-note">
-    <summary>👩‍🏫 先生・保護者の方へ（使い方のヒント）</summary>
-    <div class="box">
-      レベル1〜5で難易度を段階的に上げられます。レベル1は「◯時ちょうど」のみ、レベル5は1分刻みまで対応します。
-      「まなぶ」では針をドラッグしたり、＋／−ボタンで調整でき、読み上げ機能で聴覚的にも時刻を確認できます。
-      「クイズ」は正誤を厳しく採点せず、間違えても優しくやり直せる設計にしています。
-      「プリント」では同じ難易度設定でワークシートを自動生成し、解答つき／なしを切り替えて印刷（PDF保存）できます。
-    </div>
-  </details>
-
-  <footer class="hint">
-    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:5px;">
-      <div style="width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 50% 0%,#1B8FE8 0%,#2BB8D6 28%,#3FCB9E 45%,#8FD24A 58%,#F4D027 72%,#F7941E 100%);flex:none;"></div>
-      <strong style="color:var(--ink);">MieeL</strong>
-      <a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener" style="color:var(--minute);">mieel-support-school.com</a>
-    </div>
-    © とけいのがくしゅう ツール（特別支援教育向け）
-  </footer>
-</div>
-
+<body class="mz">
+<noscript>このアプリを使うには JavaScript を有効にしてください。</noscript>
 <script>
-(function(){
-  "use strict";
+/*MZ-SHELL-JS*/
+/* ==========================================================================
+   MieeL アプリ共通シェル（iPad 向け・全画面アプリ型）  shell.js
+   ※ このファイルは _shell/build.py で各アプリの index.html に埋め込まれます
 
-  /* ---------- constants ---------- */
-  var CENTER = 182, FACE_R = 150;
-  var TEXT_SCALE = 1; // 文字を大きくモードで時計内の文字サイズも拡大する
-  var LEVELS = [
-    {id:1, name:"◯時ちょうど", stars:"★☆☆☆☆", minuteStep:60, minuteChoices:[0]},
-    {id:2, name:"◯時半", stars:"★★☆☆☆", minuteStep:30, minuteChoices:[0,30]},
-    {id:3, name:"15分きざみ", stars:"★★★☆☆", minuteStep:15, minuteChoices:[0,15,30,45]},
-    {id:4, name:"5分きざみ", stars:"★★★★☆", minuteStep:5, minuteChoices:[0,5,10,15,20,25,30,35,40,45,50,55]},
-    {id:5, name:"1分きざみ", stars:"★★★★★", minuteStep:1, minuteChoices:null}
-  ];
-  var PRAISE = ["やったね！","せいかい！","すごい！","ばっちり！","その ちょうし！"];
-  var TRY_AGAIN = ["おしい！もういちど やってみよう","だいじょうぶ、もう いちど！","ちょっと ちがうよ。もう いちど チャレンジ！"];
+   つかいかた（各アプリ側）:
+     MieelApp.start({
+       id, title, icon, color, colorD, soft, teacherNote,
+       modes: [{
+         id, name, sub, icon, color,
+         levels: [{ id, name, stars }],
+         kind: 'choice' | 'order' | 'custom',
+         pool(level) -> [item...]   または  make(level) -> q
+         toQ(item, level) -> q      （pool を使うとき・省略可）
+         render(stage, q, api)      （custom のとき）
+         print: { instruction, cols, cell(q, showAnswer) }   （省略可・false で印刷なし）
+       }],
+       options: [{ key, label, type:'check'|'seg', opts:[[値,'ラベル']], def, print:true, regen:true }]  （アプリ独自の せってい・省略可）
+     });
+     MieelApp.opt(key) で アプリ独自の せっていを よめます。 MieelApp.numpad(onKey, {extra}) で すうじキーを つくれます。
+     choice の q: { icon, text, sub, html, say, options:[文字 | {label, value, icon, html}], answer, sayAnswer, explain, cols,
+                   side（よこむきで カードを ひだり・こたえを みぎに）, ask（こたえの うえに だす しつもん html） }
+     options の type: 'check' | 'seg' | 'multi'（はいれつ）。 printOnly:true で プリント画面だけに だす。
+     print の counts:[[かず,'ラベル']...] と defCount で もんだいすうの えらびかたを かえられます。
+     order  の q: { icon, text, tokens:[...], say }
+   ========================================================================== */
+window.MieelApp = (function () {
+  'use strict';
 
-  function levelById(id){ for(var i=0;i<LEVELS.length;i++){ if(LEVELS[i].id===id) return LEVELS[i]; } return LEVELS[0]; }
-
-  function polar(cx,cy,r,deg){
-    var rad=(deg-90)*Math.PI/180;
-    return {x:cx+r*Math.cos(rad), y:cy+r*Math.sin(rad)};
+  /* ---------- 小さな道具 ---------- */
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  function h(tag, props) {
+    var el = document.createElement(tag);
+    if (props) Object.keys(props).forEach(function (k) {
+      var v = props[k];
+      if (v === null || v === undefined || v === false) return;
+      if (k === 'class') el.className = v;
+      else if (k === 'html') el.innerHTML = v;
+      else if (k === 'style') el.setAttribute('style', v);
+      else if (k.slice(0, 2) === 'on') el.addEventListener(k.slice(2), v);
+      else el.setAttribute(k, v === true ? '' : v);
+    });
+    (function add(list) {
+      list.forEach(function (c) {
+        if (c === null || c === undefined || c === false) return;
+        if (Array.isArray(c)) add(c);
+        else el.appendChild(typeof c === 'string' || typeof c === 'number' ? document.createTextNode(String(c)) : c);
+      });
+    })(Array.prototype.slice.call(arguments, 2));
+    return el;
   }
-  function mod12(h){ h=((h-1)%12+12)%12+1; return h; }
-  function mod60(m){ return ((m%60)+60)%60; }
+  function shuffle(a) { var r = a.slice(); for (var i = r.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = r[i]; r[i] = r[j]; r[j] = t; } return r; }
+  function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+  function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function emo(e, cls) { return h('span', { class: 'mz-emoji' + (cls ? ' ' + cls : '') }, e); }
+  function load(k) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch (e) { return null; } }
+  function save(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* 保存できなくても動く */ } }
 
-  function speak(text){
-    try{
-      if(!('speechSynthesis' in window)) return;
-      window.speechSynthesis.cancel();
-      var u=new SpeechSynthesisUtterance(text);
-      u.lang='ja-JP'; u.rate=0.85; u.pitch=1.05;
-      window.speechSynthesis.speak(u);
-    }catch(e){}
-  }
-  var _acx=null;
-  function playTone(freq,duration,startDelay,volume){
-    try{
-      if(!window.AudioContext && !window.webkitAudioContext) return;
-      if(!_acx) _acx = new (window.AudioContext||window.webkitAudioContext)();
-      if(_acx.state==='suspended') _acx.resume();
-      var t0=_acx.currentTime+(startDelay||0);
-      var osc=_acx.createOscillator(), gain=_acx.createGain();
-      osc.type='sine';
-      osc.frequency.setValueAtTime(freq,t0);
-      gain.gain.setValueAtTime(0,t0);
-      gain.gain.linearRampToValueAtTime(volume||0.13, t0+0.02);
-      gain.gain.linearRampToValueAtTime(0, t0+duration);
-      osc.connect(gain); gain.connect(_acx.destination);
-      osc.start(t0); osc.stop(t0+duration+0.02);
-    }catch(e){}
-  }
-  function playCorrectChime(){ playTone(523.25,0.16,0,0.12); playTone(659.25,0.18,0.14,0.12); playTone(783.99,0.26,0.30,0.12); }
-  function playGentleTick(){ playTone(320,0.14,0,0.05); }
-  function showBigMark(){
-    var el=document.getElementById('bigMark');
-    el.classList.remove('show');
-    void el.offsetWidth;
-    el.classList.add('show');
-    clearTimeout(showBigMark._t);
-    showBigMark._t = setTimeout(function(){ el.classList.remove('show'); }, 1150);
-  }
-  function timeSpeechText(h,m){
-    return m===0 ? (h+"時 ちょうど") : (h+"時"+m+"分");
-  }
-  function timeText(h,m){ return h+"時"+m+"分"; }
+  var PRAISE = ['やったね！', 'せいかい！', 'すごい！', 'ばっちり！', 'よくできました！', 'かっこいい！'];
+  var TRY = ['もういちど！', 'おしい！', 'ゆっくり かんがえよう', 'だいじょうぶ、もういっかい！'];
+  var DEF = { setSize: 5, autoRead: true, sound: true, volume: 0.8, rate: 0.9, errorless: true, autoNext: false, bigText: false, calm: false };
 
-  /* ---------- SVG clock builder ---------- */
-  function buildClockSVG(h,m,opts){
-    opts = opts||{};
-    var level = opts.level||3;
-    var showRing = level>=2;
-    var showFine = level>=3;
-    var interactive = !!opts.interactive;
-    var hourAngle = ((h%12)+m/60)*30;
-    var minuteAngle = m*6;
+  var A = null, S = null, P = null;     // アプリ設定・せってい・きろく
+  var st = { screen: 'home' };          // いまの じょうたい
+  var lockUntil = 0;
+  function tapOk(ms) { var n = Date.now(); if (n < lockUntil) return false; lockUntil = n + (ms || 450); return true; }
+  function lock(ms) { lockUntil = Math.max(lockUntil, Date.now() + ms); }
 
-    var parts=[];
-    parts.push('<svg class="clockface" viewBox="0 0 '+(CENTER*2)+' '+(CENTER*2)+'" xmlns="http://www.w3.org/2000/svg">');
-    parts.push('<circle cx="'+CENTER+'" cy="'+CENTER+'" r="'+FACE_R+'" fill="var(--card)" stroke="var(--ink)" stroke-width="5"/>');
+  /* ---------- 音 ---------- */
+  var ac = null;
+  function audio() {
+    if (!S.sound) return null;
+    try {
+      if (!ac) { var C = window.AudioContext || window.webkitAudioContext; if (!C) return null; ac = new C(); }
+      if (ac.state === 'suspended') ac.resume();
+      return ac;
+    } catch (e) { return null; }
+  }
+  function tone(f, start, dur, type, vol) {
+    var a = audio(); if (!a) return;
+    var t = a.currentTime + start, o = a.createOscillator(), g = a.createGain();
+    o.type = type || 'sine'; o.frequency.setValueAtTime(f, t);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime((vol || 0.25) * S.volume, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(a.destination); o.start(t); o.stop(t + dur + 0.05);
+  }
+  var sfx = {
+    tap: function () { tone(740, 0, 0.08, 'triangle', 0.15); },
+    ok: function () { tone(880, 0, 0.3, 'sine', 0.32); tone(1318.5, 0.22, 0.5, 'sine', 0.28); },
+    ng: function () { tone(330, 0, 0.16, 'triangle', 0.18); tone(262, 0.12, 0.22, 'triangle', 0.16); },
+    put: function (i) { tone([523, 587, 659, 698, 784, 880, 988, 1047][i % 8], 0, 0.14, 'triangle', 0.2); },
+    fanfare: function () {
+      [[523, 0], [659, 0.1], [784, 0.2], [1047, 0.32], [784, 0.5], [1047, 0.62]].forEach(function (n) { tone(n[0], n[1], 0.32, 'square', 0.06); tone(n[0], n[1], 0.38, 'triangle', 0.2); });
+      [1568, 2093, 2637].forEach(function (f, i) { tone(f, 0.95 + i * 0.07, 0.5, 'sine', 0.09); });
+    }
+  };
 
-    // fine minute ticks
-    if(showFine){
-      for(var mm=0; mm<60; mm++){
-        if(mm%5===0) continue;
-        var a=mm*6;
-        var p1=polar(CENTER,CENTER,FACE_R-8,a), p2=polar(CENTER,CENTER,FACE_R-16,a);
-        parts.push('<line x1="'+p1.x+'" y1="'+p1.y+'" x2="'+p2.x+'" y2="'+p2.y+'" stroke="var(--ink-soft)" stroke-width="2" stroke-linecap="round"/>');
+  /* ---------- 読み上げ（日本語の声を えらぶ） ---------- */
+  var canSpeak = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+  var jaVoice = null;
+  function loadVoice() {
+    if (!canSpeak) return;
+    var v = (speechSynthesis.getVoices() || []).filter(function (x) { return /^ja(-|_|$)/i.test(x.lang); });
+    jaVoice = v.filter(function (x) { return /Kyoko|O-ren|Otoya|Hattori|Nanami|Haruka/i.test(x.name); })[0] || v.filter(function (x) { return x.localService; })[0] || v[0] || null;
+  }
+  function speak(text, rate) {
+    if (!canSpeak || !text) return;
+    try {
+      speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(String(text).replace(/[〇○]{2}/g, 'まるまる'));
+      u.lang = 'ja-JP'; u.rate = rate || S.rate; u.pitch = 1.1;
+      if (jaVoice) u.voice = jaVoice;
+      speechSynthesis.speak(u);
+    } catch (e) { /* 読み上げできなくても動く */ }
+  }
+  function stopSpeak() { if (canSpeak) { try { speechSynthesis.cancel(); } catch (e) { /* 無視 */ } } }
+
+  /* ---------- 演出 ---------- */
+  var okTimer = null;
+  function showCorrect() {
+    var o = $('#mzCorrect');
+    clearTimeout(okTimer);
+    o.classList.remove('show'); void o.offsetWidth; o.classList.add('show');
+    okTimer = setTimeout(function () { o.classList.remove('show'); }, 1150);
+  }
+  function confetti() {
+    if (S.calm) return;
+    var items = ['🎉', '⭐', '🎊', '✨', '🌟', '💖'];
+    for (var i = 0; i < 40; i++) {
+      var c = h('span', { class: 'mz-confetti' }, pick(items));
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.fontSize = (24 + Math.random() * 28) + 'px';
+      c.style.animationDuration = (2.2 + Math.random() * 1.6) + 's';
+      c.style.animationDelay = (Math.random() * 0.7) + 's';
+      c.style.setProperty('--r', (Math.random() * 900 - 450) + 'deg');
+      document.body.appendChild(c);
+      (function (el) { setTimeout(function () { el.remove(); }, 4800); })(c);
+    }
+  }
+  var toastT = null;
+  function toast(msg) { var t = $('#mzToast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(function () { t.classList.remove('show'); }, 2400); }
+
+  /* ---------- 画面の わく ---------- */
+  function setView(cls, kids) {
+    var v = $('#mzView');
+    v.innerHTML = '';
+    v.appendChild(h('section', { class: 'mz-screen ' + cls }, kids));
+  }
+  function setTop(showPrint) {
+    var b = $('#mzPrintBtn');
+    if (b) b.hidden = !showPrint;
+  }
+  function modeColor(m) { return m && m.color ? m.color : A.color; }
+
+  /* ---------- ホーム ---------- */
+  function renderHome() {
+    st.screen = 'home';
+    setUrl(false);
+    stopSpeak();
+    setTop(A.modes.some(function (m) { return m.print !== false; }));
+    setView('mz-home', [
+      h('h1', { class: 'mz-h1' }, A.homeTitle || 'どれを する？'),
+      h('div', { class: 'mz-modes', style: '--mcols:' + (A.modes.length <= 2 ? A.modes.length : A.modes.length <= 4 ? 2 : 3) }, A.modes.map(function (m) {
+        var best = bestOfMode(m);
+        return h('button', {
+          type: 'button', class: 'mz-mode', style: '--c:' + modeColor(m),
+          onclick: function () { if (!tapOk(500)) return; sfx.tap(); speak(m.say || m.name); openMode(m); }
+        }, best ? h('span', { class: 'best' }, '★'.repeat(best)) : null, emo(m.icon || '⭐'), h('span', { class: 'nm' }, m.name), m.sub ? h('span', { class: 'sb' }, m.sub) : null);
+      }))
+    ]);
+  }
+  function bestOfMode(m) {
+    var b = 0;
+    (m.levels || [{ id: 1 }]).forEach(function (l) { var r = P[m.id + ':' + l.id]; if (r) b = Math.max(b, r.stars5 || 0); });
+    return b;
+  }
+
+  function openMode(m) {
+    st.mode = m;
+    if (!m.levels || m.levels.length <= 1) { startSet(m, m.levels ? m.levels[0].id : 1); return; }
+    renderLevels(m);
+  }
+
+  /* ---------- レベル ---------- */
+  function renderLevels(m) {
+    st.screen = 'levels';
+    setTop(false);
+    setView('mz-lv', [
+      h('div', { class: 'mz-bar' },
+        h('button', { type: 'button', class: 'mz-back', onclick: function () { if (tapOk(400)) renderHome(); } }, '◀ もどる'),
+        h('div', { class: 'mz-label' }, emo(m.icon || ''), ' ', m.name),
+        h('span', { style: 'width:120px' })),
+      h('div', { class: 'mz-levels' }, m.levels.map(function (lv) {
+        var r = P[m.id + ':' + lv.id];
+        return h('button', {
+          type: 'button', class: 'mz-level', style: '--c:' + modeColor(m),
+          onclick: function () { if (!tapOk(500)) return; sfx.tap(); speak(lv.name); startSet(m, lv.id); }
+        }, h('span', { class: 'stars' }, lv.stars || ''), h('span', { class: 'nm' }, lv.name),
+          r ? h('span', { class: 'best' }, 'さいこう ' + '★'.repeat(r.stars5 || 0) + '☆'.repeat(5 - (r.stars5 || 0))) : null);
+      }))
+    ]);
+  }
+
+  /* ---------- もんだいの よういの しかた ---------- */
+  function makeQueue(m, level) {
+    return { m: m, level: level, list: [], used: {} };
+  }
+  function drawQ(qu) {
+    var m = qu.m;
+    if (m.pool) {
+      if (!qu.list.length) {
+        var pool = m.pool(qu.level) || [];
+        qu.list = shuffle(pool);
+        if (qu.last && qu.list.length > 1 && qu.list[0] === qu.last) qu.list.push(qu.list.shift());
       }
+      var item = qu.list.shift();
+      qu.last = item;
+      return m.toQ ? m.toQ(item, qu.level) : item;
     }
-    // hour ticks (also 5-min marks)
-    for(var i=1;i<=12;i++){
-      var ang=i*30;
-      var t1=polar(CENTER,CENTER,FACE_R-6,ang), t2=polar(CENTER,CENTER,FACE_R-20,ang);
-      parts.push('<line x1="'+t1.x+'" y1="'+t1.y+'" x2="'+t2.x+'" y2="'+t2.y+'" stroke="var(--ink)" stroke-width="5" stroke-linecap="round"/>');
-    }
-    // hour numbers
-    for(var hn=1;hn<=12;hn++){
-      var np=polar(CENTER,CENTER,FACE_R-38,hn*30);
-      parts.push('<text x="'+np.x+'" y="'+(np.y+10)+'" text-anchor="middle" font-size="'+(30*TEXT_SCALE)+'" font-weight="800" fill="var(--ink)" font-family="M PLUS Rounded 1c, sans-serif">'+hn+'</text>');
-    }
-    // minute ring numbers
-    if(showRing){
-      for(var rn=0;rn<12;rn++){
-        var val = rn===0?60:rn*5;
-        var rp=polar(CENTER,CENTER,FACE_R+20,rn*30);
-        parts.push('<text x="'+rp.x+'" y="'+(rp.y+7)+'" text-anchor="middle" font-size="'+(17*TEXT_SCALE)+'" font-weight="700" fill="var(--minute)" font-family="M PLUS Rounded 1c, sans-serif">'+val+'</text>');
-      }
-    }
-    // hour hand
-    parts.push('<g class="hand hour-hand" data-hand="hour" transform="rotate('+hourAngle+' '+CENTER+' '+CENTER+')">'
-      + '<line x1="'+CENTER+'" y1="'+CENTER+'" x2="'+CENTER+'" y2="'+(CENTER-84)+'" stroke="var(--hour)" stroke-width="12" stroke-linecap="round"/>'
-      + (interactive ? '<line class="hit" x1="'+CENTER+'" y1="'+CENTER+'" x2="'+CENTER+'" y2="'+(CENTER-84)+'" stroke="transparent" stroke-width="40" stroke-linecap="round"/>' : '')
-      + '</g>');
-    // minute hand
-    parts.push('<g class="hand minute-hand" data-hand="minute" transform="rotate('+minuteAngle+' '+CENTER+' '+CENTER+')">'
-      + '<line x1="'+CENTER+'" y1="'+CENTER+'" x2="'+CENTER+'" y2="'+(CENTER-130)+'" stroke="var(--minute)" stroke-width="8" stroke-linecap="round"/>'
-      + (interactive ? '<line class="hit" x1="'+CENTER+'" y1="'+CENTER+'" x2="'+CENTER+'" y2="'+(CENTER-130)+'" stroke="transparent" stroke-width="34" stroke-linecap="round"/>' : '')
-      + '</g>');
-    parts.push('<circle cx="'+CENTER+'" cy="'+CENTER+'" r="11" fill="var(--ink)"/>');
-    parts.push('</svg>');
-    return parts.join('');
+    // make で つくる もんだいは、同じ もんだいが つづかないように する
+    var q, key, tries = 0;
+    do { q = m.make(qu.level); key = qKey(q); tries++; } while (qu.used[key] && tries < 30);
+    qu.used[key] = true;
+    return q;
+  }
+  function qKey(q) { return JSON.stringify([q.text, q.html, q.answer, q.tokens, q.key]); }
+
+  /* ---------- セット（5もん など） ---------- */
+  function startSet(m, level) {
+    st.mode = m; st.level = level;
+    st.set = { n: Number(S.setSize) || 5, i: 0, results: [], queue: makeQueue(m, level) };
+    showQ();
   }
 
-  /* blank clock face for "draw the hands" worksheets, optional faint answer hands */
-  function buildBlankClockSVG(h,m,opts){
-    opts=opts||{};
-    var level=opts.level||3;
-    var showAnswer=!!opts.showAnswer;
-    var showRing = level>=2;
-    var parts=[];
-    parts.push('<svg class="clockface" viewBox="0 0 '+(CENTER*2)+' '+(CENTER*2)+'" xmlns="http://www.w3.org/2000/svg">');
-    parts.push('<circle cx="'+CENTER+'" cy="'+CENTER+'" r="'+FACE_R+'" fill="var(--card)" stroke="var(--ink)" stroke-width="5"/>');
-    for(var i=1;i<=12;i++){
-      var ang=i*30;
-      var t1=polar(CENTER,CENTER,FACE_R-6,ang), t2=polar(CENTER,CENTER,FACE_R-20,ang);
-      parts.push('<line x1="'+t1.x+'" y1="'+t1.y+'" x2="'+t2.x+'" y2="'+t2.y+'" stroke="var(--ink)" stroke-width="5" stroke-linecap="round"/>');
-    }
-    for(var hn=1;hn<=12;hn++){
-      var np=polar(CENTER,CENTER,FACE_R-38,hn*30);
-      parts.push('<text x="'+np.x+'" y="'+(np.y+10)+'" text-anchor="middle" font-size="'+(30*TEXT_SCALE)+'" font-weight="800" fill="var(--ink)" font-family="M PLUS Rounded 1c, sans-serif">'+hn+'</text>');
-    }
-    if(showRing){
-      for(var rn=0;rn<12;rn++){
-        var val = rn===0?60:rn*5;
-        var rp=polar(CENTER,CENTER,FACE_R+20,rn*30);
-        parts.push('<text x="'+rp.x+'" y="'+(rp.y+7)+'" text-anchor="middle" font-size="'+(15*TEXT_SCALE)+'" font-weight="700" fill="var(--minute)" font-family="M PLUS Rounded 1c, sans-serif">'+val+'</text>');
-      }
-    }
-    if(showAnswer){
-      var hourAngle = ((h%12)+m/60)*30, minuteAngle=m*6;
-      parts.push('<g transform="rotate('+hourAngle+' '+CENTER+' '+CENTER+')"><line x1="'+CENTER+'" y1="'+CENTER+'" x2="'+CENTER+'" y2="'+(CENTER-84)+'" stroke="var(--hour)" stroke-width="10" stroke-linecap="round" stroke-dasharray="6,7" opacity="0.55"/></g>');
-      parts.push('<g transform="rotate('+minuteAngle+' '+CENTER+' '+CENTER+')"><line x1="'+CENTER+'" y1="'+CENTER+'" x2="'+CENTER+'" y2="'+(CENTER-130)+'" stroke="var(--minute)" stroke-width="7" stroke-linecap="round" stroke-dasharray="5,6" opacity="0.55"/></g>');
-    }
-    parts.push('<circle cx="'+CENTER+'" cy="'+CENTER+'" r="9" fill="'+(showAnswer?'var(--ink)':'#cfd6dd')+'"/>');
-    parts.push('</svg>');
-    return parts.join('');
+  function levelName() {
+    var m = st.mode, l = (m.levels || []).filter(function (x) { return x.id === st.level; })[0];
+    return m.name + (l && m.levels.length > 1 ? '（' + l.name + '）' : '');
   }
 
-  /* ---------- interactive clock widget ---------- */
-  function createClockWidget(holder, initial, level, onChange){
-    var state = {h:initial.h, m:initial.m};
-    render();
+  function showQ() {
+    st.screen = 'play';
+    setTop(false);
+    var m = st.mode, set = st.set;
+    var q = drawQ(set.queue);
+    set.q = q; set.first = true; set.locked = false;
+    var color = modeColor(m);
+    var dots = h('div', { class: 'mz-dots', style: '--c:' + color });
+    for (var k = 0; k < set.n; k++) dots.appendChild(h('i', { class: k < set.results.length ? set.results[k] : k === set.i ? 'now' : '' }));
+    var stage = h('div', { class: 'mz-stage', id: 'mzStage' });
+    setView('mz-play', [
+      h('div', { class: 'mz-bar' },
+        h('button', { type: 'button', class: 'mz-back', onclick: function () { if (!tapOk(400)) return; stopSpeak(); if (m.levels && m.levels.length > 1) renderLevels(m); else renderHome(); } }, '◀ もどる'),
+        h('div', { class: 'mz-label' }, levelName()),
+        dots,
+        h('button', { type: 'button', class: 'mz-say', 'aria-label': 'よみあげ', onclick: function () { if (tapOk(300)) speak(sayOf(q)); } }, emo('🔊'))),
+      stage
+    ]);
+    var kind = q.kind || m.kind || 'choice';
+    if (kind === 'choice') renderChoice(stage, q, color);
+    else if (kind === 'order') renderOrder(stage, q, color);
+    else m.render(stage, q, api(color));
+    if (S.autoRead) speak(sayOf(q));
+    lock(450);
+  }
+  function sayOf(q) { return q.say || [q.text, q.sub].filter(Boolean).join('。') || ''; }
 
-    function render(){
-      holder.innerHTML = buildClockSVG(state.h, state.m, {level:level, interactive:true});
-      attachDrag();
-    }
-    function setLevel(newLevel){ level = newLevel; render(); }
-    function setTime(h,m){ state.h=mod12(h); state.m=mod60(m); render(); if(onChange) onChange(state.h,state.m); }
-    function getTime(){ return {h:state.h, m:state.m}; }
+  /* ---------- えらぶ もんだい ---------- */
+  function qCard(q, color, compact) {
+    return h('div', { class: 'mz-q' + (compact ? ' compact' : ''), style: '--c:' + color },
+      q.icon ? emo(q.icon, 'qi' + (q.bigIcon ? ' big' : '')) : null,
+      q.html ? h('div', { class: 'qv', html: q.html }) : null,
+      q.text ? h('div', { class: 'qt' }, q.text) : null,
+      q.sub ? h('div', { class: 'qs' }, q.sub) : null);
+  }
+  function optObj(o) { return typeof o === 'object' ? { label: o.label, value: o.value !== undefined ? o.value : o.label, icon: o.icon, html: o.html, say: o.say } : { label: String(o), value: o }; }
+  function renderChoice(stage, q, color) {
+    var opts = (q.keepOrder ? q.options : shuffle(q.options)).map(optObj);
+    var longest = Math.max.apply(null, opts.map(function (o) { return (o.label || '').length; }));
+    var n = opts.length, cols;
+    if (q.cols) cols = q.cols;
+    else if (opts.some(function (o) { return o.html; })) cols = n <= 4 ? n : 3;
+    else if (n === 2) cols = 2;
+    else if (n === 3) cols = longest <= 7 ? 3 : 1;
+    else if (n === 4) cols = longest <= 4 ? 4 : longest <= 14 ? 2 : 1;
+    else cols = longest <= 8 ? 3 : 2;
+    if (window.innerWidth < window.innerHeight && cols > 2 && longest > 4) cols = n === 3 ? 1 : 2;
+    var side = q.side && window.innerWidth > window.innerHeight;
+    if (side) cols = 1;
+    var grid = h('div', { class: 'mz-opts', style: '--cols:' + cols });
+    opts.forEach(function (o) {
+      var b = h('button', { type: 'button', class: 'mz-opt' + (o.icon && cols >= 3 ? ' stack' : ''), style: '--c:' + color },
+        o.icon ? emo(o.icon) : null, o.html ? h('span', { html: o.html }) : null, o.label && !o.html ? h('span', null, o.label) : null);
+      b.addEventListener('click', function () {
+        if (st.set.locked || Date.now() < lockUntil) return;
+        if (o.value === q.answer) {
+          b.classList.add('ok');
+          $$('.mz-opt', grid).forEach(function (x) { if (x !== b) x.classList.add('dim'); });
+          correct(q.sayAnswer || o.say || o.label, q.explain);
+        } else {
+          b.classList.remove('ng'); void b.offsetWidth; b.classList.add('ng');
+          wrong();
+          if (S.errorless) setTimeout(function () { b.classList.add('gone'); }, 450);
+        }
+      });
+      grid.appendChild(b);
+    });
+    if (side) stage.append(h('div', { class: 'mz-side' }, qCard(q, color), h('div', { class: 'mz-sidep' }, q.ask ? h('div', { class: 'mz-ask', html: q.ask }) : null, grid)));
+    else { stage.append(qCard(q, color)); if (q.ask) stage.append(h('div', { class: 'mz-ask', html: q.ask })); stage.append(grid); }
+  }
 
-    function attachDrag(){
-      var svg = holder.querySelector('svg');
-      var hourHand = svg.querySelector('[data-hand="hour"]');
-      var minuteHand = svg.querySelector('[data-hand="minute"]');
-
-      function toSvgPoint(clientX, clientY){
-        var pt = svg.createSVGPoint();
-        pt.x = clientX; pt.y = clientY;
-        var ctm = svg.getScreenCTM();
-        if(!ctm) return {x:CENTER,y:CENTER};
-        return pt.matrixTransform(ctm.inverse());
-      }
-      function angleFromEvent(e){
-        var p = toSvgPoint(e.clientX, e.clientY);
-        var dx = p.x-CENTER, dy = p.y-CENTER;
-        var a = Math.atan2(dx, -dy) * 180/Math.PI;
-        if(a<0) a+=360;
-        return a;
-      }
-
-      function bindHand(handEl, type){
-        var hit = handEl.querySelector('.hit');
-        if(!hit) return;
-        hit.addEventListener('pointerdown', function(e){
-          e.preventDefault();
-          handEl.classList.add('dragging');
-          try{ hit.setPointerCapture(e.pointerId); }catch(err){}
-          var lastAngle = angleFromEvent(e);
-          var startH = state.h, startM = state.m;
-          var rotAccum = 0;
-
-          function move(ev){
-            var a = angleFromEvent(ev);
-            var delta = a - lastAngle;
-            if(delta>180) delta-=360;
-            if(delta<-180) delta+=360;
-            rotAccum += delta;
-            lastAngle = a;
-
-            if(type==='minute'){
-              var levelInfo = levelById(level);
-              var step = levelInfo.minuteStep;
-              var totalMinuteAngle = ( (startM*6) + rotAccum );
-              var rawM = mod60(Math.round(totalMinuteAngle/6));
-              var snappedM = Math.round(rawM/step)*step;
-              if(snappedM>=60) snappedM = 0;
-              var hourShift = Math.round(( (startM*6)+rotAccum )/360);
-              var newH = mod12(startH + hourShift);
-              state.h = newH; state.m = snappedM;
-            } else {
-              var totalHourAngle = (mod12(startH)%12)*30 + (startM*0.5) + rotAccum;
-              var rawH = Math.round(totalHourAngle/30) % 12;
-              if(rawH<=0) rawH+=12;
-              state.h = rawH;
-            }
-            updateHandsOnly();
+  /* ---------- ならべる もんだい ---------- */
+  function renderOrder(stage, q, color) {
+    var tokens = q.tokens.map(function (t, i) { return { t: t, i: i }; });
+    var pool = shuffle(tokens), guard = 0;
+    while (pool.length > 1 && pool.every(function (x, i) { return x.i === i; }) && guard++ < 20) pool = shuffle(tokens);
+    var placed = [];
+    var vertical = q.vertical !== undefined ? q.vertical : Math.max.apply(null, q.tokens.map(function (t) { return String(t).length; })) > 8;
+    var slots = h('div', { class: 'mz-slots' + (vertical ? ' col' : ''), style: '--c:' + color });
+    var poolEl = h('div', { class: 'mz-pool' });
+    var hint = h('div', { class: 'mz-hint' }, 'ばんごうの じゅんに タップして ならべよう');
+    function draw() {
+      slots.innerHTML = ''; poolEl.innerHTML = '';
+      tokens.forEach(function (_, k) {
+        var tk = placed[k];
+        slots.appendChild(h('button', {
+          type: 'button', class: 'mz-slot' + (tk ? ' filled' : ''), style: '--c:' + color,
+          onclick: function () { if (!tk || st.set.locked) return; placed.splice(k, 1); pool.push(tk); sfx.tap(); draw(); }
+        }, h('span', { class: 'no' }, k + 1), tk ? tk.t : ''));
+      });
+      pool.forEach(function (tk) {
+        poolEl.appendChild(h('button', {
+          type: 'button', class: 'mz-tile', style: '--c:' + color,
+          onclick: function () {
+            if (st.set.locked) return;
+            pool.splice(pool.indexOf(tk), 1); placed.push(tk); sfx.put(placed.length - 1); speak(tk.t); draw();
+            if (!pool.length) check();
           }
-
-          function up(ev){
-            handEl.classList.remove('dragging');
-            window.removeEventListener('pointermove', move);
-            window.removeEventListener('pointerup', up);
-            render();
-            if(onChange) onChange(state.h, state.m);
-          }
-          window.addEventListener('pointermove', move);
-          window.addEventListener('pointerup', up);
-        });
-      }
-      function updateHandsOnly(){
-        var hourAngle = ((state.h%12)+state.m/60)*30;
-        var minuteAngle = state.m*6;
-        hourHand.setAttribute('transform','rotate('+hourAngle+' '+CENTER+' '+CENTER+')');
-        minuteHand.setAttribute('transform','rotate('+minuteAngle+' '+CENTER+' '+CENTER+')');
-      }
-      bindHand(hourHand,'hour');
-      bindHand(minuteHand,'minute');
+        }, tk.t));
+      });
     }
-
-    return {setTime:setTime, getTime:getTime, setLevel:setLevel, render:render};
-  }
-
-  /* ---------- LEVEL BARS ---------- */
-  function renderLevelBar(container, current, onPick){
-    container.innerHTML='';
-    LEVELS.forEach(function(lv){
-      var btn=document.createElement('button');
-      btn.className='level-btn'+(lv.id===current?' active':'');
-      btn.innerHTML='<span class="stars">'+lv.stars+'</span><span class="name">Lv'+lv.id+' '+lv.name+'</span>';
-      btn.addEventListener('click', function(){ onPick(lv.id); });
-      container.appendChild(btn);
-    });
-  }
-
-  /* =========================================================
-     LEARN MODE
-  ========================================================= */
-  var learnState = {level:1, h:3, m:0};
-  var learnWidget = createClockWidget(document.getElementById('learnClockHolder'), {h:3,m:0}, 1, function(h,m){
-    learnState.h=h; learnState.m=m; updateLearnDigital();
-  });
-  function updateLearnDigital(){
-    document.getElementById('learnDigital').innerHTML =
-      '<span class="h">'+learnState.h+'時</span><span class="m">'+learnState.m+'分</span>';
-  }
-  function renderLearnLevelBar(){
-    renderLevelBar(document.getElementById('levelBarLearn'), learnState.level, function(id){
-      learnState.level=id;
-      learnWidget.setLevel(id);
-      snapLearnToLevel();
-      renderLearnLevelBar();
-    });
-  }
-  function snapLearnToLevel(){
-    var lv=levelById(learnState.level);
-    var step=lv.minuteStep;
-    var snapped = Math.round(learnState.m/step)*step;
-    if(snapped>=60) snapped=0;
-    learnState.m=snapped;
-    learnWidget.setTime(learnState.h, learnState.m);
-    updateLearnDigital();
-  }
-  renderLearnLevelBar();
-  updateLearnDigital();
-
-  document.getElementById('learnClockHolder').closest('.panel').querySelectorAll('.stepper-row button').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var act=btn.getAttribute('data-act');
-      var lv=levelById(learnState.level);
-      var step=lv.minuteStep===60?60:lv.minuteStep;
-      if(act==='h-') learnState.h=mod12(learnState.h-1);
-      if(act==='h+') learnState.h=mod12(learnState.h+1);
-      if(act==='m-'){ learnState.m=mod60(learnState.m-step); if(lv.id===1) learnState.m=0; }
-      if(act==='m+'){ learnState.m=mod60(learnState.m+step); if(lv.id===1) learnState.m=0; }
-      learnWidget.setTime(learnState.h, learnState.m);
-      updateLearnDigital();
-    });
-  });
-  document.getElementById('learnSpeak').addEventListener('click', function(){
-    speak(timeSpeechText(learnState.h, learnState.m));
-  });
-  document.getElementById('learnRandom').addEventListener('click', function(){
-    var t = randomTimeForLevel(learnState.level);
-    learnState.h=t.h; learnState.m=t.m;
-    learnWidget.setTime(t.h,t.m);
-    updateLearnDigital();
-  });
-  document.getElementById('learnReset').addEventListener('click', function(){
-    learnState.h=12; learnState.m=0;
-    learnWidget.setTime(12,0);
-    updateLearnDigital();
-  });
-
-  function randomTimeForLevel(levelId){
-    var lv=levelById(levelId);
-    var h=1+Math.floor(Math.random()*12);
-    var m;
-    if(lv.minuteChoices){
-      m = lv.minuteChoices[Math.floor(Math.random()*lv.minuteChoices.length)];
+    function check() {
+      // おなじ もじが 2つ ある ときも、もじが あっていれば せいかい
+      var ok = placed.every(function (tk, k) { return tk.t === q.tokens[k]; });
+      var els = $$('.mz-slot', slots);
+      if (ok) { els.forEach(function (e) { e.classList.add('ok'); }); correct(q.sayAnswer || q.tokens.join('、'), q.explain); return; }
+      wrong();
+      // あっている ところは のこして、ちがう ところだけ もどす
+      var keep = 0;
+      while (keep < placed.length && placed[keep].t === q.tokens[keep]) keep++;
+      els.forEach(function (e, k) { if (k >= keep) e.classList.add('ng'); });
+      st.set.locked = true;
+      setTimeout(function () {
+        var back = placed.splice(keep);
+        pool = pool.concat(shuffle(back));
+        st.set.locked = false;
+        draw();
+      }, 700);
+    }
+    draw();
+    if (vertical) {
+      stage.append(qCard({ icon: q.icon, text: q.text, sub: q.sub, html: q.html }, color, true), hint,
+        h('div', { class: 'mz-ow' }, slots, poolEl));
     } else {
-      m = Math.floor(Math.random()*60);
+      stage.append(qCard({ icon: q.icon, text: q.text, sub: q.sub, html: q.html }, color), slots, hint, poolEl);
     }
-    return {h:h,m:m};
   }
 
-  function sameTime(a,b){ return !!a && !!b && a.h===b.h && a.m===b.m; }
-  function shuffleArr(arr){
-    for(var i=arr.length-1;i>0;i--){
-      var j=Math.floor(Math.random()*(i+1));
-      var t=arr[i]; arr[i]=arr[j]; arr[j]=t;
-    }
+  // えらんだ ものを つけたり はずしたり（さいごの 1つは のこす）
+  function toggleIn(arr, v) {
+    arr = (arr || []).slice();
+    var i = arr.indexOf(v);
+    if (i >= 0) { if (arr.length > 1) arr.splice(i, 1); } else arr.push(v);
     return arr;
   }
-  var CHOOSE_OPTION_COUNT = 4;
-  /* 目標時刻と「見分ける力」を試すニアミスの選択肢(同じ時・違う分／違う時・同じ分)を混ぜつつ、
-     指定数までランダムな時刻でうめて重複なしの選択肢セットを作る */
-  function buildChooseOptions(level, target){
-    var lv = levelById(level);
-    var list = [{h:target.h, m:target.m}];
 
-    // 同じ「時」で分だけ違う選択肢（分の聞き分け練習）
-    if(lv.minuteChoices && lv.minuteChoices.length>1){
-      var otherMinutes = lv.minuteChoices.filter(function(m){ return m!==target.m; });
-      if(otherMinutes.length){
-        var mm = otherMinutes[Math.floor(Math.random()*otherMinutes.length)];
-        list.push({h:target.h, m:mm});
-      }
-    } else if(!lv.minuteChoices){
-      var mm2 = mod60(target.m + 5 + Math.floor(Math.random()*50));
-      list.push({h:target.h, m:mm2});
+  /* ---------- なぞりがき（うすい もじを なぞる・かたちの うえを なぞれたか はんてい） ---------- */
+  var TRACE_FONT = '"Klee One","UD デジタル 教科書体 NK-R","UD Digital Kyokasho NK-R","UD デジタル 教科書体 N-R","YuKyokasho Yoko","Hiragino Maru Gothic ProN","M PLUS Rounded 1c",sans-serif';
+  var ROUND_FONT = '"Hiragino Maru Gothic ProN","M PLUS Rounded 1c","BIZ UDPGothic","Yu Gothic UI",sans-serif';
+  function trace(stage, api, txt, o) {
+    o = o || {};
+    var n = [].slice.call(txt).length;
+    var H = 380, W = Math.round(H * Math.max(1, n * (o.textbook ? 0.9 : 0.72)));
+    var wrap = h('div', { class: 'trace', style: '--ar:' + (W / H) });
+    var guide = h('canvas', { width: W, height: H, class: 'tg' });
+    var ink = h('canvas', { width: W, height: H, class: 'ti' });
+    wrap.append(guide);
+    if (o.grid && n === 1) wrap.append(h('span', { class: 'gridl' }));
+    wrap.append(ink);
+    var msg = h('div', { class: 'tmsg' }, o.msg || 'うすい もじを ゆびで なぞろう');
+    var done = false;
+    var bar = h('div', { class: 'tbar' },
+      h('button', { type: 'button', class: 'tbtn', onclick: clear }, '🧽 けす'),
+      h('button', { type: 'button', class: 'tbtn ok', onclick: function () { judge(true); } }, '✅ できた'));
+    stage.append(o.head || null, msg, wrap, bar);
+    var g = guide.getContext('2d'), k = ink.getContext('2d');
+    var fs = Math.min(H * 0.84, W / n * 1.02), gd = null, pts = [];
+    var font = (o.textbook ? '600 ' : '900 ') + fs + 'px ' + (o.textbook ? TRACE_FONT : ROUND_FONT);
+    // フォントが よみこまれてから かく（まにあわない ときは 1.5びょうで あきらめる）
+    var drawn = false;
+    function drawGuide() {
+      if (drawn) return; drawn = true;
+    g.font = font;
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    var y0 = H / 2 + fs * 0.04;
+    if (o.textbook) {
+      // 教科書体は ほそいので ふちどりして ふとく する
+      g.lineJoin = 'round'; g.lineWidth = fs * 0.07; g.strokeStyle = '#EFE7D6'; g.strokeText(txt, W / 2, y0);
     }
-
-    // 同じ「分」で時だけ違う選択肢（時の聞き分け練習）
-    var otherHour = mod12(target.h + 1 + Math.floor(Math.random()*10));
-    list.push({h:otherHour, m:target.m});
-
-    // 足りない分はランダムな時刻でうめる（重複除外）
-    var guard=0;
-    while(list.length<CHOOSE_OPTION_COUNT && guard<200){
-      guard++;
-      var cand = randomTimeForLevel(level);
-      var dup = list.some(function(x){ return sameTime(x,cand); });
-      if(!dup) list.push(cand);
+    g.fillStyle = '#EFE7D6'; g.fillText(txt, W / 2, y0);
+    if (!o.textbook) { g.setLineDash([8, 10]); g.lineWidth = 3; g.strokeStyle = '#C9B99A'; g.strokeText(txt, W / 2, y0); }
+    gd = g.getImageData(0, 0, W, H).data;
+    for (var y = 0; y < H; y += 5) for (var x = 0; x < W; x += 5) { var i = (y * W + x) * 4; if (gd[i + 3] > 200) pts.push([x, y]); }
+    if (o.textbook) { g.fillStyle = '#B9AC93'; g.fillText(txt, W / 2, y0); }
     }
-    return shuffleArr(list);
-  }
-
-  /* =========================================================
-     QUIZ MODE
-  ========================================================= */
-  var quizState = {
-    level:1, qtype:'read',
-    score:0, total:0,
-    current:{h:3,m:0}, answered:false,
-    chosenH:null, chosenM:null,
-    setTargetChosenChecked:false
-  };
-
-  function renderQuizLevelBar(){
-    renderLevelBar(document.getElementById('levelBarQuiz'), quizState.level, function(id){
-      quizState.level=id;
-      renderQuizLevelBar();
-      if(quizState.qtype==='read'){ newReadQuestion(true); }
-      else if(quizState.qtype==='choose'){ newChooseQuestion(true); }
-      else if(quizState.qtype==='match'){ newMatchSet(); }
-      else { newSetQuestion(true); }
-    });
-  }
-  document.querySelectorAll('.quiz-type-tabs button').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      document.querySelectorAll('.quiz-type-tabs button').forEach(function(b){b.classList.remove('active');});
-      btn.classList.add('active');
-      quizState.qtype = btn.getAttribute('data-qtype');
-      document.getElementById('quizReadArea').classList.toggle('hidden', quizState.qtype!=='read');
-      document.getElementById('quizChooseArea').classList.toggle('hidden', quizState.qtype!=='choose');
-      document.getElementById('quizSetArea').classList.toggle('hidden', quizState.qtype!=='set');
-      document.getElementById('quizMatchArea').classList.toggle('hidden', quizState.qtype!=='match');
-      document.getElementById('scorePill').classList.toggle('hidden', quizState.qtype==='match');
-      if(quizState.qtype==='read'){ newReadQuestion(true); }
-      else if(quizState.qtype==='choose'){ newChooseQuestion(true); }
-      else if(quizState.qtype==='match'){ newMatchSet(); }
-      else { newSetQuestion(true); }
-    });
-  });
-
-  function updateScorePill(){
-    document.getElementById('scorePill').textContent = 'せいかい '+quizState.score+' / '+quizState.total;
+    try { document.fonts.load(font, txt).then(drawGuide, drawGuide); } catch (e) { drawGuide(); }
+    setTimeout(drawGuide, 1500);
+    k.lineCap = 'round'; k.lineJoin = 'round'; k.lineWidth = Math.round(fs * (o.textbook ? 0.12 : 0.16)); k.strokeStyle = api.color; k.fillStyle = api.color;
+    var down = false, last = null;
+    function pos(e) { var r = ink.getBoundingClientRect(); return [(e.clientX - r.left) * W / r.width, (e.clientY - r.top) * H / r.height]; }
+    ink.addEventListener('pointerdown', function (e) { if (done) return; e.preventDefault(); try { ink.setPointerCapture(e.pointerId); } catch (x) { /* 無視 */ } down = true; last = pos(e); k.beginPath(); k.arc(last[0], last[1], k.lineWidth / 2, 0, 7); k.fill(); });
+    ink.addEventListener('pointermove', function (e) { if (!down) return; var p = pos(e); k.beginPath(); k.moveTo(last[0], last[1]); k.lineTo(p[0], p[1]); k.stroke(); last = p; });
+    function up() { if (!down) return; down = false; judge(false); }
+    ink.addEventListener('pointerup', up); ink.addEventListener('pointercancel', up);
+    function clear() { if (done) return; k.clearRect(0, 0, W, H); msg.textContent = o.msg || 'うすい もじを ゆびで なぞろう'; }
+    function judge(pressed) {
+      if (done || !gd) return;
+      var d = k.getImageData(0, 0, W, H).data, hit = 0;
+      pts.forEach(function (p) { if (d[(p[1] * W + p[0]) * 4 + 3] > 50) hit++; });
+      var cover = pts.length ? hit / pts.length : 0, inkN = 0, out = 0;
+      for (var y = 0; y < H; y += 8) for (var x = 0; x < W; x += 8) { var i = (y * W + x) * 4; if (d[i + 3] > 50) { inkN++; if (gd[i + 3] < 30) out++; } }
+      var over = inkN ? out / inkN : 0;
+      var need = S.traceEasy ? 0.35 : 0.5;
+      if (cover >= (pressed ? need : need + 0.22) && over < 0.6) { done = true; msg.textContent = 'じょうずに かけたね！'; api.correct(o.say || txt); }
+      else if (pressed) { msg.textContent = over >= 0.6 ? 'はみださないように なぞろう' : 'もうすこし なぞってみよう'; speak(msg.textContent); }
+    }
   }
 
-  /* ---- read-type quiz ---- */
-  function drawQuizReadClock(){
-    document.getElementById('quizClockHolder').innerHTML = buildClockSVG(quizState.current.h, quizState.current.m, {level:quizState.level, interactive:false});
-  }
-  function newReadQuestion(resetScoreView){
-    quizState.current = randomTimeForLevel(quizState.level);
-    quizState.answered = false;
-    quizState.chosenH = null; quizState.chosenM = null;
-    drawQuizReadClock();
-    renderHourPicker();
-    renderMinutePicker();
-    document.getElementById('quizFeedback').innerHTML='';
-    document.getElementById('quizCheckBtn').classList.remove('hidden');
-    document.getElementById('quizCheckBtn').disabled = false;
-    document.getElementById('quizNextBtn').classList.add('hidden');
-    if(resetScoreView) updateScorePill();
-  }
-  function renderHourPicker(){
-    var box=document.getElementById('quizHourPicker');
-    box.innerHTML='<div class="picker-hour" id="pkHourInner"><div class="pk-center">じ を タップ</div></div>';
-    var inner=document.getElementById('pkHourInner');
-    var size = 300; // matches CSS min(300px,80vw) approx for layout math; actual px handled by CSS percent too
-    for(var h=1;h<=12;h++){
-      (function(h){
-        var pos = polar(150,150,120,h*30);
-        var b=document.createElement('button');
-        b.className='pk-btn'; b.type='button'; b.textContent=h;
-        b.style.left=(pos.x/300*100)+'%';
-        b.style.top=(pos.y/300*100)+'%';
-        b.addEventListener('click', function(){
-          if(quizState.answered) return;
-          quizState.chosenH = h;
-          inner.querySelectorAll('.pk-btn').forEach(function(x){x.classList.remove('selected');});
-          b.classList.add('selected');
-        });
-        inner.appendChild(b);
-      })(h);
-    }
-  }
-  function renderMinutePicker(){
-    var box=document.getElementById('quizMinutePicker');
-    var lv=levelById(quizState.level);
-    box.innerHTML='';
-    if(lv.id===1){
-      box.innerHTML='<p style="color:var(--ink-soft);font-weight:700;">（レベル1は分をえらばなくてOK）</p>';
-      quizState.chosenM = 0;
-      return;
-    }
-    if(lv.id===2 || lv.id===3){
-      var row=document.createElement('div');
-      row.className='minute-row-choice';
-      lv.minuteChoices.forEach(function(mv){
-        var b=document.createElement('button');
-        b.type='button';
-        b.textContent = mv+'分'+(mv===0?'(ちょうど)':(mv===30?'(半)':''));
-        b.addEventListener('click', function(){
-          if(quizState.answered) return;
-          quizState.chosenM = mv;
-          row.querySelectorAll('button').forEach(function(x){x.classList.remove('selected');});
-          b.classList.add('selected');
-        });
-        row.appendChild(b);
-      });
-      box.appendChild(row);
-      return;
-    }
-    if(lv.id===4){
-      var wrap=document.createElement('div');
-      wrap.className='picker-circle-minute';
-      lv.minuteChoices.forEach(function(mv, idx){
-        var pos=polar(150,150,120,idx*30);
-        var b=document.createElement('button');
-        b.className='pk-btn'; b.type='button'; b.textContent=mv;
-        b.style.left=(pos.x/300*100)+'%';
-        b.style.top=(pos.y/300*100)+'%';
-        b.addEventListener('click', function(){
-          if(quizState.answered) return;
-          quizState.chosenM = mv;
-          wrap.querySelectorAll('.pk-btn').forEach(function(x){x.classList.remove('selected');});
-          b.classList.add('selected');
-        });
-        wrap.appendChild(b);
-      });
-      box.appendChild(wrap);
-      return;
-    }
-    // level 5: stepper
-    quizState.chosenM = quizState.chosenM===null?0:quizState.chosenM;
-    var stepWrap=document.createElement('div');
-    stepWrap.className='stepper-row minute';
-    stepWrap.innerHTML =
-      '<span class="label">分：<span id="quizM5Val">'+quizState.chosenM+'</span>分</span>'+
-      '<div class="stepper-btns">'+
-      '<button type="button" data-d="-5">−5</button>'+
-      '<button type="button" data-d="-1">−1</button>'+
-      '<button type="button" data-d="1">＋1</button>'+
-      '<button type="button" data-d="5">＋5</button>'+
-      '</div>';
-    box.appendChild(stepWrap);
-    stepWrap.querySelectorAll('button').forEach(function(b){
-      b.addEventListener('click', function(){
-        if(quizState.answered) return;
-        var d=parseInt(b.getAttribute('data-d'),10);
-        quizState.chosenM = mod60(quizState.chosenM + d);
-        document.getElementById('quizM5Val').textContent = quizState.chosenM;
-      });
-    });
-  }
-  document.getElementById('quizCheckBtn').addEventListener('click', function(){
-    if(quizState.chosenH===null || quizState.chosenM===null){
-      showQuizFeedback(false, 'じ と ふん を えらんでね', 'quizFeedback');
-      return;
-    }
-    var correct = (quizState.chosenH===quizState.current.h) && (quizState.chosenM===quizState.current.m);
-    if(!quizState.answered){ quizState.total++; if(correct) quizState.score++; quizState.answered=true; updateScorePill(); }
-    if(correct){
-      showQuizFeedback(true, PRAISE[Math.floor(Math.random()*PRAISE.length)], 'quizFeedback');
-      document.getElementById('quizCheckBtn').classList.add('hidden');
-      document.getElementById('quizNextBtn').classList.remove('hidden');
-      speak('せいかい！ '+timeSpeechText(quizState.current.h, quizState.current.m));
-      playCorrectChime();
-      showBigMark();
-    } else {
-      showQuizFeedback(false, TRY_AGAIN[Math.floor(Math.random()*TRY_AGAIN.length)], 'quizFeedback');
-      playGentleTick();
-      quizState.answered=false; // allow retry without re-counting score
-    }
-  });
-  document.getElementById('quizNextBtn').addEventListener('click', function(){ newReadQuestion(false); });
-
-  function showQuizFeedback(correct, msg, targetId){
-    var el=document.getElementById(targetId);
-    el.innerHTML = '<div class="feedback '+(correct?'correct':'wrong')+'">'+(correct?'⭕':'🌱')+' '+msg+'</div>';
+  /* ---------- すうじキー ---------- */
+  function numpad(onKey, o) {
+    o = o || {};
+    var keys = ['7', '8', '9', '4', '5', '6', '1', '2', '3', 'del', '0', o.extra || ''];
+    return h('div', { class: 'mz-pad' }, keys.map(function (k) {
+      if (!k) return h('span');
+      var lab = k === 'del' ? '⌫' : k === 'next' ? '➡' : k === 'ok' ? '✔' : k;
+      return h('button', { type: 'button', class: 'mz-rep' + (k.length > 1 ? ' fn ' + k : ''), 'aria-label': k === 'del' ? 'けす' : k === 'next' ? 'つぎ' : k, onclick: function () { sfx.tap(); onKey(k); } }, lab);
+    }));
   }
 
-  /* ---- set-hand type quiz ---- */
-  var quizSetTarget = {h:3,m:0};
-  var quizSetWidget = createClockWidget(document.getElementById('quizSetClockHolder'), {h:12,m:0}, quizState.level, function(){});
-  function newSetQuestion(resetScoreView){
-    quizSetTarget = randomTimeForLevel(quizState.level);
-    quizSetWidget.setLevel(quizState.level);
-    quizSetWidget.setTime(12,0);
-    document.getElementById('quizSetTarget').innerHTML =
-      '<span class="h">'+quizSetTarget.h+'時</span><span class="m">'+quizSetTarget.m+'分</span>';
-    document.getElementById('quizSetFeedback').innerHTML='';
-    document.getElementById('quizSetCheckBtn').classList.remove('hidden');
-    document.getElementById('quizSetNextBtn').classList.add('hidden');
-    quizState.answeredSet=false;
-    if(resetScoreView) updateScorePill();
-  }
-  document.getElementById('quizSetSpeak').addEventListener('click', function(){
-    speak(timeSpeechText(quizSetTarget.h, quizSetTarget.m));
-  });
-  document.getElementById('quizSetArea').querySelectorAll('.stepper-row button').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var act=btn.getAttribute('data-act');
-      var lv=levelById(quizState.level);
-      var step=lv.minuteStep;
-      var t=quizSetWidget.getTime();
-      if(act==='h-') t.h=mod12(t.h-1);
-      if(act==='h+') t.h=mod12(t.h+1);
-      if(act==='m-'){ t.m=mod60(t.m-step); if(lv.id===1) t.m=0; }
-      if(act==='m+'){ t.m=mod60(t.m+step); if(lv.id===1) t.m=0; }
-      quizSetWidget.setTime(t.h,t.m);
-    });
-  });
-  document.getElementById('quizSetCheckBtn').addEventListener('click', function(){
-    var t=quizSetWidget.getTime();
-    var correct = (t.h===quizSetTarget.h) && (t.m===quizSetTarget.m);
-    if(!quizState.answeredSet){ quizState.total++; if(correct) quizState.score++; quizState.answeredSet=true; updateScorePill(); }
-    if(correct){
-      showQuizFeedback(true, PRAISE[Math.floor(Math.random()*PRAISE.length)], 'quizSetFeedback');
-      document.getElementById('quizSetCheckBtn').classList.add('hidden');
-      document.getElementById('quizSetNextBtn').classList.remove('hidden');
-      speak('せいかい！ '+timeSpeechText(quizSetTarget.h, quizSetTarget.m));
-      playCorrectChime();
-      showBigMark();
-    } else {
-      showQuizFeedback(false, TRY_AGAIN[Math.floor(Math.random()*TRY_AGAIN.length)], 'quizSetFeedback');
-      playGentleTick();
-      quizState.answeredSet=false;
+  /* ---------- せいかい・まちがい ---------- */
+  function correct(sayText, explain) {
+    var set = st.set;
+    if (set.locked) return;
+    set.locked = true;
+    set.results[set.i] = set.first ? 'ok' : 'miss';
+    sfx.ok(); showCorrect();
+    var praise = pick(PRAISE);
+    speak(sayText ? sayText + '。' + praise : praise);
+    var stage = $('#mzStage');
+    stage.classList.add('answered');
+    if (explain) {
+      var ex = h('div', { class: 'mz-explain' }, '💡 ' + explain);
+      stage.appendChild(ex);
+      setTimeout(function () { try { ex.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e) { /* 無視 */ } }, 50);
     }
-  });
-  document.getElementById('quizSetNextBtn').addEventListener('click', function(){ newSetQuestion(false); });
-
-  /* ---- choose-type quiz: 出題された時刻に一致するアナログ時計を選ぶ ---- */
-  var quizChooseTarget = {h:3,m:0};
-  var quizChooseOptions = [];
-  function newChooseQuestion(resetScoreView){
-    quizChooseTarget = randomTimeForLevel(quizState.level);
-    quizChooseOptions = buildChooseOptions(quizState.level, quizChooseTarget);
-    document.getElementById('quizChooseTarget').innerHTML =
-      '<span class="h">'+quizChooseTarget.h+'時</span><span class="m">'+quizChooseTarget.m+'分</span>';
-    renderChooseGrid();
-    document.getElementById('quizChooseFeedback').innerHTML='';
-    document.getElementById('quizChooseNextBtn').classList.add('hidden');
-    quizState.chooseFirstAttemptDone = false;
-    quizState.chooseLocked = false;
-    if(resetScoreView) updateScorePill();
+    var dots = $$('.mz-dots i');
+    if (dots[set.i]) dots[set.i].className = set.results[set.i];
+    lock(700);
+    var last = set.i >= set.n - 1;
+    var nb = h('button', { type: 'button', class: 'mz-next', onclick: function () { if (tapOk(600)) goNext(); } }, last ? 'おわり ▶' : 'つぎへ ▶');
+    setTimeout(function () { if (st.screen === 'play' && st.set === set) stage.appendChild(nb); }, 650);
+    if (S.autoNext) setTimeout(function () { if (st.screen === 'play' && st.set === set && document.body.contains(nb)) goNext(); }, 2600);
   }
-  function renderChooseGrid(){
-    var grid=document.getElementById('quizChooseGrid');
-    grid.innerHTML='';
-    quizChooseOptions.forEach(function(opt){
-      var btn=document.createElement('button');
-      btn.type='button';
-      btn.className='choose-opt';
-      btn.setAttribute('aria-label', opt.h+'時'+opt.m+'分の時計');
-      btn.innerHTML = buildClockSVG(opt.h, opt.m, {level:quizState.level, interactive:false});
-      btn.addEventListener('click', function(){
-        if(quizState.chooseLocked) return;
-        var correct = sameTime(opt, quizChooseTarget);
-        if(!quizState.chooseFirstAttemptDone){
-          quizState.total++;
-          if(correct) quizState.score++;
-          quizState.chooseFirstAttemptDone = true;
-          updateScorePill();
-        }
-        if(correct){
-          quizState.chooseLocked = true;
-          btn.classList.add('correct');
-          grid.querySelectorAll('.choose-opt').forEach(function(b){ if(b!==btn) b.disabled=true; });
-          showQuizFeedback(true, PRAISE[Math.floor(Math.random()*PRAISE.length)], 'quizChooseFeedback');
-          document.getElementById('quizChooseNextBtn').classList.remove('hidden');
-          speak('せいかい！ '+timeSpeechText(quizChooseTarget.h, quizChooseTarget.m));
-          playCorrectChime();
-          showBigMark();
-        } else {
-          btn.classList.add('wrong-flash');
-          setTimeout(function(){ btn.classList.remove('wrong-flash'); }, 500);
-          showQuizFeedback(false, TRY_AGAIN[Math.floor(Math.random()*TRY_AGAIN.length)], 'quizChooseFeedback');
-          playGentleTick();
-        }
-      });
-      grid.appendChild(btn);
-    });
+  function wrong() {
+    st.set.first = false;
+    sfx.ng();
+    speak(pick(TRY));
   }
-  document.getElementById('quizChooseSpeak').addEventListener('click', function(){
-    speak(timeSpeechText(quizChooseTarget.h, quizChooseTarget.m));
-  });
-  document.getElementById('quizChooseNextBtn').addEventListener('click', function(){ newChooseQuestion(false); });
-
-  /* ---- matching game: 時刻カードと時計カードをタップして むすぶ ---- */
-  var MATCH_COLORS = ['#D9583F','#2E7D8C','#4F9A63','#C9932A','#9B6FB0','#4C7BC9','#D9764F','#3F9E8E'];
-  var matchState = {
-    pairCount:6, pairs:[], leftOrder:[], rightOrder:[],
-    matchedIds:{}, selectedLeftId:null, selectedRightId:null, lineColors:{}
-  };
-  function pairById(id){
-    for(var i=0;i<matchState.pairs.length;i++){ if(matchState.pairs[i].id===id) return matchState.pairs[i]; }
-    return null;
+  function goNext() {
+    var set = st.set;
+    set.i++;
+    if (set.i >= set.n) renderResult(); else showQ();
   }
-  function newMatchSet(){
-    var list=[]; var guard=0;
-    while(list.length<matchState.pairCount && guard<300){
-      guard++;
-      var t=randomTimeForLevel(quizState.level);
-      var dup=list.some(function(x){return x.h===t.h && x.m===t.m;});
-      if(!dup) list.push(t);
-    }
-    while(list.length<matchState.pairCount){ list.push(randomTimeForLevel(quizState.level)); }
-
-    matchState.pairs = list.map(function(t,i){ return {id:i, h:t.h, m:t.m}; });
-    matchState.leftOrder = matchState.pairs.map(function(p){ return p.id; });
-    var rightIds = shuffleArr(matchState.leftOrder.slice());
-    var guard2=0;
-    while(guard2<10 && rightIds.every(function(id,i){ return id===matchState.leftOrder[i]; })){
-      rightIds = shuffleArr(rightIds.slice()); guard2++;
-    }
-    matchState.rightOrder = rightIds;
-    matchState.matchedIds = {};
-    matchState.selectedLeftId = null;
-    matchState.selectedRightId = null;
-    matchState.lineColors = {};
-    matchState.pairs.forEach(function(p,i){ matchState.lineColors[p.id] = MATCH_COLORS[i % MATCH_COLORS.length]; });
-
-    renderMatchColumns();
-    updateMatchProgress();
-    document.getElementById('matchNextSetBtn').classList.add('hidden');
-    document.getElementById('matchFeedback').innerHTML='';
-    clearMatchLines();
-  }
-  function renderMatchColumns(){
-    var leftCol=document.getElementById('matchColLeft');
-    var rightCol=document.getElementById('matchColRight');
-    leftCol.innerHTML=''; rightCol.innerHTML='';
-    matchState.leftOrder.forEach(function(id){
-      var p=pairById(id);
-      var el=document.createElement('button');
-      el.type='button'; el.className='match-card left-card';
-      el.textContent = timeText(p.h,p.m);
-      el.dataset.pairId=id;
-      el.addEventListener('click', function(){ onMatchCardClick('left', id, el); });
-      leftCol.appendChild(el);
-    });
-    matchState.rightOrder.forEach(function(id){
-      var p=pairById(id);
-      var el=document.createElement('button');
-      el.type='button'; el.className='match-card right-card';
-      el.innerHTML = buildClockSVG(p.h, p.m, {level:quizState.level, interactive:false});
-      el.dataset.pairId=id;
-      el.addEventListener('click', function(){ onMatchCardClick('right', id, el); });
-      rightCol.appendChild(el);
-    });
-  }
-  function onMatchCardClick(side, id, el){
-    if(matchState.matchedIds[id]) return;
-    if(side==='left'){
-      document.querySelectorAll('#matchColLeft .match-card').forEach(function(c){c.classList.remove('selected');});
-      matchState.selectedLeftId = id;
-      el.classList.add('selected');
-    } else {
-      document.querySelectorAll('#matchColRight .match-card').forEach(function(c){c.classList.remove('selected');});
-      matchState.selectedRightId = id;
-      el.classList.add('selected');
-    }
-    if(matchState.selectedLeftId!==null && matchState.selectedRightId!==null){
-      evaluateMatchPair();
-    }
-  }
-  function evaluateMatchPair(){
-    var lId=matchState.selectedLeftId, rId=matchState.selectedRightId;
-    var leftEl = document.querySelector('#matchColLeft .match-card[data-pair-id="'+lId+'"]');
-    var rightEl = document.querySelector('#matchColRight .match-card[data-pair-id="'+rId+'"]');
-    if(lId===rId){
-      matchState.matchedIds[lId]=true;
-      leftEl.classList.remove('selected'); rightEl.classList.remove('selected');
-      leftEl.classList.add('matched'); rightEl.classList.add('matched');
-      var color = matchState.lineColors[lId];
-      leftEl.style.borderColor=color; rightEl.style.borderColor=color;
-      drawMatchLine(leftEl, rightEl, color);
-      matchState.selectedLeftId=null; matchState.selectedRightId=null;
-      updateMatchProgress();
-      var doneCount=Object.keys(matchState.matchedIds).length;
-      if(doneCount===matchState.pairCount){
-        showQuizFeedback(true, 'ぜんぶ そろった！ '+PRAISE[Math.floor(Math.random()*PRAISE.length)], 'matchFeedback');
-        document.getElementById('matchNextSetBtn').classList.remove('hidden');
-        speak('ぜんぶ そろいました！');
-        playCorrectChime();
-        showBigMark();
-      }
-    } else {
-      leftEl.classList.add('wrong-flash'); rightEl.classList.add('wrong-flash');
-      playGentleTick();
-      setTimeout(function(){
-        leftEl.classList.remove('wrong-flash','selected');
-        rightEl.classList.remove('wrong-flash','selected');
-      }, 550);
-      matchState.selectedLeftId=null; matchState.selectedRightId=null;
-    }
-  }
-  function updateMatchProgress(){
-    var done=Object.keys(matchState.matchedIds).length;
-    document.getElementById('matchProgress').textContent = 'そろった数：'+done+' / '+matchState.pairCount+' くみ';
-  }
-  function getMatchSvg(){ return document.getElementById('matchLinesSvg'); }
-  function syncMatchSvgSize(){
-    var svg=getMatchSvg();
-    var rect=svg.getBoundingClientRect();
-    svg.setAttribute('width', Math.max(rect.width,1));
-    svg.setAttribute('height', Math.max(rect.height,1));
-    svg.setAttribute('viewBox','0 0 '+Math.max(rect.width,1)+' '+Math.max(rect.height,1));
-  }
-  function clearMatchLines(){ var svg=getMatchSvg(); svg.innerHTML=''; syncMatchSvgSize(); }
-  function drawMatchLine(leftEl, rightEl, color){
-    var svg=getMatchSvg();
-    var svgRect=svg.getBoundingClientRect();
-    var lRect=leftEl.getBoundingClientRect();
-    var rRect=rightEl.getBoundingClientRect();
-    var x1=lRect.right-svgRect.left, y1=(lRect.top+lRect.height/2)-svgRect.top;
-    var x2=rRect.left-svgRect.left, y2=(rRect.top+rRect.height/2)-svgRect.top;
-    svg.insertAdjacentHTML('beforeend',
-      '<circle cx="'+x1+'" cy="'+y1+'" r="5" fill="'+color+'"/>'
-      + '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+color+'" stroke-width="4" stroke-linecap="round"/>'
-      + '<circle cx="'+x2+'" cy="'+y2+'" r="5" fill="'+color+'"/>');
-  }
-  function redrawAllMatchLines(){
-    clearMatchLines();
-    Object.keys(matchState.matchedIds).forEach(function(idStr){
-      var id=parseInt(idStr,10);
-      var leftEl = document.querySelector('#matchColLeft .match-card[data-pair-id="'+id+'"]');
-      var rightEl = document.querySelector('#matchColRight .match-card[data-pair-id="'+id+'"]');
-      if(leftEl && rightEl) drawMatchLine(leftEl, rightEl, matchState.lineColors[id]);
-    });
-  }
-  function refreshMatchClockIcons(){
-    document.querySelectorAll('#matchColRight .match-card').forEach(function(el){
-      var id=parseInt(el.dataset.pairId,10);
-      var p=pairById(id);
-      if(p) el.innerHTML = buildClockSVG(p.h, p.m, {level:quizState.level, interactive:false});
-    });
-    redrawAllMatchLines();
-  }
-  function debounce(fn, wait){
-    var t;
-    return function(){
-      var args=arguments, ctx=this;
-      clearTimeout(t);
-      t=setTimeout(function(){ fn.apply(ctx,args); }, wait);
+  function api(color) {
+    return {
+      color: color, speak: speak, sfx: sfx, h: h, emo: emo, shuffle: shuffle, pick: pick,
+      correct: function (sayText, explain) { correct(sayText, explain); },
+      wrong: function () { wrong(); },
+      locked: function () { return st.set.locked || Date.now() < lockUntil; },
+      tapOk: tapOk,
+      settings: function () { return S; },
+      // custom の なかで ふつうの「えらぶ もんだい」を つかう
+      choice: function (stage, q) { renderChoice(stage, q, color); },
+      order: function (stage, q) { renderOrder(stage, q, color); }
     };
   }
-  window.addEventListener('resize', debounce(function(){
-    var area=document.getElementById('quizMatchArea');
-    if(area && !area.classList.contains('hidden')) redrawAllMatchLines();
-  }, 200));
-  document.querySelectorAll('#matchCountChips .chip').forEach(function(c){
-    c.addEventListener('click', function(){
-      document.querySelectorAll('#matchCountChips .chip').forEach(function(x){x.classList.remove('selected');});
-      c.classList.add('selected');
-      matchState.pairCount = parseInt(c.getAttribute('data-mcount'),10);
-      newMatchSet();
-    });
-  });
-  document.getElementById('matchNextSetBtn').addEventListener('click', newMatchSet);
 
-  renderQuizLevelBar();
-  newReadQuestion(true);
-  newChooseQuestion(false);
-  newSetQuestion(false);
-  newMatchSet();
-
-  /* =========================================================
-     PRINT MODE
-  ========================================================= */
-  var printState = {level:1, type:'read', count:9, showAnswer:false, problems:[]};
-
-  function renderPrintLevelBar(){
-    renderLevelBar(document.getElementById('levelBarPrint'), printState.level, function(id){
-      printState.level=id; renderPrintLevelBar(); regenerateProblems(); renderWorksheet();
-    });
+  /* ---------- けっか ---------- */
+  function renderResult() {
+    st.screen = 'result';
+    var set = st.set, m = st.mode;
+    var ok = set.results.filter(function (r) { return r === 'ok'; }).length;
+    var stars5 = Math.round(ok / set.n * 5);
+    var key = m.id + ':' + st.level;
+    var prev = P[key] || {};
+    P[key] = { stars5: Math.max(prev.stars5 || 0, stars5), plays: (prev.plays || 0) + 1 };
+    save('mieel.' + A.id + '.progress', P);
+    var msg = ok === set.n ? 'ぜんぶ いっかいで せいかい！ すごい！' : ok >= set.n / 2 ? 'よく がんばったね！' : 'さいごまで できたね！ また チャレンジしよう';
+    var stars = h('div', { class: 'big-stars' });
+    for (var k = 0; k < 5; k++) stars.appendChild(h('span', { class: 'mz-emoji' + (k < stars5 ? '' : ' off') }, '⭐'));
+    setView('mz-res', [h('div', { class: 'mz-result' },
+      h('h2', null, 'できた！'),
+      stars,
+      h('div', { class: 'msg' }, set.n + 'もん ちゅう ' + ok + 'もん いっかいで せいかい'),
+      h('div', { class: 'msg', style: 'font-size:.85em;color:var(--mz-sub)' }, msg),
+      h('div', { class: 'mz-actions' },
+        h('button', { type: 'button', class: 'mz-big go', onclick: function () { if (tapOk(500)) startSet(m, st.level); } }, '🔄 もういちど'),
+        m.levels && m.levels.length > 1 ? h('button', { type: 'button', class: 'mz-big blue', onclick: function () { if (tapOk(500)) renderLevels(m); } }, '⭐ レベルを かえる') : null,
+        h('button', { type: 'button', class: 'mz-big gray', onclick: function () { if (tapOk(500)) renderHome(); } }, '🏠 ホーム')))]);
+    sfx.fanfare(); confetti();
+    speak('できた！ ' + msg);
+    lock(1200);
   }
-  document.querySelectorAll('#printTypeChips .chip').forEach(function(c){
-    c.addEventListener('click', function(){
-      document.querySelectorAll('#printTypeChips .chip').forEach(function(x){x.classList.remove('selected');});
-      c.classList.add('selected');
-      printState.type=c.getAttribute('data-ptype');
-      renderWorksheet();
-    });
-  });
-  document.querySelectorAll('#printCountChips .chip').forEach(function(c){
-    c.addEventListener('click', function(){
-      document.querySelectorAll('#printCountChips .chip').forEach(function(x){x.classList.remove('selected');});
-      c.classList.add('selected');
-      printState.count=parseInt(c.getAttribute('data-count'),10);
-      regenerateProblems(); renderWorksheet();
-    });
-  });
-  document.getElementById('printShowAnswer').addEventListener('change', function(e){
-    printState.showAnswer = e.target.checked;
-    renderWorksheet();
-  });
-  document.getElementById('printRegenBtn').addEventListener('click', function(){
-    regenerateProblems(); renderWorksheet();
-  });
-  document.getElementById('printOpenBtn').addEventListener('click', function(){
-    renderWorksheet();
-    setTimeout(function(){ window.print(); }, 60);
-  });
 
-  function regenerateProblems(){
-    var list=[]; var guard=0;
-    // まず重複しない時刻をできるだけ集める
-    while(list.length<printState.count && guard<300){
-      guard++;
-      var t = randomTimeForLevel(printState.level);
-      var dup = list.some(function(x){return x.h===t.h && x.m===t.m;});
-      if(!dup) list.push(t);
-    }
-    // 組み合わせが足りない場合（レベル1など）は重複を許して必ず指定数そろえる
-    while(list.length<printState.count){
-      list.push(randomTimeForLevel(printState.level));
-    }
-    // 「えらぶ」印刷用に、各問題の選択肢もあらかじめ生成しておく(解答表示の切替で選択肢が変わらないように)
-    list.forEach(function(t){ t.chooseOptions = buildChooseOptions(printState.level, t); });
-    printState.problems = list;
+  /* ---------- プリント（先生用） ---------- */
+  var pr = null;
+  function printModes() { return A.modes.filter(function (m) { return m.print !== false; }); }
+  function renderPrint() {
+    st.screen = 'print';
+    stopSpeak();
+    setTop(false);
+    var modes = printModes();
+    if (!pr) pr = load('mieel.' + A.id + '.print') || {};
+    if (!modes.some(function (m) { return m.id === pr.mode; })) pr.mode = modes[0].id;
+    var m = modes.filter(function (x) { return x.id === pr.mode; })[0];
+    var levels = m.levels || [{ id: 1, name: 'ふつう' }];
+    if (!levels.some(function (l) { return l.id === pr.level; })) pr.level = levels[0].id;
+    var cl = (m.print && m.print.counts) || [[4], [6], [8], [10], [12]];
+    if (!cl.some(function (c) { return c[0] === Number(pr.count); })) pr.count = (m.print && m.print.defCount) || (cl.length > 1 ? cl[1][0] : cl[0][0]);
+    save('mieel.' + A.id + '.print', pr);
+    var set = function (k, v, regen) { pr[k] = v; if (regen !== false) pr.seed = null; renderPrint(); };
+    var old = $('.mz-pctrl'), keep = old ? old.scrollTop : 0;
+    var chips = function (list, cur, on) { return h('div', { class: 'mz-chips' }, list.map(function (o) { return h('button', { type: 'button', class: 'mz-chip' + (String(o[0]) === String(cur) ? ' on' : ''), onclick: function () { on(o[0]); } }, o[1]); })); };
+    var ctrl = h('div', { class: 'mz-pctrl' },
+      h('div', { class: 'lab' }, 'もんだいの しゅるい'),
+      chips(modes.map(function (x) { return [x.id, (x.icon ? x.icon + ' ' : '') + x.name]; }), pr.mode, function (v) { set('mode', v); }),
+      levels.length > 1 ? [h('div', { class: 'lab' }, 'レベル'), chips(levels.map(function (l) { return [l.id, (l.stars ? l.stars + ' ' : '') + l.name]; }), pr.level, function (v) { set('level', v); })] : null,
+      (A.options || []).filter(function (o) { return o.print || o.printOnly; }).map(function (o) {
+        if (o.type === 'multi') {
+          return [h('div', { class: 'lab' }, o.label), h('div', { class: 'mz-chips' }, o.opts.map(function (x) {
+            var on = (S[o.key] || []).indexOf(x[0]) >= 0;
+            return h('button', { type: 'button', class: 'mz-chip' + (on ? ' on' : ''), onclick: function () { S[o.key] = toggleIn(S[o.key], x[0]); saveS(); set('opt', null, !!o.regen); } }, x[1]);
+          }))];
+        }
+        return [h('div', { class: 'lab' }, o.label), chips(o.opts || [[true, 'する'], [false, 'しない']], S[o.key], function (v) {
+          var d = o.def; S[o.key] = typeof d === 'number' ? Number(v) : typeof d === 'boolean' ? (v === true || v === 'true') : v; saveS(); set('opt', null, !!o.regen);
+        })];
+      }),
+      h('div', { class: 'lab' }, 'もんだいすう'),
+      chips((m.print && m.print.counts) || [[4, '4もん'], [6, '6もん'], [8, '8もん'], [10, '10もん'], [12, '12もん']], pr.count, function (v) { set('count', v); }),
+      h('div', { class: 'lab' }, 'もじの 大きさ'),
+      chips([['normal', 'ふつう'], ['big', '大きい']], pr.size || 'normal', function (v) { set('size', v, false); }),
+      h('div', { class: 'lab' }, 'ならびかた'),
+      chips([['auto', 'おまかせ'], [1, '1れつ'], [2, '2れつ']], pr.cols || 'auto', function (v) { set('cols', v, false); }),
+      h('div', { class: 'lab' }, 'こたえ'),
+      chips([[false, 'こたえなし'], [true, 'こたえを いれる（先生用）']], !!pr.answer, function (v) { set('answer', v === true || v === 'true', false); }),
+      h('button', { type: 'button', class: 'mz-pgo', onclick: doPrint }, '🖨️ プリントする'),
+      h('button', { type: 'button', class: 'mz-pgo sub', onclick: function () { set('seed', null); } }, '🔄 もんだいを かえる'),
+      h('p', { class: 'mz-note' }, '印刷の画面で「A4・たて」を選びます。「PDFに保存」を選ぶと PDF になります。余白は「なし」か「デフォルト」がおすすめです。'));
+    setView('mz-pr', [
+      h('div', { class: 'mz-bar' },
+        h('button', { type: 'button', class: 'mz-back', onclick: function () { if (tapOk(400)) renderHome(); } }, '◀ もどる'),
+        h('div', { class: 'mz-label' }, '🖨️ プリントを つくる（先生用）'),
+        h('span', { style: 'width:120px' })),
+      h('div', { class: 'mz-print' }, ctrl, h('div', { class: 'mz-preview', id: 'mzPreview' }))
+    ]);
+    ctrl.scrollTop = keep;
+    buildWorksheet(m);
   }
-  regenerateProblems();
 
-  function renderWorksheet(){
-    var lv = levelById(printState.level);
-    var typeName = printState.type==='read' ? 'とけいをよんで、じかんをかこう'
-      : printState.type==='choose' ? 'じかんをよんで、あう とけいをえらぼう'
-      : printState.type==='match' ? 'おなじじかんの もの同士を せんで むすぼう'
-      : 'じかんをよんで、はりをかこう';
-    var html = '';
-    html += '<div class="ws-header"><div style="display:flex;align-items:center;gap:8px;">'
-      + '<div style="width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 50% 0%,#1B8FE8 0%,#2BB8D6 28%,#3FCB9E 45%,#8FD24A 58%,#F4D027 72%,#F7941E 100%);border:1px solid #ccc;flex:none;"></div>'
-      + '<div><div style="font-size:11px;color:#333;font-weight:700;">MieeL とけいのがくしゅう</div><h2>とけいのプリント（'+typeName+' ／ Lv'+lv.id+' '+lv.name+'）</h2></div></div>'
-      + '<div class="ws-fields" style="flex-direction:column;align-items:flex-end;gap:2px;">'
-      + '<div style="font-size:.75rem;color:#3A9A8C;font-weight:700;">mieel-support-school.com</div>'
-      + '<div><span class="lbl">なまえ：</span><span class="blank">&nbsp;</span><span class="lbl">ひづけ：</span><span class="blank">&nbsp;</span></div></div></div>';
-
-    if(printState.type==='match'){
-      html += renderWsMatchBody();
-      document.getElementById('worksheet').innerHTML = html;
-      return;
-    }
-
-    html += '<div class="ws-grid'+(printState.type==='choose'?' choose-mode':'')+'">';
-    var labels=['①','②','③','④'];
-    printState.problems.forEach(function(t, idx){
-      html += '<div class="ws-cell"><div class="no">もんだい '+(idx+1)+'</div>';
-      if(printState.type==='read'){
-        html += '<div style="width:150px;margin:0 auto;">'+buildClockSVG(t.h,t.m,{level:printState.level, interactive:false})+'</div>';
-        if(printState.showAnswer){
-          html += '<div class="ws-answerline"><span class="filled">'+t.h+'</span> 時 <span class="filled">'+t.m+'</span> 分</div>';
-        } else {
-          html += '<div class="ws-answerline"><span class="blank">&nbsp;</span> 時 <span class="blank">&nbsp;</span> 分</div>';
-        }
-      } else if(printState.type==='choose'){
-        html += '<div class="ws-digital-prompt">'+timeText(t.h,t.m)+'</div>';
-        html += '<div class="ws-choose-grid">';
-        var correctIdx = 0;
-        t.chooseOptions.forEach(function(opt, oi){
-          var isCorrect = sameTime(opt, t);
-          if(isCorrect) correctIdx = oi;
-          html += '<div class="ws-choose-item'+(printState.showAnswer && isCorrect ? ' correct-answer':'')+'">'
-            + '<span class="letter">'+labels[oi]+'</span>'
-            + buildClockSVG(opt.h, opt.m, {level:printState.level, interactive:false})
-            + '</div>';
-        });
-        html += '</div>';
-        if(printState.showAnswer){
-          html += '<div class="ws-answerline">こたえ：<span class="filled">'+labels[correctIdx]+'</span></div>';
-        } else {
-          html += '<div class="ws-answerline">こたえ：<span class="blank">&nbsp;&nbsp;&nbsp;</span></div>';
-        }
-      } else {
-        html += '<div class="ws-digital-prompt">'+timeText(t.h,t.m)+'</div>';
-        html += '<div style="width:150px;margin:0 auto;">'+buildBlankClockSVG(t.h,t.m,{level:printState.level, showAnswer:printState.showAnswer})+'</div>';
+  function printQs(m, level, count) {
+    var qs = [], seen = {};
+    if (m.pool) {
+      var list = m.print && m.print.ordered ? (m.pool(level) || []).slice() : shuffle(m.pool(level) || []);
+      list.slice(0, count).forEach(function (it) { qs.push(m.toQ ? m.toQ(it, level) : it); });
+    } else {
+      var tries = 0;
+      while (qs.length < count && tries++ < count * 40) {
+        var q = m.make(level), k = qKey(q);
+        if (seen[k]) continue;
+        seen[k] = true; qs.push(q);
       }
-      html += '</div>';
-    });
-    html += '</div>';
-    document.getElementById('worksheet').innerHTML = html;
+      // くみあわせが すくない ときは おなじ もんだいも つかって かずを そろえる
+      while (m.print && m.print.repeat && qs.length < count) qs.push(m.make(level));
+    }
+    return qs;
   }
 
-  function renderWsMatchBody(){
-    var MAX_MATCH_PAIRS = 8; // 用紙1枚にきれいに収まる目安の上限
-    var sourceProblems = printState.problems.length > MAX_MATCH_PAIRS
-      ? printState.problems.slice(0, MAX_MATCH_PAIRS) : printState.problems;
-    var pairs = sourceProblems.map(function(t,i){ return {id:i, h:t.h, m:t.m}; });
-    var leftOrder = pairs.map(function(p){ return p.id; });
-    var rightOrder = shuffleArr(leftOrder.slice());
-    var guard=0;
-    while(guard<10 && rightOrder.every(function(id,i){ return id===leftOrder[i]; })){
-      rightOrder = shuffleArr(rightOrder.slice()); guard++;
+  function defaultCell(m, q, ans) {
+    var kind = q.kind || m.kind || 'choice';
+    var s = '';
+    if (q.html) s += '<div class="v">' + q.html + '</div>';
+    if (q.text || q.icon) s += '<div class="q">' + (q.icon ? '<span class="mz-emoji">' + q.icon + '</span>' : '') + esc(q.text || '') + '</div>';
+    if (kind === 'order') {
+      // ならべる もんだいは □ に ばんごうを かく
+      var order = shuffle(q.tokens.map(function (t, i) { return { t: t, i: i }; }));
+      s += '<div class="ws-ord">' + order.map(function (o) { return '<div class="r"><span class="bx">' + (ans ? (o.i + 1) : '') + '</span><span>' + esc(o.t) + '</span></div>'; }).join('') + '</div>';
+    } else if (q.options) {
+      var opts = (q.keepOrder ? q.options : shuffle(q.options)).map(optObj);
+      s += '<div class="ws-opts">' + opts.map(function (o) { return '<span class="ws-opt">' + (o.html || ((o.icon ? o.icon + ' ' : '') + esc(o.label))) + '</span>'; }).join('') + '</div>';
+      if (ans) { var a = opts.filter(function (o) { return o.value === q.answer; })[0]; s += '<div class="ws-ans">こたえ：' + esc(a ? a.label : q.answer) + '</div>'; }
     }
-    var ROWH=92, GAP=16;
-    var n = pairs.length;
-    var totalH = n*ROWH + Math.max(0,(n-1))*GAP;
+    return s;
+  }
 
-    var leftHtml = leftOrder.map(function(id){
-      var p=pairs[id];
-      return '<div class="ws-match-item">'+timeText(p.h,p.m)+'</div>';
-    }).join('');
-    var rightHtml = rightOrder.map(function(id){
-      var p=pairs[id];
-      return '<div class="ws-match-item">'+buildClockSVG(p.h,p.m,{level:printState.level, interactive:false})+'</div>';
-    }).join('');
+  function buildWorksheet(m) {
+    var level = pr.level, count = Number(pr.count) || 6;
+    var lv = (m.levels || []).filter(function (l) { return l.id === level; })[0];
+    if (!pr.seed || pr.seed.mode !== m.id || pr.seed.level !== level || pr.seed.count !== count) pr.seed = { mode: m.id, level: level, count: count, qs: printQs(m, level, count) };
+    var qs = pr.seed.qs;
+    var P2 = m.print || {};
+    var cols = pr.cols && pr.cols !== 'auto' ? Number(pr.cols) : (P2.cols || ((m.kind === 'order') ? 1 : 2));
+    if (pr.size === 'big' && (!pr.cols || pr.cols === 'auto') && !P2.keepCols) cols = 1;
+    var inst = P2.instruction || (m.kind === 'order' ? 'ただしい じゅんばんに なるように、□に ばんごうを かこう' : 'ただしい こたえに 〇を つけよう');
+    var cells = qs.map(function (q, i) {
+      return '<div class="ws-cell' + (P2.cellClass ? ' ' + P2.cellClass : '') + '">' + (P2.noNum ? '' : '<div class="n">もんだい ' + (i + 1) + '</div>') + (P2.cell ? P2.cell(q, !!pr.answer, i) : defaultCell(m, q, !!pr.answer)) + '</div>';
+    });
+    // A4 に はいるように ページを わける（じっさいに ならべて たかさを はかる）
+    var meas = h('div', { style: 'position:fixed;left:-10000px;top:0;visibility:hidden' });
+    document.body.appendChild(meas);
+    var head = function (no, all) {
+      return '<div class="ws-head"><div><div class="ws-brand"><span class="ws-orb"></span>MieeL ' + esc(A.title) + '</div>' +
+        '<h2>' + (m.icon ? m.icon + ' ' : '') + esc(P2.title || m.name) + (lv && (m.levels || []).length > 1 ? '（' + esc(lv.name) + '）' : '') + '</h2>' +
+        '<div class="ws-inst">' + esc(inst) + '</div></div>' +
+        '<div class="ws-fields"><div class="ws-url">mieel-support-school.com</div><div>なまえ<span class="ws-blank">&nbsp;</span></div>' +
+        '<div>ひづけ<span class="ws-blank" style="min-width:26mm">&nbsp;</span>' + (all > 1 ? '<span class="ws-no">' + no + ' / ' + all + '</span>' : '') + '</div></div></div>';
+    };
+    var pages = [], cur = [];
+    var mk = function (list) { return '<div class="ws-page' + (pr.size === 'big' ? ' big' : '') + '"><!--H--><div class="ws-body" style="--wcols:' + cols + '">' + list.join('') + '</div></div>'; };
+    cells.forEach(function (c) {
+      var trial = cur.concat([c]);
+      meas.innerHTML = mk(trial).replace('<!--H-->', head(1, 2));
+      var body = $('.ws-body', meas);
+      if (cur.length && body.scrollHeight > body.clientHeight + 1) { pages.push(cur); cur = [c]; }
+      else cur = trial;
+    });
+    if (cur.length) pages.push(cur);
+    meas.remove();
+    var html = pages.map(function (pg, i) { return mk(pg).replace('<!--H-->', head(i + 1, pages.length)); }).join('');
+    var pv = $('#mzPreview');
+    if (pv) { pv.innerHTML = html || '<p class="mz-note" style="text-align:center">もんだいが ありません</p>'; fitPreview(); }
+    $('#mzWorksheet').innerHTML = html;
+  }
+  function fitPreview() {
+    var pv = $('#mzPreview'); if (!pv) return;
+    var z = Math.min(1, Math.max(0.25, (pv.clientWidth - 32) / (210 * 96 / 25.4)));
+    $$('.ws-page', pv).forEach(function (p) { p.style.zoom = z.toFixed(3); });
+  }
+  function doPrint() {
+    toast('じゅんびして います…');
+    var fonts = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+    fonts.then(function () { setTimeout(function () { window.print(); }, 150); });
+  }
 
-    var linesSvg='';
-    if(printState.showAnswer){
-      leftOrder.forEach(function(id,i){
-        var j = rightOrder.indexOf(id);
-        var y1 = i*(ROWH+GAP)+ROWH/2;
-        var y2 = j*(ROWH+GAP)+ROWH/2;
-        linesSvg += '<line x1="0" y1="'+y1+'" x2="120" y2="'+y2+'" stroke="var(--minute)" stroke-width="2.5" stroke-dasharray="6,6" opacity="0.65"/>';
+  /* ---------- 先生用 せってい ---------- */
+  function renderSettings() {
+    var panel = $('#mzSettingsPanel'), md = $('#mzSettings'), keepTop = md.scrollTop;
+    panel.innerHTML = '';
+    var seg = function (label, key, opts) {
+      return [h('div', { class: 'mz-seglabel' }, label), h('div', { class: 'mz-seg' }, opts.map(function (o) {
+        return h('button', { type: 'button', class: String(S[key]) === String(o[0]) ? 'on' : '', onclick: function () { S[key] = typeof DEF[key] === 'number' ? Number(o[0]) : o[0]; saveS(); renderSettings(); } }, o[1]);
+      }))];
+    };
+    var chk = function (key, label) { return h('label', { class: 'row' }, h('span', null, label), h('input', { type: 'checkbox', checked: !!S[key], onchange: function (e) { S[key] = e.target.checked; saveS(); } })); };
+    var rng = function (key, label, min, max, step) {
+      var out = h('b', null, ' ' + Math.round(S[key] * 100) + '%');
+      return h('label', { class: 'row' }, h('span', null, label, out), h('input', { type: 'range', min: min, max: max, step: step, value: S[key], oninput: function (e) { S[key] = Number(e.target.value); out.textContent = ' ' + Math.round(S[key] * 100) + '%'; saveS(); } }));
+    };
+    panel.appendChild(h('div', null,
+      h('div', { class: 'hd' }, h('h2', null, '⚙️ 先生用せってい'), h('button', { type: 'button', class: 'mz-btn ok', onclick: closeSettings }, 'とじる')),
+      h('p', { class: 'mz-note' }, '右上の ⚙️ を 1.5秒 ながおしで ひらきます。せっていは この端末に 保存されます。'),
+      h('h3', null, 'もんだい'),
+      seg('1かいに とく もんだいの かず', 'setSize', [[3, '3もん'], [5, '5もん'], [10, '10もん']]),
+      chk('errorless', '✋ まちがえた こたえは うすくする（しっぱいを くりかえさない）'),
+      chk('autoNext', '⏭ せいかいしたら じどうで つぎへ'),
+      A.options && A.options.some(function (o) { return !o.printOnly; }) ? [h('h3', null, 'この アプリの せってい')].concat(A.options.filter(function (o) { return !o.printOnly; }).map(function (o) {
+        if (o.type === 'check') return chk(o.key, o.label);
+        if (o.type === 'multi') {
+          return h('div', null, h('div', { class: 'mz-seglabel' }, o.label), h('div', { class: 'mz-seg' }, o.opts.map(function (x) {
+            return h('button', { type: 'button', class: (S[o.key] || []).indexOf(x[0]) >= 0 ? 'on' : '', onclick: function () { S[o.key] = toggleIn(S[o.key], x[0]); saveS(); renderSettings(); } }, x[1]);
+          })));
+        }
+        return h('div', null, h('div', { class: 'mz-seglabel' }, o.label), h('div', { class: 'mz-seg' }, o.opts.map(function (x) {
+          return h('button', { type: 'button', class: String(S[o.key]) === String(x[0]) ? 'on' : '', onclick: function () { S[o.key] = x[0]; saveS(); renderSettings(); } }, x[1]);
+        })));
+      })) : null,
+      h('h3', null, 'おと・よみあげ'),
+      chk('autoRead', '🗣 もんだいを じどうで よみあげる'),
+      rng('rate', 'こえの はやさ', 0.6, 1.2, 0.05),
+      chk('sound', '🔔 こうかおん（ピンポン など）'),
+      rng('volume', 'こうかおんの 大きさ', 0.1, 1, 0.05),
+      h('p', { class: 'mz-note' }, '※ iPad の 消音モードだと 効果音が 鳴りません。'),
+      h('h3', null, 'みやすさ'),
+      chk('bigText', '🔠 もじを 大きく する'),
+      chk('calm', '🌙 えんしゅつを ひかえめに（音や うごきが にがてな子に）'),
+      A.teacherNote ? [h('h3', null, '👩‍🏫 指導者の方へ'), h('div', { class: 'mz-teacher', html: A.teacherNote })] : null,
+      h('h3', null, 'きろく'),
+      h('div', null, h('button', { type: 'button', class: 'mz-btn warn', onclick: function () { if (confirm('⭐ の きろくを けしますか？')) { P = {}; save('mieel.' + A.id + '.progress', P); toast('けしました'); } } }, '⭐ の きろくを けす')),
+      h('div', { style: 'margin-top:22px' }, h('button', { type: 'button', class: 'mz-btn ok', onclick: closeSettings }, 'とじる')),
+      h('div', { class: 'mz-foot' },
+        h('div', { class: 'mz-brand' }, h('span', { class: 'mz-orb' }), h('strong', null, 'MieeL'), h('a', { href: 'https://www.mieel-support-school.com/', target: '_blank', rel: 'noopener' }, 'www.mieel-support-school.com')),
+        '© ' + A.title + '（特別支援教育向け）')));
+    md.scrollTop = keepTop;
+  }
+  function saveS() { save('mieel.' + A.id + '.settings', S); applyS(); }
+  function applyS() { document.body.classList.toggle('big-text', !!S.bigText); document.body.classList.toggle('calm', !!S.calm); }
+  function openSettings() { stopSpeak(); renderSettings(); $('#mzSettings').classList.add('open'); $('#mzSettings').scrollTop = 0; }
+  function closeSettings() {
+    $('#mzSettings').classList.remove('open'); lock(400);
+    if (st.screen === 'home') renderHome();
+    else if (st.screen === 'print') renderPrint();
+  }
+
+  /* ---------- はじまり ---------- */
+  function start(app) {
+    A = app;
+    A.color = A.color || '#3F9D8B';
+    var od = {}; (A.options || []).forEach(function (o) { od[o.key] = o.def; });
+    S = Object.assign({}, DEF, od, load('mieel.' + A.id + '.settings') || {});
+    P = load('mieel.' + A.id + '.progress') || {};
+    var r = document.documentElement.style;
+    r.setProperty('--mz-main', A.color);
+    if (A.colorD) r.setProperty('--mz-main-d', A.colorD);
+    if (A.soft) r.setProperty('--mz-soft', A.soft);
+    document.body.classList.add('mz');
+    document.body.innerHTML =
+      '<header class="mz-top">' +
+      '<div class="mz-brand" aria-label="MieeL"><span class="mz-orb"></span><strong>MieeL</strong><span class="url">mieel-support-school.com</span></div>' +
+      '<div class="mz-apptitle"><span class="mz-emoji">' + esc(A.icon || '') + '</span>' + esc(A.title) + '</div>' +
+      '<button class="mz-topbtn" id="mzPrintBtn" type="button" hidden><span class="mz-emoji">🖨️</span><span class="t">プリント</span></button>' +
+      '<button class="mz-gear" id="mzGear" type="button" aria-label="先生用せってい（ながおし）">⚙️</button>' +
+      '</header><main id="mzView"></main>' +
+      '<div id="mzCorrect" aria-hidden="true"><div class="wrap"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="84"></circle></svg><div class="lb">せいかい！</div></div></div>' +
+      '<div class="mz-modal" id="mzSettings" role="dialog" aria-modal="true"><div class="mz-panel" id="mzSettingsPanel"></div></div>' +
+      '<div class="mz-toast" id="mzToast"></div><div id="mzWorksheet"></div>';
+    applyS();
+    if (canSpeak) { loadVoice(); if ('onvoiceschanged' in speechSynthesis) speechSynthesis.onvoiceschanged = loadVoice; }
+
+    // ⚙️ ながおし（こどもが さわっても すぐには ひらかない）
+    var gear = $('#mzGear'), gt = null;
+    var cancel = function () { clearTimeout(gt); gear.classList.remove('pressing'); };
+    gear.addEventListener('pointerdown', function (e) { e.preventDefault(); gear.classList.add('pressing'); gt = setTimeout(function () { cancel(); openSettings(); }, 1500); });
+    ['pointerup', 'pointerleave', 'pointercancel'].forEach(function (ev) { gear.addEventListener(ev, cancel); });
+    gear.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.shiftKey && (e.key === 'S' || e.key === 's') && !$('#mzSettings').classList.contains('open')) openSettings();
+      if (e.key === 'Escape' && $('#mzSettings').classList.contains('open')) closeSettings();
+    });
+    $('#mzSettings').addEventListener('click', function (e) { if (e.target.id === 'mzSettings') closeSettings(); });
+    $('#mzPrintBtn').addEventListener('click', function () { if (tapOk(400)) { setUrl(true); renderPrint(); } });
+
+    // おなじ ボタンの れんだを ふせぐ（0.35びょう いない）
+    var lastBtn = null, lastT = 0;
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest && e.target.closest('button');
+      if (!b || b.closest('.mz-panel') || b.closest('.mz-pctrl') || b.classList.contains('mz-rep')) return;   // mz-rep：れんだ して よい ボタン（すうじキー・おかね）
+      var n = Date.now();
+      if (b === lastBtn && n - lastT < 350) { e.stopImmediatePropagation(); e.preventDefault(); return; }
+      lastBtn = b; lastT = n;
+    }, true);
+    document.addEventListener('gesturestart', function (e) { e.preventDefault(); });
+    var rt = null;
+    window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { if (st.screen === 'print') fitPreview(); }, 250); });
+
+    if (/[?&]print=1/.test(location.search) && printModes().length) renderPrint(); else renderHome();
+  }
+  function setUrl(print) { try { history.replaceState(null, '', location.pathname + (print ? '?print=1' : '')); } catch (e) { /* 無視 */ } }
+
+  return { opt: function (k) { return S ? S[k] : undefined; }, numpad: numpad, trace: trace, start: start, speak: speak, sfx: sfx, h: h, emo: emo, shuffle: shuffle, pick: pick, esc: esc, toast: toast };
+})();
+/*/MZ-SHELL-JS*/
+</script>
+<script>
+/* ==========================================================================
+   とけいの がくしゅう（MieeL）
+   よむ／えらぶ／あわせる（はりを うごかす）／むすぶ
+   ========================================================================== */
+(function () {
+  'use strict';
+  var opt = MieelApp.opt, shuffle = MieelApp.shuffle, pick = MieelApp.pick;
+  var C = 182, R = 150;
+  var LEVELS = [
+    { id: 1, name: '◯じ ちょうど', stars: '★☆☆☆☆', step: 60, mins: [0] },
+    { id: 2, name: '◯じ はん', stars: '★★☆☆☆', step: 30, mins: [0, 30] },
+    { id: 3, name: '15ふん きざみ', stars: '★★★☆☆', step: 15, mins: [0, 15, 30, 45] },
+    { id: 4, name: '5ふん きざみ', stars: '★★★★☆', step: 5, mins: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55] },
+    { id: 5, name: '1ぷん きざみ', stars: '★★★★★', step: 1, mins: null }
+  ];
+  function L(id) { return LEVELS.filter(function (l) { return l.id === id; })[0]; }
+  function rnd(n) { return Math.floor(Math.random() * n); }
+  function mod12(h) { return ((h - 1) % 12 + 12) % 12 + 1; }
+  function mod60(m) { return ((m % 60) + 60) % 60; }
+  function randTime(lv) { var l = L(lv); return { h: 1 + rnd(12), m: l.mins ? pick(l.mins) : rnd(60) }; }
+  function same(a, b) { return a.h === b.h && a.m === b.m; }
+
+  // じこくの かきかた（ひらがな／かんじ）と よみあげ
+  function fun(m) { var d = m % 10; return (d === 1 || d === 3 || d === 4 || d === 6 || d === 8 || d === 0) ? 'ぷん' : 'ふん'; }
+  function tText(t) {
+    if (opt('kanjiTime')) return t.h + '時' + (t.m === 0 ? '' : t.m === 30 && opt('han') ? '半' : t.m + '分');
+    return t.h + 'じ' + (t.m === 0 ? '' : t.m === 30 && opt('han') ? 'はん' : t.m + fun(t.m));
+  }
+  function tSay(t) { return t.h + '時' + (t.m === 0 ? 'ちょうど' : t.m === 30 && opt('han') ? '半' : t.m + '分'); }
+
+  /* ---------- とけいの え（SVG） ---------- */
+  function polar(r, deg) { var a = (deg - 90) * Math.PI / 180; return { x: C + r * Math.cos(a), y: C + r * Math.sin(a) }; }
+  function face(lv, o) {
+    o = o || {};
+    var s = '<svg class="clk" viewBox="0 0 ' + C * 2 + ' ' + C * 2 + '" xmlns="http://www.w3.org/2000/svg">';
+    s += '<circle cx="' + C + '" cy="' + C + '" r="' + R + '" fill="#fff" stroke="#2E2A25" stroke-width="6"/>';
+    if (lv >= 3 || o.fine) for (var mm = 0; mm < 60; mm++) { if (mm % 5 === 0) continue; var p1 = polar(R - 8, mm * 6), p2 = polar(R - 16, mm * 6); s += '<line x1="' + p1.x + '" y1="' + p1.y + '" x2="' + p2.x + '" y2="' + p2.y + '" stroke="#8A8072" stroke-width="2" stroke-linecap="round"/>'; }
+    for (var i = 1; i <= 12; i++) { var t1 = polar(R - 6, i * 30), t2 = polar(R - 20, i * 30); s += '<line x1="' + t1.x + '" y1="' + t1.y + '" x2="' + t2.x + '" y2="' + t2.y + '" stroke="#2E2A25" stroke-width="5" stroke-linecap="round"/>'; }
+    for (var n = 1; n <= 12; n++) { var np = polar(R - 40, n * 30); s += '<text x="' + np.x + '" y="' + (np.y + 11) + '" text-anchor="middle" font-size="32" font-weight="800" fill="#2E2A25" font-family="M PLUS Rounded 1c, sans-serif">' + n + '</text>'; }
+    if ((lv >= 3 && opt('ring') !== false) || o.ring) for (var r = 0; r < 12; r++) { var rp = polar(R + 20, r * 30); s += '<text x="' + rp.x + '" y="' + (rp.y + 7) + '" text-anchor="middle" font-size="17" font-weight="700" fill="#1C7ED6" font-family="M PLUS Rounded 1c, sans-serif">' + (r === 0 ? 0 : r * 5) + '</text>'; }
+    return s;
+  }
+  function hands(t, o) {
+    o = o || {};
+    var ha = ((t.h % 12) + t.m / 60) * 30, ma = t.m * 6;
+    var dash = o.faint ? ' stroke-dasharray="7,7" opacity=".55"' : '';
+    return '<g class="hand hh" data-hand="hour" transform="rotate(' + ha + ' ' + C + ' ' + C + ')"><line x1="' + C + '" y1="' + C + '" x2="' + C + '" y2="' + (C - 86) + '" stroke="#E03131" stroke-width="13" stroke-linecap="round"' + dash + '/>' + (o.hit ? '<line class="hit" x1="' + C + '" y1="' + C + '" x2="' + C + '" y2="' + (C - 92) + '" stroke="transparent" stroke-width="52" stroke-linecap="round"/>' : '') + '</g>' +
+      '<g class="hand mh" data-hand="minute" transform="rotate(' + ma + ' ' + C + ' ' + C + ')"><line x1="' + C + '" y1="' + C + '" x2="' + C + '" y2="' + (C - 130) + '" stroke="#1C7ED6" stroke-width="8" stroke-linecap="round"' + dash + '/>' + (o.hit ? '<line class="hit" x1="' + C + '" y1="' + (C - 40) + '" x2="' + C + '" y2="' + (C - 138) + '" stroke="transparent" stroke-width="46" stroke-linecap="round"/>' : '') + '</g>' +
+      '<circle cx="' + C + '" cy="' + C + '" r="11" fill="#2E2A25"/>';
+  }
+  function clock(t, lv, o) { return face(lv, o) + hands(t, o) + '</svg>'; }
+
+  /* ---------- はりを うごかす とけい ---------- */
+  function widget(holder, t, lv, onChange) {
+    var st = { h: t.h, m: t.m }, step = L(lv).step;
+    holder.innerHTML = clock(st, lv, { hit: true });
+    var svg = holder.querySelector('svg'), hh = svg.querySelector('.hh'), mh = svg.querySelector('.mh');
+    function upd() {
+      hh.setAttribute('transform', 'rotate(' + (((st.h % 12) + st.m / 60) * 30) + ' ' + C + ' ' + C + ')');
+      mh.setAttribute('transform', 'rotate(' + (st.m * 6) + ' ' + C + ' ' + C + ')');
+    }
+    function ang(e) { var pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; var p = pt.matrixTransform(svg.getScreenCTM().inverse()); var a = Math.atan2(p.x - C, -(p.y - C)) * 180 / Math.PI; return a < 0 ? a + 360 : a; }
+    function bind(el, type) {
+      var hit = el.querySelector('.hit');
+      hit.addEventListener('pointerdown', function (e) {
+        e.preventDefault(); el.classList.add('drag');
+        try { hit.setPointerCapture(e.pointerId); } catch (x) { /* 無視 */ }
+        var last = ang(e), acc = 0, h0 = st.h, m0 = st.m;
+        function mv(ev) {
+          var a = ang(ev), d = a - last; if (d > 180) d -= 360; if (d < -180) d += 360; acc += d; last = a;
+          if (type === 'minute') {
+            // ながい はりを まわすと、みじかい はりも いっしょに すすむ
+            var tm = Math.round(((h0 % 12) * 60 + m0 + acc / 6) / step) * step;
+            tm = ((tm % 720) + 720) % 720; st.h = Math.floor(tm / 60) || 12; st.m = tm % 60;
+          } else {
+            var rh = Math.round(((h0 % 12) * 30 + acc) / 30) % 12; if (rh <= 0) rh += 12; st.h = rh;
+          }
+          upd(); if (onChange) onChange(st, true);
+        }
+        function up() { el.classList.remove('drag'); window.removeEventListener('pointermove', mv); window.removeEventListener('pointerup', up); if (onChange) onChange(st, false); }
+        window.addEventListener('pointermove', mv); window.addEventListener('pointerup', up);
       });
     }
-
-    return (printState.problems.length > MAX_MATCH_PAIRS
-        ? '<p style="font-weight:700;color:var(--ink-soft);margin:0 0 8px;">※「むすぶ」は用紙にきれいに収まるよう最大'+MAX_MATCH_PAIRS+'組までにしています</p>'
-        : '')
-      + '<div class="ws-match-grid">'
-      + '<div class="ws-match-col">'+leftHtml+'</div>'
-      + '<svg class="ws-match-lines" viewBox="0 0 120 '+totalH+'" preserveAspectRatio="none" style="height:'+totalH+'px;">'+linesSvg+'</svg>'
-      + '<div class="ws-match-col">'+rightHtml+'</div>'
-      + '</div>';
+    bind(hh, 'hour'); bind(mh, 'minute');
+    return { get: function () { return { h: st.h, m: st.m }; } };
   }
 
-  renderPrintLevelBar();
-  renderWorksheet();
+  function chooseOpts(lv, t, n) {
+    var l = L(lv), list = [t];
+    if (!l.mins || l.mins.length > 1) { var om = l.mins ? l.mins.filter(function (m) { return m !== t.m; }) : [mod60(t.m + 5 + rnd(50))]; list.push({ h: t.h, m: pick(om) }); }
+    list.push({ h: mod12(t.h + 1 + rnd(10)), m: t.m });
+    // はんぶんの ときは「みじかい はりの よみちがい」（ひとつ まえの じ）も いれる
+    if (t.m >= 30) list.push({ h: mod12(t.h + 1), m: t.m });
+    var g = 0;
+    while (list.length < n && g++ < 50) { var c = randTime(lv); if (!list.some(function (x) { return same(x, c); })) list.push(c); }
+    var out = []; list.forEach(function (x) { if (!out.some(function (y) { return same(x, y); })) out.push(x); });
+    return out.slice(0, n);
+  }
 
-  /* =========================================================
-     MODE SWITCHING / GLOBAL UI
-  ========================================================= */
-  document.querySelectorAll('nav.modes button').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      document.querySelectorAll('nav.modes button').forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
-      btn.classList.add('active'); btn.setAttribute('aria-selected','true');
-      var mode = btn.getAttribute('data-mode');
-      document.querySelectorAll('.view').forEach(function(v){ v.classList.add('hidden'); });
-      document.getElementById('view-'+mode).classList.remove('hidden');
-      document.getElementById('worksheet').classList.toggle('hidden', mode!=='print');
-      if(mode==='print') renderWorksheet();
-    });
+  /* ---------- あわせる ---------- */
+  function renderSet(stage, q, api) {
+    var h = api.h, t = q.t, lv = q.lv;
+    var start = { h: 12, m: 0 };
+    var read = h('div', { class: 'tread' });
+    var hold = h('div', { class: 'clkw' });
+    var w;
+    function show(s) { read.textContent = opt('readout') === false ? '' : 'いま ' + tText(s); }
+    var box = h('div', { class: 'setbox' },
+      h('div', { class: 'setl' }, h('div', { class: 'mz-q tgt', style: '--c:' + api.color }, h('div', { class: 'qs' }, 'この じこくに あわせよう'), h('div', { class: 'tt' }, tText(t))),
+        read, h('div', { class: 'hint' }, '🔴 みじかい はり ＝ 「じ」　🔵 ながい はり ＝ 「ふん」'),
+        h('button', { type: 'button', class: 'chk ready', onclick: check }, '✔ できた')),
+      hold);
+    stage.appendChild(box);
+    w = widget(hold, start, lv, function (s, moving) { show(s); if (!moving) api.sfx.tap(); });
+    show(start);
+    function check() {
+      if (api.locked()) return;
+      var s = w.get();
+      if (same(s, t)) { box.classList.add('done'); api.correct(tSay(t)); }
+      else {
+        api.wrong();
+        var msg = s.h !== t.h && s.m !== t.m ? 'みじかい はりと ながい はりを みなおそう' : s.h !== t.h ? 'みじかい はり（じ）を みなおそう' : 'ながい はり（ふん）を みなおそう';
+        read.textContent = '💡 ' + msg; setTimeout(function () { api.speak(msg); }, 700);
+      }
+    }
+  }
+
+  var PR_COUNTS = [[4, '4もん'], [6, '6もん'], [8, '8もん'], [9, '9もん'], [12, '12もん']];
+
+  MieelApp.start({
+    id: 'tokei',
+    title: 'とけいの がくしゅう',
+    icon: '🕰️',
+    color: '#1C7ED6', colorD: '#1864AB', soft: '#DCEBFA',
+    homeTitle: 'なにを する？',
+    teacherNote:
+      '算数の「時刻の読み方」の教材です。<br>' +
+      '・<b>よむ</b>：時計を見て、時刻を選びます。<br>' +
+      '・<b>えらぶ</b>：時刻を見て、あう時計を選びます（同じ「じ」で「ふん」が違う時計、はんぶん過ぎの「じ」の読みちがい などを まぜます）。<br>' +
+      '・<b>あわせる</b>：はりを指で動かして時刻を合わせます（長いはりを回すと、短いはりも いっしょに動きます）。<br>' +
+      '・<b>むすぶ</b>：時刻と時計を むすびます。<br>' +
+      '・レベル：ちょうど／はん／15分／5分／1分。3レベル以上で 外側に「ふん」の目もり数字を出します（設定で消せます）。<br>' +
+      '・表記は「3じ15ふん」（ひらがな）が基本です。設定で「3時15分」や「3じはん」の表記に変えられます。',
+    options: [
+      { key: 'kanjiTime', label: '🈶 「3時15分」の かんじ ひょうき', type: 'check', def: false, print: true },
+      { key: 'han', label: '「30ぷん」を「はん」と かく', type: 'check', def: true, print: true },
+      { key: 'ring', label: '🔵 とけいの そとに「ふん」の すうじを だす（レベル3〜）', type: 'check', def: true, print: true },
+      { key: 'readout', label: '「あわせる」で いまの じこくを ひょうじ', type: 'check', def: true }
+    ],
+    modes: [
+      {
+        id: 'read', name: 'よむ', sub: 'なんじ なんぷん？', icon: '👀', color: '#1C7ED6', levels: LEVELS, kind: 'choice',
+        make: function (lv) {
+          var t = randTime(lv), os = chooseOpts(lv, t, lv === 1 ? 3 : 4);
+          return { html: '<div class="clkq">' + clock(t, lv) + '</div>', sub: 'なんじ ' + (lv === 1 ? '' : 'なんぷん ') + 'かな？', say: 'この とけいは なんじ' + (lv === 1 ? '' : 'なんぷん') + 'かな？', options: os.map(function (x) { return { label: tText(x), value: x.h + ':' + x.m, say: tSay(x) }; }), answer: t.h + ':' + t.m, sayAnswer: tSay(t), key: t.h + ':' + t.m, t: t, lv: lv, side: true };
+        },
+        print: {
+          instruction: 'とけいを よんで、じこくを かこう', cols: 3, keepCols: true, noNum: true, counts: PR_COUNTS, defCount: 9,
+          cell: function (q, ans) { return '<div class="pc">' + clock(q.t, q.lv) + '</div><div class="pl">' + (ans ? '<b>' + tText(q.t) + '</b>' : '<span class="pbl"></span>じ<span class="pbl"></span>' + (q.lv === 1 ? '' : 'ふん')) + '</div>'; }
+        }
+      },
+      {
+        id: 'choose', name: 'えらぶ', sub: 'あう とけいは どれ？', icon: '🔍', color: '#2F9E44', levels: LEVELS, kind: 'choice',
+        make: function (lv) {
+          var t = randTime(lv), os = chooseOpts(lv, t, lv === 1 ? 3 : 4);
+          return { text: tText(t), sub: 'の とけいは どれ？', say: tSay(t) + ' の とけいは どれ？', options: os.map(function (x) { return { label: tText(x), value: x.h + ':' + x.m, html: '<span class="clko">' + clock(x, lv) + '</span>' }; }), answer: t.h + ':' + t.m, sayAnswer: tSay(t), cols: os.length === 3 ? 3 : 4, key: t.h + ':' + t.m, t: t, lv: lv };
+        },
+        print: {
+          instruction: 'じこくに あう とけいに 〇を つけよう', cols: 1, noNum: true, counts: [[3, '3もん'], [4, '4もん'], [5, '5もん']], defCount: 4,
+          cell: function (q, ans) { return '<div class="pch"><div class="pt">' + tText(q.t) + '</div><div class="pco">' + shuffle(q.options).map(function (o) { var p = o.value.split(':'); return '<span class="pc s' + (ans && o.value === q.answer ? ' ok' : '') + '">' + clock({ h: +p[0], m: +p[1] }, q.lv) + '</span>'; }).join('') + '</div></div>'; }
+        }
+      },
+      {
+        id: 'set', name: 'あわせる', sub: 'はりを うごかそう', icon: '🤚', color: '#E8590C', levels: LEVELS, kind: 'custom',
+        make: function (lv) { var t = randTime(lv); if (t.h === 12 && t.m === 0) t.h = 3; return { t: t, lv: lv, key: t.h + ':' + t.m, say: tSay(t) + ' に あわせよう' }; },
+        render: renderSet,
+        print: {
+          instruction: 'じこくに あうように、はりを かこう', cols: 3, keepCols: true, noNum: true, counts: PR_COUNTS, defCount: 9,
+          cell: function (q, ans) { return '<div class="pt">' + tText(q.t) + '</div><div class="pc">' + face(q.lv, { ring: q.lv >= 2 }) + (ans ? hands(q.t, { faint: true }) : '<circle cx="' + C + '" cy="' + C + '" r="9" fill="#CCC"/>') + '</svg></div>'; }
+        }
+      },
+      {
+        id: 'match', name: 'むすぶ', sub: 'じこくと とけいを むすぼう', icon: '🔗', color: '#7048E8', levels: LEVELS, kind: 'custom',
+        make: function (lv) {
+          var ts = [], g = 0; while (ts.length < (lv === 1 ? 3 : 4) && g++ < 50) { var t = randTime(lv); if (!ts.some(function (x) { return same(x, t); })) ts.push(t); }
+          return { ts: ts, lv: lv, key: ts.map(function (t) { return t.h + ':' + t.m; }).join(','), say: 'おなじ じこくを むすぼう' };
+        },
+        render: function (stage, q, api) {
+          var h = api.h, left = h('div', { class: 'mcol' }), right = h('div', { class: 'mcol' }), sel = null, done = 0;
+          var L2 = shuffle(q.ts), R2 = shuffle(q.ts);
+          function pickCard(el, t, side) {
+            if (api.locked() || el.classList.contains('ok')) return;
+            if (!sel || sel.side === side) { if (sel) sel.el.classList.remove('sel'); sel = { el: el, t: t, side: side }; el.classList.add('sel'); api.sfx.tap(); if (side === 'L') api.speak(tSay(t)); return; }
+            if (same(sel.t, t)) {
+              sel.el.classList.remove('sel'); sel.el.classList.add('ok'); el.classList.add('ok'); done++; api.sfx.put(done); api.speak(tSay(t));
+              sel = null; if (done === q.ts.length) api.correct('ぜんぶ むすべたね');
+            } else { el.classList.remove('ng'); void el.offsetWidth; el.classList.add('ng'); api.wrong(); }
+          }
+          L2.forEach(function (t) { var b = h('button', { type: 'button', class: 'mcard tx' }, tText(t)); b.addEventListener('click', function () { pickCard(b, t, 'L'); }); left.appendChild(b); });
+          R2.forEach(function (t) { var b = h('button', { type: 'button', class: 'mcard ck', html: clock(t, q.lv) }); b.addEventListener('click', function () { pickCard(b, t, 'R'); }); right.appendChild(b); });
+          stage.append(h('div', { class: 'mz-hint' }, 'じこくを タップして、おなじ とけいを タップしよう'), h('div', { class: 'mwrap' }, left, right));
+        },
+        print: {
+          instruction: 'おなじ じこくを せんで むすぼう', cols: 1, noNum: true, counts: [[1, '1くみ'], [2, '2くみ']], defCount: 2,
+          cell: function (q, ans) { var R2 = shuffle(q.ts); return '<div class="pm"><div class="pmc">' + q.ts.map(function (t) { return '<div class="pmt">' + tText(t) + ' ●</div>'; }).join('') + '</div><div class="pmc">' + R2.map(function (t) { return '<div class="pmk">● <span class="pc s">' + clock(t, q.lv) + '</span>' + (ans ? '<i>' + tText(t) + '</i>' : '') + '</div>'; }).join('') + '</div></div>'; }
+        }
+      }
+    ]
   });
-
-  var largeToggle = document.getElementById('btnLargeText');
-  largeToggle.addEventListener('click', function(){
-    var on = document.documentElement.classList.toggle('large-text');
-    largeToggle.setAttribute('aria-pressed', on ? 'true':'false');
-    TEXT_SCALE = on ? 1.25 : 1;
-    // 表示中の時計をすべて文字サイズ反映で再描画する
-    learnWidget.render();
-    quizSetWidget.render();
-    drawQuizReadClock();
-    renderChooseGrid();
-    refreshMatchClockIcons();
-    renderWorksheet();
-  });
-
-  window.addEventListener('afterprint', function(){ /* no-op, worksheet stays available */ });
-
 })();
 </script>
 </body>

@@ -104,6 +104,32 @@
   @media (max-width:600px){
     .ws-row{flex-direction:column;gap:8px;}
   }
+
+  /* ---- A4 そのままの プレビュー（みたまま いんさつ） ---- */
+  .sheet-page{width:210mm;height:297mm;max-width:none;min-height:0;margin:0 auto 22px;display:flex;flex-direction:column;overflow:hidden;border-radius:4px;}
+  body.landscape .sheet-page{width:297mm;height:210mm;}
+  .sheet-page .ws-drawbox{flex:1;min-height:60mm;}
+  .ws-fields .nw{white-space:nowrap;}
+  .sheet-page table.ws-table{flex:1;height:100%;}
+  .sheet-page table.ws-table thead tr{height:12mm;}
+  .sheet-page table.ws-table th:first-child{width:12mm;white-space:nowrap;}
+  .ws-fields .blank.s{min-width:48px;}
+  #previewWrap{overflow:auto;}
+  @media (min-width:1000px){
+    body{padding-bottom:0;}
+    .app{max-width:none;display:grid;grid-template-columns:minmax(360px,440px) 1fr;grid-template-rows:auto 1fr;gap:0 18px;height:100vh;height:100dvh;padding:12px 16px;}
+    .app>header.top{grid-column:1 / -1;}
+    .app>section.panel{margin:0;min-height:0;overflow-y:auto;}
+    .app>section.panel:nth-of-type(2){padding:0 !important;background:transparent;box-shadow:none;}
+    #previewWrap{height:100%;}
+    footer.hint{display:none;}
+  }
+  @media print{
+    @page{size:A4 portrait;margin:0;}
+    body.landscape{}
+    .sheet-page{width:210mm;height:297mm;zoom:1 !important;}
+    body.landscape .sheet-page{width:297mm;height:210mm;}
+  }
 </style>
 <style id="pageOrientStyle"></style>
 </head>
@@ -358,7 +384,7 @@
     return '<div class="ws-fields">'
       + '<span>なまえ：</span><span class="blank">&nbsp;</span>'
       + '<span>くみ：</span><span class="blank">&nbsp;</span>'
-      + '<span>にち：</span><span class="blank">&nbsp;</span>がつ<span class="blank">&nbsp;</span>にち'
+      + '<span class="nw">ひづけ：<span class="blank s">&nbsp;</span>がつ<span class="blank s">&nbsp;</span>にち</span>'
       + '</div>';
   }
   function renderWeatherRow(){
@@ -428,7 +454,7 @@
     html += renderNameFields();
 
     html += '<table class="ws-table"><thead><tr>';
-    html += '<th>かい</th><th>日づけ</th>';
+    html += '<th>かい</th><th>ひづけ</th>';
     if(showWeather) html += '<th>てんき</th>';
     measureIds.forEach(function(id){ html += '<th>'+byId[id].label+'</th>'; });
     if(showNotesCol) html += '<th>きづいたこと</th>';
@@ -448,6 +474,16 @@
   /* =========================================================
      全体描画
   ========================================================= */
+  // プレビューの はばに あわせて A4 を ちぢめて みせる（いんさつは じっさいの おおきさ）
+  function fitPreview(){
+    var wrap=document.getElementById('previewWrap'); if(!wrap) return;
+    var pw=(document.body.classList.contains('landscape')?297:210)*96/25.4;
+    var z=Math.min(1,Math.max(.3,(wrap.clientWidth-40)/pw));
+    document.querySelectorAll('#worksheet .sheet-page').forEach(function(pg){ pg.style.zoom=z.toFixed(3); });
+  }
+  window.addEventListener('resize', function(){ clearTimeout(window.__fpT); window.__fpT=setTimeout(fitPreview,200); });
+  window.addEventListener('beforeprint', function(){ document.querySelectorAll('#worksheet .sheet-page').forEach(function(pg){ pg.style.zoom=''; }); });
+  window.addEventListener('afterprint', fitPreview);
   function renderWorksheet(){
     var html = state.type==='sheet' ? renderSheetType() : renderTableType();
     var ws = document.getElementById('worksheet');
@@ -455,7 +491,9 @@
     ws.classList.toggle('large-print', state.textSize==='large');
     /* きろくひょうは列数が多くなりがちなので、印刷時は横向きにするヒントを出す */
     document.getElementById('pageOrientStyle').textContent =
-      state.type==='table' ? '@page{size:landscape;}' : '';
+      state.type==='table' ? '@page{size:A4 landscape;margin:0;}' : '@page{size:A4 portrait;margin:0;}';
+    document.body.classList.toggle('landscape', state.type==='table');
+    fitPreview();
   }
 
   renderPlantGrid();

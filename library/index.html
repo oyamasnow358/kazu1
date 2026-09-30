@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="MieeL教材">
+<meta name="theme-color" content="#FAF7EF">
+<title>教材ライブラリ｜MieeL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#FAF7EF;--card:#fff;--ink:#2E2A25;--sub:#7D7466;--line:#EAE1CE;
+    --mieel:radial-gradient(circle at 50% 0%,#1B8FE8 0%,#2BB8D6 28%,#3FCB9E 45%,#8FD24A 58%,#F4D027 72%,#F7941E 100%);
+    --emoji:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","BIZ UDPGothic","Yu Gothic UI",sans-serif;font-weight:700;
+    padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);}
+  main{max-width:1180px;margin:0 auto;padding:18px 16px 40px;}
+  .brand{display:flex;align-items:center;gap:8px;font-size:15px;}
+  .orb{width:24px;height:24px;border-radius:50%;background:var(--mieel);}
+  .brand a{color:#1C7ED6;text-decoration:none;font-size:13px;}
+  h1{font-size:clamp(26px,3.4vw,36px);margin:12px 0 4px;}
+  .lead{color:var(--sub);font-weight:500;margin:0 0 18px;line-height:1.7;}
+  .cats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;position:sticky;top:0;background:var(--bg);padding:8px 0;z-index:2;}
+  .cats button{border:3px solid var(--line);background:#fff;border-radius:999px;padding:10px 18px;font:inherit;font-size:16px;cursor:pointer;color:var(--ink);}
+  .cats button.on{border-color:var(--ink);background:#FFF3BF;}
+  h2{font-size:22px;margin:24px 0 10px;display:flex;align-items:center;gap:8px;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;}
+  .app{display:flex;flex-direction:column;align-items:center;gap:6px;padding:18px 12px 14px;border-radius:24px;background:var(--card);border:5px solid var(--c,#ADB5BD);
+    box-shadow:0 6px 0 rgba(0,0,0,.1);text-decoration:none;color:var(--ink);text-align:center;transition:transform .1s;}
+  .app:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.1);}
+  .app .i{font-family:var(--emoji);font-size:52px;line-height:1.1;}
+  .app .n{font-size:19px;}
+  .app .d{font-size:13px;color:var(--sub);font-weight:500;line-height:1.5;}
+  .app .p{font-size:11px;color:#ADB5BD;font-weight:500;}
+  .teacher .app{flex-direction:row;text-align:left;align-items:center;gap:14px;}
+  .teacher .app .i{font-size:40px;}
+  .note{margin-top:30px;border-top:1px solid var(--line);padding-top:16px;color:var(--sub);font-size:13px;font-weight:500;line-height:1.8;}
+</style>
+</head>
+<body>
+<main>
+  <div class="brand"><span class="orb"></span><strong>MieeL</strong><a href="https://www.mieel-support-school.com/" target="_blank" rel="noopener">www.mieel-support-school.com</a></div>
+  <h1>🧰 教材ライブラリ</h1>
+  <p class="lead">知的障害特別支援学校向けの デジタル教材です。iPad では「共有 → ホーム画面に追加」で アプリのように使えます。<br>どの教材も 右上の ⚙️ を 1.5秒 ながおしで 先生用せってい、🖨️ で A4プリントが つくれます。</p>
+  <div class="cats" id="cats"></div>
+  <div id="list"></div>
+  <p class="note">
+    このページは教材の一覧です（削除しても各教材の動作には影響しません）。<br>
+    アイデア教材ボックスに表示するには、各教材フォルダのURL（例：https://ユーザー名.github.io/kyozai-html/フォルダ名/）を スプレッドシートの downloadUrl 列に入力してください。<br>
+    ※ いちばん上の URL（/kazu1/）は「たしざん・ひきざん」です。clock2（＝とけい）・okane2 も 以前のURLを そのまま使えるように残しています。
+  </p>
+</main>
+<script>
+(function () {
+  var CATS = [
+    { id: 'kokugo', n: 'こくご', i: '📚', apps: [
+      ['hiragana1', 'あ', 'ひらがな', 'なぞる・よむ・えらぶ・きく・ことば', '#E64980'],
+      ['katakana', '🔤', 'カタカナ', 'よむ・かきかえ・なぞる・ことば', '#C15B6B'],
+      ['dakuon_handakuon', 'が', 'だくおん・はんだくおん', 'なぞる・は/ば/ぱ・きいて えらぶ', '#0C8599'],
+      ['kanji', '🈁', 'かんじ', '1年の かんじ 52字', '#5F3DC4'],
+      ['bunsyou', '📖', 'ぶんしょう れんしゅう', 'じゅんばん・たすけことば・文づくり', '#5B6FA8'],
+      ['bunshoudai2', '🔎', 'ものがたりを よみとろう', 'いつ・どこ・だれ・なに・どうして', '#2F8F83'],
+      ['kotobakimoti', '💬', 'ちくちく・あったか ことば', 'ことばと きもち', '#E8590C'],
+      ['kurabekko', '🧩', 'くらべっこ', 'おおきい・ちいさい などの ことば', '#0CA678']] },
+    { id: 'sansu', n: 'さんすう', i: '🔢', apps: [
+      ['kazu1', '🔢', 'かずを まなぼう', 'かぞえる・みつける・かく', '#F08C00'],
+      ['keisan', '➕', 'たしざん・ひきざん', 'ドットで かぞえる・計算ドリル', '#1C7ED6'],
+      ['bunshoudai', '🧮', 'ぶんしょうだい', 'しきと こたえを つくる', '#E07A2E'],
+      ['tokei', '🕰️', 'とけい', 'よむ・えらぶ・はりを うごかす', '#1C7ED6'],
+      ['jikan_keisan', '⏱️', 'じかんの けいさん', 'なんぷん・おわりの じこく', '#E8590C'],
+      ['okane', '🪙', 'おかね', 'こうか・いくら・はらう・おつり', '#C98A2E'],
+      ['okane2', '🛒', 'おかいもの', 'リストの ものを かって はらう', '#7048E8'],
+      ['nagasa', '📏', 'ながさ', 'くらべる・ものさし・たんい', '#1C7ED6'],
+      ['omosa', '⚖️', 'おもさ', 'シーソー・はかり・たんい', '#7048E8'],
+      ['kasa', '🥤', 'かさ', 'コップ・めもり・たんい', '#0C8599'],
+      ['katachi', '🔺', 'かたち', 'えらぶ・なまえ・むすぶ', '#E8590C'],
+      ['tizu_houkou', '🧭', 'ちずと ほうこう', 'やじるし・ちず・マスを すすむ', '#1C7ED6'],
+      ['youbi_karenda', '🗓️', 'ようびと カレンダー', 'ようび・カレンダー・あと なんにち', '#2F9E44']] },
+    { id: 'seikatsu', n: 'せいかつ', i: '🏠', apps: [
+      ['aisatu', '🙋', 'あいさつ', 'ばめんに あう あいさつ', '#F08C00'],
+      ['bousai', '🚨', 'ぼうさい', 'じしん・かじ・おかしも', '#E03131'],
+      ['koutuu', '🚦', 'こうつう あんぜん', 'しんごう・ひょうしき', '#2F9E44'],
+      ['gomi_bunbetu', '🗑️', 'ごみの ぶんべつ', 'もえる・もえない・しげん', '#0CA678'],
+      ['karadatokenkou', '🧍', 'からだと けんこう', 'からだの なまえ・けんこう', '#E64980'],
+      ['kisetu_gyouji', '🎏', 'きせつと ぎょうじ', 'きせつ・ぎょうじ・つき', '#7048E8'],
+      ['timer', '⏳', 'みえる タイマー', 'のこり時間が あかい えんばんで みえる', '#E03131'],
+      ['plant', '🌱', 'しょくぶつの かんさつ', '観察シート・記録表の プリント', '#2F9E44']] },
+    { id: 'teacher', n: '先生用', i: '👩‍🏫', apps: [
+      ['mieel_gaido', '📘', 'MieeL 操作マニュアル', '14機能の使い方', '#0E7C66'],
+      ['kennkyu', '🗓️', '先生方の動き（年間スケジュール）', 'つぎの予定が ひとめで わかる', '#1C7ED6']] }
+  ];
+  var cur = 'all';
+  try { cur = localStorage.getItem('mieel.library.cat') || 'all'; } catch (e) { /* 無視 */ }
+  function el(t, c, h) { var e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; }
+  function draw() {
+    var cats = document.getElementById('cats'); cats.innerHTML = '';
+    [{ id: 'all', n: 'ぜんぶ', i: '🌈' }].concat(CATS).forEach(function (c) {
+      var b = el('button', c.id === cur ? 'on' : '', '<span style="font-family:var(--emoji)">' + c.i + '</span> ' + c.n);
+      b.onclick = function () { cur = c.id; try { localStorage.setItem('mieel.library.cat', cur); } catch (e) { /* 無視 */ } draw(); };
+      cats.appendChild(b);
+    });
+    var list = document.getElementById('list'); list.innerHTML = '';
+    CATS.forEach(function (c) {
+      if (cur !== 'all' && cur !== c.id) return;
+      list.appendChild(el('h2', '', '<span style="font-family:var(--emoji)">' + c.i + '</span>' + c.n));
+      var g = el('div', 'grid' + (c.id === 'teacher' ? ' teacher' : ''));
+      c.apps.forEach(function (a) {
+        var x = el('a', 'app', '<span class="i">' + a[1] + '</span><span><span class="n">' + a[2] + '</span><br><span class="d">' + a[3] + '</span><br><span class="p">/' + a[0] + '/</span></span>');
+        x.href = '../' + a[0] + '/'; x.style.setProperty('--c', a[4]);
+        g.appendChild(x);
+      });
+      list.appendChild(g);
+    });
+  }
+  draw();
+})();
+</script>
+</body>
+</html>
