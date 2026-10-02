@@ -1202,28 +1202,43 @@ window.MieelApp = (function () {
       mh.setAttribute('transform', 'rotate(' + (st.m * 6) + ' ' + C + ' ' + C + ')');
     }
     function ang(e) { var pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; var p = pt.matrixTransform(svg.getScreenCTM().inverse()); var a = Math.atan2(p.x - C, -(p.y - C)) * 180 / Math.PI; return a < 0 ? a + 360 : a; }
-    function bind(el, type) {
-      var hit = el.querySelector('.hit');
-      hit.addEventListener('pointerdown', function (e) {
-        e.preventDefault(); el.classList.add('drag');
-        try { hit.setPointerCapture(e.pointerId); } catch (x) { /* 無視 */ }
-        var last = ang(e), acc = 0, h0 = st.h, m0 = st.m;
-        function mv(ev) {
-          var a = ang(ev), d = a - last; if (d > 180) d -= 360; if (d < -180) d += 360; acc += d; last = a;
-          if (type === 'minute') {
-            // ながい はりを まわすと、みじかい はりも いっしょに すすむ
-            var tm = Math.round(((h0 % 12) * 60 + m0 + acc / 6) / step) * step;
-            tm = ((tm % 720) + 720) % 720; st.h = Math.floor(tm / 60) || 12; st.m = tm % 60;
-          } else {
-            var rh = Math.round(((h0 % 12) * 30 + acc) / 30) % 12; if (rh <= 0) rh += 12; st.h = rh;
-          }
-          upd(); if (onChange) onChange(st, true);
-        }
-        function up() { el.classList.remove('drag'); window.removeEventListener('pointermove', mv); window.removeEventListener('pointerup', up); if (onChange) onChange(st, false); }
-        window.addEventListener('pointermove', mv); window.addEventListener('pointerup', up);
-      });
+    // どちらの はりを つかむか きめる（はりが かさなっていても うごかせるように）
+    //  ・レベル1（◯じ ちょうど）は ながい はりが 12で こてい → いつも みじかい はり
+    //  ・かさなっている ときは、まんなか寄りを さわれば みじかい はり、さきの ほうなら ながい はり
+    function pickHand(e) {
+      var pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; var p = pt.matrixTransform(svg.getScreenCTM().inverse());
+      var dist = Math.sqrt((p.x - C) * (p.x - C) + (p.y - C) * (p.y - C)), a = ang(e);
+      if (dist > R + 30) return null;
+      if (step >= 60) return 'hour';
+      var hA = ((st.h % 12) + st.m / 60) * 30, mA = st.m * 6;
+      function diff(x) { var d = Math.abs(a - x) % 360; return d > 180 ? 360 - d : d; }
+      var tol = dist < 40 ? 90 : Math.max(14, Math.atan2(30, dist) * 180 / Math.PI);
+      var nearH = diff(hA) <= tol && dist <= 110, nearM = diff(mA) <= tol;
+      if (nearH && nearM) return dist <= 96 ? 'hour' : 'minute';
+      if (nearH) return 'hour';
+      if (nearM) return 'minute';
+      return null;
     }
-    bind(hh, 'hour'); bind(mh, 'minute');
+    svg.addEventListener('pointerdown', function (e) {
+      var type = pickHand(e); if (!type) return;
+      var el = type === 'hour' ? hh : mh;
+      e.preventDefault(); el.classList.add('drag');
+      try { svg.setPointerCapture(e.pointerId); } catch (x) { /* 無視 */ }
+      var last = ang(e), acc = 0, h0 = st.h, m0 = st.m;
+      function mv(ev) {
+        var a = ang(ev), d = a - last; if (d > 180) d -= 360; if (d < -180) d += 360; acc += d; last = a;
+        if (type === 'minute') {
+          // ながい はりを まわすと、みじかい はりも いっしょに すすむ
+          var tm = Math.round(((h0 % 12) * 60 + m0 + acc / 6) / step) * step;
+          tm = ((tm % 720) + 720) % 720; st.h = Math.floor(tm / 60) || 12; st.m = tm % 60;
+        } else {
+          var rh = Math.round(((h0 % 12) * 30 + acc) / 30) % 12; if (rh <= 0) rh += 12; st.h = rh;
+        }
+        upd(); if (onChange) onChange(st, true);
+      }
+      function up() { el.classList.remove('drag'); window.removeEventListener('pointermove', mv); window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up); if (onChange) onChange(st, false); }
+      window.addEventListener('pointermove', mv); window.addEventListener('pointerup', up); window.addEventListener('pointercancel', up);
+    });
     return { get: function () { return { h: st.h, m: st.m }; } };
   }
 
@@ -1249,7 +1264,7 @@ window.MieelApp = (function () {
     function show(s) { read.textContent = opt('readout') === false ? '' : 'いま ' + tText(s); }
     var box = h('div', { class: 'setbox' },
       h('div', { class: 'setl' }, h('div', { class: 'mz-q tgt', style: '--c:' + api.color }, h('div', { class: 'qs' }, 'この じこくに あわせよう'), h('div', { class: 'tt' }, tText(t))),
-        read, h('div', { class: 'hint' }, '🔴 みじかい はり ＝ 「じ」　🔵 ながい はり ＝ 「ふん」'),
+        read, h('div', { class: 'hint' }, lv === 1 ? '🔴 みじかい はりを うごかして「じ」を あわせよう' : '🔴 みじかい はり ＝ 「じ」　🔵 ながい はり ＝ 「ふん」'),
         h('button', { type: 'button', class: 'chk ready', onclick: check }, '✔ できた')),
       hold);
     stage.appendChild(box);
