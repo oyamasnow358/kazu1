@@ -463,11 +463,15 @@ window.MieelApp = (function () {
     var v = (speechSynthesis.getVoices() || []).filter(function (x) { return /^ja(-|_|$)/i.test(x.lang); });
     jaVoice = v.filter(function (x) { return /Kyoko|O-ren|Otoya|Hattori|Nanami|Haruka/i.test(x.name); })[0] || v.filter(function (x) { return x.localService; })[0] || v[0] || null;
   }
+  function jaSay(t) {
+    // 読み上げで 単語の あたまの「は」「へ」が 助詞（わ・え）と 読まれないように カタカナに する（はこ→ハこ、へや→ヘや）
+    return String(t == null ? '' : t).replace(/なかまはずれ/g, '仲間外れ').replace(/(^|[\s、。！？!?・（(「『])([はへ])(?=[\u3041-\u3096\u30A1-\u30FA\u30FC\u4E00-\u9FFF])/g, function (m, a, c) { return a + (c === 'は' ? 'ハ' : 'ヘ'); });
+  }
   function speak(text, rate) {
     if (!canSpeak || !text) return;
     try {
       speechSynthesis.cancel();
-      var u = new SpeechSynthesisUtterance(String(text).replace(/[〇○]{2}/g, 'まるまる'));
+      var u = new SpeechSynthesisUtterance(jaSay(String(text).replace(/[〇○]{2}/g, 'まるまる')));
       u.lang = 'ja-JP'; u.rate = rate || S.rate; u.pitch = 1.1;
       if (jaVoice) u.voice = jaVoice;
       speechSynthesis.speak(u);
