@@ -957,17 +957,17 @@ window.MieelApp = (function () {
     return s;
   }
 
-  function buildWorksheet(m) {
-    var level = pr.level, count = Number(pr.count) || 6;
-    var lv = (m.levels || []).filter(function (l) { return l.id === level; })[0];
-    if (!pr.seed || pr.seed.mode !== m.id || pr.seed.level !== level || pr.seed.count !== count) pr.seed = { mode: m.id, level: level, count: count, qs: printQs(m, level, count) };
-    var qs = pr.seed.qs;
+  // A4 の ページ（HTML）を つくる。o = { level, count, answer, size, cols, qs }
+  function worksheetPages(m, o) {
+    var level = o.level, count = Number(o.count) || 6;
+    var lv = (m.levels || []).filter(function (l) { return String(l.id) === String(level); })[0];
+    var qs = o.qs || printQs(m, lv ? lv.id : level, count);
     var P2 = m.print || {};
-    var cols = pr.cols && pr.cols !== 'auto' ? Number(pr.cols) : (P2.cols || ((m.kind === 'order') ? 1 : 2));
-    if (pr.size === 'big' && (!pr.cols || pr.cols === 'auto') && !P2.keepCols) cols = 1;
+    var cols = o.cols && o.cols !== 'auto' ? Number(o.cols) : (P2.cols || ((m.kind === 'order') ? 1 : 2));
+    if (o.size === 'big' && (!o.cols || o.cols === 'auto') && !P2.keepCols) cols = 1;
     var inst = P2.instruction || (m.kind === 'order' ? 'ただしい じゅんばんに なるように、□に ばんごうを かこう' : 'ただしい こたえに 〇を つけよう');
     var cells = qs.map(function (q, i) {
-      return '<div class="ws-cell' + (P2.cellClass ? ' ' + P2.cellClass : '') + '">' + (P2.noNum ? '' : '<div class="n">もんだい ' + (i + 1) + '</div>') + (P2.cell ? P2.cell(q, !!pr.answer, i) : defaultCell(m, q, !!pr.answer)) + '</div>';
+      return '<div class="ws-cell' + (P2.cellClass ? ' ' + P2.cellClass : '') + '">' + (P2.noNum ? '' : '<div class="n">もんだい ' + (i + 1) + '</div>') + (P2.cell ? P2.cell(q, !!o.answer, i) : defaultCell(m, q, !!o.answer)) + '</div>';
     });
     // A4 に はいるように ページを わける（じっさいに ならべて たかさを はかる）
     var meas = h('div', { style: 'position:fixed;left:-10000px;top:0;visibility:hidden' });
@@ -980,7 +980,7 @@ window.MieelApp = (function () {
         '<div>ひづけ<span class="ws-blank" style="min-width:26mm">&nbsp;</span>' + (all > 1 ? '<span class="ws-no">' + no + ' / ' + all + '</span>' : '') + '</div></div></div>';
     };
     var pages = [], cur = [];
-    var mk = function (list) { return '<div class="ws-page' + (pr.size === 'big' ? ' big' : '') + '"><!--H--><div class="ws-body" style="--wcols:' + cols + '">' + list.join('') + '</div></div>'; };
+    var mk = function (list) { return '<div class="ws-page' + (o.size === 'big' ? ' big' : '') + '"><!--H--><div class="ws-body" style="--wcols:' + cols + '">' + list.join('') + '</div></div>'; };
     cells.forEach(function (c) {
       var trial = cur.concat([c]);
       meas.innerHTML = mk(trial).replace('<!--H-->', head(1, 2));
@@ -990,10 +990,44 @@ window.MieelApp = (function () {
     });
     if (cur.length) pages.push(cur);
     meas.remove();
-    var html = pages.map(function (pg, i) { return mk(pg).replace('<!--H-->', head(i + 1, pages.length)); }).join('');
+    return pages.map(function (pg, i) { return mk(pg).replace('<!--H-->', head(i + 1, pages.length)); });
+  }
+  function buildWorksheet(m) {
+    var level = pr.level, count = Number(pr.count) || 6;
+    if (!pr.seed || pr.seed.mode !== m.id || pr.seed.level !== level || pr.seed.count !== count) pr.seed = { mode: m.id, level: level, count: count, qs: printQs(m, level, count) };
+    var html = worksheetPages(m, { level: level, count: count, answer: pr.answer, size: pr.size, cols: pr.cols, qs: pr.seed.qs }).join('');
     var pv = $('#mzPreview');
     if (pv) { pv.innerHTML = html || '<p class="mz-note" style="text-align:center">もんだいが ありません</p>'; fitPreview(); }
     $('#mzWorksheet').innerHTML = html;
+  }
+  // ほかの アプリ（やすみの しゅくだい メーカー など）から プリントを つくる ための まどぐち
+  function printAPI() {
+    var countOpts = function (m) { return ((m.print && m.print.counts) || [[4], [6], [8], [10], [12]]).map(function (c) { return [c[0], c[1] || (c[0] + 'もん')]; }); };
+    return {
+      version: 1,
+      app: { id: A.id, title: A.title, icon: A.icon || '' },
+      list: function () {
+        return printModes().map(function (m) {
+          var lvs = m.levels || [], co = countOpts(m);
+          var params = [];
+          if (lvs.length > 1) params.push({ key: 'level', label: 'レベル', opts: lvs.map(function (l) { return [l.id, (l.stars ? l.stars + ' ' : '') + l.name]; }), def: lvs[0].id });
+          params.push({ key: 'count', label: 'もんだいすう', opts: co, def: (m.print && m.print.defCount) || (co[1] || co[0])[0] });
+          params.push({ key: 'size', label: 'もじの 大きさ', opts: [['normal', 'ふつう'], ['big', '大きい']], def: 'normal' });
+          params.push({ key: 'answer', label: 'こたえ', opts: [[false, 'こたえなし'], [true, 'こたえを いれる（先生用）']], def: false });
+          return { id: m.id, name: m.name, icon: m.icon || A.icon || '', params: params };
+        });
+      },
+      build: function (id, params) {
+        var m = printModes().filter(function (x) { return x.id === id; })[0];
+        if (!m) return Promise.reject(new Error('no mode ' + id));
+        var o = params || {}, lvs = m.levels || [{ id: 1 }];
+        var level = o.level != null ? o.level : lvs[0].id;
+        var css = Array.prototype.map.call(document.querySelectorAll('style'), function (x) { return x.textContent; }).join(String.fromCharCode(10));
+        var go = function () { return { pages: worksheetPages(m, { level: level, count: o.count, answer: o.answer === true || o.answer === 'true', size: o.size, cols: o.cols }), css: css }; };
+        var f = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+        return f.then(go, go);
+      }
+    };
   }
   function fitPreview() {
     var pv = $('#mzPreview'); if (!pv) return;
@@ -1116,6 +1150,7 @@ window.MieelApp = (function () {
     var rt = null;
     window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { if (st.screen === 'print') fitPreview(); }, 250); });
 
+    window.MieelPrintAPI = printAPI();
     if (/[?&]print=1/.test(location.search) && printModes().length) renderPrint(); else renderHome();
   }
   function setUrl(print) { try { history.replaceState(null, '', location.pathname + (print ? '?print=1' : '')); } catch (e) { /* 無視 */ } }
