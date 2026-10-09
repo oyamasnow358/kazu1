@@ -15,7 +15,7 @@
 <title>ぶんしょうだい｜MieeL</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800&family=Klee+One:wght@600&display=swap" rel="stylesheet">
 <style>
 /*MZ-SHELL-CSS*/
 /* ==========================================================================
@@ -1439,9 +1439,12 @@ window.MieelApp = (function () {
   }
 
   var maxOf = function () { return Number(opt('max')) || 10; };
-  function makeFor(pids) {
-    return function () { var q = gen(pick(pids), maxOf()); q.say = q.text; return q; };
+  // レベル 3（ランダム）は さきに たす・ひく を はんぶんずつで きめてから、もんだいの かたちを えらぶ
+  function pidFor(lv) { var l = lv === 3 ? (Math.random() < 0.5 ? 1 : 2) : (LEVEL_PATS[lv] ? lv : 3); return pick(LEVEL_PATS[l]); }
+  function makeFor(pids, lv) {
+    return function () { var q = gen(lv ? pidFor(lv) : pick(pids), maxOf()); q.say = q.text; return q; };
   }
+  var OP_LEVELS = [{ id: 1, name: 'たしざん だけ', stars: '➕' }, { id: 2, name: 'ひきざん だけ', stars: '➖' }, { id: 3, name: 'ランダム（たしざん・ひきざん）', stars: '🔀' }];
 
   function printProblem(q) {
     return '<div class="wp">' + kanji(q.text).replace(/(\d+)/g, '<b class="wn">$1</b>') + '</div>' +
@@ -1456,8 +1459,8 @@ window.MieelApp = (function () {
     homeTitle: 'どれに する？',
     teacherNote:
       '算数の文章題（たし算・ひき算）の教材です。<br>' +
-      '・<b>もんだいを とこう</b>：文章を読んで「しき」と「こたえ」をすうじキーで作ります。レベル1＝あわせて・ふえると（たし算）、レベル2＝のこりは・ちがいは・のこりのなかま（ひき算）、レベル3＝まぜて。<br>' +
-      '・<b>たす？ ひく？</b>：正しい式を2つから選びます（演算の判断だけを練習）。<br>' +
+      '・<b>もんだいを とこう</b>：文章を読んで「しき」と「こたえ」をすうじキーで作ります。「たしざん だけ」（あわせて・ふえると）／「ひきざん だけ」（のこりは・ちがいは・のこりのなかま）／「ランダム」（たし算とひき算が半分ずつ、ばらばらに出ます）を選べます。<br>' +
+      '・<b>たす？ ひく？</b>：正しい式を2つから選びます（演算の判断だけを練習）。こちらも たしざん だけ／ひきざん だけ／ランダム を選べます。プリントでも同じように選べます。<br>' +
       '・たし算は「3＋4」「4＋3」どちらも正解にしています。まちがえた所だけが消えます。<br>' +
       '・数の大きさ、絵の表示、漢字（ふりがな付き）、＋－を最初から見せるかは、下の「この アプリの せってい」とプリント画面で変えられます。',
     options: [
@@ -1469,9 +1472,9 @@ window.MieelApp = (function () {
     modes: [
       {
         id: 'solve', name: 'もんだいを とこう', sub: 'しきと こたえを つくろう', icon: '📖', color: '#E07A2E',
-        levels: [{ id: 1, name: 'たしざんの もんだい', stars: '★☆☆' }, { id: 2, name: 'ひきざんの もんだい', stars: '★★☆' }, { id: 3, name: 'まぜて', stars: '★★★' }],
+        levels: OP_LEVELS,
         kind: 'custom',
-        make: function (lv) { return makeFor(LEVEL_PATS[lv])(); },
+        make: function (lv) { return makeFor(null, lv)(); },
         render: renderSolve,
         print: {
           instruction: 'もんだいを よんで、しきと こたえを かこう', cols: 1,
@@ -1486,9 +1489,10 @@ window.MieelApp = (function () {
       },
       {
         id: 'shiki', name: 'たす？ ひく？', sub: 'ただしい しきを えらぼう', icon: '🎯', color: '#3F7FBF',
+        levels: OP_LEVELS,
         kind: 'choice',
-        make: function () {
-          var q = gen(pick(LEVEL_PATS[3]), maxOf());
+        make: function (lv) {
+          var q = gen(pidFor(lv || 3), maxOf());
           var right = q.a + ' ' + opSym(q.op) + ' ' + q.b, other = q.a + ' ' + opSym(q.op === '+' ? '-' : '+') + ' ' + q.b;
           return {
             html: '<div class="bcol"><div class="ptext">' + probHTML(q) + '</div>' + (opt('visual') ? visHTML(q.v) : '') + '</div>',
