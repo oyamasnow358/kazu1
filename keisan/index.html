@@ -15,7 +15,7 @@
 <title>たしざん・ひきざん｜MieeL</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800&family=Klee+One:wght@600&display=swap" rel="stylesheet">
 <style>
 /*MZ-SHELL-CSS*/
 /* ==========================================================================
@@ -362,6 +362,45 @@ body.mz.calm *,body.mz.calm *::before,body.mz.calm *::after{animation:none!impor
 .pp{font-size:4mm;}
 .ws-page.big .pk{font-size:8mm;}
 .ws-page.big .pbx{min-width:20mm;height:13mm;}
+
+/* 2けた：10の たば と ばら */
+.pvb{display:flex;gap:18px;align-items:flex-start;justify-content:center;flex-wrap:wrap;background:#fff;border:3px solid var(--mz-line);border-radius:20px;padding:10px 14px;}
+.pvcol{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.pvh{font-size:calc(15px*var(--mz-scale));color:var(--mz-sub);font-weight:800;}
+.pvtens{display:flex;gap:6px;flex-wrap:wrap;max-width:330px;justify-content:center;}
+.pvbar{width:28px;height:calc(clamp(120px,19vh,170px));border-radius:8px;border:2px solid rgba(0,0,0,.2);padding:0;position:relative;background:repeating-linear-gradient(180deg,#1C7ED6 0 calc(10% - 2px),#fff calc(10% - 2px) 10%);}
+.pvbar.b{background:repeating-linear-gradient(180deg,#F08C00 0 calc(10% - 2px),#fff calc(10% - 2px) 10%);}
+.pvbar b{position:absolute;left:50%;top:-20px;transform:translateX(-50%);font-size:13px;color:var(--mz-sub);white-space:nowrap;}
+.pvtens{padding-top:20px;}
+.pvbar.x{opacity:.35;}
+.pvbar.x::after{content:"✕";position:absolute;inset:0;display:grid;place-items:center;color:#E03131;font-size:28px;font-weight:900;}
+.pvones{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+.pvfw{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.pvlab{font-size:13px;font-weight:800;border-radius:999px;padding:2px 10px;}
+.pvlab.cr{background:#FFF3BF;color:#8F6D00;}
+.pvlab.br{background:#FFE8CC;color:#C2410C;}
+.pvtf{display:grid;grid-template-columns:repeat(5,30px);grid-template-rows:repeat(2,30px);border:3px solid #495057;border-radius:6px;background:#FFFDF5;}
+.pvtf .pvc{border:1px solid #CED4DA;display:grid;place-items:center;width:30px;height:30px;}
+.pvtf .pvc.d{width:30px;height:30px;border-radius:50%;border:3px solid #FFFDF5;background:#1C7ED6;}
+.pvtf .pvc.d.b{background:#F08C00;}
+.pvtf .pvc.d.x{background:#E9E4D8;}
+.pvtf .pvc.d.x::after{font-size:22px;}
+.pvtf.carry{box-shadow:0 0 0 5px #FFD43B;}
+.pvtf.broken{border-style:dashed;border-color:#E8590C;}
+/* プリント（2けた） */
+.ppv{display:inline-flex;align-items:flex-end;gap:1.2mm;flex-wrap:wrap;}
+.ppv .pten{background:#DCEBFA;}
+.ppv .pten.b{background:#FFE8CC;}
+.ptfw{display:inline-flex;flex-direction:column;align-items:center;margin-left:1mm;}
+.ptfw small{font-size:2.6mm;color:#555;line-height:1.2;}
+.ptf{display:inline-grid;grid-template-columns:repeat(5,3.3mm);grid-template-rows:repeat(2,3.3mm);border:.4mm solid #333;}
+.ptf i{border:.15mm solid #999;border-radius:0;display:grid;place-items:center;}
+.ptf i::after{content:"";width:2.5mm;height:2.5mm;border-radius:50%;border:.3mm solid #333;}
+.ptf i.a::after{background:#DCEBFA;}
+.ptf i.b::after{background:#FFE8CC;}
+.ptf i.e::after{display:none;}
+.ptf.carry{outline:.6mm solid #F59F00;outline-offset:.3mm;}
+.ptf.broken{border-style:dashed;}
 </style>
 </head>
 <body class="mz">
@@ -1249,6 +1288,62 @@ window.MieelApp = (function () {
     return g;
   }
 
+  /* ---------- 2けた：10の たば と ばら（10の わく） ---------- */
+  // たしざん：ばらを ひとつの わくに あつめる → 10こに なったら くりあがり
+  // ひきざん：ばらが たりない ときは 10の たばを 1つ ばらして わくに する（くりさがり）
+  var needPV = function (q) { return q.a > 20 || q.b > 20 || q.ans > 20; };
+  function pvModel(q) {
+    var m = { tens: [], frames: [], carry: false, borrow: false };
+    var ta = Math.floor(q.a / 10), oa = q.a % 10, tb = Math.floor(q.b / 10), ob = q.b % 10, i;
+    if (q.op === '+') {
+      for (i = 0; i < ta; i++) m.tens.push('a');
+      for (i = 0; i < tb; i++) m.tens.push('b');
+      var ones = []; for (i = 0; i < oa; i++) ones.push('a'); for (i = 0; i < ob; i++) ones.push('b');
+      m.carry = ones.length >= 10;
+      m.frames.push({ cells: ones.slice(0, 10), carry: m.carry });
+      if (ones.length > 10) m.frames.push({ cells: ones.slice(10) });
+    } else {
+      m.borrow = oa < ob;
+      for (i = 0; i < ta - (m.borrow ? 1 : 0); i++) m.tens.push('a');
+      if (m.borrow) m.frames.push({ cells: ['a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a'], broken: true });
+      var o2 = []; for (i = 0; i < oa; i++) o2.push('a');
+      if (oa || !m.borrow) m.frames.push({ cells: o2 });
+    }
+    return m;
+  }
+  function pvBoard(h, q, onTap) {
+    var m = pvModel(q);
+    var tens = h('div', { class: 'pvtens' }, m.tens.map(function (c) {
+      var b = h('button', { type: 'button', class: 'pvbar ' + c, 'aria-label': '10' }, h('b', null, '10'));
+      if (onTap) b.addEventListener('click', function () { onTap(b, 10); });
+      return b;
+    }));
+    var ones = h('div', { class: 'pvones' }, m.frames.map(function (f) {
+      var g = h('div', { class: 'pvtf' + (f.carry ? ' carry' : '') + (f.broken ? ' broken' : '') });
+      for (var i = 0; i < 10; i++) {
+        var c = f.cells[i];
+        if (!c) { g.appendChild(h('span', { class: 'pvc' })); continue; }
+        var d = h('button', { type: 'button', class: 'pvc d ' + c });
+        if (onTap) (function (d) { d.addEventListener('click', function () { onTap(d, 1); }); })(d);
+        g.appendChild(d);
+      }
+      return h('div', { class: 'pvfw' }, f.broken ? h('div', { class: 'pvlab br' }, '🔨 10を ばらした') : f.carry ? h('div', { class: 'pvlab cr' }, '⬆ 10に なった！ くりあがり') : null, g);
+    }));
+    var note = q.op === '+' ? (m.carry ? 'ばらが 10こ そろったら、10の たばが 1つ ふえるよ' : '10の たばと ばらを それぞれ かぞえよう')
+      : (m.borrow ? 'ばらが たりないので 10の たばを 1つ ばらしたよ。そこから ' + (q.b % 10) + 'こ とろう' : 'ばらから ' + (q.b % 10) + 'こ' + (q.b >= 10 ? '、10の たばから ' + Math.floor(q.b / 10) + 'つ' : '') + ' とろう');
+    return { el: h('div', { class: 'pvb' }, h('div', { class: 'pvcol' }, h('div', { class: 'pvh' }, '10の たば'), tens), h('div', { class: 'pvcol' }, h('div', { class: 'pvh' }, 'ばら'), ones)), note: note };
+  }
+  function pvPrint(q) {
+    var m = pvModel(q), s = '<span class="ppv">';
+    m.tens.forEach(function (c) { s += '<span class="pten ' + c + '">10</span>'; });
+    m.frames.forEach(function (f) {
+      s += '<span class="ptfw">' + (f.broken ? '<small>ばらした10</small>' : f.carry ? '<small>10→くりあがり</small>' : '') + '<span class="ptf' + (f.carry ? ' carry' : '') + (f.broken ? ' broken' : '') + '">';
+      for (var i = 0; i < 10; i++) s += f.cells[i] ? '<i class="' + f.cells[i] + '"></i>' : '<i class="e"></i>';
+      s += '</span></span>';
+    });
+    return s + '</span>';
+  }
+
   function render(stage, q, api) {
     var h = api.h, buf = '', done = false;
     var showDots = opt('dots');
@@ -1287,7 +1382,10 @@ window.MieelApp = (function () {
       counted = 0; crossed = 0;
       [].forEach.call(area.querySelectorAll('.d'), function (d) { d.classList.remove('c', 'x'); d.textContent = ''; });
     }
-    if (showDots) {
+    if (showDots && needPV(q)) {
+      var pv = pvBoard(h, q, q.op === '-' ? function (el) { if (done) return; el.classList.toggle('x'); api.sfx.put(area.querySelectorAll('.x').length); } : null);
+      area.append(pv.el); tip.textContent = pv.note;
+    } else if (showDots) {
       if (q.op === '+') {
         area.append(dotGroup(h, q.a, 'ga', tapAdd), h('span', { class: 'dplus' }, '＋'), dotGroup(h, q.b, 'gb', tapAdd));
         tip.textContent = q.ans <= 20 ? '● を タップして かぞえよう' : '10の ぼうと ● を あわせよう';
@@ -1341,7 +1439,7 @@ window.MieelApp = (function () {
     var dots = opt('printDots');
     return '<div class="pk"><span class="pno">（' + (i + 1) + '）</span><span class="peq">' + q.a + ' ' + (q.op === '+' ? '＋' : '－') + ' ' + q.b + ' ＝ </span>' +
       '<span class="pbx">' + (ans ? q.ans : '') + '</span></div>' +
-      (dots ? '<div class="pdw">' + (q.op === '+' ? pdots(q.a, 'a') + '<span class="pp">＋</span>' + pdots(q.b, 'b') : pdots(q.a, 'a')) + '</div>' : '');
+      (dots ? '<div class="pdw">' + (needPV(q) ? pvPrint(q) : q.op === '+' ? pdots(q.a, 'a') + '<span class="pp">＋</span>' + pdots(q.b, 'b') : pdots(q.a, 'a')) + '</div>' : '');
   }
   var PRINT = function (inst) {
     return { instruction: inst, cols: 2, keepCols: true, noNum: true, cellClass: 'kc', counts: [[10, '10もん'], [20, '20もん'], [30, '30もん'], [40, '40もん']], defCount: 20, repeat: true, cell: printCell };
@@ -1361,6 +1459,7 @@ window.MieelApp = (function () {
       '算数の たし算・ひき算の 教材です。<br>' +
       '・<b>たしざん</b>：● を タップすると 1, 2, 3 … と 番号がつき、かぞえる手助けになります（最後の ● をもう一度タップで 1つ戻ります）。<br>' +
       '・<b>ひきざん</b>：ひく数だけ ● をタップして ✕ にし、のこりを かぞえます。<br>' +
+      '・2けたは「10の たば」と「ばら（10の わく）」で表示します。たし算は ばらが 10こ そろうと黄色の わくで「くりあがり」、ひき算で ばらが足りないときは 10の たばを1つ「ばらした 10」として わくで見せます（くりさがり）。プリントも同じ絵です。<br>' +
       '・答えは すうじキーで入れます。けた数がそろうと自動で答え合わせします（✔でも答え合わせ）。<br>' +
       '・レベル：5まで／10まで／くりあがり・くりさがり（1けた どうし・10をこえる）／2けた（100まで）。<br>' +
       '・● が いらない子は「この アプリの せってい」で かくせます。プリントは 1枚に たくさん（10〜40もん）の計算ドリルになります。',
