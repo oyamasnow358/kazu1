@@ -46,7 +46,10 @@
   .left .time{font-size:clamp(40px,8vh,76px);letter-spacing:2px;font-variant-numeric:tabular-nums;line-height:1.1;}
   .left .time.hide{visibility:hidden;}
   .msg{font-size:clamp(18px,2.6vh,24px);color:var(--sub);min-height:1.4em;}
-  .right{display:flex;flex-direction:column;gap:12px;overflow-y:auto;padding:4px;}
+  .right{display:flex;flex-direction:column;gap:12px;min-height:0;padding:4px;}
+  /* せっていは なかで スクロール、スタート・もどす は いつも みえる ところに */
+  .opts{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;gap:12px;overscroll-behavior:contain;}
+  .big{flex:none;}
   .panel{background:var(--card);border:4px solid var(--line);border-radius:24px;padding:12px 14px;}
   .panel h3{margin:0 0 8px;font-size:15px;color:var(--sub);}
   .chips{display:flex;flex-wrap:wrap;gap:8px;}
@@ -67,7 +70,7 @@
   .row{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:44px;font-size:15px;}
   .row input{width:26px;height:26px;accent-color:var(--ok);}
   /* うごいている あいだは そうさ パネルを かくす（ボタンだけ） */
-  body.running.focus .right .panel{display:none;}
+  body.running.focus .right .opts{display:none;}
   body.running.focus main{grid-template-columns:1fr auto;}
   body.running.focus .right{justify-content:flex-end;}
   body.running.focus .big{flex-direction:column;}
@@ -84,6 +87,38 @@
   footer{flex:none;text-align:center;font-size:12px;color:var(--sub);padding:0 0 6px;font-weight:500;}
   footer a{color:var(--blue);text-decoration:none;font-weight:700;}
   @media (orientation:portrait){main{grid-template-columns:1fr;grid-template-rows:auto 1fr;}.dial{width:min(80vw,40vh);}body.running.focus main{grid-template-columns:1fr;grid-template-rows:1fr auto;}body.running.focus .big{flex-direction:row;justify-content:center;}}
+  /* iPhone など ちいさい がめん */
+  @media (max-width:600px),(max-height:500px){
+    header{min-height:48px;padding:4px 10px;gap:6px;} .brand{font-size:13px;} .brand .u{display:none;} .ttl{font-size:17px;}
+    .tb{width:42px;height:42px;font-size:19px;border-width:2px;}
+    main{gap:10px;padding:0 10px 6px;}
+    .right{gap:8px;padding:2px;} .opts{gap:8px;}
+    .panel{border-width:3px;border-radius:18px;padding:8px 10px;} .panel h3{font-size:13px;margin-bottom:6px;}
+    .chips{gap:6px;} .chip{min-width:58px;height:44px;font-size:17px;border-radius:13px;padding:0 8px;}
+    .adj{gap:6px;margin-top:6px;} .adj button{height:42px;min-width:0;font-size:14px;border-radius:12px;white-space:nowrap;padding:0 2px;letter-spacing:-.5px;}
+    .acts{gap:6px;} .act{height:58px;font-size:12px;border-radius:13px;} .act .emo{font-size:22px;}
+    .row{font-size:14px;min-height:40px;}
+    .big{gap:8px;} .go{height:64px;font-size:24px;box-shadow:0 5px 0 var(--ok-d);} .go.pause{box-shadow:0 5px 0 #C77C02;} .rs{width:92px;height:64px;font-size:17px;}
+    body.running.focus .go,body.running.focus .rs{width:auto;flex:1;}
+    footer{font-size:10px;padding:0 6px 4px;}
+    #end .bell{font-size:64px;} #end button{height:72px;font-size:26px;padding:0 40px;}
+  }
+  @media (max-width:600px) and (orientation:portrait){
+    main{grid-template-rows:auto minmax(0,1fr);}
+    .left{gap:4px;} .dial{width:min(76vw,36vh);} .left .time{font-size:clamp(34px,6.5vh,56px);} .task{font-size:22px;} .msg{font-size:16px;}
+    body.running.focus .dial{width:min(88vw,56vh);} body.running.focus .left .time{font-size:clamp(44px,9vh,80px);}
+  }
+  @media (max-width:600px) and (orientation:portrait) and (max-height:740px){
+    .dial{width:min(64vw,30vh);} .left .time{font-size:34px;line-height:1;} .msg{font-size:14px;min-height:0;} .task{font-size:19px;min-height:0;} footer{display:none;}
+  }
+  @media (max-height:500px) and (orientation:landscape){
+    main{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);grid-template-rows:minmax(0,1fr);}
+    .left{gap:2px;} .dial{width:auto;height:calc(100dvh - 150px);max-width:100%;} .left .time{font-size:34px;} .task{font-size:20px;min-height:0;} .msg{font-size:14px;min-height:0;}
+    footer{display:none;}
+    body.running.focus main{grid-template-columns:minmax(0,1fr) 200px;} body.running.focus .big{flex-direction:column;} body.running.focus .right{justify-content:center;}
+    body.running.focus .dial{height:calc(100dvh - 135px);}
+    body.running.focus .go,body.running.focus .rs{flex:none;width:100%;height:76px;}
+  }
   @media (prefers-reduced-motion:reduce){*{animation:none!important;}}
 </style>
 </head>
@@ -102,6 +137,7 @@
     <div class="msg" id="msg">じかんを えらんで「スタート」</div>
   </section>
   <section class="right">
+   <div class="opts">
     <div class="panel">
       <h3>じかん</h3>
       <div class="chips" id="chips"></div>
@@ -121,6 +157,7 @@
       <label class="row"><span>🔔 おわりの おと</span><input type="checkbox" id="optSound" checked></label>
       <label class="row"><span>🙈 うごいている ときは ボタンだけに する</span><input type="checkbox" id="optFocus" checked></label>
     </div>
+   </div>
     <div class="big">
       <button class="go" id="goBtn" type="button">▶ スタート</button>
       <button class="rs" id="rsBtn" type="button">↺ もどす</button>
@@ -190,6 +227,7 @@
     if (S.left <= 0) S.left = S.total;
     S.end = Date.now() + S.left * 1000; S.running = true; S.announced = S.left <= 60 || S.total <= 90;
     document.body.classList.add('running'); tone(660, 0, .15);
+    if ($('optVoice').checked) { try { var pu = new SpeechSynthesisUtterance(' '); pu.volume = 0; speechSynthesis.speak(pu); } catch (e) { /* 無視 */ } }
     $('goBtn').textContent = '⏸ とめる'; $('goBtn').classList.add('pause');
     $('msg').textContent = ACTS[S.act][0] ? ACTS[S.act][1] + 'の じかん' : 'スタート！';
     keepAwake(true); loop();
@@ -231,6 +269,7 @@
   $('fsBtn').onclick = function () { var d = document.documentElement; try { if (!document.fullscreenElement) (d.requestFullscreen || d.webkitRequestFullscreen).call(d); else document.exitFullscreen(); } catch (e) { /* 無視 */ } };
   document.addEventListener('visibilitychange', function () { if (!document.hidden && S.running) keepAwake(true); });
   document.addEventListener('gesturestart', function (e) { e.preventDefault(); });
+  (function () { var d = document.documentElement; if (!d.requestFullscreen && !d.webkitRequestFullscreen) $('fsBtn').style.display = 'none'; })();
   document.body.classList.toggle('focus', $('optFocus').checked);
   renderChips(); renderActs(); showTask(); draw();
 })();
