@@ -89,9 +89,9 @@ main#mzView{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 18p
 .mz-back{flex:none;height:60px;padding:0 22px;border-radius:999px;border:4px solid #ADB5BD;background:#fff;color:#495057;font-size:22px;box-shadow:0 4px 0 #DEE2E6;}
 .mz-back:active{transform:translateY(3px);box-shadow:0 1px 0 #DEE2E6;}
 .mz-bar .mz-label{flex:1;min-width:0;text-align:center;font-size:calc(clamp(20px,2.4vw,28px)*var(--mz-scale));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.mz-levels{flex:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));grid-auto-rows:minmax(200px,min(52vh,340px));gap:18px;align-content:center;max-width:1060px;width:100%;margin:0 auto;}
+.mz-levels{flex:1;min-height:0;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,40vw),1fr));grid-auto-rows:minmax(min(140px,24vh),min(300px,calc((100dvh - 230px) / 2)));gap:clamp(10px,1.8vh,18px);align-content:safe center;max-width:1060px;width:100%;margin:0 auto;padding:4px 4px 14px;}
 .mz-level{
-  --c:var(--mz-main);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:200px;
+  --c:var(--mz-main);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:0;
   border-radius:30px;border:6px solid var(--c);background:#fff;box-shadow:0 7px 0 rgba(0,0,0,.12);padding:16px;text-align:center;
 }
 .mz-level:active{transform:translateY(5px);box-shadow:0 2px 0 rgba(0,0,0,.12);}
@@ -386,6 +386,19 @@ body.mz.calm *,body.mz.calm *::before,body.mz.calm *::after{animation:none!impor
   .setbox{gap:10px;} .setl{gap:6px;} .tgt{padding:6px 16px;} .tgt .tt{font-size:26px;} .tread{font-size:15px;} .hint{font-size:12px;}
   .chk{height:46px;min-width:150px;font-size:19px;box-shadow:0 4px 0 var(--mz-ok-d);} .clkw{width:calc(100dvh - 180px);} .tgt .qs{font-size:12px;}
   .mwrap{gap:22px;} .mcard.tx{min-height:48px;font-size:18px;} .mcard.ck .clk{width:calc(100dvh - 270px);}
+}
+/* うごかす はりを えらぶ */
+.hsel{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;}
+.hsel button{border:3px solid var(--mz-line);background:#fff;border-radius:999px;padding:8px 14px;font-size:calc(16px*var(--mz-scale));font-weight:800;}
+.hsel button.on{background:var(--mz-main);border-color:var(--mz-main);color:#fff;}
+/* iPad たて：とけいが はみださない */
+@media (orientation:portrait) and (min-width:601px){
+  .clkw{width:min(78vw,calc(100dvh - 610px),520px);} .clkq{width:min(70vw,calc(100dvh - 600px),420px);}
+  .mcol .mcard{min-width:0;flex:1 1 0;} .mcard.ck .clk{width:100%;max-width:190px;}
+}
+@media (orientation:landscape) and (min-height:501px){
+  .clkw{width:min(62vh,calc(100dvh - 210px),520px);}
+  .mcol .mcard{min-width:0;flex:1 1 0;} .mcard.ck .clk{width:min(100%,26vh,190px);}
 }
 </style>
 </head>
@@ -1284,6 +1297,7 @@ window.MieelApp = (function () {
     return hourG + minG + '<circle cx="' + C + '" cy="' + C + '" r="11" fill="#2E2A25"/>';
   }
   function clock(t, lv, o) { return face(lv, o) + hands(t, o) + '</svg>'; }
+  var linked = function () { return opt('link') === 'link'; };
   var hourOf = function (ha) { var k = Math.floor((((ha % 360) + 360) % 360) / 30 + 1e-6); return k === 0 ? 12 : k; };
 
   /* ---------- はりを うごかす とけい ----------
@@ -1309,6 +1323,7 @@ window.MieelApp = (function () {
       if (dist > R + 30) return null;
       if (wo.only) return wo.only;
       if (step >= 60) return 'hour';
+      if (wo.sel && wo.sel() !== 'auto') return wo.sel();
       var hA = st.ha, mA = st.m * 6;
       function diff(x) { var d = Math.abs(a - x) % 360; return d > 180 ? 360 - d : d; }
       var tol = dist < 40 ? 90 : Math.max(14, Math.atan2(30, dist) * 180 / Math.PI);
@@ -1325,10 +1340,12 @@ window.MieelApp = (function () {
       try { svg.setPointerCapture(e.pointerId); } catch (x) { /* 無視 */ }
       var last = ang(e), acc = 0, h0 = st.h, m0 = st.m, ha0 = st.ha;
       // ゆびで さわった ところへ すぐ はりを むける（ながい はり だけ／みじかい はり だけ の とき）
-      if (wo.only) { var d0 = last - (type === 'minute' ? m0 * 6 : ha0); if (d0 > 180) d0 -= 360; if (d0 < -180) d0 += 360; acc = d0; }
+      var jump = wo.only || (wo.sel && wo.sel() !== 'auto') || step >= 60;
+      if (jump) { var d0 = last - (type === 'minute' ? m0 * 6 : ha0); if (d0 > 180) d0 -= 360; if (d0 < -180) d0 += 360; acc = d0; }
       function apply() {
         if (type === 'minute') {
-          if (wo.only === 'minute' && wo.follow) {
+          if (!wo.only && !linked()) { st.m = mod60(Math.round((m0 + acc / 6) / step) * step); }
+          else if (wo.only === 'minute' && wo.follow) {
             // ながい はりを まわした ぶん じかんが すすむ（みじかい はりも すこしずつ）
             var tt = (((h0 % 12) * 60 + m0 + Math.round(acc / 6 / step) * step) % 720 + 720) % 720; st.h = Math.floor(tt / 60) || 12; st.m = tt % 60; st.ha = ((st.h % 12) + st.m / 60) * 30;
           } else if (wo.only === 'minute') { st.m = mod60(Math.round((m0 + acc / 6) / step) * step); }
@@ -1339,12 +1356,15 @@ window.MieelApp = (function () {
           }
         } else if (wo.freeHour) {
           st.ha = ((Math.round((ha0 + acc) / 2.5) * 2.5) % 360 + 360) % 360; st.h = hourOf(st.ha);
+        } else if (!linked()) {
+          // べつべつ：ゆびの むきで「じ」を きめる（みじかい はりは その じの へやの なかで ふんに あわせて すすむ）
+          var fa = ((ha0 + acc) % 360 + 360) % 360, rr = Math.round((fa - st.m * .5) / 30) % 12; if (rr <= 0) rr += 12; st.h = rr;
         } else {
           var rh = Math.round(((h0 % 12) * 30 + acc) / 30) % 12; if (rh <= 0) rh += 12; st.h = rh;
         }
         upd(); if (onChange) onChange(st, true);
       }
-      if (wo.only) apply();
+      if (jump) apply();
       function mv(ev) { var a = ang(ev), d = a - last; if (d > 180) d -= 360; if (d < -180) d += 360; acc += d; last = a; apply(); }
       function up() { el.classList.remove('drag'); window.removeEventListener('pointermove', mv); window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up); if (onChange) onChange(st, false); }
       window.addEventListener('pointermove', mv); window.addEventListener('pointerup', up); window.addEventListener('pointercancel', up);
@@ -1372,13 +1392,20 @@ window.MieelApp = (function () {
     var hold = h('div', { class: 'clkw' });
     var w;
     function show(s) { read.textContent = opt('readout') === false ? '' : 'いま ' + tText(s); }
+    // うごかす はりを えらぶ（はりが かさなって いても まよわない）
+    var selH = 'auto';
+    var hsel = h('div', { class: 'hsel' }, [['auto', '👆 さわった はり'], ['hour', '🔴 みじかい はり'], ['minute', '🔵 ながい はり']].map(function (o) {
+      var b = h('button', { type: 'button', class: o[0] === selH ? 'on' : '' }, o[1]);
+      b.addEventListener('click', function () { selH = o[0]; hsel.querySelectorAll('button').forEach(function (x) { x.classList.toggle('on', x === b); }); api.sfx.tap(); if (o[0] !== 'auto') api.speak(o[0] === 'hour' ? 'みじかい はりを うごかすよ' : 'ながい はりを うごかすよ'); });
+      return b;
+    }));
     var box = h('div', { class: 'setbox' },
       h('div', { class: 'setl' }, h('div', { class: 'mz-q tgt', style: '--c:' + api.color }, h('div', { class: 'qs' }, 'この じこくに あわせよう'), h('div', { class: 'tt' }, tText(t))),
-        read, h('div', { class: 'hint' }, lv === 1 ? '🔴 みじかい はりを うごかして「じ」を あわせよう' : '🔴 みじかい はり ＝ 「じ」　🔵 ながい はり ＝ 「ふん」'),
+        read, lv === 1 ? null : hsel, h('div', { class: 'hint' }, lv === 1 ? '🔴 みじかい はりを うごかして「じ」を あわせよう' : '🔴 みじかい はり ＝ 「じ」　🔵 ながい はり ＝ 「ふん」'),
         h('button', { type: 'button', class: 'chk ready', onclick: check }, '✔ できた')),
       hold);
     stage.appendChild(box);
-    w = widget(hold, start, lv, function (s, moving) { show(s); if (!moving) api.sfx.tap(); });
+    w = widget(hold, start, lv, function (s, moving) { show(s); if (!moving) api.sfx.tap(); }, { sel: function () { return selH; } });
     show(start);
     function check() {
       if (api.locked()) return;
@@ -1624,6 +1651,7 @@ window.MieelApp = (function () {
       { key: 'han', label: '「30ぷん」を「はん」と かく', type: 'check', def: true, print: true },
       { key: 'ring', label: '🔵 とけいの そとに「ふん」の すうじを だす（レベル3〜）', type: 'check', def: true, print: true },
       { key: 'readout', label: '「あわせる」で いまの じこくを ひょうじ', type: 'check', def: true },
+      { key: 'link', label: '🤚「あわせる」の はりの うごきかた', type: 'seg', opts: [['sep', 'べつべつに うごかす'], ['link', 'いっしょに うごく（ほんものの とけい）']], def: 'sep' },
       { key: 'zones', label: '🔴 みじかい はりの「へや」（すうじと すうじの あいだ）を いろで みせる', type: 'seg', opts: [['always', 'いつも'], ['miss', 'まちがえたら'], ['off', 'みせない']], def: 'always', print: true }
     ],
     modes: [
@@ -1632,7 +1660,7 @@ window.MieelApp = (function () {
         make: function (lv) {
           var t = randTime(lv), os = chooseOpts(lv, t, lv === 1 ? 3 : 4);
           var ex = t.m === 0 ? '' : 'みじかい はりは ' + t.h + ' と ' + mod12(t.h + 1) + ' の あいだ だから ' + hText(t.h) + '、ながい はりで ' + fText(t.m);
-          return { html: '<div class="clkq">' + clock(t, lv) + '</div>', sub: 'なんじ ' + (lv === 1 ? '' : 'なんぷん ') + 'かな？', say: 'この とけいは なんじ' + (lv === 1 ? '' : 'なんぷん') + 'かな？', options: os.map(function (x) { return { label: tText(x), value: x.h + ':' + x.m, say: tSay(x) }; }), answer: t.h + ':' + t.m, sayAnswer: tSay(t), explain: ex, key: t.h + ':' + t.m, t: t, lv: lv, side: true };
+          return { html: '<div class="clkq">' + clock(t, lv) + '</div>', sub: 'なんじ ' + (lv === 1 ? '' : 'なんぷん ') + 'かな？', say: 'この とけいは なんじ' + (lv === 1 ? '' : 'なんぷん') + 'かな？', options: os.map(function (x) { return { label: tText(x), value: x.h + ':' + x.m, say: tSay(x) }; }), answer: t.h + ':' + t.m, sayAnswer: tSay(t), explain: ex, key: t.h + ':' + t.m, t: t, lv: lv, side: true, cols: os.length === 4 ? 2 : os.length };
         },
         print: {
           instruction: 'とけいを よんで、じこくを かこう', cols: 3, keepCols: true, noNum: true, counts: PR_COUNTS, defCount: 9,

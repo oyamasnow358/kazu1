@@ -89,9 +89,9 @@ main#mzView{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 18p
 .mz-back{flex:none;height:60px;padding:0 22px;border-radius:999px;border:4px solid #ADB5BD;background:#fff;color:#495057;font-size:22px;box-shadow:0 4px 0 #DEE2E6;}
 .mz-back:active{transform:translateY(3px);box-shadow:0 1px 0 #DEE2E6;}
 .mz-bar .mz-label{flex:1;min-width:0;text-align:center;font-size:calc(clamp(20px,2.4vw,28px)*var(--mz-scale));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.mz-levels{flex:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));grid-auto-rows:minmax(200px,min(52vh,340px));gap:18px;align-content:center;max-width:1060px;width:100%;margin:0 auto;}
+.mz-levels{flex:1;min-height:0;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,40vw),1fr));grid-auto-rows:minmax(min(140px,24vh),min(300px,calc((100dvh - 230px) / 2)));gap:clamp(10px,1.8vh,18px);align-content:safe center;max-width:1060px;width:100%;margin:0 auto;padding:4px 4px 14px;}
 .mz-level{
-  --c:var(--mz-main);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:200px;
+  --c:var(--mz-main);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:0;
   border-radius:30px;border:6px solid var(--c);background:#fff;box-shadow:0 7px 0 rgba(0,0,0,.12);padding:16px;text-align:center;
 }
 .mz-level:active{transform:translateY(5px);box-shadow:0 2px 0 rgba(0,0,0,.12);}
